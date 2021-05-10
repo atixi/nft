@@ -1,7 +1,5 @@
 import Header from '../Components/header'
 import Head from 'next/head'
-import Image from 'next/image'
-import Styles from '../styles/Home.module.css'
 import LiveAuctions from '/Components/liveAuctions'
 import PartFive from '/Components/partFive'
 import Footer from '/Components/footer'
