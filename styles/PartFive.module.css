@@ -1,0 +1,59 @@
+.categoriesListParent{
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+.categoriesListParent > div{
+    margin: 5px;
+    white-space: nowrap;
+}
+.categoriesListParent ul li{
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 30px;
+    border: 1px solid #f2f2f2;
+}
+.categoriesListScroll{
+    position: relative;
+    overflow: auto;
+}
+.categoriesList{
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+.productItem{
+    border: 1px solid #f1f1f1;
+    border-radius: 3px;
+}
+.productDescriptionDiv{
+
+}
+.topOfProductImage{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.wareHouse{
+    color: #969696;
+    font-size: 12px;
+}
+.placeBid{
+    color: #0887ff
+}
+.ownImage{
+    border-radius: 50%;
+}
+.ownImage:not(:first-child){
+    margin-left: -10px;
+}
+.productDescriptionBottom{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
