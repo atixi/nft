@@ -3,44 +3,11 @@ import { Row, Col, Input, Space, Select } from 'antd'
 import React from 'react';
 const { Search } = Input;
 const { Option } = Select;
-const options = [
-    {
-        value: 'zhejiang',
-        label: 'Zhejiang',
-        children: [
-            {
-                value: 'hangzhou',
-                label: 'Hangzhou',
-                children: [
-                    {
-                        value: 'xihu',
-                        label: 'West Lake',
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        value: 'jiangsu',
-        label: 'Jiangsu',
-        children: [
-            {
-                value: 'nanjing',
-                label: 'Nanjing',
-                children: [
-                    {
-                        value: 'zhonghuamen',
-                        label: 'Zhong Hua Men',
-                    },
-                ],
-            },
-        ],
-    },
-];
+
 function Footer() {
     return (
         <>
-            <div className={`${styles.mainFooter} p-3`}>
+            <div className={`${styles.mainFooter} p-3 mt-5`}>
                 <Row>
                     <Col md={8} sm={24} xs={24} className="mb-3 mb-md-0">
 
