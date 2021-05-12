@@ -1,11 +1,11 @@
 import Header from '../Components/header'
 import Head from 'next/head'
-import Image from 'next/image'
-import Styles from '../styles/Home.module.css'
 import LiveAuctions from '/Components/liveAuctions'
 import PartFive from '/Components/partFive'
 import Footer from '/Components/footer'
 import TopSellers from '/Components/topSellers'
+import Slide from '/Components/slider/slide'
+import HotCollections from '/Components/HotCollections'
 
 export default function Home() {
   return (
@@ -17,9 +17,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-
+      <Slide/>
       <TopSellers />
       <LiveAuctions />
+      <HotCollections/>
       <PartFive />
       <Footer />
     </>
