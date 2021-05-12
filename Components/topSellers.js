@@ -1,4 +1,4 @@
-import styles from '../styles/TopSellers.module.css'
+import styles from '/styles/TopSellers.module.css'
 import { Row, Col } from 'antd'
 import { } from 'antd';
 import React from 'react';
