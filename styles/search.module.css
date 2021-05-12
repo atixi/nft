@@ -1,0 +1,29 @@
+
+.wrapper {
+    margin:0px 20px;
+    border-radius: 25px;
+    max-height: 50px;
+    padding:5px 10px;
+    border:1px solid transparent;
+    background-color: #ededed;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.wrapper:focus-within,.wrapper:hover{
+    border:1px solid #ccc;
+}
+.wrapper:focus-within{
+    background-color: #fff;
+    box-shadow: 0 0 0px 3px rgba(200, 200, 200, .3);
+}
+.wrapper input{
+    border:0px;
+    width:200px;
+    font-weight: 600;
+    background-color: transparent;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.wrapper input:focus{
+    outline: none !important;
+}
