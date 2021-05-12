@@ -29,8 +29,8 @@
     justify-content: flex-start;
 }
 .productItem{
-    border: 1px solid #f1f1f1;
-    border-radius: 3px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
 }
 .productDescriptionDiv{
 

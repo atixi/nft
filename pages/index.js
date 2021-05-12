@@ -1,7 +1,7 @@
 import Header from '../Components/header'
 import Head from 'next/head'
 import LiveAuctions from '/Components/liveAuctions'
-import PartFive from '/Components/partFive'
+import Explore from '/Components/explore'
 import Footer from '/Components/footer'
 import TopSellers from '/Components/topSellers'
 import Slide from '/Components/slider/slide'
@@ -17,11 +17,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <Slide/>
+      <Slide />
       <TopSellers />
       <LiveAuctions />
-      <HotCollections/>
-      <PartFive />
+      <HotCollections />
+      <Explore />
       <Footer />
     </>
   )

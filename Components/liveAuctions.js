@@ -1,9 +1,6 @@
-import styles from '../styles/PartFive.module.css'
-import { Row, Col, Menu, Dropdown } from 'antd'
-import { HeartTwoTone } from '@ant-design/icons';
+import { Menu } from 'antd'
 import React from 'react';
-import { PRODUCTS } from '/Constants/constants'
-
+import Products from './products';
 function handleButtonClick(e) {
     message.info('Click on left button.');
     console.log('click left button', e);
@@ -36,36 +33,7 @@ function LiveAuctions() {
                     <h1>Live Auctions</h1>
                 </div>
 
-                <Row justify="space-around">
-
-                    {PRODUCTS.map(n =>
-                        <Col lg={4} md={6} sm={8} xs={24} className="p-4 p-lg-1">
-                            <div className={`${styles.productItem} p-2 p-lg-1`}>
-                                <div className={styles.topOfProductImage}>
-                                    <div>
-                                        {PRODUCTS.map(m =>
-                                            <img src={m.productImage} width={22} className={styles.ownImage} />
-                                        )}
-                                    </div>
-                                    <Dropdown.Button onClick={handleButtonClick} overlay={menu} />
-                                </div>
-                                <div className={`col-md-12 p-3`}>
-                                    <img src={n.productImage} className="w-100 rounded" />
-                                </div>
-                                <div className={styles.productDescriptionDiv}>
-                                    <h6><strong>{n.productTitle}</strong></h6>
-                                    <h6>{n.price} <span className={styles.wareHouse}>{n.currentQTY + ' of ' + n.totalQTY}</span></h6>
-                                    <div className={styles.productDescriptionBottom}>
-                                        <h6 className={styles.placeBid}>{n.palceMessage}</h6> <h6 className={styles.placeBid}>{n.likes} <HeartTwoTone /></h6>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </Col>
-                    )}
-
-                </Row>
+                <Products />
             </div>
         </>
     );
