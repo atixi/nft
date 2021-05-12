@@ -1,4 +1,5 @@
 .categoriesListParent{
+    font-weight: bold;
     list-style-type: none;
     display: flex;
     flex-direction: row;
