@@ -1,12 +1,12 @@
-import profileStyles from '../styles/profile.module.css'
-import styles from '../styles/PartFive.module.css'
+import profileStyles from '/styles/profile.module.css'
+import styles from '/styles/PartFive.module.css'
 import { Row, Col } from 'antd'
 import { Menu, Dropdown } from 'antd';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { HeartTwoTone, CopyOutlined } from '@ant-design/icons';
 import React from 'react';
 import { PRODUCTS } from '/Constants/constants'
-import Header from '../Components/header';
+import Header from '/Components/header';
 
 function handleButtonClick(e) {
     message.info('Click on left button.');
@@ -32,7 +32,7 @@ const menu = (
         </Menu.Item>
     </Menu>
 );
-function PartFive() {
+function Profile() {
     return (
         <>
             <Header />
@@ -56,7 +56,6 @@ function PartFive() {
                 </div>
 
                 <Row justify="space-around">
-
                     {PRODUCTS.map(n =>
                         <Col lg={4} md={6} sm={8} xs={24} className="p-4 p-lg-1">
                             <div className={`${styles.productItem} p-2 p-lg-1`}>
@@ -77,7 +76,6 @@ function PartFive() {
                                     <div className={styles.productDescriptionBottom}>
                                         <h6 className={styles.placeBid}>{n.palceMessage}</h6> <h6 className={styles.placeBid}>{n.likes} <HeartTwoTone /></h6>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -90,4 +88,4 @@ function PartFive() {
     );
 }
 
-export default PartFive;
+export default Profile;
