@@ -1,5 +1,6 @@
 
 .wrapper {
+    width: 100%;
     margin:0px 20px;
     border-radius: 25px;
     max-height: 50px;
@@ -19,7 +20,8 @@
 }
 .wrapper input{
     border:0px;
-    width:200px;
+    min-width:180px;
+    flex:1;
     font-weight: 600;
     background-color: transparent;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
