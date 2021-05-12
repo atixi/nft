@@ -2,6 +2,49 @@ export const PRODUCTS = [
     {
         id: 1,
         productTitle: 'product one',
+        productImage: '/images/products/product1.jpg',
+        price: '99 ETH',
+        currentQTY: 90,
+        totalQTY: 100,
+        likes: 100,
+        palceMessage: 'Place a bid'
+    },
+    {
+        id: 1,
+        productTitle: 'product one',
+        productImage: '/images/products/product1.jpg',
+        price: '99 ETH',
+        currentQTY: 90,
+        totalQTY: 100,
+        likes: 100,
+        palceMessage: 'Place a bid'
+    },
+    {
+        id: 1,
+        productTitle: 'product one',
+        productImage: '/images/products/product1.jpg',
+        price: '99 ETH',
+        currentQTY: 90,
+        totalQTY: 100,
+        likes: 100,
+        palceMessage: 'Place a bid'
+    },
+    {
+        id: 1,
+        productTitle: 'product one',
+        productImage: '/images/products/product1.jpg',
+        price: '99 ETH',
+        currentQTY: 90,
+        totalQTY: 100,
+        likes: 100,
+        palceMessage: 'Place a bid'
+    },
+]
+
+export const SELLERS = [
+    {
+        id: 1,
+        productTitle: 'product one',
         productImage: '/images/tops/image.png',
         price: '99 ETH',
         currentQTY: 90,
