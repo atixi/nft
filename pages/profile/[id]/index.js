@@ -3,7 +3,7 @@ import { Row, Col, Tabs } from 'antd'
 import { CopyOutlined } from '@ant-design/icons';
 import React from 'react';
 import Header from '/Components/header';
-import Products from '../Components/products';
+import Products from '/Components/products';
 
 const { TabPane } = Tabs;
 function callback(key) {
@@ -18,11 +18,11 @@ function Profile() {
             <div>
                 <div className={profileStyles.profile}>
                     <div className={profileStyles.cover}>
-                        <img src='./images/profile/profile.png' />
+                        <img src='/images/profile/profile.png' />
                     </div>
                     <div className={profileStyles.bio}>
                         <div className={profileStyles.avatar}>
-                            <img alt="Identicon" src='./images/profile/profile.png' loading="lazy" className="sc-eirseW evgNzS" />
+                            <img alt="Identicon" src='/images/profile/profile.png' loading="lazy" className="sc-eirseW evgNzS" />
                         </div>
                         <div className={profileStyles.bioDescription} >
                             <h3><strong>People are the pillars of the...</strong></h3>
