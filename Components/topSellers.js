@@ -1,6 +1,6 @@
 import styles from '/styles/TopSellers.module.css'
 import { Row, Col } from 'antd'
-import { } from 'antd';
+import Link from 'next/Link'
 import React from 'react';
 import { SELLERS } from '/Constants/constants'
 const breackCol = '<Col /> asdfsdf'
@@ -17,18 +17,52 @@ function TopSellers() {
         <>
             <div className="">
                 <div className="p-3">
-                    <h1>Top Sellers</h1>
+                    <h3>Top Sellers in 1 Day</h3>
                 </div>
 
                 <Row justify="space-between" className={styles.topSells}>
-
                     {SELLERS.map((n, i) =>
-                        <Col>
-                            <div className={`${styles.topItem} p-2 p-lg-1`}>
-                                <div>{n.id}</div>
-                                <div className={styles.topItemImage}><img src={n.productImage} /></div>
-                                <div>{n.productTitle} <span>nll</span></div>
-                            </div>
+                        <Col md={5} sm={6} xs={14}>
+                            <Row className={`${styles.topItem} p-2 p-lg-1`}>
+                                <Col md={1} sm={1} xs={1}>
+                                    {n.id}
+                                </Col>
+                                <Col className={styles.topItemImage} md={5} sm={6} xs={7}>
+                                    <img src={n.productImage} />
+                                </Col>
+                                <Col md={18} sm={17} xs={16}>
+                                    <Link href='/profile/[id]' as={`/profile/${n.id}`} >{n.productTitle}</Link>
+                                    <br />
+                                    <span>3 ETH</span>
+                                </Col>
+                            </Row>
+                            <Row className={`${styles.topItem} p-2 p-lg-1`}>
+                                <Col md={1} sm={1} xs={1}>
+                                    {n.id}
+                                </Col>
+                                <Col className={styles.topItemImage} md={5} sm={6} xs={7}>
+                                    <img src={n.productImage} />
+                                </Col>
+                                <Col md={18} sm={17} xs={16}>
+                                    <Link href='/profile/[id]' as={`/profile/${n.id}`} >{n.productTitle}</Link>
+                                    <br />
+                                    <span>3 ETH</span>
+                                </Col>
+                            </Row>
+                            <Row className={`${styles.topItem} p-2 p-lg-1`}>
+                                <Col md={1} sm={1} xs={1}>
+                                    {n.id}
+                                </Col>
+                                <Col className={styles.topItemImage} md={5} sm={6} xs={7}>
+                                    <img src={n.productImage} />
+                                </Col>
+                                <Col md={18} sm={17} xs={16}>
+                                    <Link href='/profile/[id]' as={`/profile/${n.id}`} >{n.productTitle}</Link>
+                                    <br />
+                                    <span>3 ETH</span>
+                                </Col>
+                            </Row>
+
                             {check(i)}
                         </Col>
                     )}

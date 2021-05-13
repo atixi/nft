@@ -8,7 +8,7 @@ function Explore() {
             <div >
                 <div className={styles.categoriesListParent}>
                     <div className="p-3">
-                        <h1>Explore</h1>
+                        <h3>Explore</h3>
                     </div>
                     <div className={styles.categoriesListScroll}>
                         <ul className={`${styles.categoriesList} m-2`}>

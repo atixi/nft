@@ -1,16 +1,13 @@
-.topSellsRow{
- 
-}
 .topSells{
-    overflow:auto;
+    width: 200px;
+    width: 100%;
+    overflow: auto;
     display: flex;
     flex-wrap: nowrap;
 }
 .topItem{
-    display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     padding: 5px;
 }
 .topItemImage{
