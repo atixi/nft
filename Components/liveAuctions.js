@@ -30,7 +30,7 @@ function LiveAuctions() {
         <>
             <div >
                 <div className="p-3">
-                    <h1>Live Auctions</h1>
+                    <h3>Live Auctions</h3>
                 </div>
 
                 <Products />
