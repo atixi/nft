@@ -1,63 +1,66 @@
 import styles from '../styles/Footer.module.css'
-import { Row, Col, Input, Space, Select } from 'antd'
+import { Row, Col, Input, Space, Select } from 'antd';
+import { FOOTER } from '/Constants/footerConstants'
+import { FOOTER_WEBSITE_LINKS } from '/Constants/footerConstants'
+import { FOOTER_COMMUNITY } from '/Constants/footerConstants'
+import { FOOTER_LANGUAGES } from '/Constants/footerConstants'
 import React from 'react';
 const { Search } = Input;
 const { Option } = Select;
-
+const {
+    updatesMessage,
+    searchPlaceHolder,
+    searchSubmitMessage,
+    terms,
+    policy
+} = FOOTER;
 function Footer() {
     return (
         <>
-            <div className={`${styles.mainFooter} p-3 mt-5`}>
+            <div className={`${styles.mainFooter} pt-5 pl-3 pr-3 pb-3 mt-5`}>
                 <Row>
                     <Col md={8} sm={24} xs={24} className="mb-3 mb-md-0">
-
                         <div className="col-md-12 col-sm-12">
-                            <h5>Get Latest Rarible updates</h5>
+                            <h5>{updatesMessage}</h5>
                             <div className="input-group">
-                                <input type="search" className={`${styles.searchInput} form-control`} placeholder="Your e-mail" aria-label="Search"
+                                <input type="search" className={`${styles.searchInput} form-control`} placeholder={searchPlaceHolder} aria-label="Search"
                                     aria-describedby="search-addon" />
-                                <button type="button" className={`${styles.submitSearch} btn `}>I'm in</button>
+                                <button type="button" className={`${styles.submitSearch} btn `}>{searchSubmitMessage}</button>
                             </div>
-
-                        </div>
-
-                    </Col>
-                    <Col md={4} sm={8} xs={12}>
-                        <div className="col-md-12 col-sm-10">
-                            <h5>Rarible</h5>
-                            <h6>Explore</h6>
-                            <h6>How it works</h6>
-                            <h6>Create</h6>
-                            <h6>Support</h6>
                         </div>
                     </Col>
                     <Col md={4} sm={8} xs={12}>
                         <div className="col-md-12 col-sm-10">
-                            <h5>Community</h5>
-                            <h6>RARI Token</h6>
-                            <h6>Discussion</h6>
-                            <h6>Voting</h6>
-                            <h6>Suggest feature</h6>
+                            <h5>{FOOTER_WEBSITE_LINKS.websiteTitle}</h5>
+                            {
+                                FOOTER_WEBSITE_LINKS.websiteLinks.map(websiteLink => <h6>{websiteLink.websiteLinkTitle}</h6>)
+                            }
+                        </div>
+                    </Col>
+                    <Col md={4} sm={8} xs={12}>
+                        <div className="col-md-12 col-sm-10">
+                            <h5>{FOOTER_COMMUNITY.communityTitle}</h5>
+                            {
+                                FOOTER_COMMUNITY.communityLinks.map(communitlink => <h6>{communitlink.communityLinktitle}</h6>)
+                            }
                         </div>
                     </Col>
                     <Col md={8} sm={8} xs={24} className="mt-4 mt-sm-0">
                         <div className="col-md-12 col-sm-10">
-                            <h5>Language</h5>
+                            <h5>{FOOTER_LANGUAGES.languagesTitle}</h5>
                             <Select defaultValue="English" className={styles.language}>
-                                <Option value="English">English</Option>
-                                <Option value="中文">中文</Option>
-                                <Option value="한국어">한국어</Option>
-                                <Option value="日本語">日本語</Option>
+                                {
+                                    FOOTER_LANGUAGES.languages.map(language => <Option value={language.language}>{language.language}</Option>)
+                                }
                             </Select>
                         </div>
                     </Col>
                     <Col md={24} xs={24}>
                         <hr />
                         <div className={styles.policyTerms}>
-                            <h6>Terms</h6>
-                            <h6>Privacy</h6>
+                            <h6>{terms}</h6>
+                            <h6>{policy}</h6>
                         </div>
-
                         <div className={styles.socials}>
                             <a href="https://twitter.com/rariblecom" target="_blank" class="sc-dlnjPT sc-hKFyIo sc-fKgIGh sc-bCwgka cuIYFB hEVogm PAjGx jHJtWF sc-flUlJl gYzuBe"><svg viewBox="0 0 18 16" fill="none" width="18" height="18" xlmns="http://www.w3.org/2000/svg"><path d="M17.9655 2.42676C17.3018 2.71851 16.593 2.91726 15.8468 3.00801C16.6073 2.54976 17.1922 1.82751 17.469 0.965759C16.7558 1.38201 15.9653 1.68501 15.1238 1.85376C14.4518 1.13451 13.494 0.684509 12.4305 0.684509C10.3927 0.684509 8.7405 2.33676 8.7405 4.37226C8.7405 4.66476 8.77425 4.94601 8.83575 5.21526C5.76825 5.07051 3.0495 3.59751 1.23 1.37076C0.90975 1.91226 0.7305 2.54151 0.7305 3.22701C0.7305 4.50951 1.383 5.63676 2.3715 6.29901C1.76625 6.27951 1.197 6.11301 0.7005 5.83701V5.88276C0.7005 7.67151 1.97025 9.16326 3.66 9.50301C3.35025 9.58626 3.02325 9.63126 2.688 9.63126C2.4525 9.63126 2.22675 9.60876 2.001 9.56676C2.47425 11.0315 3.83475 12.0995 5.454 12.1295C4.194 13.1188 2.59725 13.7083 0.8775 13.7083C0.585 13.7083 0.29325 13.691 0 13.658C1.64175 14.7035 3.576 15.3148 5.66775 15.3148C12.4583 15.3148 16.167 9.69276 16.167 4.82526C16.167 4.66851 16.167 4.51026 16.1558 4.35276C16.8765 3.83601 17.5057 3.18276 18.0007 2.44176L17.9655 2.42676Z" fill="currentColor"></path></svg></a>
                             <a href="https://t.me/rarible" target="_blank" class="sc-dlnjPT sc-hKFyIo sc-fKgIGh sc-bCwgka cuIYFB hEVogm PAjGx jHJtWF sc-flUlJl gYzuBe"><svg viewBox="0 0 16 14" fill="none" width="17" height="17" xlmns="http://www.w3.org/2000/svg"><path d="M15.9513 1.29916L13.5438 13.1556C13.377 13.997 12.8902 14.1987 12.21 13.8093L8.542 10.979L6.76804 12.7662C6.56797 12.9748 6.40125 13.1556 6.03445 13.1556C5.55428 13.1556 5.63431 12.9679 5.47425 12.495L4.20714 8.19051L0.572523 7.00834C-0.214421 6.76495 -0.22109 6.20168 0.745918 5.7914L14.9243 0.0891779C15.5711 -0.209841 16.1914 0.256072 15.9446 1.29221L15.9513 1.29916Z" fill="currentColor"></path></svg></a>
