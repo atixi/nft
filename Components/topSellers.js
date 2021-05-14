@@ -1,5 +1,5 @@
 import styles from '/styles/TopSellers.module.css'
-import { Row, Col } from 'antd'
+import { Row, Col, Avatar } from 'antd'
 import Link from 'next/Link'
 import React from 'react';
 import { SELLERS } from '/Constants/constants'
@@ -28,7 +28,7 @@ function TopSellers() {
                                     {n.id}
                                 </Col>
                                 <Col className={styles.topItemImage} md={5} sm={6} xs={7}>
-                                    <img src={n.productImage} />
+                                    <Avatar size="large" src={n.productImage} />
                                 </Col>
                                 <Col md={18} sm={17} xs={16}>
                                     <Link href='/profile/[id]' as={`/profile/${n.id}`} >{n.productTitle}</Link>
@@ -41,7 +41,7 @@ function TopSellers() {
                                     {n.id}
                                 </Col>
                                 <Col className={styles.topItemImage} md={5} sm={6} xs={7}>
-                                    <img src={n.productImage} />
+                                    <Avatar size="large" src={n.productImage} />
                                 </Col>
                                 <Col md={18} sm={17} xs={16}>
                                     <Link href='/profile/[id]' as={`/profile/${n.id}`} >{n.productTitle}</Link>
@@ -54,7 +54,7 @@ function TopSellers() {
                                     {n.id}
                                 </Col>
                                 <Col className={styles.topItemImage} md={5} sm={6} xs={7}>
-                                    <img src={n.productImage} />
+                                    <Avatar  size="large" src={n.productImage} />
                                 </Col>
                                 <Col md={18} sm={17} xs={16}>
                                     <Link href='/profile/[id]' as={`/profile/${n.id}`} >{n.productTitle}</Link>

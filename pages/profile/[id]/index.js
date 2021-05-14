@@ -15,7 +15,7 @@ function Profile() {
     return (
         <>
             <Header />
-            <div>
+            <div style={{maxWidth: 1400, margin: 'auto'}}>
                 <div className={profileStyles.profile}>
                     <div className={profileStyles.cover}>
                         <img src='/images/profile/profile.png' />

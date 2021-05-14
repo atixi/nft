@@ -16,12 +16,15 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <Header />
-      <Slide />
-      <TopSellers />
-      <LiveAuctions />
-      <HotCollections />
-      <Explore />
+      <div style={{ maxWidth: 1400, margin: 'auto'}}>
+        <Slide />
+        <TopSellers />
+        <LiveAuctions />
+        <HotCollections />
+        <Explore />
+      </div>
       <Footer />
     </>
   )
