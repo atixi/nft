@@ -1,6 +1,6 @@
 import styles from '/styles/TopSellers.module.css'
 import { Row, Col, Avatar } from 'antd'
-import Link from 'next/Link'
+import Link from 'next/link'
 import React from 'react';
 import { SELLERS } from '/Constants/constants'
 const breackCol = '<Col /> asdfsdf'
