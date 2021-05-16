@@ -17,6 +17,7 @@
     height: 100%;
     margin: 0px;
     opacity: 0;
+    cursor: pointer;
   }
   
   .dropdown input[type=checkbox]:checked {
@@ -24,6 +25,8 @@
     z-index:+0;
     top: 0px; left: 0px; 
     right: 0px; bottom: 0px;
+    cursor: default;
+    z-index: 3;
   }
   
   .dropdown ul {
