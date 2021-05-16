@@ -378,16 +378,16 @@ export default function Header(props) {
         </li>
         <li className="d-none d-xl-flex">
           <Dropdown
-            trigger={{
-              style: {
-                border: "0px",
-                backgroundColor: "transparent",
-                cursor: "pointer",
-                color: "#888",
-              },
-              className: styles.btn,
-              title: "Cummunity",
+            trigger={(<a href="#" style={{
+              border: "0px",
+              backgroundColor: "transparent",
+              cursor: "pointer",
+              color: "#888",
             }}
+            className= {styles.btn}>
+              Community 
+              <svg viewBox="0 0 11 7" fill="none" width="10" height="10" xlmns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.00146 6.41431L9.70857 1.7072C10.0991 1.31668 10.0991 0.683511 9.70857 0.292986C9.31805 -0.097538 8.68488 -0.097538 8.29436 0.292986L5.00146 3.58588L1.70857 0.292986C1.31805 -0.097538 0.684882 -0.097538 0.294358 0.292986C-0.0961662 0.68351 -0.0961662 1.31668 0.294358 1.7072L5.00146 6.41431Z" fill="currentColor"></path></svg>
+            </a>)}
           >
             <ul>
               <li>
@@ -409,22 +409,48 @@ export default function Header(props) {
           </Dropdown>
         </li>
         <li className="d-none d-lg-flex d-xl-none">
-          <a href="#">
-            <svg
-              viewBox="0 0 14 4"
-              fill="none"
-              width="16"
-              height="16"
-              xlmns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z"
-                fill="currentColor"
-              ></path>
-            </svg>
-          </a>
+          
+          <Dropdown trigger={(<a style={{
+                border: "0px",
+                backgroundColor: "transparent",
+                cursor: "pointer",
+                color: "#888"}}
+              className={styles.btn}
+              href="#">
+                <svg
+                  viewBox="0 0 14 4"
+                  fill="none"
+                  width="16"
+                  height="16"
+                  xlmns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              </a>)
+            }>
+          <ul>
+              <li>
+                <a href="#">RARI Token</a>
+              </li>
+              <li>
+                <a href="#">Discussion</a>
+              </li>
+              <li>
+                <a href="#">Voting</a>
+              </li>
+              <li>
+                <a href="#">Suggest feature</a>
+              </li>
+              <li>
+                <a href="#">Subscribe</a>
+              </li>
+            </ul>
+          </Dropdown>
         </li>
       </ul>
       <div style={{ flex: 1 }} className="d-block d-xl-none"></div>
