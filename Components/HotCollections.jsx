@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Carousel from "react-elastic-carousel";
 import styles from "../styles/hotcollection.module.css";
 import HCItem from "./HCItem";

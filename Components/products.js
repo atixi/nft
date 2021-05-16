@@ -2,6 +2,7 @@ import styles from '/styles/Products.module.css'
 import { Row, Col } from 'antd'
 import { Menu, Dropdown } from 'antd';
 import { HeartTwoTone } from '@ant-design/icons';
+import Link from 'next/link';
 import React from 'react';
 import { PRODUCTS } from '/Constants/constants'
 
@@ -50,7 +51,7 @@ function Products() {
                                     <img src={n.productImage} className="w-100 rounded" />
                                 </div>
                                 <div className={styles.productDescriptionDiv}>
-                                    <h6><strong>{n.productTitle}</strong></h6>
+                                    <h6><strong><Link href={`/product-details?id=${n.id}`}>{n.productTitle}</Link></strong></h6>
                                     <h6>{n.price} <span className={styles.wareHouse}>{n.currentQTY + ' of ' + n.totalQTY}</span></h6>
                                     <div className={styles.productDescriptionBottom}>
                                         <h6 className={styles.placeBid}>{n.palceMessage}</h6> <h6 className={styles.placeBid}>{n.likes} <HeartTwoTone /></h6>
