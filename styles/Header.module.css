@@ -47,6 +47,11 @@
 }
 .mainNav {
     border-bottom: 1px solid #e5e5e5;
+    position: fixed;
+    top:0px;
+    left:0px;
+    right: 0px;
+    z-index: 99;
 }
 .mainNav ul{
     display: flex;
