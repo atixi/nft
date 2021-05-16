@@ -2,7 +2,6 @@
     display: flex;
     height: calc(100vh - 74px);
     flex-direction: column;
-    margin-top: 74px;
 }
 .content{
     flex:1;
@@ -42,12 +41,12 @@
     background-color: #fff;
     box-sizing: border-box;
 }
-/* .avatar{
+.avatar{
     width: 35px;
     height: 35px;
     border-radius: 50% !important;
     margin:8px !important;
-} */
+}
 .footer center{
     font-size: 16px;
     color:#bbb;
