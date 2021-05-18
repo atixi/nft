@@ -1,12 +1,16 @@
 import styles from '../styles/dropdown.module.css';
+import { Menu, Dropdown } from 'antd';
+
 
 export default function(props){
+
+
+
     return(
-    <span className={styles.dropdown}>
-        {props.trigger}
-        <label>
-            <input type="checkbox"/>
-            {props.children}
-        </label>
-    </span>);
+        <Dropdown className={styles.dropdown} overlayClassName={styles.dropdown} overlay={props.menu} trigger={['click']}>
+            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                {props.trigger}
+            </a>
+        </Dropdown>
+    );
 }
