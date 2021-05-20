@@ -2,9 +2,7 @@ import styles from '../styles/dropdown.module.css';
 import { Menu, Dropdown } from 'antd';
 
 
-export default function(props){
-
-
+export default function AppDropdown(props){
 
     return(
         <Dropdown className={styles.dropdown} overlayClassName={styles.dropdown} overlay={props.menu} trigger={['click']}>
