@@ -10,6 +10,9 @@ export default function Header(props) {
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
 
+  const connectToWallet = ()=>{
+    console.log('connect to wallet')
+  }
   const menuFooter = (
     <div className={mstyles.menu_footer}>
       <div>  
@@ -401,7 +404,7 @@ export default function Header(props) {
         </button>
 
         <button
-          className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block`}
+          className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block` } onClick={connectToWallet}
         >
           Connect wallet
         </button>

@@ -14,6 +14,15 @@ const fetchAssets = async (tokenAddress, tokenId) => {
   return asset;
 };
 
+const getAssetBalance = async (address, as) => {
+  const balance = await seaport.getAssetBalance({
+    accountAddress: address, // string
+    asset: as, // Asset
+  });
+  return balance;
+};
+
 export default {
   fetchAssets,
+  getAssetBalance,
 };
