@@ -4,4 +4,5 @@ const getTopSellers = () => client.get();
 
 export default {
   getTopSellers,
+  getLiveAuctions,
 };
