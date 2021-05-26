@@ -37,6 +37,30 @@ function LiveAuctions() {
     );
   
 }
+import styled from "styled-components"
+const Button = styled.button`
+    border: none;
+    background: transparent;
+    margin-right: 15px;
+    margin-top: -5px;
+`
+const CardTitle = styled.div`
+    font-weight: 700;
+    font-size: 16px;
+    color: black !important;
+`
+const ProductPrice = styled.span`
+text-transform: uppercase;
+	background: linear-gradient(to right, #009DFF 0%, #026BFF 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+    font-weight: bold;
+`;
+const BidsStatus = styled.small`
+    color: #818182;
+    font-weight: bold;
+`
+
 function Prod(product)
 {
     function handleButtonClick(e) {
@@ -65,26 +89,32 @@ function Prod(product)
     );
     console.log("productt: ",product)
      return (
-        <div className={`${styles.productItem} p-2 p-lg-1`}>
-                                 <div className={`${styles.topOfProductImage} mt-3`}>
-                                     <div>
-                                         {PRODUCTS.map(m =>
-                                             <img src={m.productImage} width={22} className={styles.ownImage} />
-                                         )}
-                                     </div>
-                                     <Dropdown.Button onClick={handleButtonClick} overlay={menu} />
-                                 </div>
-                                 <div className={`col-md-12 p-3`}>
-                                     <img src={product.productImage} className="w-100 rounded" />
-                                 </div>
-                                 <div className={styles.productDescriptionDiv}>
-                                     <h6><strong><Link href={`/product-details?id=${product.id}`}>{product.productTitle}</Link></strong></h6>
-                                     <h6>{product.price} <span className={styles.wareHouse}>{product.currentQTY + ' of ' + product.totalQTY}</span></h6>
-                                     <div className={styles.productDescriptionBottom}>
-                                         <h6 className={styles.placeBid}>{product.palceMessage}</h6> <h6 className={styles.placeBid}>{product.likes} <HeartTwoTone /></h6>
-                                    </div>
-                             </div>
-                            </div>
+        <div className={`${styles.productItem} p-2 p-lg-1 mr-3`}>
+            <div className={`${styles.topOfProductImage} mt-3`}>
+                <div className={"pl-3"}>
+                    {PRODUCTS.map(m =>
+                        <img src={m.productImage} width={22} className={styles.ownImage} />
+                    )}
+                </div>
+                <Dropdown onClick={handleButtonClick} overlay={menu} ><Button>...</Button></Dropdown> 
+            </div>
+            <div className={`col-md-12 p-3`}>
+                <img src={product.productImage} className="w-100 rounded" />
+            </div>
+            <div className={`${styles.productDescriptionDiv} pl-3`}>
+            <div className={styles.countDownParent}><div className={styles.countDown}>{"043h 34m 34s left"} <HeartTwoTone className={styles.countDownIcon}/></div></div>
+            <Link href={`/product-details?id=${product.id}`}><CardTitle>{product.productTitle}</CardTitle></Link>
+                <BidsStatus>Highest bids</BidsStatus>
+                <div className={styles.productDescriptionBottom}>
+                <ProductPrice>{product.price}</ProductPrice>
+                <span className={styles.wareHouse}>{" "+product.currentQTY + ' of ' + product.totalQTY}</span>
+                <span className={`${styles.likeButtonContainer}`}>
+                    <HeartTwoTone className={styles.likeButton} />
+                    <h6 className={`${styles.placeBid} mr-3`}>{product.likes}</h6>
+                </span>
+            </div>
+        </div>
+    </div>
      )
 }
 export default LiveAuctions;
