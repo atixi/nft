@@ -7,32 +7,26 @@ import TopSellers from "/Components/topSellers";
 import Slide from "/Components/slider/slide";
 import HotCollections from "/Components/HotCollections";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import useApi from "../../Components/hooks/useApi";
+import OpenSeaAPI from "../api/openSeaAPI";
 
 function Home() {
-  const [products, setProducts] = useState(null);
+  const collectionApi = useApi(OpenSeaAPI.getCollections);
+
+  const [items, setItems] = useState(null);
 
   useEffect(() => {
     loadCollections();
   }, []);
 
   const loadCollections = async () => {
-    const url = "https://api.opensea.io/api/v1/collections";
-
-    axios
-      .get(url)
-      .then(function(response) {
-        // handle success
-        setProducts(response.data.collections);
-      })
-      .catch(function(error) {
-        // handle error
-        console.log(error);
-      })
-      .then(function() {
-        // always executed
-      });
+    const result = await collectionApi.request();
+    if (result.ok) {
+      const collections = await result.data.collections;
+      setItems(collections);
+    }
   };
+
   return (
     <>
       <Head>
@@ -45,7 +39,7 @@ function Home() {
       <Header />
       <div style={{ maxWidth: 1400, margin: "auto" }}>
         <Slide />
-        <TopSellers data={products} />
+        <TopSellers data={items} />
         <LiveAuctions />
         <HotCollections />
         <Explore />

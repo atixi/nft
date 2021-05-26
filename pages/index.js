@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import { MY_TOKEN_ADDRESS } from "/Constants/constants";
 import { MY_TOKEN_ID } from "/Constants/constants";
-import openSeaApi from "./api/openSeaApi";
 import Home from "./home/index";
 import { useEffect, useState } from "react";
 import * as Web3 from "web3";
@@ -16,7 +15,7 @@ import {
 } from "../Constants/constants";
 import axios from "axios";
 
-const loadAsset = openSeaApi.fetchAssets(MY_TOKEN_ADDRESS, MY_TOKEN_ID);
+// const loadAsset = openSeaApi.fetchAssets(MY_TOKEN_ADDRESS, MY_TOKEN_ID);
 // const web3Provider =
 //   typeof web3 !== "undefined"
 //     ? window.web3.currentProvider
