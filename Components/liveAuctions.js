@@ -1,43 +1,14 @@
 import React from 'react';
-// import Products from '/Components/products';
 import { PRODUCTS } from '/Constants/constants'
 
 import Carousel from "react-elastic-carousel";
 
-import styles from '/styles/Products.module.css'
 import { Menu, Dropdown } from 'antd';
 import { HeartTwoTone } from '@ant-design/icons';
 import Link from 'next/link';
-const breakPoints = [
-  { width: 1, itemsToShow: 1 },
-  { width: 550, itemsToShow: 2, itemsToScroll: 2 },
-  { width: 768, itemsToShow: 3,itemsToScroll: 3 },
-  { width: 1024, itemsToShow:4,itemsToScroll:4 },
-  { width: 1200, itemsToShow: 5,itemsToScroll:5 }
-];
+import styled from "styled-components";
+import styles from '/styles/Products.module.css'
 
-function LiveAuctions() {
-    return (
-        <>
-            <div >
-                <div className="p-3">
-                    <h3>Live Auctions</h3>
-                </div>
-                {console.log(PRODUCTS)}
-
-                <Carousel breakPoints={breakPoints} pagination={false} transitionMs={1000}>
-                    {PRODUCTS.map((product) => (
-                    // console.log("called");
-                    Prod(product)
-                    
-                    ))} 
-                </Carousel>
-            </div>
-        </>
-    );
-  
-}
-import styled from "styled-components"
 const Button = styled.button`
     border: none;
     background: transparent;
@@ -61,7 +32,34 @@ const BidsStatus = styled.small`
     font-weight: bold;
 `
 
-function Prod(product)
+const breakPoints = [
+  { width: 1, itemsToShow: 1 },
+  { width: 550, itemsToShow: 2, itemsToScroll: 2 },
+  { width: 768, itemsToShow: 3,itemsToScroll: 3 },
+  { width: 1024, itemsToShow:4,itemsToScroll:4 },
+  { width: 1200, itemsToShow: 5,itemsToScroll:5 }
+];
+
+function LiveAuctions() {
+    return (
+        <>
+            <div >
+                <div className="p-3">
+                    <h3>Live Auctions</h3>
+                </div>
+
+                <Carousel breakPoints={breakPoints} pagination={false} transitionMs={1000}>
+                    {PRODUCTS.map((product) => (
+                    ProductCard(product)
+                    ))} 
+                </Carousel>
+            </div>
+        </>
+    );
+  
+}
+
+function ProductCard(product)
 {
     function handleButtonClick(e) {
         message.info('Click on left button.');
@@ -87,7 +85,6 @@ function Prod(product)
             </Menu.Item>
         </Menu>
     );
-    console.log("productt: ",product)
      return (
         <div className={`${styles.productItem} p-2 p-lg-1 mr-3`}>
             <div className={`${styles.topOfProductImage} mt-3`}>
