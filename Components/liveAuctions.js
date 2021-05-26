@@ -72,16 +72,16 @@ function ProductCard(product)
     const menu = (
         <Menu onClick={handleMenuClick}>
             <Menu.Item key="1">
-                Purchase now
+                <span>Purchase now</span>
             </Menu.Item>
             <Menu.Item key="2">
-                Place a bid
+                <span>Place a bid</span>
             </Menu.Item>
             <Menu.Item key="3">
-                View on OpenSea
+                <span>View on OpenSea</span>
             </Menu.Item>
             <Menu.Item key="3">
-                Share
+                <span>Share</span>
             </Menu.Item>
         </Menu>
     );
@@ -93,7 +93,7 @@ function ProductCard(product)
                         <img src={m.productImage} width={22} className={styles.ownImage} />
                     )}
                 </div>
-                <Dropdown onClick={handleButtonClick} overlay={menu} ><Button>...</Button></Dropdown> 
+                <Dropdown onClick={handleButtonClick} overlay={menu} placement="bottomRight" ><Button>...</Button></Dropdown> 
             </div>
             <div className={`col-md-12 p-3`}>
                 <img src={product.productImage} className="w-100 rounded" />
