@@ -3,11 +3,12 @@ import { PRODUCTS } from '/Constants/constants'
 
 import Carousel from "react-elastic-carousel";
 
-import { Menu, Dropdown } from 'antd';
+import { Menu, Dropdown, Avatar, Tooltip } from 'antd';
 import { HeartTwoTone } from '@ant-design/icons';
 import Link from 'next/link';
 import styled from "styled-components";
 import styles from '/styles/Products.module.css'
+import Profile from "/Components/profileAvatar";
 
 const Button = styled.button`
     border: none;
@@ -89,11 +90,18 @@ function ProductCard(product)
         <div className={`${styles.productItem} p-2 p-lg-1 mr-3`}>
             <div className={`${styles.topOfProductImage} mt-3`}>
                 <div className={"pl-3"}>
+                <Avatar.Group>
                     {PRODUCTS.map(m =>
-                        <img src={m.productImage} width={22} className={styles.ownImage} />
+                     
+                            <Tooltip title={m.id} placement="top">
+                              <Avatar icon={<img src={m.productImage} width={22} />} />
+                              {/* <Profile profile={m.productImage} size={"small"} tick={false} /> */}
+                            </Tooltip>
                     )}
+                    </Avatar.Group>
+
                 </div>
-                <Dropdown onClick={handleButtonClick} overlay={menu} placement="bottomRight" ><Button>...</Button></Dropdown> 
+                <Dropdown trigger={['click']} onClick={handleButtonClick} overlay={menu} placement="bottomRight" ><Button>...</Button></Dropdown> 
             </div>
             <div className={`col-md-12 p-3`}>
                 <img src={product.productImage} className="w-100 rounded" />

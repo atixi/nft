@@ -1,8 +1,8 @@
 .slideWrapper{
     width: auto;
     overflow-x: auto;
-    padding:15px;
-    margin:0px 20px;
+    padding:15px 0px;
+    margin-right: 20px;
     white-space: nowrap;
 }
 .slideWrapper::-webkit-scrollbar {

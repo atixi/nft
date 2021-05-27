@@ -25,8 +25,15 @@
     list-style-type: none;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: left;
     justify-content: flex-start;
+    padding-left: 0px;
+}
+.categoriesList li
+{
+    border: solid 0.002rem rgb(204, 201, 201) !important;
+    margin-right: 10px !important;
+    color: black;
 }
 .productItem{
     border: 1px solid #ccc;
