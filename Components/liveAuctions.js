@@ -49,7 +49,7 @@ function Product(product)
             <Menu.Item key="3">
                 <span>{CONSTANTS.viewOnOpenSea}</span>
             </Menu.Item>
-            <Menu.Item key="3">
+            <Menu.Item key="4">
                 <span>{CONSTANTS.share}</span>
             </Menu.Item>
         </Menu>

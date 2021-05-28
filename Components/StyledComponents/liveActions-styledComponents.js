@@ -18,6 +18,7 @@ text-transform: uppercase;
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
     font-weight: bold;
+    font-size: ${props => props.fontSize ? props.fontSize : "15px"};
 `;
 export const BidsStatus = styled.small`
     color: #818182;
@@ -86,6 +87,6 @@ export const HeartIcon = styled(HeartTwoTone)`
 color: #818182;
 font-size: 35px;
 position: relative;
-left: 80px;
+right: ${props => props.right ? props.right : "-80px"};
 top: -3px;
 `
