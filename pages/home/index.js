@@ -9,21 +9,46 @@ import HotCollections from "/Components/HotCollections";
 import { useEffect, useState } from "react";
 import useApi from "../../Components/hooks/useApi";
 import OpenSeaAPI from "../api/openSeaAPI";
-
+import { accountLIst, assetTokens } from "../../Constants/constants";
+import openSeaAPI from "../api/openSeaAPI";
 function Home() {
-  const collectionApi = useApi(OpenSeaAPI.getCollections);
-
   const [items, setItems] = useState(null);
+  const [bundles, setBundles] = useState();
+  const [topSellers, setTopSellers] = useState(null);
+  const [liveAuctions, setLiveAuctions] = useState(null);
+  const [explore, setExplore] = useState(null);
+  const [collections, setCollections] = useState(null);
+  const [accountAddress, setAccountAddress] = useState(accountLIst[1]);
 
   useEffect(() => {
+    loadBundles();
+    loadTopSellers();
     loadCollections();
   }, []);
 
-  const loadCollections = async () => {
-    const result = await collectionApi.request();
+  const loadBundles = async () => {
+    const result = await openSeaAPI.getBundles(accountAddress);
+
     if (result.ok) {
-      const collections = await result.data.collections;
-      setItems(collections);
+      const bundles = result.data?.bundles;
+      console.log(bundles);
+      setBundles(bundles);
+    }
+  };
+
+  // this function is not complete
+  const loadTopSellers = async () => {
+    const result = await OpenSeaAPI.getAssetsListByOwner(accountAddress);
+    if (result.ok) {
+      const assets = await result.data.assets;
+      // setTopSellers(assets);
+    }
+  };
+  const loadCollections = async () => {
+    const result = await OpenSeaAPI.getCollections(accountAddress);
+    if (result.ok) {
+      const collections = await result.data;
+      setCollections(collections);
     }
   };
 
@@ -36,15 +61,15 @@ function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
+      {/* <Header /> */}
       <div style={{ maxWidth: 1400, margin: "auto" }}>
         <Slide />
-        <TopSellers data={items} />
-        <LiveAuctions />
-        <HotCollections />
-        <Explore />
+        <TopSellers data={topSellers} />
+        <LiveAuctions data={items} />
+        <HotCollections data={collections} />
+        <Explore data={bundles} />
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

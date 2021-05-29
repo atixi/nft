@@ -1,7 +1,7 @@
 import { create } from "apisauce";
 
 const apiClient = create({
-  baseURL: "https://api.opensea.io/api/v1/collections",
+  baseURL: "https://api.opensea.io/api/v1",
 });
 
 // apiClient.addAsyncRequestTransform(async (request) => {

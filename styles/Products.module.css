@@ -33,7 +33,7 @@
     border-radius: 15px;
 }
 .productDescriptionDiv{
-
+    justify-content: first baseline;
 }
 .topOfProductImage{
     display: flex;
@@ -43,9 +43,12 @@
 .wareHouse{
     color: #969696;
     font-size: 12px;
+    position: relative;
+    left: 0px;
 }
 .placeBid{
-    color: #0887ff
+    color: #818182;
+    float: right;
 }
 .ownImage{
     border-radius: 50%;
@@ -53,8 +56,50 @@
 .ownImage:not(:first-child){
     margin-left: -10px;
 }
-.productDescriptionBottom{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.likeButton{
+    color: #818182;
+    font-size: 35px;
+    position: relative;
+    left: 80px;
+    top: -3px;
+}
+.countDownParent
+{
+    position: relative;
+    height: 30px;
+    margin-top: -50px;
+    width: 170px;
+    margin-bottom: 20px;
+    z-index: 1;
+    text-align: center;
+}
+.countDown
+{
+    position: relative;
+    top: 2px;
+    background: white;
+    width: 165px;
+    border-radius: 25px;
+    height: 36px;
+    left: -10px;
+    padding-top: 7px;
+
+}
+.countDownParent:before
+{
+    content: " ";
+    position: absolute;
+    width: 170px;
+    height: 40px;
+    left: -12px !important;
+    inset: 0px;
+    z-index: 0.5;
+    border-radius: 25px;
+    background: linear-gradient(to right, rgb(12, 80, 255) 0%, rgb(12, 80, 255) 24%, rgb(91, 157, 255) 55.73%, rgb(255, 116, 241) 75%, rgb(255, 116, 241) 100%);
+}
+.countDownIcon
+{
+    position: relative;
+    top: -2px;
+    left: 3px;
 }

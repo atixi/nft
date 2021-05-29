@@ -76,7 +76,8 @@ export const PRODUCTS = [
   {
     id: 1,
     productTitle: "product one",
-    productImage: "/images/products/product1.jpg",
+    productImage:
+      "https://lh3.googleusercontent.com/7O9TM4--FDArfDp2BD7hKC20Fw3ROnDSbQSmr3MWS10v3icIsrvF_7T8g9-FgPO0_R56qqMg-1RAml3pgJZafVzskylaTosRGaka5g",
     price: "99 ETH",
     currentQTY: 90,
     totalQTY: 100,
@@ -86,7 +87,8 @@ export const PRODUCTS = [
   {
     id: 2,
     productTitle: "product one",
-    productImage: "/images/products/product1.jpg",
+    productImage:
+      "https://lh3.googleusercontent.com/7O9TM4--FDArfDp2BD7hKC20Fw3ROnDSbQSmr3MWS10v3icIsrvF_7T8g9-FgPO0_R56qqMg-1RAml3pgJZafVzskylaTosRGaka5g",
     price: "99 ETH",
     currentQTY: 90,
     totalQTY: 100,
@@ -96,7 +98,8 @@ export const PRODUCTS = [
   {
     id: 3,
     productTitle: "product one",
-    productImage: "/images/products/product1.jpg",
+    productImage:
+      "https://lh3.googleusercontent.com/7O9TM4--FDArfDp2BD7hKC20Fw3ROnDSbQSmr3MWS10v3icIsrvF_7T8g9-FgPO0_R56qqMg-1RAml3pgJZafVzskylaTosRGaka5g",
     price: "99 ETH",
     currentQTY: 90,
     totalQTY: 100,
@@ -106,7 +109,8 @@ export const PRODUCTS = [
   {
     id: 4,
     productTitle: "product one",
-    productImage: "/images/products/product1.jpg",
+    productImage:
+      "https://lh3.googleusercontent.com/7O9TM4--FDArfDp2BD7hKC20Fw3ROnDSbQSmr3MWS10v3icIsrvF_7T8g9-FgPO0_R56qqMg-1RAml3pgJZafVzskylaTosRGaka5g",
     price: "99 ETH",
     currentQTY: 90,
     totalQTY: 100,
@@ -266,4 +270,15 @@ export const SELLERS = [
     likes: 100,
     palceMessage: "Place a bid",
   },
+];
+
+export const assetTokens = [
+  "63612454193857669735992767605921166416679510491416240189969904965695435702273",
+  "63612454193857669735992767605921166416679510491416240189969904962396900818945",
+  "63612454193857669735992767605921166416679510491416240189969904961297389191169",
+];
+
+export const accountLIst = [
+  "0x8CA35f878fD14992b58a18bEB484f721b1d07A33",
+  "0x579b52c84cd88e4ab4f5558131dfbe01143b96b0",
 ];
