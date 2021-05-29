@@ -27,7 +27,7 @@ export default function HotCollections(props) {
     }
     return (
     
-      <div style={{padding:"25px"}}>
+      <div style={{padding:"25px 0px"}}>
           <h3>Hot collections 💥</h3>
         <Carousel breakPoints={breakPoints} pagination={false} transitionMs={1000}>
           {items.map((item) => (
