@@ -1,10 +1,13 @@
-// import * as Web3 from "web3";
-// import { OpenSeaPort, Network } from "opensea-js";
+import * as Web3 from "web3";
+import { OpenSeaPort, Network } from "opensea-js";
 
-// const provider = new Web3.providers.HttpProvider("https://mainnet.infura.io");
-// const seaport = new OpenSeaPort(provider, {
-//   networkName: Network.Main,
-// });
+export let web3Provider =
+  typeof web3 !== "undefined"
+    ? window.web3.currentProvider
+    : new Web3.providers.HttpProvider("https://mainnet.infura.io");
+const seaport = new OpenSeaPort(web3Provider, {
+  networkName: Network.Main,
+});
 
 // const fetchAssets = async (tokenAddress, tokenId) => {
 //   const asset = await seaport.api.getAsset({
