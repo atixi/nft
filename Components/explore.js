@@ -1,11 +1,9 @@
 import React from 'react';
 import Products from '/Components/products';
-// import Profile from "/Components/profileAvatar";
 import { Dropdown, Menu, Switch } from 'antd';
 import EXPLORE_CONSTANTS from "/Constants/exploreConstants"
 import {FilterAndSort, CategoriesListContainer, CategoriesListScroll, CategoriesList} from "./StyledComponents/explore-styledComponents";
 import {SectionHeading} from "./StyledComponents/globalStyledComponents";
-
 
 const menu = (
     <Menu>

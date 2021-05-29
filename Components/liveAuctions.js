@@ -4,19 +4,15 @@ import Carousel from "react-elastic-carousel";
 import { Menu, Dropdown, Avatar, Tooltip } from 'antd';
 import Link from 'next/link';
 import CONSTANTS from "/Constants/liveActionsConstants"
-
 import {Button, CardTitle, ProductPrice, BidsStatus, ProductCard, HeartIcon, NumberOfLikes, LikesContainer, ProductList, ProductCardHeader, ProductDescriptionBottom, ProductDescription, CountDownContainer, CountDown} from "./StyledComponents/liveActions-styledComponents";
- 
 import {SectionHeading} from "./StyledComponents/globalStyledComponents";
-
 const breakPoints = [
   { width: 1, itemsToShow: 1 },
   { width: 550, itemsToShow: 2, itemsToScroll: 2 },
-  { width: 768, itemsToShow: 3,itemsToScroll: 3 },
-  { width: 1024, itemsToShow:4,itemsToScroll:4 },
-  { width: 1200, itemsToShow: 5,itemsToScroll:5 }
+  { width: 768, itemsToShow: 3, itemsToScroll: 3 },
+  { width: 1024, itemsToShow: 4, itemsToScroll: 4 },
+  { width: 1200, itemsToShow: 5, itemsToScroll: 5 },
 ];
-
 function LiveAuctions() {
     return (
         <>
