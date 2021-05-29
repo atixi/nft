@@ -1,76 +1,49 @@
-import styles from '/styles/TopSellers.module.css'
-import { Row, Col, Avatar } from 'antd'
-import Link from 'next/link'
-import React from 'react';
-import { SELLERS } from '/Constants/constants'
-const breackCol = '<Col /> asdfsdf'
-//<Markup content={breackCol} />
-const check = (i) => {
-    i++;
-    if ((i / 5) === 0) {
-        //return <h1>asdf</h1>
-        console.log("some thing" + i)
-    }
+import { Row, Col, Avatar, Image } from "antd";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import useApi from "./hooks/useApi";
+import "react-multi-carousel/lib/styles.css";
+import styles from "../styles/topSeller.module.css";
+import { SELLERS } from "../Constants/constants";
+const breackCol = "<Col /> asdfsdf";
+{
+  /* <Markup content={breackCol} />; */
 }
-function TopSellers() {
-    return (
-        <>
-            <div className="">
-                <div className="p-3">
-                    <h3>Top Sellers in 1 Day</h3>
+const check = (i) => {
+  i++;
+  if (i / 5 === 0) {
+    //return <h1>asdf</h1>
+    console.log("some thing" + i);
+  }
+};
+
+function TopSellers({ data }) {
+  return (
+    <>
+      <div className="">
+        <div className="p-3">
+          <h3>Top Sellers in 1 Day</h3>
+        </div>
+        <div className={styles.topSellerContainer}>
+          {data &&
+            data.map((seller, index) => (
+              <div className={styles.topSellerItem} key={seller.name}>
+                <div>{index + 1}</div>
+                <div className={styles.iconContainer}>
+                  <img className={styles.icon} src={seller.image_url} />
                 </div>
-
-                <Row justify="space-between" className={styles.topSells}>
-                    {SELLERS.map((n, i) =>
-                        <Col md={5} sm={6} xs={14}>
-                            <Row className={`${styles.topItem} p-2 p-lg-1`}>
-                                <Col md={1} sm={1} xs={1}>
-                                    {n.id}
-                                </Col>
-                                <Col className={styles.topItemImage} md={5} sm={6} xs={7}>
-                                    <Avatar size="large" src={n.productImage} />
-                                </Col>
-                                <Col md={18} sm={17} xs={16}>
-                                    <Link href='/profile/[id]' as={`/profile/${n.id}`} >{n.productTitle}</Link>
-                                    <br />
-                                    <span>3 ETH</span>
-                                </Col>
-                            </Row>
-                            <Row className={`${styles.topItem} p-2 p-lg-1`}>
-                                <Col md={1} sm={1} xs={1}>
-                                    {n.id}
-                                </Col>
-                                <Col className={styles.topItemImage} md={5} sm={6} xs={7}>
-                                    <Avatar size="large" src={n.productImage} />
-                                </Col>
-                                <Col md={18} sm={17} xs={16}>
-                                    <Link href='/profile/[id]' as={`/profile/${n.id}`} >{n.productTitle}</Link>
-                                    <br />
-                                    <span>3 ETH</span>
-                                </Col>
-                            </Row>
-                            <Row className={`${styles.topItem} p-2 p-lg-1`}>
-                                <Col md={1} sm={1} xs={1}>
-                                    {n.id}
-                                </Col>
-                                <Col className={styles.topItemImage} md={5} sm={6} xs={7}>
-                                    <Avatar  size="large" src={n.productImage} />
-                                </Col>
-                                <Col md={18} sm={17} xs={16}>
-                                    <Link href='/profile/[id]' as={`/profile/${n.id}`} >{n.productTitle}</Link>
-                                    <br />
-                                    <span>3 ETH</span>
-                                </Col>
-                            </Row>
-
-                            {check(i)}
-                        </Col>
-                    )}
-
-                </Row>
-            </div>
-        </>
-    );
+                <div className={styles.sellerDetails}>
+                  <div key={seller.name + seller.name}>{seller.name}</div>
+                  <div className={styles.sellerPrice}>
+                    {seller.stats?.average_price}
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default TopSellers;
