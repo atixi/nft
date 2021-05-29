@@ -1,4 +1,3 @@
-import styles from '/styles/Products.module.css'
 import React from 'react';
 import Products from '/Components/products';
 // import Profile from "/Components/profileAvatar";
