@@ -18,30 +18,33 @@ const check = (i) => {
 };
 
 function TopSellers({ data }) {
+  const topSellers = data;
   return (
     <>
-      <div className="">
-        <div className="p-3">
-          <h3>Top Sellers in 1 Day</h3>
-        </div>
-        <div className={styles.topSellerContainer}>
-          {data &&
-            data.map((seller, index) => (
-              <div className={styles.topSellerItem} key={seller.name}>
-                <div>{index + 1}</div>
-                <div className={styles.iconContainer}>
-                  <img className={styles.icon} src={seller.image_url} />
-                </div>
-                <div className={styles.sellerDetails}>
-                  <div key={seller.name + seller.name}>{seller.name}</div>
-                  <div className={styles.sellerPrice}>
-                    {seller.stats?.average_price}
+      {topSellers && (
+        <div className="">
+          <div className="p-3">
+            <h3>Top Sellers in 1 Day</h3>
+          </div>
+          <div className={styles.topSellerContainer}>
+            {data &&
+              data.map((seller, index) => (
+                <div className={styles.topSellerItem} key={seller.name}>
+                  <div>{index + 1}</div>
+                  <div className={styles.iconContainer}>
+                    <img className={styles.icon} src={seller.image_url} />
+                  </div>
+                  <div className={styles.sellerDetails}>
+                    <div key={seller.name + seller.name}>{seller.name}</div>
+                    <div className={styles.sellerPrice}>
+                      {seller.stats?.average_price}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

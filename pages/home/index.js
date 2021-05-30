@@ -7,10 +7,11 @@ import TopSellers from "/Components/topSellers";
 import Slide from "/Components/slider/slide";
 import HotCollections from "/Components/HotCollections";
 import { useEffect, useState } from "react";
-import openSeaAPI from "../api/openseaApi";
+import OpenSeaAPI from "../api/openseaApi";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { InjectedConnector } from "@web3-react/injected-connector";
 import { useWeb3React } from "@web3-react/core";
+import { accountLIst } from "../../Constants/constants";
 
 export const injectedConnector = new InjectedConnector({
   supportedChainIds: [
@@ -57,7 +58,8 @@ function Home() {
   const [liveAuctions, setLiveAuctions] = useState(null);
   const [explore, setExplore] = useState(null);
   const [collections, setCollections] = useState(null);
-  const { chainId, account, activate, active } = useWeb3React();
+  const [accountAddress, setAccountAddress] = useState(accountLIst[0]);
+  // const { chainId, account, activate, active } = useWeb3React(accountLIst);
 
   useEffect(() => {
     initData();
@@ -65,31 +67,30 @@ function Home() {
 
   const initData = () => {
     loadBundles();
-    // loadTopSellers();
-    // loadCollections();
+    loadTopSellers();
+    loadCollections();
     // initAccount();
   };
   const loadBundles = async () => {
-    const result = await openSeaAPI.getBundles(account);
+    const result = await OpenSeaAPI.getBundles(accountLIst[1]);
 
     if (result.ok) {
       const bundles = result.data?.bundles;
       setBundles(bundles);
-      console.log(bundles);
     }
   };
 
   // this function is not complete
   const loadTopSellers = async () => {
-    const result = await OpenSeaAPI.getAssetsListByOwner(account);
+    const result = await OpenSeaAPI.getAssetsListByOwner(accountAddress);
     if (result.ok) {
       const assets = await result.data.assets;
-      // setTopSellers(assets);
+      setTopSellers(assets);
     }
   };
 
   const loadCollections = async () => {
-    const result = await OpenSeaAPI.getCollections(account);
+    const result = await OpenSeaAPI.getCollections(accountAddress);
     if (result.ok) {
       const collections = await result.data;
       setCollections(collections);
@@ -109,7 +110,7 @@ function Home() {
       <div style={{ maxWidth: 1400, margin: "auto" }}>
         <Slide />
         <TopSellers data={topSellers} />
-        <LiveAuctions data={items} />
+        {/* <LiveAuctions data={items} /> */}
         <HotCollections data={collections} />
         <Explore data={bundles} />
       </div>
