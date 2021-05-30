@@ -6,12 +6,14 @@ import Image from 'next/image'
 import Search from "./search";
 import Dropdown from "./Dropdown";
 import { Menu } from "antd";
+import { useMetaMask } from "metamask-react";
 export default function Header(props) {
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
-
+  const { status, connect, account } = useMetaMask();
   const connectToWallet = ()=>{
     console.log('connect to wallet')
+
   }
   const menuFooter = (
     <div className={mstyles.menu_footer}>
@@ -403,11 +405,16 @@ export default function Header(props) {
           Create
         </button>
 
-        <button
+        {status === "notConnected" ? <button
+          className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block` } onClick={connect}
+        >
+          Connect wallet 
+        </button> : <button
           className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block` } onClick={connectToWallet}
         >
-          Connect wallet
-        </button>
+          Account <span style={{fontWeight: 'bolder'}}>{account && (account.substring(0, 6)+ 
+          "..."+account?.substring(account?.length - 4, account?.length ))}</span> 
+        </button>}
 
         <button
           onClick={() => {
