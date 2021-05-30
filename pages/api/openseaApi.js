@@ -1,33 +1,27 @@
-// import * as Web3 from "web3";
-// import { OpenSeaPort, Network } from "opensea-js";
-
-// const provider = new Web3.providers.HttpProvider("https://mainnet.infura.io");
-// const seaport = new OpenSeaPort(provider, {
-//   networkName: Network.Main,
-// });
-
-// const fetchAssets = async (tokenAddress, tokenId) => {
-//   const asset = await seaport.api.getAsset({
-//     tokenAddress: tokenAddress, // string
-//     tokenId: tokenId, // string | number | null
-//   });
-//   return asset;
-// };
-
-// const getAssetBalance = async (address, as) => {
-//   const balance = await seaport.getAssetBalance({
-//     accountAddress: address, // string
-//     asset: as, // Asset
-//   });
-//   return balance;
-// };
-
-// export default {
-//   fetchAssets,
-//   getAssetBalance,
-// };
+import * as Web3 from "web3";
+import { OpenSeaPort, Network } from "opensea-js";
 
 import client from "./openSeaClient";
+
+const provider = new Web3.providers.HttpProvider("https://mainnet.infura.io");
+
+const seaport = new OpenSeaPort(provider, {
+  networkName: Network.Main,
+});
+
+async function getAccount() {
+  let error = null;
+  let accountAddress = null;
+
+  const web3 = await seaport.web3;
+
+  const result = await web3.eth.getAccounts((e, res) => {
+    console.log(res);
+    // accountAddress = res[0];
+  });
+
+  return { accountAddress, error };
+}
 
 async function getCollections(owner) {
   return await client.get(`collections?asset_owner=${owner}`);
@@ -71,6 +65,7 @@ async function getSingleAsset(accountId, assetId) {
 }
 
 export default {
+  getAccount,
   getCollections,
   getBundles,
   getAssetsByTokenIds,

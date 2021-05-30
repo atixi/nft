@@ -7,10 +7,49 @@ import TopSellers from "/Components/topSellers";
 import Slide from "/Components/slider/slide";
 import HotCollections from "/Components/HotCollections";
 import { useEffect, useState } from "react";
-import useApi from "../../Components/hooks/useApi";
-import OpenSeaAPI from "../api/openSeaAPI";
-import { accountLIst, assetTokens } from "../../Constants/constants";
-import openSeaAPI from "../api/openSeaAPI";
+import openSeaAPI from "../api/openseaApi";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import { InjectedConnector } from "@web3-react/injected-connector";
+import { useWeb3React } from "@web3-react/core";
+
+export const injectedConnector = new InjectedConnector({
+  supportedChainIds: [
+    1, // Mainet
+    3, // Ropsten
+    4, // Rinkeby
+    5, // Goerli
+    42, // Kovan
+  ],
+});
+const providerOptions = {
+  injected: {
+    display: {
+      // logo: `data:image/gif;base64,INSERT_BASE64_STRING`,
+      name: "Injected",
+      description: "Connect with the provider in your Browser",
+    },
+    package: null,
+  },
+  // Example with WalletConnect provider
+  walletconnect: {
+    display: {
+      // logo: "data:image/gif;base64,INSERT_BASE64_STRING",
+      name: "Mobile",
+      description: "Scan qrcode with your mobile wallet",
+    },
+    package: WalletConnectProvider,
+    options: {
+      infuraId: "INFURA_ID", // required
+    },
+  },
+};
+
+function getLibrary(provider) {
+  const library = new Web3Provider(provider);
+  library.pollingInterval = 12000;
+  return library;
+}
+
 function Home() {
   const [items, setItems] = useState(null);
   const [bundles, setBundles] = useState();
@@ -18,34 +57,39 @@ function Home() {
   const [liveAuctions, setLiveAuctions] = useState(null);
   const [explore, setExplore] = useState(null);
   const [collections, setCollections] = useState(null);
-  const [accountAddress, setAccountAddress] = useState(accountLIst[1]);
+  const { chainId, account, activate, active } = useWeb3React();
 
   useEffect(() => {
-    loadBundles();
-    loadTopSellers();
-    loadCollections();
+    initData();
   }, []);
 
+  const initData = () => {
+    loadBundles();
+    // loadTopSellers();
+    // loadCollections();
+    // initAccount();
+  };
   const loadBundles = async () => {
-    const result = await openSeaAPI.getBundles(accountAddress);
+    const result = await openSeaAPI.getBundles(account);
 
     if (result.ok) {
       const bundles = result.data?.bundles;
-      console.log(bundles);
       setBundles(bundles);
+      console.log(bundles);
     }
   };
 
   // this function is not complete
   const loadTopSellers = async () => {
-    const result = await OpenSeaAPI.getAssetsListByOwner(accountAddress);
+    const result = await OpenSeaAPI.getAssetsListByOwner(account);
     if (result.ok) {
       const assets = await result.data.assets;
       // setTopSellers(assets);
     }
   };
+
   const loadCollections = async () => {
-    const result = await OpenSeaAPI.getCollections(accountAddress);
+    const result = await OpenSeaAPI.getCollections(account);
     if (result.ok) {
       const collections = await result.data;
       setCollections(collections);
@@ -61,7 +105,7 @@ function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* <Header /> */}
+      <Header />
       <div style={{ maxWidth: 1400, margin: "auto" }}>
         <Slide />
         <TopSellers data={topSellers} />
@@ -69,7 +113,7 @@ function Home() {
         <HotCollections data={collections} />
         <Explore data={bundles} />
       </div>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }
