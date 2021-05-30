@@ -17,8 +17,7 @@ function Home() {
   const [topSellers, setTopSellers] = useState(null);
   const [liveAuctions, setLiveAuctions] = useState(null);
   const [collections, setCollections] = useState(null);
-  const [accountAddress, setAccountAddress] = useState(accountLIst[0]);
-  // const { chainId, account, activate, active } = useWeb3React(accountLIst);
+  const { account } = useMetaMask();
 
   useEffect(() => {
     initData();

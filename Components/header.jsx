@@ -418,10 +418,10 @@ export default function Header(props) {
         >
           Connect wallet 
         </button> : <button
-          className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block` } onClick={connect}
+          className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block` } onClick={connectToWallet}
         >
-          Account <span style={{fontWeight: 'bolder'}}>{welletAddress && (welletAddress.substring(0, 6)+ 
-          "..."+welletAddress?.substring(welletAddress?.length - 4, welletAddress?.length ))}</span> 
+          Account <span style={{fontWeight: 'bolder'}}>{account && (account.substring(0, 6)+ 
+          "..."+account?.substring(account?.length - 4, account?.length ))}</span> 
         </button>}
 
         <button
