@@ -1,4 +1,3 @@
-import styles from "../styles/Footer.module.css";
 import { Row, Col, Input, Space } from "antd";
 import { FOOTER } from "/Constants/footerConstants";
 import { FOOTER_WEBSITE_LINKS } from "/Constants/footerConstants";
