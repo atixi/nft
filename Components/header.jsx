@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/Header.module.css";
 import hstyles from "../styles/search.module.css";
 import mstyles from "../styles/dropdown.module.css";
@@ -7,10 +7,18 @@ import Search from "./search";
 import Dropdown from "./Dropdown";
 import { Menu } from "antd";
 import { useMetaMask } from "metamask-react";
+import { accountList } from "../Constants/constants";
 export default function Header(props) {
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
   const { status, connect, account } = useMetaMask();
+  const [welletAddress, setAccountAddress] = useState(account ? account : accountList[0]);
+
+  useEffect(()=>{
+    window.ethereum.on("accountsChanged", function(accounts) {
+      setAccountAddress(accounts[0])
+    });    
+  }, [])
   const connectToWallet = ()=>{
     console.log('connect to wallet')
 
@@ -410,10 +418,10 @@ export default function Header(props) {
         >
           Connect wallet 
         </button> : <button
-          className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block` } onClick={connectToWallet}
+          className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block` } onClick={connect}
         >
-          Account <span style={{fontWeight: 'bolder'}}>{account && (account.substring(0, 6)+ 
-          "..."+account?.substring(account?.length - 4, account?.length ))}</span> 
+          Account <span style={{fontWeight: 'bolder'}}>{welletAddress && (welletAddress.substring(0, 6)+ 
+          "..."+welletAddress?.substring(welletAddress?.length - 4, welletAddress?.length ))}</span> 
         </button>}
 
         <button

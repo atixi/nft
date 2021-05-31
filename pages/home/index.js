@@ -24,9 +24,12 @@ function Home() {
   }, []);
 
   const initData = () => {
-    loadBundles();
-    loadTopSellers();
-    loadCollections();
+    window.ethereum.on("accountsChanged", function(accounts) {
+      console.log(accounts);
+    });
+    // loadBundles();
+    // loadTopSellers();
+    // loadCollections();
   };
 
   const loadBundles = async () => {
