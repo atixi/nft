@@ -7,89 +7,57 @@ import TopSellers from "/Components/topSellers";
 import Slide from "/Components/slider/slide";
 import HotCollections from "/Components/HotCollections";
 import { useEffect, useState } from "react";
-import openSeaAPI from "../api/openseaApi";
-import WalletConnectProvider from "@walletconnect/web3-provider";
-import { InjectedConnector } from "@web3-react/injected-connector";
-import { useWeb3React } from "@web3-react/core";
-
-export const injectedConnector = new InjectedConnector({
-  supportedChainIds: [
-    1, // Mainet
-    3, // Ropsten
-    4, // Rinkeby
-    5, // Goerli
-    42, // Kovan
-  ],
-});
-const providerOptions = {
-  injected: {
-    display: {
-      // logo: `data:image/gif;base64,INSERT_BASE64_STRING`,
-      name: "Injected",
-      description: "Connect with the provider in your Browser",
-    },
-    package: null,
-  },
-  // Example with WalletConnect provider
-  walletconnect: {
-    display: {
-      // logo: "data:image/gif;base64,INSERT_BASE64_STRING",
-      name: "Mobile",
-      description: "Scan qrcode with your mobile wallet",
-    },
-    package: WalletConnectProvider,
-    options: {
-      infuraId: "INFURA_ID", // required
-    },
-  },
-};
-
-function getLibrary(provider) {
-  const library = new Web3Provider(provider);
-  library.pollingInterval = 12000;
-  return library;
-}
+import OpenSeaAPI from "../api/openseaApi";
+import { accountList } from "../../Constants/constants";
+import { useMetaMask } from "metamask-react";
 
 function Home() {
   const [items, setItems] = useState(null);
   const [bundles, setBundles] = useState();
   const [topSellers, setTopSellers] = useState(null);
   const [liveAuctions, setLiveAuctions] = useState(null);
-  const [explore, setExplore] = useState(null);
   const [collections, setCollections] = useState(null);
-  const { chainId, account, activate, active } = useWeb3React();
+  const { account } = useMetaMask();
 
   useEffect(() => {
     initData();
   }, []);
 
   const initData = () => {
-    loadBundles();
+    window.ethereum.on("accountsChanged", function(accounts) {
+      console.log(accounts);
+    });
+    // loadBundles();
     // loadTopSellers();
     // loadCollections();
-    // initAccount();
   };
+
   const loadBundles = async () => {
-    const result = await openSeaAPI.getBundles(account);
+    const result = await OpenSeaAPI.getBundles(
+      account ? account : accountList[0]
+    );
 
     if (result.ok) {
       const bundles = result.data?.bundles;
       setBundles(bundles);
-      console.log(bundles);
     }
   };
 
   // this function is not complete
   const loadTopSellers = async () => {
-    const result = await OpenSeaAPI.getAssetsListByOwner(account);
+    const result = await OpenSeaAPI.getAssetsListByOwner(
+      account ? account : accountList[0]
+    );
     if (result.ok) {
       const assets = await result.data.assets;
-      // setTopSellers(assets);
+      setTopSellers(assets);
     }
   };
 
   const loadCollections = async () => {
-    const result = await OpenSeaAPI.getCollections(account);
+    const result = await OpenSeaAPI.getCollections(
+      account ? account : accountList[0]
+    );
     if (result.ok) {
       const collections = await result.data;
       setCollections(collections);
@@ -109,7 +77,7 @@ function Home() {
       <div style={{ maxWidth: 1400, margin: "auto" }}>
         <Slide />
         <TopSellers data={topSellers} />
-        <LiveAuctions data={items} />
+        <LiveAuctions data={topSellers} />
         <HotCollections data={collections} />
         <Explore data={bundles} />
       </div>
