@@ -66,13 +66,13 @@ function Product(product) {
     </Menu>
   );
   return (
-    <ProductCard className={`p-2 p-lg-1 mr-3`}>
+    <ProductCard key={product.id} className={`p-2 p-lg-1 mr-3`}>   
       <ProductCardHeader className={`mt-3`}>
         <div className={"pl-3"}>
           <Avatar.Group>
-            {PRODUCTS.map((m) => (
+            {PRODUCTS.map((m, index) => (
               <Tooltip title={m.id} placement="top">
-                <Avatar icon={<img src={m.productImage} width={22} />} />
+                <Avatar key={index} icon={<img src={m.productImage} width={22} />} />
               </Tooltip>
             ))}
           </Avatar.Group>

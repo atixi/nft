@@ -17,13 +17,14 @@ justify-content: space-around;
     div{
         margin: 5px;
         white-space: nowrap;
-    }
-ul li{
+    };
+    ul li{
     padding: 10px;
     padding-left: 20px;
     padding-right: 20px;
     border-radius: 30px;
     border: 1px solid #f2f2f2;
+    };
 `;
 export const CategoriesListScroll = styled.div`
 position: relative;
@@ -36,9 +37,9 @@ flex-direction: row;
 align-items: left;
 justify-content: flex-start;
 padding-left: 0px;
-li{
+    li{
     border: solid 0.002rem rgb(204, 201, 201) !important;
     margin-right: 10px !important;
     color: black;
-}
-`
+    };
+`;

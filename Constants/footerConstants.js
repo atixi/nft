@@ -15,7 +15,8 @@ export const FOOTER_WEBSITE_LINKS = {
         { websiteLinkTitle: 'How it works', link: 'www.facebook.com' },
         { websiteLinkTitle: 'Create', link: 'www.facebook.com' },
         { websiteLinkTitle: 'Support', link: 'www.facebook.com' },
-    ]
+    ],
+    allRightReserved: "All rights reserved."
 }
 export const FOOTER_COMMUNITY = {
     communityTitle: 'Community',
