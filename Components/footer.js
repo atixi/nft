@@ -1,12 +1,9 @@
-import styles from "../styles/Footer.module.css";
-import { Row, Col, Input, Space, Select } from "antd";
+import { Row, Col, Input, Space } from "antd";
 import { FOOTER } from "/Constants/footerConstants";
 import { FOOTER_WEBSITE_LINKS } from "/Constants/footerConstants";
 import { FOOTER_COMMUNITY } from "/Constants/footerConstants";
 import { FOOTER_LANGUAGES } from "/Constants/footerConstants";
 import React from "react";
-const { Search } = Input;
-const { Option } = Select;
 const {
   updatesMessage,
   searchPlaceHolder,
@@ -14,67 +11,86 @@ const {
   terms,
   policy,
 } = FOOTER;
+import {FooterContainer, SearchInput, TermAndPolicy, SocialLinksContainer, SearchButton, CopyRight, CopyRightAndPolicyContainer, FooterExtraLinkContainer, CategoryListUl, LinkText, CategoryLink, CategoryListLi, CategoryTitle, SelectLanguage} from "./StyledComponents/footer-styledComponents"
+const { Option } = SelectLanguage;
+
 function Footer() {
   return (
     <>
-      <div className={`${styles.mainFooter} pt-5 pl-3 pr-3 pb-3 mt-5`}>
+      <FooterContainer className={` pt-5 pl-3 pr-3 pb-3 mt-5`}>
         <Row>
-          <Col md={8} sm={24} xs={24} className="mb-3 mb-md-0">
+          <Col md={6} lg={6} sm={24} xs={24} className="mb-3 mb-md-0">
             <div className="col-md-12 col-sm-12">
-              <h5>{updatesMessage}</h5>
-              <div className="input-group">
-                <input
+              <CategoryTitle>{updatesMessage}</CategoryTitle>
+              <div className="input-group mt-3">
+                <SearchInput
                   type="search"
-                  className={`${styles.searchInput} form-control`}
+                  className={`form-control`}
                   placeholder={searchPlaceHolder}
                   aria-label="Search"
-                  aria-describedby="search-addon"
+                  size={"large"}
+                  key={"0"}
                 />
-                <button type="button" className={`${styles.submitSearch} btn `}>
+                <SearchButton type="button" className={`btn`}>
                   {searchSubmitMessage}
-                </button>
+                </SearchButton>
               </div>
-            </div>
+            </div>  
           </Col>
-          <Col md={4} sm={8} xs={12}>
-            <div className="col-md-12 col-sm-10">
-              <h5>{FOOTER_WEBSITE_LINKS.websiteTitle}</h5>
+          <Col md={12} sm={8} xs={12} className={"text-center"}>
+            <Row>
+            <Col md={12} sm={12} xs={12} className={"text-left pl-5"}>
+              <CategoryTitle>{FOOTER_WEBSITE_LINKS.websiteTitle}</CategoryTitle>
+              <CategoryListUl>
               {FOOTER_WEBSITE_LINKS.websiteLinks.map((websiteLink) => (
-                <h6 key={websiteLink.websiteLinkTitle}>
-                  {websiteLink.websiteLinkTitle}
-                </h6>
+                <CategoryListLi>                 
+                  <CategoryLink href="#" key={websiteLink.websiteLinkTitle}>
+                  <LinkText>{websiteLink.websiteLinkTitle}</LinkText>
+                </CategoryLink>
+                </CategoryListLi>
               ))}
-            </div>
-          </Col>
-          <Col md={4} sm={8} xs={12}>
-            <div className="col-md-12 col-sm-10">
-              <h5>{FOOTER_COMMUNITY.communityTitle}</h5>
+              </CategoryListUl>
+            </Col>
+            <Col md={12} sm={12} xs={12}  className={"text-left pl-5"}>
+              <CategoryTitle>{FOOTER_COMMUNITY.communityTitle}</CategoryTitle>
+              <CategoryListUl>
               {FOOTER_COMMUNITY.communityLinks.map((communitlink) => (
-                <h6 key={communitlink.communityLinktitle}>
-                  {communitlink.communityLinktitle}
-                </h6>
+                <CategoryListLi>
+                <CategoryLink key={communitlink.communityLinktitle}>
+                  <LinkText>{communitlink.communityLinktitle}</LinkText>
+                </CategoryLink>
+                </CategoryListLi>
               ))}
-            </div>
+              </CategoryListUl>
+            </Col>
+            </Row>
           </Col>
-          <Col md={8} sm={8} xs={24} className="mt-4 mt-sm-0">
+          <Col md={6} sm={8} xs={24} className="mt-4 mt-sm-0">
             <div className="col-md-12 col-sm-10">
-              <h5>{FOOTER_LANGUAGES.languagesTitle}</h5>
-              <Select defaultValue="English" className={styles.language}>
+              <CategoryTitle>{FOOTER_LANGUAGES.languagesTitle}</CategoryTitle>
+              <div className={"mt-2"}>
+              <SelectLanguage defaultValue="English">
                 {FOOTER_LANGUAGES.languages.map((language) => (
                   <Option key={language.language} value={language.language}>
                     {language.language}
                   </Option>
                 ))}
-              </Select>
+              </SelectLanguage> 
+              </div>
             </div>
           </Col>
           <Col md={24} xs={24}>
             <hr />
-            <div className={styles.policyTerms}>
-              <h6>{terms}</h6>
-              <h6>{policy}</h6>
-            </div>
-            <div className={styles.socials}>
+            <FooterExtraLinkContainer>
+              <CopyRightAndPolicyContainer>
+                <CopyRight>{`© ${FOOTER_WEBSITE_LINKS.websiteTitle}, Inc. ${FOOTER_WEBSITE_LINKS.allRightReserved}`}</CopyRight>
+                <TermAndPolicy>
+                <span>{terms}</span>
+                <span>{policy}</span>
+                </TermAndPolicy>
+                
+              </CopyRightAndPolicyContainer>
+            <SocialLinksContainer>
               <a
                 href="https://twitter.com/rariblecom"
                 target="_blank"
@@ -195,10 +211,11 @@ function Footer() {
                   ></path>
                 </svg>
               </a>
-            </div>
+            </SocialLinksContainer>
+            </FooterExtraLinkContainer>
           </Col>
         </Row>
-      </div>
+      </FooterContainer>
     </>
   );
 }
