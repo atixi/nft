@@ -2,18 +2,18 @@ import { CollectionCard, ProfileAvatarContainer, CardTitle, CardDescription, Car
 import Profile from "/Components/profileAvatar";
 export default function HCItem(props){
 
-    console.log("reciev ", props.item)
+    // console.log("reciev ", props)
     return (
         <CollectionCard>
             <CardImageContainer>
-                <img src={props.item.banner_image_url}/>
+                <img src={props.item.coverpic}/>
             </CardImageContainer>
             <CardDescription style={{borderTop:"1px solid #ccc"}}>
                 <ProfileAvatarContainer>
-                    <Profile profile={props.item.image_url} size={64} tick={false} />
+                    <Profile profile={props.item.profpic} size={64} tick={false} />
                 </ProfileAvatarContainer>
                 <CardTitle style={{padding:"0px 10px",marginTop:"-35px"}}>
-                    <span>{props.item.name}</span>
+                    <span>{props.item.title}</span>
                     <span>{props.item.subtitle}</span>
                 </CardTitle>
             </CardDescription>
