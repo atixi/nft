@@ -426,18 +426,6 @@ export default function Header() {
           Create
         </button>
 
-<<<<<<< HEAD
-        {status === "notConnected" ? <button
-          className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block` } onClick={connect}
-        >
-          Connect wallet 
-        </button> : <button
-          className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block` } onClick={connectToWallet}
-        >
-          Account <span style={{fontWeight: 'bolder'}}>{account && (account.substring(0, 6)+ 
-          "..."+account?.substring(account?.length - 4, account?.length ))}</span> 
-        </button>}
-=======
         {address  ? (
         <>
           <p>Account: {<span style={{fontWeight: 'bolder'}}>{address && (address.substring(0, 6)+ 
@@ -451,7 +439,6 @@ export default function Header() {
       >
         Connect To Wallet
       </button>
->>>>>>> 167aa46 (Web3Provider is implementd)
 
         <button
           onClick={() => {

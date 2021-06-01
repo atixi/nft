@@ -35,13 +35,11 @@ function Home() {
 
   const loadBundles = async () => {
     const result = await OpenSeaAPI.getBundles(
-      address ? address : accountList[1]
+      address ? address[0] : accountList[0]
     );
 
     if (result.ok) {
       const bundles = result.data?.bundles;
-      console.log(result.data);
-      console.log(bundles);
       setBundles(bundles);
     }
   };
@@ -82,6 +80,7 @@ function Home() {
         <TopSellers data={topSellers} />
         <LiveAuctions data={topSellers} />
         <HotCollections data={collections} />
+
         <Explore data={bundles} />
       </div>
       <Footer />
