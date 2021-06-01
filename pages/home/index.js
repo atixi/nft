@@ -35,7 +35,7 @@ function Home() {
 
   const loadBundles = async () => {
     const result = await OpenSeaAPI.getBundles(
-      address ? address[0] : accountList[0]
+      address ? address : accountList[0]
     );
 
     if (result.ok) {
