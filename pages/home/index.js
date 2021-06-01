@@ -13,7 +13,7 @@ import { useMetaMask } from "metamask-react";
 
 function Home() {
   const [items, setItems] = useState(null);
-  const [bundles, setBundles] = useState(null);
+  const [bundles, setBundles] = useState([]);
   const [topSellers, setTopSellers] = useState(null);
   const [liveAuctions, setLiveAuctions] = useState(null);
   const [collections, setCollections] = useState(null);
@@ -30,7 +30,6 @@ function Home() {
     loadBundles();
     loadTopSellers();
     // loadCollections();
-    console.log(bundles)
   };
 
   const loadBundles = async () => {

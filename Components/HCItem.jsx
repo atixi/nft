@@ -1,10 +1,12 @@
 import { CollectionCard, ProfileAvatarContainer, CardTitle, CardDescription, CardImageContainer } from "./StyledComponents/hotCollections-styledComponents"
 import Profile from "/Components/profileAvatar";
 export default function HCItem(props){
+
+    console.log("reciev ", props.item)
     return (
         <CollectionCard>
             <CardImageContainer>
-                <img src={props.item.coverpic}/>
+                <img src={props.item.banner_image_url}/>
             </CardImageContainer>
             <CardDescription style={{borderTop:"1px solid #ccc"}}>
                 <ProfileAvatarContainer>
