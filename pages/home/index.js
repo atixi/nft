@@ -28,7 +28,7 @@ function Home() {
       console.log(accounts);
     });
     // loadBundles();
-    // loadTopSellers();
+    loadTopSellers();
     // loadCollections();
   };
 
