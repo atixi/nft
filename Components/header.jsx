@@ -6,19 +6,32 @@ import Image from 'next/image'
 import Search from "./search";
 import Dropdown from "./Dropdown";
 import { Menu } from "antd";
-import { useMetaMask } from "metamask-react";
-import { accountList } from "../Constants/constants";
-export default function Header(props) {
+import { useStoreApi } from "../providers/storeApi";
+import { useWeb3 } from "../providers/getWeb";
+
+export default function Header() {
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
-  const { status, connect, account } = useMetaMask();
-  const [welletAddress, setAccountAddress] = useState(account ? account : accountList[0]);
+  const { address, balance, message, setBalance, setAddress } = useStoreApi();
+  const web3 = useWeb3();
 
-  useEffect(()=>{
-    window.ethereum.on("accountsChanged", function(accounts) {
-      setAccountAddress(accounts[0])
-    });    
-  }, [])
+  const setUserAccount = async () => {
+    if (window.ethereum) {
+      await window.ethereum.enable();
+      web3.eth.getAccounts().then((account) => {
+        setAddress(account[0]);
+        setUserBalance(account[0]);
+      });
+    }
+  };
+
+  const setUserBalance = async (fromAddress) => {
+    await web3.eth.getBalance(fromAddress).then((value) => {
+      const credit = web3.utils.fromWei(value, "ether");
+      setBalance(credit);
+    });
+  };
+
   const connectToWallet = ()=>{
     console.log('connect to wallet')
 
@@ -413,16 +426,19 @@ export default function Header(props) {
           Create
         </button>
 
-        {status === "notConnected" ? <button
-          className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block` } onClick={connect}
-        >
-          Connect wallet 
-        </button> : <button
-          className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block` } onClick={connect}
-        >
-          Account <span style={{fontWeight: 'bolder'}}>{welletAddress && (welletAddress.substring(0, 6)+ 
-          "..."+welletAddress?.substring(welletAddress?.length - 4, welletAddress?.length ))}</span> 
-        </button>}
+        {address  ? (
+        <>
+          <p>Account: {<span style={{fontWeight: 'bolder'}}>{address && (address.substring(0, 6)+ 
+          "..."+address?.substring(address?.length - 4, address?.length ))}</span> }</p>
+          {/* <p>Balance: {balance}</p> */}
+        </>
+      ) : null}
+       <button
+          className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block` }
+        onClick={() => setUserAccount()}
+      >
+        Connect To Wallet
+      </button>
 
         <button
           onClick={() => {
