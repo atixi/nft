@@ -9,15 +9,15 @@ import HotCollections from "/Components/HotCollections";
 import { useEffect, useState } from "react";
 import OpenSeaAPI from "../api/openseaApi";
 import { accountList } from "../../Constants/constants";
-import { useStoreApi } from "../../providers/storeApi";
+import { useMetaMask } from "metamask-react";
 
 function Home() {
-  const { address, balance, message, setBalance, setAddress } = useStoreApi();
   const [items, setItems] = useState(null);
   const [bundles, setBundles] = useState();
   const [topSellers, setTopSellers] = useState(null);
   const [liveAuctions, setLiveAuctions] = useState(null);
   const [collections, setCollections] = useState(null);
+  const { account } = useMetaMask();
 
   useEffect(() => {
     initData();
@@ -27,15 +27,14 @@ function Home() {
     window.ethereum.on("accountsChanged", function(accounts) {
       console.log(accounts);
     });
-
-    loadBundles();
-    loadTopSellers();
-    loadCollections();
+    // loadBundles();
+    // loadTopSellers();
+    // loadCollections();
   };
 
   const loadBundles = async () => {
     const result = await OpenSeaAPI.getBundles(
-      address ? address : accountList[0]
+      account ? account : accountList[0]
     );
 
     if (result.ok) {
@@ -47,7 +46,7 @@ function Home() {
   // this function is not complete
   const loadTopSellers = async () => {
     const result = await OpenSeaAPI.getAssetsListByOwner(
-      address ? address : accountList[0]
+      account ? account : accountList[0]
     );
     if (result.ok) {
       const assets = await result.data.assets;
@@ -57,7 +56,7 @@ function Home() {
 
   const loadCollections = async () => {
     const result = await OpenSeaAPI.getCollections(
-      address ? address : accountList[0]
+      account ? account : accountList[0]
     );
     if (result.ok) {
       const collections = await result.data;
@@ -80,7 +79,6 @@ function Home() {
         <TopSellers data={topSellers} />
         <LiveAuctions data={topSellers} />
         <HotCollections data={collections} />
-
         <Explore data={bundles} />
       </div>
       <Footer />
