@@ -1,12 +1,10 @@
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import Home from "./home/index";
-
 const defaultQueryFn = async () => {
   return new Promise((resolve) => {
     resolve(loadAsset);
   });
 };
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -14,7 +12,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>

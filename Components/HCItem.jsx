@@ -1,19 +1,22 @@
-import styles from '../styles/hotcollection.module.css';
+import { CollectionCard, ProfileAvatarContainer, CardTitle, CardDescription, CardImageContainer } from "./StyledComponents/hotCollections-styledComponents"
+import Profile from "/Components/profileAvatar";
 export default function HCItem(props){
+
+    console.log("reciev ", props.item)
     return (
-        <div className={styles.item}>
-            <div>
-                <img style={{height:"100%",width:"auto",margin:"0px auto"}} src={props.item.coverpic}/>
-            </div>
-            <div style={{borderTop:"1px solid #ccc"}}>
-                <div className={styles.avatar}>
-                    <img alt="Identicon" src={props.item.profpic} loading="lazy" className="sc-eirseW evgNzS"/>
-                </div>
-                <div style={{padding:"0px 10px",marginTop:"-35px"}}>
-                    <span>{props.item.title}</span>
+        <CollectionCard>
+            <CardImageContainer>
+                <img src={props.item.banner_image_url}/>
+            </CardImageContainer>
+            <CardDescription style={{borderTop:"1px solid #ccc"}}>
+                <ProfileAvatarContainer>
+                    <Profile profile={props.item.image_url} size={64} tick={false} />
+                </ProfileAvatarContainer>
+                <CardTitle style={{padding:"0px 10px",marginTop:"-35px"}}>
+                    <span>{props.item.name}</span>
                     <span>{props.item.subtitle}</span>
-                </div>
-            </div>
-        </div>
+                </CardTitle>
+            </CardDescription>
+        </CollectionCard>
     );
 }

@@ -17,7 +17,6 @@ const ProfileAvatar = (props) => {
   const [size, setSize] = useState(props.size);
   const [tick, setTick] = useState(props.tick);
   const [profilePhoto, setProfilePhoto] = useState(props.profile);
-  console.log(size);
   useEffect(() => {
     setSize(props.size);
     setTick(props.tick);
