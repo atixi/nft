@@ -13,7 +13,7 @@ import { useMetaMask } from "metamask-react";
 
 function Home() {
   const [items, setItems] = useState(null);
-  const [bundles, setBundles] = useState();
+  const [bundles, setBundles] = useState(null);
   const [topSellers, setTopSellers] = useState(null);
   const [liveAuctions, setLiveAuctions] = useState(null);
   const [collections, setCollections] = useState(null);
@@ -27,14 +27,15 @@ function Home() {
     window.ethereum.on("accountsChanged", function(accounts) {
       console.log(accounts);
     });
-    // loadBundles();
+    loadBundles();
     loadTopSellers();
     // loadCollections();
+    console.log(bundles)
   };
 
   const loadBundles = async () => {
     const result = await OpenSeaAPI.getBundles(
-      account ? account : accountList[0]
+      account ? account : accountList[1]
     );
 
     if (result.ok) {
@@ -78,7 +79,7 @@ function Home() {
         <Slide />
         <TopSellers data={topSellers} />
         <LiveAuctions data={topSellers} />
-        <HotCollections data={collections} />
+        <HotCollections data={bundles} />
         <Explore data={bundles} />
       </div>
       <Footer />
