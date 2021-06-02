@@ -61,7 +61,12 @@ function Home() {
     );
     if (result.ok) {
       const assets = await result.data.assets;
-      collections = _.groupBy(assets, "collection[slug]");
+      const data = _.groupBy(assets, "collection[name]");
+      const keys = Object.keys(data);
+      console.log(keys);
+      keys.map((item) =>
+        collections.push({ collection: item, data: data[item] })
+      );
       setCollections(collections);
     }
   };
