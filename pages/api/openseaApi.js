@@ -24,7 +24,7 @@ async function getAccount() {
 }
 
 async function getCollections(owner) {
-  return await client.get(`collections?asset_owner=${owner}`);
+  return await client.get(`assets?owner=${owner}`);
 }
 
 async function getBundles(owner, onSale = false) {

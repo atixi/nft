@@ -10,13 +10,13 @@ import { useEffect, useState } from "react";
 import OpenSeaAPI from "../api/openseaApi";
 import { accountList } from "../../Constants/constants";
 import { useMetaMask } from "metamask-react";
+import _ from "lodash";
 
 function Home() {
-  const [items, setItems] = useState(null);
   const [bundles, setBundles] = useState([]);
-  const [topSellers, setTopSellers] = useState(null);
-  const [liveAuctions, setLiveAuctions] = useState(null);
-  const [collections, setCollections] = useState(null);
+  const [topSellers, setTopSellers] = useState();
+  const [liveAuctions, setLiveAuctions] = useState();
+  const [collections, setCollections] = useState();
   const { account } = useMetaMask();
 
   useEffect(() => {
@@ -29,7 +29,7 @@ function Home() {
     });
     loadBundles();
     loadTopSellers();
-    // loadCollections();
+    loadCollections();
   };
 
   const loadBundles = async () => {
@@ -55,11 +55,13 @@ function Home() {
   };
 
   const loadCollections = async () => {
+    let collections = [];
     const result = await OpenSeaAPI.getCollections(
       account ? account : accountList[0]
     );
     if (result.ok) {
-      const collections = await result.data;
+      const assets = await result.data.assets;
+      collections = _.groupBy(assets, "collection[slug]");
       setCollections(collections);
     }
   };
@@ -78,7 +80,7 @@ function Home() {
         <Slide />
         <TopSellers data={topSellers} />
         <LiveAuctions data={topSellers} />
-        <HotCollections data={bundles} />
+        <HotCollections data={collections} />
         <Explore data={bundles} />
       </div>
       <Footer />
