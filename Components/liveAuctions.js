@@ -88,9 +88,9 @@ function Product(product) {
         <CountDownContainer>
           <CountDown>{"043h 34m 34s left"} 🔥</CountDown>
         </CountDownContainer>
-        <Link href={`/product-details?id=${product.id}`}>
+        <a href={`/product-details?id=${product.id}`}>
           <CardTitle>{product.productTitle}</CardTitle>
-        </Link>
+        </a>
         <BidsStatus>{CONSTANTS.bidsStatus}</BidsStatus>
         <ProductDescriptionBottom>
           <ProductPrice>{product.price}</ProductPrice>

@@ -3,9 +3,6 @@ import styled from "styled-components";
 import { Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 
-const ProfileContainer = styled.span`
-  background: red;
-`;
 const ProfileTick = styled.div`
   position: relative;
   top: 55%;
@@ -22,8 +19,8 @@ const ProfileAvatar = (props) => {
     setTick(props.tick);
   }, [props]);
   return (
-    <>
       <>
+      <a href={"javascript:void(0)"}>
         <Avatar
           size={size}
           icon={profilePhoto ? <img src={profilePhoto} /> : <UserOutlined />}
@@ -52,8 +49,8 @@ const ProfileAvatar = (props) => {
         ) : (
           ""
         )}
+        </a>
       </>
-    </>
   );
 };
 export default ProfileAvatar;
