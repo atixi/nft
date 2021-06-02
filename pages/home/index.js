@@ -63,7 +63,6 @@ function Home() {
       const assets = await result.data.assets;
       const data = _.groupBy(assets, "collection[name]");
       const keys = Object.keys(data);
-      console.log(keys);
       keys.map((item) =>
         collections.push({ collection: item, data: data[item] })
       );
