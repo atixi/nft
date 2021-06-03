@@ -2,7 +2,8 @@ import { Component } from 'react';
 import Header from '/Components/header';
 import {Tabs, Menu, Dropdown, Row, Col} from 'antd';
 import Profile from "/Components/profileAvatar";
-import {Wrapper, Content, Counter, AuctionTimer, BidCountdown, LastBidder, PriceInCryptoContainer, PriceInDollarContainer, BidOwner, BidPrice, FooterButton, AvatarContainer, ButtonContainer, OwnerProfitContainer, ItemImageContainer, ItemDescriptionText, DropdownMenu, ItemLink, ItemInfo, ItemDetails, ItemFooter, ItemName} from "../Components/StyledComponents/productDetails-styledComponents";
+import CONSTANTS from "/Constants/productDetailsConstants";
+import {Wrapper, Content, ItemTopButtonContainer, ItemDetailsHeader, Auction, BidOwnerContainer, Counter, BidPriceValue, BidOwnerProfile, AuctionTimer, BidCountdown, LastBidder, AuctionLabel, PriceInCryptoContainer, PriceInDollarContainer, BidOwner, BidPrice, FooterButton, AvatarContainer, ButtonContainer, OwnerProfitContainer, ItemImageContainer, ItemDescriptionText, DropdownMenu, ItemLink, ItemInfo, ItemDetails, ItemFooter, ItemName} from "../Components/StyledComponents/productDetails-styledComponents";
 
 const { TabPane } = Tabs;
 
@@ -36,8 +37,9 @@ render(){
                 </ItemImageContainer>
                 <ItemInfo className={'float-none float-sm-left'}>
                 <ItemDetails>
-                <div style={{display:"flex"}}>
+                <ItemDetailsHeader>
                     <ItemName>{this.item.name}</ItemName>
+                    <ItemTopButtonContainer>
                     <button style={{flex:"none"}}><svg viewBox="0 0 17 16" fill="none" width="16" height="16" xlmns="http://www.w3.org/2000/svg"><path d="M8.2112 14L12.1056 9.69231L14.1853 7.39185C15.2497 6.21455 15.3683 4.46116 14.4723 3.15121V3.15121C13.3207 1.46757 10.9637 1.15351 9.41139 2.47685L8.2112 3.5L6.95566 2.42966C5.40738 1.10976 3.06841 1.3603 1.83482 2.97819V2.97819C0.777858 4.36443 0.885104 6.31329 2.08779 7.57518L8.2112 14Z" stroke="rgba(4, 4, 5, 1)" stroke-width="2"></path></svg> 
                         {" "+this.item.favorite}
                     </button>
@@ -52,7 +54,8 @@ render(){
 
                     </Dropdown>
                     </button>
-                </div>
+                    </ItemTopButtonContainer>
+                </ItemDetailsHeader>
                 <div>
                     <span className="text-gradient">1 ETH</span><span style={{color:"#ccc"}}> / 1 of 3</span>
                 </div>
@@ -60,7 +63,7 @@ render(){
                     <button>{this.item.category}</button><button><span className="text-gradient">Unlockable</span></button>
                 </div>
                 <ItemDescriptionText>{this.item.description}</ItemDescriptionText>
-                        <span style={{color:"#ccc"}}>Owner</span><br/>
+                        <span style={{color:"#ccc"}}>{CONSTANTS.owner}</span><br/>
                         <AvatarContainer>
                             <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
 
@@ -68,15 +71,15 @@ render(){
                         </AvatarContainer>
                         <OwnerProfitContainer><small>{"10% of sales will go to creator"}</small></OwnerProfitContainer>
                 <Tabs defaultActiveKey="4">
-                    <TabPane key="1" tab={<span>Details</span>}>
-                        <span style={{color:"#ccc"}}>Owner</span><br/>
+                    <TabPane key="1" tab={<span>{CONSTANTS.details}</span>}>
+                        <span style={{color:"#ccc"}}>{CONSTANTS.owner}</span><br/>
                         <AvatarContainer>
                             <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
 
                             <span style={{flex:"1"}}>{this.item.owner.name}</span>
                         </AvatarContainer>
                     </TabPane>
-                    <TabPane key="2" tab={<span>Bids</span>}>
+                    <TabPane key="2" tab={<span>{CONSTANTS.bids}</span>}>
                     <LastBidder>
                             <div className={"content"}>
                                <span className="avatarContainer">
@@ -97,15 +100,15 @@ render(){
                             </div>
                         </LastBidder>
                     </TabPane>
-                    <TabPane key="3" tab={<span>Owners</span>}>
-                    <span style={{color:"#ccc"}}>Owner</span><br/>
+                    <TabPane key="3" tab={<span>{CONSTANTS.owners}</span>}>
+                    <span style={{color:"#ccc"}}>{CONSTANTS.owner}</span><br/>
                         <AvatarContainer>
                             <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
 
                             <span style={{flex:"1"}}>{this.item.owner.name}</span>
                         </AvatarContainer>
                     </TabPane>
-                    <TabPane key="4" tab={<span>History</span>}>
+                    <TabPane key="4" tab={<span>{CONSTANTS.history}</span>}>
                         <LastBidder>
                             <div className={"content"}>
                                <span className="avatarContainer">
@@ -114,7 +117,112 @@ render(){
                                <span className={"bidInfo"}>
                                     <span className={"bidedPriceContainer"}>
                                         <span className={"bidedPriceText"}>
-                                            {"Bid "}
+                                        {CONSTANTS.bid+" "}
+                                            <span className={"bidValue"}>{"0.01 wETH"}</span>
+                                        </span>
+                                    </span>
+                                    <span className={"bidOwnerAndDateContainer"}>
+                                        {"by "}
+                                        <a className={"bidderLink"}>kandee</a>
+                                        {" at "}
+                                        <span className={"bidDate"}>{"6/2/2021, 11:50 PM"}</span>
+                                    </span>
+                               </span>
+                            </div>
+                        </LastBidder>
+                        <LastBidder>
+                            <div className={"content"}>
+                               <span className="avatarContainer">
+                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                               </span>
+                               <span className={"bidInfo"}>
+                                    <span className={"bidedPriceContainer"}>
+                                        <span className={"bidedPriceText"}>
+                                        {CONSTANTS.bid+" "}
+                                            <span className={"bidValue"}>{"0.01 wETH"}</span>
+                                        </span>
+                                    </span>
+                                    <span className={"bidOwnerAndDateContainer"}>
+                                        {"by "}
+                                        <a className={"bidderLink"}>kandee</a>
+                                        {" at "}
+                                        <span className={"bidDate"}>{"6/2/2021, 11:50 PM"}</span>
+                                    </span>
+                               </span>
+                            </div>
+                        </LastBidder>
+                        <LastBidder>
+                            <div className={"content"}>
+                               <span className="avatarContainer">
+                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                               </span>
+                               <span className={"bidInfo"}>
+                                    <span className={"bidedPriceContainer"}>
+                                        <span className={"bidedPriceText"}>
+                                        {CONSTANTS.bid+" "}
+                                            <span className={"bidValue"}>{"0.01 wETH"}</span>
+                                        </span>
+                                    </span>
+                                    <span className={"bidOwnerAndDateContainer"}>
+                                        {"by "}
+                                        <a className={"bidderLink"}>kandee</a>
+                                        {" at "}
+                                        <span className={"bidDate"}>{"6/2/2021, 11:50 PM"}</span>
+                                    </span>
+                               </span>
+                            </div>
+                        </LastBidder>
+                        <LastBidder>
+                            <div className={"content"}>
+                               <span className="avatarContainer">
+                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                               </span>
+                               <span className={"bidInfo"}>
+                                    <span className={"bidedPriceContainer"}>
+                                        <span className={"bidedPriceText"}>
+                                        {CONSTANTS.bid+" "}
+                                            <span className={"bidValue"}>{"0.01 wETH"}</span>
+                                        </span>
+                                    </span>
+                                    <span className={"bidOwnerAndDateContainer"}>
+                                        {"by "}
+                                        <a className={"bidderLink"}>kandee</a>
+                                        {" at "}
+                                        <span className={"bidDate"}>{"6/2/2021, 11:50 PM"}</span>
+                                    </span>
+                               </span>
+                            </div>
+                        </LastBidder>
+                        <LastBidder>
+                            <div className={"content"}>
+                               <span className="avatarContainer">
+                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                               </span>
+                               <span className={"bidInfo"}>
+                                    <span className={"bidedPriceContainer"}>
+                                        <span className={"bidedPriceText"}>
+                                        {CONSTANTS.bid+" "}
+                                            <span className={"bidValue"}>{"0.01 wETH"}</span>
+                                        </span>
+                                    </span>
+                                    <span className={"bidOwnerAndDateContainer"}>
+                                        {"by "}
+                                        <a className={"bidderLink"}>kandee</a>
+                                        {" at "}
+                                        <span className={"bidDate"}>{"6/2/2021, 11:50 PM"}</span>
+                                    </span>
+                               </span>
+                            </div>
+                        </LastBidder>
+                        <LastBidder>
+                            <div className={"content"}>
+                               <span className="avatarContainer">
+                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                               </span>
+                               <span className={"bidInfo"}>
+                                    <span className={"bidedPriceContainer"}>
+                                        <span className={"bidedPriceText"}>
+                                        {CONSTANTS.bid+" "}
                                             <span className={"bidValue"}>{"0.01 wETH"}</span>
                                         </span>
                                     </span>
@@ -156,112 +264,7 @@ render(){
                                <span className={"bidInfo"}>
                                     <span className={"bidedPriceContainer"}>
                                         <span className={"bidedPriceText"}>
-                                            {"Bid "}
-                                            <span className={"bidValue"}>{"0.01 wETH"}</span>
-                                        </span>
-                                    </span>
-                                    <span className={"bidOwnerAndDateContainer"}>
-                                        {"by "}
-                                        <a className={"bidderLink"}>kandee</a>
-                                        {" at "}
-                                        <span className={"bidDate"}>{"6/2/2021, 11:50 PM"}</span>
-                                    </span>
-                               </span>
-                            </div>
-                        </LastBidder>
-                        <LastBidder>
-                            <div className={"content"}>
-                               <span className="avatarContainer">
-                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
-                               </span>
-                               <span className={"bidInfo"}>
-                                    <span className={"bidedPriceContainer"}>
-                                        <span className={"bidedPriceText"}>
-                                            {"Bid "}
-                                            <span className={"bidValue"}>{"0.01 wETH"}</span>
-                                        </span>
-                                    </span>
-                                    <span className={"bidOwnerAndDateContainer"}>
-                                        {"by "}
-                                        <a className={"bidderLink"}>kandee</a>
-                                        {" at "}
-                                        <span className={"bidDate"}>{"6/2/2021, 11:50 PM"}</span>
-                                    </span>
-                               </span>
-                            </div>
-                        </LastBidder>
-                        <LastBidder>
-                            <div className={"content"}>
-                               <span className="avatarContainer">
-                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
-                               </span>
-                               <span className={"bidInfo"}>
-                                    <span className={"bidedPriceContainer"}>
-                                        <span className={"bidedPriceText"}>
-                                            {"Bid "}
-                                            <span className={"bidValue"}>{"0.01 wETH"}</span>
-                                        </span>
-                                    </span>
-                                    <span className={"bidOwnerAndDateContainer"}>
-                                        {"by "}
-                                        <a className={"bidderLink"}>kandee</a>
-                                        {" at "}
-                                        <span className={"bidDate"}>{"6/2/2021, 11:50 PM"}</span>
-                                    </span>
-                               </span>
-                            </div>
-                        </LastBidder>
-                        <LastBidder>
-                            <div className={"content"}>
-                               <span className="avatarContainer">
-                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
-                               </span>
-                               <span className={"bidInfo"}>
-                                    <span className={"bidedPriceContainer"}>
-                                        <span className={"bidedPriceText"}>
-                                            {"Bid "}
-                                            <span className={"bidValue"}>{"0.01 wETH"}</span>
-                                        </span>
-                                    </span>
-                                    <span className={"bidOwnerAndDateContainer"}>
-                                        {"by "}
-                                        <a className={"bidderLink"}>kandee</a>
-                                        {" at "}
-                                        <span className={"bidDate"}>{"6/2/2021, 11:50 PM"}</span>
-                                    </span>
-                               </span>
-                            </div>
-                        </LastBidder>
-                        <LastBidder>
-                            <div className={"content"}>
-                               <span className="avatarContainer">
-                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
-                               </span>
-                               <span className={"bidInfo"}>
-                                    <span className={"bidedPriceContainer"}>
-                                        <span className={"bidedPriceText"}>
-                                            {"Bid "}
-                                            <span className={"bidValue"}>{"0.01 wETH"}</span>
-                                        </span>
-                                    </span>
-                                    <span className={"bidOwnerAndDateContainer"}>
-                                        {"by "}
-                                        <a className={"bidderLink"}>kandee</a>
-                                        {" at "}
-                                        <span className={"bidDate"}>{"6/2/2021, 11:50 PM"}</span>
-                                    </span>
-                               </span>
-                            </div>
-                        </LastBidder>
-                        <LastBidder>
-                            <div className={"content"}>
-                               <span className="avatarContainer">
-                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
-                               </span>
-                               <span className={"bidInfo"}>
-                                    <span className={"bidedPriceContainer"}>
-                                        <span className={"bidedPriceText"}>
-                                            {"Bid "}
+                                        {CONSTANTS.bid+" "}
                                             <span className={"bidValue"}>{"0.01 wETH"}</span>
                                         </span>
                                     </span>
@@ -279,53 +282,50 @@ render(){
             </ItemDetails>
                         <ItemFooter>
                             <BidCountdown>
-                                <Row>
-                                    <Col lg={12} md={12}  sm={12} className={"border-right"}>
-                                        <BidOwner>{"Highest bid by"} <a>{" userName"}</a></BidOwner>
+                                    <BidOwnerContainer className={"border-right pr-2 pl-2"}>
+                                        <BidOwner className={"float-left"}>{CONSTANTS.highestBid} <a>{" userName"}</a></BidOwner>
                                         <BidPrice>
-                                            <Row>
-                                                <Col lg={8} sm={8} md={8} xs={8}>
+                                                <BidOwnerProfile className={"mr-3"}>
                                                     <Profile profile={this.item.owner.avatar} size={"large"} tick={false} />
-                                                </Col>
-                                                <Col lg={16} sm={16} xs={16} md={16}>
+                                                </BidOwnerProfile>
+                                                <BidPriceValue>
                                                     <PriceInCryptoContainer>
                                                         <span>{"0.01 wETH"}</span>
                                                     </PriceInCryptoContainer>
                                                     <PriceInDollarContainer>
                                                         <span>{"~$32"}</span>
                                                     </PriceInDollarContainer>
-                                                </Col>
-                                            </Row>
+                                                </BidPriceValue>
                                         </BidPrice>
-                                    </Col>
-                                    <Col className={"auction"} lg={12} md={12} sm={12}>
+                                    </BidOwnerContainer>
+                                    <Auction>
                                         <div className={"auctionDiv"}>
-                                            <span className={"auctionLabel"}>{"Auction ends in"}</span>
+                                            <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
                                             <AuctionTimer>
                                                 <Counter className={"days"}>
-                                                    <span className={"timeValue"}>23</span>
-                                                    <span className={"timeLabel"}>{"Days"}</span>
+                                                    <span className={"timeValue"}>23<span className={"timeLabel1"}>d</span></span>
+                                                    <span className={"timeLabel"}>{CONSTANTS.days}</span>
                                                 </Counter>
                                                 <Counter>
-                                                    <span className={"timeValue"}>23</span>
-                                                    <span className={"timeLabel"}>{"Hours"}</span>
+                                                    <span className={"timeValue"}>23<span className={"timeLabel1"}>h</span></span>
+                                                    <span className={"timeLabel"}>{CONSTANTS.hours}</span>
                                                 </Counter>
                                                 <Counter className={"days"}>
-                                                    <span className={"timeValue"}>23</span>
-                                                    <span className={"timeLabel"}>{"Minutes"}</span>
+                                                    <span className={"timeValue"}>23<span className={"timeLabel1"}>m</span></span>
+                                                    <span className={"timeLabel"}>{CONSTANTS.minutes}</span>
                                                 </Counter>
                                                 <Counter>
-                                                    <span className={"timeValue"}>23</span>
-                                                    <span className={"timeLabel"}>{"Seconds"}</span>
+                                                    <span className={"timeValue"}>23<span className={"timeLabel1"}>s</span></span>
+                                                    <span className={"timeLabel"}>{CONSTANTS.seconds}</span>
                                                 </Counter>
                                             </AuctionTimer>
                                         </div>
-                                    </Col>
-                                </Row>
+                                    </Auction>
+                        
                             </BidCountdown>
                             <ButtonContainer>
                                 <FooterButton color={"#ffffff"} style={{background: "#0066ff"}}>Buy</FooterButton>
-                                <FooterButton color={"#0066ff"} style={{background: "#0066ff26"}}>Place a bid</FooterButton>
+                                {/* <FooterButton color={"#0066ff"} style={{background: "#0066ff26"}}>Place a bid</FooterButton> */}
                             </ButtonContainer>
                             <center>Service fee 2.5%. 1.025 ETH (~$4,383.71)</center>
                         </ItemFooter>
