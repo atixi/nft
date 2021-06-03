@@ -8,8 +8,8 @@ export const Wrapper = styled.div`
 
 export const Content = styled.div`
     flex:1;
+    height: 100%;
     display: block;
-
     button{
         border-radius: 24px;
         padding:6px 20px;
@@ -19,29 +19,34 @@ export const Content = styled.div`
         background-color: #fff;
         box-sizing: border-box;
     };
-    img{
+    .itemImage{
         max-height: 70vh;
         max-width: 90%;
         display: block;
         margin: auto;
         border-radius: 8px;
+
+        @media (max-width:575px) {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
     }
 `;
 export const ItemInfo = styled.div`
     width: 100%;
-    height: 100%;    
+    height: 100%;
     position: relative;
     overflow-y: auto;
     overflow-x: hidden;  
     border-left: 1px solid #ccc;
 
     @media (min-width:576px){
-            width: 400px;
+            width: 500px;
             height: auto;
     };
 
     @media (min-width:768px) {
-            width: 500px;
+            width: 550px;
     }
 
 `;
@@ -49,6 +54,7 @@ export const ItemInfo = styled.div`
 export const ItemDetails = styled.div`
     width: 100%;
     height: 100%;
+    overflow-y: scroll;    
     padding:25px;
     padding-bottom: 180px;
 `;
@@ -59,7 +65,7 @@ export const ItemFooter = styled.div`
     left: 0px;
     right: 0px;
     text-align: center;
-    background-color: rgba(255,255,255,.8);
+    background-color: rgba(255,255,255,.9);
     border-top: 1px solid #ccc;
 
     center{
@@ -142,7 +148,7 @@ export const FooterButton = styled.button`
 
 export const BidCountdown = styled.div`
     width: 100%;
-    background: red;
+    background: rgb(255, 255, 255, .5);
     height: 100px;
     &:after{
         content: " ";
@@ -153,4 +159,251 @@ export const BidCountdown = styled.div`
         inset: 0px;
         background: linear-gradient(to right, rgb(12, 80, 255) 0%, rgb(12, 80, 255) 24%, rgb(91, 157, 255) 55.73%, rgb(255, 116, 241) 75%, rgb(255, 116, 241) 100%);
     
+`;
+export const BidOwner = styled.div`
+    text-decoration: none;
+    color: rgba(4, 4, 5, 0.5);
+    font-size: 14px;
+    line-height: 19.32px;
+    font-family: inherit;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+
+    a{
+        transition: all 0.12s ease-in-out 0s;
+        color: rgb(4, 4, 5) !important;
+    }
+`;
+export const BidPrice = styled.div`
+    margin: 8px 0px 0px;
+    padding: 0px;
+    -webkit-box-align: stretch;
+    align-items: stretch;
+    border-width: 0px;
+    border-style: solid;
+    border-color: rgb(4, 4, 5);
+    display: flex;
+    flex-basis: auto;
+    flex-direction: column;
+    flex-shrink: 0;
+    min-height: 0px;
+    min-width: 0px;
+    max-width: 100%;
+`;
+export const PriceInCryptoContainer = styled.div`
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 20.7px;
+    font-family: inherit;
+    font-weight: 700;
+    color: rgb(4, 4, 5);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+        span{
+            text-decoration: none;
+            font-size: 20px;
+            line-height: 24px;
+            font-family: inherit;
+            font-weight: 900;
+            color: rgb(4, 4, 5);
+            float: left;
+        }
+`;
+
+export const PriceInDollarContainer = styled.div`
+    text-decoration: none;
+    color: rgba(4, 4, 5, 0.5);
+    font-size: 13px;
+    line-height: 17.94px;
+    font-family: inherit;
+    font-weight: 500;
+    margin-top: 4px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+        span{
+            text-decoration: none;
+            color: inherit;
+            font-size: 14px;
+            line-height: 19.32px;
+            font-family: inherit;
+            font-weight: inherit;
+            float: left;
+        }
+`;
+export const LastBidder = styled.div`
+    height: 69px;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    padding-bottom: 28px;
+
+    .content{
+        margin: 0px;
+        padding: 0px;
+        border-width: 0px;
+        border-style: solid;
+        border-color: rgb(4, 4, 5);
+        display: flex;
+        flex-basis: auto;
+        flex-shrink: 0;
+        min-height: 0px;
+        min-width: 0px;
+        max-width: 100%;
+        flex-direction: row;
+        -webkit-box-align: stretch;
+        align-items: stretch;
+        };
+    .avatarContainer
+        {
+            width: 40px;
+            height: 40px;
+        };
+    .bidInfo{
+        flex-shrink: 1;
+        -webkit-box-flex: 1;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        margin-left: 10px;
+        margin-top: -7px;
+        };
+    .bidedPriceContainer{
+        text-decoration: none;
+        font-size: 15px;
+        line-height: 20.7px;
+        font-family: inherit;
+        font-weight: 700;
+        color: rgb(4, 4, 5) 
+    };
+    .bidedPriceText{
+        text-decoration: none;
+        color: rgba(4, 4, 5, 0.5);
+        font-size: inherit;
+        line-height: inherit;
+        font-family: inherit;
+        font-weight: inherit;
+        };
+    .bidValue{
+        color: rgb(4, 4, 5);
+        };
+    .bidOwnerAndDateContainer{
+        text-decoration: none;
+        color: rgba(4, 4, 5, 0.5);
+        font-size: 13px;
+        line-height: 17.94px;
+        font-family: inherit;
+        font-weight: 600;
+        margin-top: 4px;
+        vertical-align: baseline;
+        };
+    .bidderLink{
+        color: black;
+        };
+    .bidDate{
+        white-space: nowrap;
+        text-decoration: none;
+        color: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        font-family: inherit;
+        font-weight: inherit;
+        };
+    .auction
+    {
+        flex-basis: 50%;
+        margin: 0px;
+        padding: 0px 0px 0px 16px;
+        -webkit-box-align: stretch;
+        align-items: stretch;
+        border-width: 0px;
+        border-style: solid;
+        border-color: rgb(4, 4, 5);
+        display: flex;
+        flex-basis: auto;
+        flex-direction: column;
+        flex-shrink: 0;
+        min-height: 0px;
+        min-width: 0px;
+        max-width: 100%;
+    };
+    .auctionDiv
+    {
+        margin: 0px;
+        padding: 0px;
+        -webkit-box-align: stretch;
+        align-items: stretch;
+        border-width: 0px;
+        border-style: solid;
+        border-color: rgb(4, 4, 5);
+        display: flex;
+        flex-basis: auto;
+        flex-direction: column;
+        flex-shrink: 0;
+        min-height: 0px;
+    };
+    .auctionLabel{
+        text-decoration: none;
+        color: #818182 !important;
+        font-size: 14px;
+        line-height: 19.32px;
+        font-family: inherit;
+        font-weight: 700;
+        };
+`;
+export const AuctionTimer = styled.div`
+    margin: 8px 0px 0px;
+    padding: 0px;
+    -webkit-box-align: stretch;
+    align-items: stretch;
+    border-width: 0px;
+    border-style: solid;
+    border-color: rgb(4, 4, 5);
+    display: flex;
+    flex-basis: auto;
+    flex-shrink: 0;
+    min-height: 0px;
+    min-width: 0px;
+    max-width: 100%;
+    flex-direction: row;
 `
+export const Counter = styled.div`
+    margin-right: 12px;
+    flex: 1;
+    margin: 0px;
+    padding: 0px;
+    -webkit-box-align: stretch;
+    align-items: stretch;
+    border-width: 0px;
+    border-style: solid;
+    border-color: rgb(4, 4, 5);
+    display: flex;
+    flex-basis: auto;
+    flex-direction: column;
+    flex-shrink: 0;
+    min-height: 0px;
+    min-width: 0px;
+    max-width: 100%;
+    .timeValue{
+        text-align: left;
+        margin-left: 20px;
+        text-decoration: none;
+        color: inherit;
+        font-size: 20px;
+        line-height: 27.6px;
+        font-family: inherit;
+        font-weight: 900;
+    }
+    .timeLabel{
+        color: #818182 !important;
+        text-align: left;
+        font-size: 13px;
+        margin-left: 20px; 
+    }
+`;
