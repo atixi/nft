@@ -9,22 +9,22 @@ import HotCollections from "/Components/HotCollections";
 import { useEffect, useState } from "react";
 import OpenSeaAPI from "../api/openseaApi";
 import { accountList } from "../../Constants/constants";
-import { useMetaMask } from "metamask-react";
 import _ from "lodash";
-
+import { useWeb3 } from "../../providers/getWeb";
 function Home() {
   const [bundles, setBundles] = useState([]);
   const [topSellers, setTopSellers] = useState();
   const [liveAuctions, setLiveAuctions] = useState();
   const [collections, setCollections] = useState();
-  const { account } = useMetaMask();
+  const account = null;
+  const web3 = useWeb3();
 
   useEffect(() => {
     initData();
   }, []);
 
   const initData = () => {
-    window.ethereum.on("accountsChanged", function(accounts) {
+    window.ethereum.on("accountsChanged", function (accounts) {
       console.log(accounts);
     });
     loadBundles();
@@ -33,9 +33,7 @@ function Home() {
   };
 
   const loadBundles = async () => {
-    const result = await OpenSeaAPI.getBundles(
-      account ? account : accountList[1]
-    );
+    const result = await OpenSeaAPI.getBundles(accountList[1]);
 
     if (result.ok) {
       const bundles = result.data?.bundles;
@@ -43,14 +41,13 @@ function Home() {
     }
   };
 
-  // this function is not complete
   const loadTopSellers = async () => {
-    const result = await OpenSeaAPI.getAssetsListByOwner(
-      account ? account : accountList[0]
-    );
+    const result = await OpenSeaAPI.getAssets();
     if (result.ok) {
       const assets = await result.data.assets;
-      setTopSellers(assets);
+      const tops = OpenSeaAPI.getTopSellers(assets);
+      console.log(tops);
+      setTopSellers(tops);
     }
   };
 

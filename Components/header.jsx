@@ -6,19 +6,57 @@ import Image from 'next/image'
 import Search from "./search";
 import Dropdown from "./Dropdown";
 import { Menu } from "antd";
-import { useMetaMask } from "metamask-react";
 import { accountList } from "../Constants/constants";
+import { useStoreApi } from "../providers/storeApi";
+import { useWeb3 } from "../providers/getWeb";
+
 export default function Header(props) {
+  const { address, balance, message, setBalance, setAddress } = useStoreApi();
+  const web3 = useWeb3();
+
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
-  const { status, connect, account } = useMetaMask();
-  const [welletAddress, setAccountAddress] = useState(account ? account : accountList[0]);
+  const [accountAddress, setAccountAddress] = useState(address ? address : accountList[0]);
 
   useEffect(()=>{
     window.ethereum.on("accountsChanged", function(accounts) {
       setAccountAddress(accounts[0])
     });    
   }, [])
+
+
+  const setUserAccount = async () => {
+    if (window.ethereum) {
+      await window.ethereum.enable();
+      web3.eth.getAccounts().then((account) => {
+        setAddress(account[0]);
+        setUserBalance(account[0]);
+      });
+    }
+  };
+
+  const displayAddress = ()=>{
+    return 'Account: '+ accountAddress.substring(1, 4) +'...'+ accountAddress.substring(accountAddress.length-5, accountAddress.length);
+  }
+  const setUserBalance = async (fromAddress) => {
+    await web3.eth.getBalance(fromAddress).then((value) => {
+      const credit = web3.utils.fromWei(value, "ether");
+      setBalance(credit);
+    });
+  };
+
+  const sendTransaction = async (e) => {
+    e.preventDefault();
+    const amount = e.target[0].value;
+    const recepeint = e.target[1].value;
+    await web3.eth.sendTransaction({
+      from: address,
+      to: recepeint,
+      value: web3.utils.toWei(amount, "ether"),
+    });
+    setUserBalance(address);
+  };
+
   const connectToWallet = ()=>{
     console.log('connect to wallet')
 
@@ -412,17 +450,11 @@ export default function Header(props) {
         >
           Create
         </button>
-
-        {status === "notConnected" ? <button
-          className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block` } onClick={connect}
+        <button
+          className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block` } onClick={() => setUserAccount()}
         >
           Connect wallet 
-        </button> : <button
-          className={`${styles.btn} ${styles.btnConnect} d-none d-lg-block` } onClick={connect}
-        >
-          Account <span style={{fontWeight: 'bolder'}}>{welletAddress && (welletAddress.substring(0, 6)+ 
-          "..."+welletAddress?.substring(welletAddress?.length - 4, welletAddress?.length ))}</span> 
-        </button>}
+        </button> 
 
         <button
           onClick={() => {

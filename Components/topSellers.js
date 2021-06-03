@@ -32,10 +32,12 @@ function TopSellers({ data }) {
                 <div className={styles.topSellerItem} key={seller.name}>
                   <div>{index + 1}</div>
                   <div className={styles.iconContainer}>
-                    <img className={styles.icon} src={seller.image_url} />
+                    <img className={styles.icon} src={seller.profile_img_url} />
                   </div>
                   <div className={styles.sellerDetails}>
-                    <div key={seller.name + seller.name}>{seller.name}</div>
+                    <div key={seller.talent + seller.talent}>
+                      {seller.talent}
+                    </div>
                     <div className={styles.sellerPrice}>
                       {seller.stats?.average_price}
                     </div>
