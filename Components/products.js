@@ -45,7 +45,7 @@ function Products() {
               // style={{ width: "280px" }}
               className="p-3 p-sm-2 p-md-2 p-lg-3"
             >
-                <ProductCardHeader className={`mt-3`}>
+                <ProductCardHeader className={`mt-1 float-right mb-2`}>
                   {/* <div className={"pl-3"}>
                     <Avatar.Group>
                       {PRODUCTS.map((m, index) => (
