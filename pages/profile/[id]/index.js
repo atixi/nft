@@ -14,6 +14,7 @@ function callback(key) {
 
 function Profile() {
   const [collections, setCollections] = useState();
+  const [collectionDetails, setCollectionDetails] = useState();
   const [created, setCreated] = useState();
   // const [address, setAddress] = useState();
   const talent = new URLSearchParams(window.location.search).getAll('talent')
@@ -36,12 +37,23 @@ function Profile() {
       setCollections(collections);
     }
   };
-  const loadTabData = (e) => {
+
+  const loadTabData = async (e) => {
     if (e === "1") {
       console.log("onsale");
     } else if (e === "2") {
-      const collectionName = collections.map((c) => c.name);
-      console.log(collectionName);
+      const collectionSlugs = collections.map((c) => c.slug);
+      let cols = [];
+      let result = await OpenSeaAPI.getCollectionsDetailsBySlugs(
+        collectionSlugs
+      );
+      for (let i = 0; i < result.length; i++) {
+        for (let j = 0; j < result[i].assets.length; j++) {
+          cols.push(result[i].assets[j]);
+        }
+      }
+      console.log(cols);
+      setCollectionDetails(cols);
     } else if (e === "3") {
       console.log(created);
     } else {
