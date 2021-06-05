@@ -19,6 +19,8 @@ import {
   ProductDescription,
   CountDownContainer,
   CountDown,
+  ProductCardHeaderButton,
+  ProductCardHeaderOwners
 } from "./StyledComponents/liveActions-styledComponents";
 import { SectionHeading } from "./StyledComponents/globalStyledComponents";
 const breakPoints = [
@@ -68,7 +70,7 @@ function Product(product) {
   return (
     <ProductCard key={product.id} className={`p-2 p-lg-1 mr-3`}>   
       <ProductCardHeader className={`mt-3`}>
-        <div className={"pl-3"}>
+        {/* <ProductCardHeaderOwners>
           <Avatar.Group>
             {PRODUCTS.map((m, index) => (
               <Tooltip title={m.id} placement="top">
@@ -76,21 +78,25 @@ function Product(product) {
               </Tooltip>
             ))}
           </Avatar.Group>
-        </div>
+        </ProductCardHeaderOwners> */}
+        <ProductCardHeaderButton>
         <Dropdown trigger={["click"]} overlay={menu} placement="bottomRight">
           <Button>...</Button>
         </Dropdown>
+        </ProductCardHeaderButton>
       </ProductCardHeader>
       <div className={`col-md-12 p-3`}>
+      <a href={`/product-details?id=${product.id}`}>
         <img src={product.productImage} className="w-100 rounded" />
+        </a>
       </div>
       <ProductDescription>
         <CountDownContainer>
           <CountDown>{"043h 34m 34s left"} 🔥</CountDown>
         </CountDownContainer>
-        <Link href={`/product-details?id=${product.id}`}>
+        <a href={`/product-details?id=${product.id}`}>
           <CardTitle>{product.productTitle}</CardTitle>
-        </Link>
+        </a>
         <BidsStatus>{CONSTANTS.bidsStatus}</BidsStatus>
         <ProductDescriptionBottom>
           <ProductPrice>{product.price}</ProductPrice>

@@ -1,12 +1,33 @@
 import styled from "styled-components";
 import { HeartTwoTone } from '@ant-design/icons';
+export const CardsContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    max-width: 1472px;
+    width: 100%;
+
+    flex-wrap: wrap;
+    div{
+        flex: 1;
+        // margin: auto;
+    }
+`;
+export const ProductCardContainer = styled.div`
+    div{
+        @media (max-width: 554px)
+        {
+            width: 500px;
+            margin: auto;
+            padding: auto;
+        }
+        }
+`;
 export const Button = styled.button`
     border: none;
     background: transparent;
     margin-right: 15px;
     margin-top: -5px;
 `;
-
 export const CardTitle = styled.div`
     font-weight: 700;
     font-size: 16px;
@@ -24,10 +45,23 @@ export const BidsStatus = styled.small`
     color: #818182;
     font-weight: bold;
 `;
+
 export const ProductCard = styled.div`
 border: 1px solid #ccc;
 border-radius: 15px;
+width: 270px;
+// margin-right: 15px;
+padding: 5px;
 `;
+export const ProductCardHeaderOwners = styled.div`
+    flex: 1;
+    float: left;
+    padding-left: 20px;
+`
+export const ProductCardHeaderButton = styled.div`
+    flex: 1;
+    text-align: right;
+`
 export const ProductCardHeader = styled.div`
 display: flex;
 flex-direction: row;
