@@ -5,6 +5,7 @@ import useApi from "./hooks/useApi";
 import "react-multi-carousel/lib/styles.css";
 import styles from "../styles/topSeller.module.css";
 import { SELLERS } from "../Constants/constants";
+import OpenSeaAPI from "../pages/api/openseaApi";
 const breackCol = "<Col /> asdfsdf";
 {
   /* <Markup content={breackCol} />; */
@@ -18,6 +19,30 @@ const check = (i) => {
 };
 
 function TopSellers({ data }) {
+  const [selectedSeller, setSelectedSeller] = useState();
+
+  const topSellerDetails = async (top) => {
+    const address = top.address;
+    const talent = top.talent;
+    let created = [];
+    let collectibles = [];
+    const result = await OpenSeaAPI.getAssetsListByOwner(address);
+    if (result.ok) {
+      created = result.data?.assets;
+      collectibles = _.groupBy(created, "collection[name]");
+      console.log(created);
+      console.log(collectibles);
+      console.log(address);
+      console.log(talent);
+    }
+    setSelectedSeller({
+      talent,
+      address,
+      created,
+      collectibles,
+    });
+  };
+
   const topSellers = data;
   return (
     <>
@@ -29,13 +54,19 @@ function TopSellers({ data }) {
           <div className={styles.topSellerContainer}>
             {data &&
               data.map((seller, index) => (
-                <div className={styles.topSellerItem} key={seller.name}>
+                <div
+                  className={styles.topSellerItem}
+                  key={seller.name}
+                  onClick={() => topSellerDetails(seller)}
+                >
                   <div>{index + 1}</div>
                   <div className={styles.iconContainer}>
-                    <img className={styles.icon} src={seller.image_url} />
+                    <img className={styles.icon} src={seller.profile_img_url} />
                   </div>
                   <div className={styles.sellerDetails}>
-                    <div key={seller.name + seller.name}>{seller.name}</div>
+                    <div key={seller.talent + seller.talent}>
+                      {seller.talent}
+                    </div>
                     <div className={styles.sellerPrice}>
                       {seller.stats?.average_price}
                     </div>

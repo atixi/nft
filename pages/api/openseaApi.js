@@ -24,13 +24,18 @@ async function getAccount() {
 }
 
 async function getCollections(owner) {
-  return await client.get(`assets?owner=${owner}`);
+  return await client.get(`collections?asset_owner=${owner}`);
 }
 
+//topsellers
+async function getAssets() {
+  return await client.get(`assets?limit=50`);
+}
 async function getBundles(owner, onSale = false) {
-  return client.get(`bundles?owner=${owner}&on_sale=${onSale}`);
+  return client.get(`bundles?owner=${owner}&on_sale=${onSale}&limit=50`);
 }
 
+async function getAssetsByOwner() {}
 async function getAssetsByTokenIds(
   tokenIds,
   orderDirection = "desc",
@@ -64,6 +69,39 @@ async function getSingleAsset(accountId, assetId) {
   );
 }
 
+async function getTopSellerDatails(address) {
+  let assets = [];
+  let collections = [];
+  const assetResult = await client.get(`assets?owner=${address}&limit=50`);
+  if (assetResult.ok) {
+    assets = assetResult.data?.assets;
+  }
+
+  console.log(assets);
+}
+// this is helper method to reproduct the topseller data (changes are required)
+function getTopSellers(assets) {
+  let topSellers = [];
+  const groupByCreator = _.groupBy(assets, "creator[user[username]]");
+  const keys = Object.keys(groupByCreator);
+
+  keys.map((item) =>
+    topSellers.push({
+      talent: item,
+      profile_img_url: groupByCreator[item][0].creator?.profile_img_url,
+      created: groupByCreator[item],
+      address: groupByCreator[item][0].creator?.address,
+    })
+  );
+  topSellers = [...topSellers].filter(
+    (item) => item.talent !== "undefined" && item.talent !== "null"
+  );
+
+  return topSellers;
+}
+
+// hellper functions
+
 export default {
   getAccount,
   getCollections,
@@ -71,4 +109,7 @@ export default {
   getAssetsByTokenIds,
   getAssetsListByOwner,
   getSingleAsset,
+  getAssets,
+  getTopSellers,
+  getTopSellerDatails,
 };
