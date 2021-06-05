@@ -6,21 +6,11 @@ import "react-multi-carousel/lib/styles.css";
 import styles from "../styles/topSeller.module.css";
 import { SELLERS } from "../Constants/constants";
 import OpenSeaAPI from "../pages/api/openseaApi";
-const breackCol = "<Col /> asdfsdf";
-{
-  /* <Markup content={breackCol} />; */
-}
-const check = (i) => {
-  i++;
-  if (i / 5 === 0) {
-    //return <h1>asdf</h1>
-    console.log("some thing" + i);
-  }
-};
+import {ListCounter, SellerPrice, SellerName} from "./StyledComponents/topSeller-styledComponents";
 
 function TopSellers({ data }) {
-  const [selectedSeller, setSelectedSeller] = useState();
-
+  const [selectedSeller, setSelectedSeller] = useState([]);
+  console.log("data: ", data)
   const topSellerDetails = async (top) => {
     const address = top.address;
     const talent = top.talent;
@@ -54,24 +44,30 @@ function TopSellers({ data }) {
           <div className={styles.topSellerContainer}>
             {data &&
               data.map((seller, index) => (
+              //  <Link href='/profile/[id]' as={`/profile/${seller.address}`} >
+                 <a href={`/profile/index?talent=${seller.address}&`}>
                 <div
                   className={styles.topSellerItem}
                   key={seller.name}
                   onClick={() => topSellerDetails(seller)}
-                >
-                  <div>{index + 1}</div>
+                > 
+                  <ListCounter>{index + 1}</ListCounter>
                   <div className={styles.iconContainer}>
                     <img className={styles.icon} src={seller.profile_img_url} />
                   </div>
                   <div className={styles.sellerDetails}>
-                    <div key={seller.talent + seller.talent}>
+                    <SellerName key={seller.talent + seller.talent}>
                       {seller.talent}
-                    </div>
-                    <div className={styles.sellerPrice}>
-                      {seller.stats?.average_price}
-                    </div>
+                    </SellerName>
+                    <SellerPrice>
+                      {/* {seller.stats?.average_price} */}
+                      {"37.95 ETH"}
+                    </SellerPrice>
                   </div>
                 </div>
+                </a>
+                //  </Link>
+
               ))}
           </div>
         </div>
