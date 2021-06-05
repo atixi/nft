@@ -78,12 +78,14 @@ function Products(props) {
                   </Dropdown>
                 </ProductCardHeader>
                 <div className={`col-md-12 p-3`}>
+              <a href={`/product-details?id=${n.id}`}>
                   <img style={{height: "200px"}} src={n.image_preview_url} className="w-100 img-fluid" />
+                </a>
                 </div>
                 <ProductDescription>
-                  <Link href={`/product-details?id=${n.id}`}>
+                  <a href={`/product-details?id=${n.id}`}>
                     <CardTitle>{n.name}</CardTitle>
-                  </Link>
+                  </a>
                   <ProductPrice>{n.price}</ProductPrice>
                   <ProductList>
                     {/* {" " + n.currentQTY + " of " + n.totalQTY} */}

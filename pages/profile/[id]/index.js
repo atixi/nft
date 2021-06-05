@@ -52,7 +52,7 @@ function Profile() {
           cols.push(result[i].assets[j]);
         }
       }
-      console.log(cols);
+      console.log("collectives: ",cols);
       setCollectionDetails(cols);
     } else if (e === "3") {
       console.log(created);
@@ -68,7 +68,7 @@ function Profile() {
       <div style={{ maxWidth: 1400, margin: "auto" }}>
         <div className={profileStyles.profile}>
           <div className={profileStyles.cover}>
-            <img src="/images/profile/profile.png" />
+            {/* <img src="/images/profile/profile.png" /> */}
           </div>
           <div className={profileStyles.bio}>
             <div className={profileStyles.avatar}>
@@ -84,16 +84,12 @@ function Profile() {
                 <strong>{talent}</strong>
               </h3>
               <h6>
-                <strong>{address}</strong> <CopyOutlined />
+                <strong>{address}</strong> 
+                {/* <CopyOutlined /> */}
               </h6>
               <Row>
                 <Col lg={8} md={6} sm={2} xs={0}></Col>
                 <Col lg={8} md={12} sm={20} xs={24}>
-                  <span>
-                    Years are passing by and, slowly but surely, the complete
-                    picture of the puzzle that was imagined by a few visionaries
-                    becomes clearer and clearer...{" "}
-                  </span>
                 </Col>
                 <Col lg={8} md={6} sm={2} xs={0}></Col>
               </Row>
@@ -140,7 +136,7 @@ function Profile() {
             <Products data={created} />
           </TabPane>
           <TabPane tab="Collectibles" key="2">
-            <Products />
+            <Products data={collectionDetails} />
           </TabPane>
         </Tabs>
       </div>
