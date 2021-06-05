@@ -1,9 +1,11 @@
 import profileStyles from "/styles/profile.module.css";
 import { Row, Col, Tabs } from "antd";
 import { CopyOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "/Components/header";
 import Products from "/Components/products";
+import OpenSeaAPI from "../../api/openseaApi";
+import { result, set } from "lodash";
 
 const { TabPane } = Tabs;
 function callback(key) {
@@ -11,9 +13,42 @@ function callback(key) {
 }
 
 function Profile() {
+  const [collections, setCollections] = useState();
+  const [created, setCreated] = useState();
+  // const [address, setAddress] = useState();
   const talent = new URLSearchParams(window.location.search).getAll('talent')
   const address = new URLSearchParams(window.location.search).getAll('address')
   const avatar = new URLSearchParams(window.location.search).getAll('avatar')
+    useEffect(() => {
+    loadTalentData();
+  }, []);
+
+  const loadTalentData = async () => {
+    const createdRequest = await OpenSeaAPI.getAssetsListByOwner(address[0]);
+    const requestCollection = await OpenSeaAPI.getCollections(address[0]);
+
+    if (createdRequest.ok) {
+      const assets = createdRequest.data?.assets;
+      setCreated(assets);
+    }
+    if (requestCollection.ok) {
+      const collections = requestCollection.data;
+      setCollections(collections);
+    }
+  };
+
+  const loadTabData = (e) => {
+    if (e === "1") {
+      console.log("onsale");
+    } else if (e === "2") {
+      const collectionName = collections.map((c) => c.name);
+      console.log(collectionName);
+    } else if (e === "3") {
+      console.log(created);
+    } else {
+      console.log("other tabs");
+    }
+  };
   return (
     <>
       <Header />
@@ -87,7 +122,7 @@ function Profile() {
             </div>
           </div>
         </div>
-        <Tabs defaultActiveKey="1" onChange={callback}>
+        <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
           <TabPane tab="On sale" key="1">
             <Products />
           </TabPane>

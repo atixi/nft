@@ -89,6 +89,7 @@ function getTopSellers(assets) {
     topSellers.push({
       talent: item,
       profile_img_url: groupByCreator[item][0].creator?.profile_img_url,
+      number_of_assets: groupByCreator[item].length,
       created: groupByCreator[item],
       address: groupByCreator[item][0].creator?.address,
     })

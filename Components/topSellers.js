@@ -6,11 +6,15 @@ import "react-multi-carousel/lib/styles.css";
 import styles from "../styles/topSeller.module.css";
 import { SELLERS } from "../Constants/constants";
 import OpenSeaAPI from "../pages/api/openseaApi";
-import {ListCounter, SellerPrice, SellerName} from "./StyledComponents/topSeller-styledComponents";
+import {
+  ListCounter,
+  SellerPrice,
+  SellerName,
+} from "./StyledComponents/topSeller-styledComponents";
 
 function TopSellers({ data }) {
   const [selectedSeller, setSelectedSeller] = useState([]);
-  console.log("data: ", data)
+  console.log("data: ", data);
   const topSellerDetails = async (top) => {
     const address = top.address;
     const talent = top.talent;
@@ -55,19 +59,9 @@ function TopSellers({ data }) {
                   <div className={styles.iconContainer}>
                     <img className={styles.icon} src={seller.profile_img_url} />
                   </div>
-                  <div className={styles.sellerDetails}>
-                    <SellerName key={seller.talent + seller.talent}>
-                      {seller.talent}
-                    </SellerName>
-                    <SellerPrice>
-                      {/* {seller.stats?.average_price} */}
-                      {"37.95 ETH"}
-                    </SellerPrice>
                   </div>
-                </div>
                 </a>
                 //  </Link>
-
               ))}
           </div>
         </div>
