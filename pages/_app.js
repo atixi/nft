@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "antd/dist/antd.css";
 import "../styles/style.css";
 import ReactDOM from "react-dom";
-import { Web3Provider } from "../providers/store";
+import { Web3Provider } from "../Providers/store";
 
 import React, { useEffect, useRef } from "react";
 
