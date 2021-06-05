@@ -47,6 +47,7 @@ function Profile() {
       let result = await OpenSeaAPI.getCollectionsDetailsBySlugs(
         collectionSlugs
       );
+      if(result.length >0)
       for (let i = 0; i < result.length; i++) {
         for (let j = 0; j < result[i].assets.length; j++) {
           cols.push(result[i].assets[j]);
