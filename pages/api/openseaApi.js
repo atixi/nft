@@ -96,8 +96,6 @@ async function getTopSellerDatails(address) {
   if (assetResult.ok) {
     assets = assetResult.data?.assets;
   }
-
-  console.log(assets);
 }
 // this is helper method to reproduct the topseller data (changes are required)
 function getTopSellers(assets) {
