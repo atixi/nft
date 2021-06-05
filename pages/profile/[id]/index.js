@@ -15,17 +15,13 @@ function callback(key) {
 function Profile() {
   const [collections, setCollections] = useState();
   const [created, setCreated] = useState();
-  const [address, setAddress] = useState();
-
+  // const [address, setAddress] = useState();
+  const address = new URLSearchParams(window.location.search).getAll("talent");
   useEffect(() => {
     loadTalentData();
   }, []);
 
   const loadTalentData = async () => {
-    const address = new URLSearchParams(window.location.search).getAll(
-      "talent"
-    );
-
     const createdRequest = await OpenSeaAPI.getAssetsListByOwner(address[0]);
     const requestCollection = await OpenSeaAPI.getCollections(address[0]);
 
@@ -35,14 +31,21 @@ function Profile() {
     }
     if (requestCollection.ok) {
       const collections = requestCollection.data;
-      console.log(collections);
       setCollections(collections);
     }
   };
 
-  const loadCollectionDetails = () => {
-    // const groupByCreator = _.groupBy(collections, "name");
-    console.log(collections);
+  const loadTabData = (e) => {
+    if (e === "1") {
+      console.log("onsale");
+    } else if (e === "2") {
+      const collectionName = collections.map((c) => c.name);
+      console.log(collectionName);
+    } else if (e === "3") {
+      console.log(created);
+    } else {
+      console.log("other tabs");
+    }
   };
   return (
     <>
@@ -117,7 +120,7 @@ function Profile() {
             </div>
           </div>
         </div>
-        <Tabs defaultActiveKey="1" onChange={() => loadCollectionDetails()}>
+        <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
           <TabPane tab="On sale" key="1">
             <Products />
           </TabPane>

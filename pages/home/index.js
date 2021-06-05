@@ -47,6 +47,7 @@ function Home() {
     if (result.ok) {
       const assets = await result.data.assets;
       const tops = OpenSeaAPI.getTopSellers(assets);
+      console.log(tops);
       setTopSellers(tops);
     }
   };

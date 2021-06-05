@@ -58,7 +58,6 @@ async function getAssetsListByOwner(
   orderDirection = "desc",
   orderBy = "token_id"
 ) {
-  console.log(owner);
   return await client.get(
     `assets?owner=${owner}&order_direction=${orderDirection}&order_by=${orderBy}`
   );
