@@ -58,6 +58,7 @@ async function getAssetsListByOwner(
   orderDirection = "desc",
   orderBy = "token_id"
 ) {
+  console.log(owner);
   return await client.get(
     `assets?owner=${owner}&order_direction=${orderDirection}&order_by=${orderBy}`
   );
@@ -89,6 +90,7 @@ function getTopSellers(assets) {
     topSellers.push({
       talent: item,
       profile_img_url: groupByCreator[item][0].creator?.profile_img_url,
+      number_of_assets: groupByCreator[item].length,
       created: groupByCreator[item],
       address: groupByCreator[item][0].creator?.address,
     })

@@ -1,9 +1,11 @@
 import profileStyles from "/styles/profile.module.css";
 import { Row, Col, Tabs } from "antd";
 import { CopyOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "/Components/header";
 import Products from "/Components/products";
+import OpenSeaAPI from "../../api/openseaApi";
+import { result, set } from "lodash";
 
 const { TabPane } = Tabs;
 function callback(key) {
@@ -11,6 +13,37 @@ function callback(key) {
 }
 
 function Profile() {
+  const [collections, setCollections] = useState();
+  const [created, setCreated] = useState();
+  const [address, setAddress] = useState();
+
+  useEffect(() => {
+    loadTalentData();
+  }, []);
+
+  const loadTalentData = async () => {
+    const address = new URLSearchParams(window.location.search).getAll(
+      "talent"
+    );
+
+    const createdRequest = await OpenSeaAPI.getAssetsListByOwner(address[0]);
+    const requestCollection = await OpenSeaAPI.getCollections(address[0]);
+
+    if (createdRequest.ok) {
+      const assets = createdRequest.data?.assets;
+      setCreated(assets);
+    }
+    if (requestCollection.ok) {
+      const collections = requestCollection.data;
+      console.log(collections);
+      setCollections(collections);
+    }
+  };
+
+  const loadCollectionDetails = () => {
+    // const groupByCreator = _.groupBy(collections, "name");
+    console.log(collections);
+  };
   return (
     <>
       <Header />
@@ -84,7 +117,7 @@ function Profile() {
             </div>
           </div>
         </div>
-        <Tabs defaultActiveKey="1" onChange={callback}>
+        <Tabs defaultActiveKey="1" onChange={() => loadCollectionDetails()}>
           <TabPane tab="On sale" key="1">
             <Products />
           </TabPane>
