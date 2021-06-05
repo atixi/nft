@@ -126,7 +126,7 @@ function Explore({ data }) {
             </FilterAndSort>
           </Dropdown>
         </CategoriesListContainer>
-        <Products />
+        {/* <Products /> */}
       </div>
     </>
   );

@@ -48,17 +48,29 @@ function TopSellers({ data }) {
           <div className={styles.topSellerContainer}>
             {data &&
               data.map((seller, index) => (
-              //  <Link href='/profile/[id]' as={`/profile/${seller.address}`} >
-                 <a href={`/profile/index?address=${seller.address}&talent=${seller.talent}&avatar=${seller.profile_img_url}`}>
+                //  <Link href='/profile/[id]' as={`/profile/${seller.address}`} >
+                <a href={`/profile/index?address=${seller.address}&talent=${seller.talent}&avatar=${seller.profile_img_url}`}>
                 <div
-                  className={styles.topSellerItem}
-                  key={seller.name}
-                  onClick={() => topSellerDetails(seller)}
-                > 
-                  <ListCounter>{index + 1}</ListCounter>
-                  <div className={styles.iconContainer}>
-                    <img className={styles.icon} src={seller.profile_img_url} />
-                  </div>
+                    className={styles.topSellerItem}
+                    key={seller.name}
+                    onClick={() => topSellerDetails(seller)}
+                  >
+                    <ListCounter>{index + 1}</ListCounter>
+                    <div className={styles.iconContainer}>
+                      <img
+                        className={styles.icon}
+                        src={seller.profile_img_url}
+                      />
+                    </div>
+                    <div className={styles.sellerDetails}>
+                      <SellerName key={seller.talent + seller.talent}>
+                        {seller.talent}
+                      </SellerName>
+                      <SellerPrice>
+                        {/* {seller.stats?.average_price} */}
+                        {"37.95 ETH"}
+                      </SellerPrice>
+                    </div>
                   </div>
                 </a>
                 //  </Link>

@@ -24,8 +24,8 @@ function Profile() {
   }, []);
 
   const loadTalentData = async () => {
-    const createdRequest = await OpenSeaAPI.getAssetsListByOwner(address[0]);
-    const requestCollection = await OpenSeaAPI.getCollections(address[0]);
+    const createdRequest = await OpenSeaAPI.getAssetsListByOwner(address);
+    const requestCollection = await OpenSeaAPI.getCollections(address);
 
     if (createdRequest.ok) {
       const assets = createdRequest.data?.assets;
@@ -36,7 +36,6 @@ function Profile() {
       setCollections(collections);
     }
   };
-
   const loadTabData = (e) => {
     if (e === "1") {
       console.log("onsale");
@@ -49,6 +48,8 @@ function Profile() {
       console.log("other tabs");
     }
   };
+
+  console.log("created data ", created)
   return (
     <>
       <Header />
@@ -123,10 +124,10 @@ function Profile() {
           </div>
         </div>
         <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
-          <TabPane tab="On sale" key="1">
-            <Products />
+          <TabPane tab="Created" key="1">
+            <Products data={created} />
           </TabPane>
-          <TabPane tab="Collections" key="2">
+          <TabPane tab="Collectibles" key="2">
             <Products />
           </TabPane>
         </Tabs>
