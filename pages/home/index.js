@@ -81,7 +81,7 @@ function Home() {
       </Head>
 
       <Header />
-      <div style={{ maxWidth: 1400, margin: "auto" }}>
+      <div style={{ maxWidth: 1450, margin: "auto" }}>
         <Slide />
         <TopSellers data={topSellers} />
         <LiveAuctions data={topSellers} />

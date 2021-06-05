@@ -117,6 +117,39 @@ export const PRODUCTS = [
     likes: 100,
     palceMessage: "Place a bid",
   },
+  {
+    id: 5,
+    productTitle: "product one",
+    productImage:
+      "https://lh3.googleusercontent.com/7O9TM4--FDArfDp2BD7hKC20Fw3ROnDSbQSmr3MWS10v3icIsrvF_7T8g9-FgPO0_R56qqMg-1RAml3pgJZafVzskylaTosRGaka5g",
+    price: "99 ETH",
+    currentQTY: 90,
+    totalQTY: 100,
+    likes: 100,
+    palceMessage: "Place a bid",
+  },
+  {
+    id: 6,
+    productTitle: "product one",
+    productImage:
+      "https://lh3.googleusercontent.com/7O9TM4--FDArfDp2BD7hKC20Fw3ROnDSbQSmr3MWS10v3icIsrvF_7T8g9-FgPO0_R56qqMg-1RAml3pgJZafVzskylaTosRGaka5g",
+    price: "99 ETH",
+    currentQTY: 90,
+    totalQTY: 100,
+    likes: 100,
+    palceMessage: "Place a bid",
+  },
+  {
+    id: 7,
+    productTitle: "product one",
+    productImage:
+      "https://lh3.googleusercontent.com/7O9TM4--FDArfDp2BD7hKC20Fw3ROnDSbQSmr3MWS10v3icIsrvF_7T8g9-FgPO0_R56qqMg-1RAml3pgJZafVzskylaTosRGaka5g",
+    price: "99 ETH",
+    currentQTY: 90,
+    totalQTY: 100,
+    likes: 100,
+    palceMessage: "Place a bid",
+  },
 ];
 
 export const SELLERS = [
