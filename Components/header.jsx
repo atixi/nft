@@ -7,8 +7,8 @@ import Search from "./search";
 import Dropdown from "./Dropdown";
 import { Menu } from "antd";
 import { accountList } from "../Constants/constants";
-import { useStoreApi } from "../providers/storeApi";
-import { useWeb3 } from "../providers/getWeb";
+import { useStoreApi } from "../Providers/storeApi";
+import { useWeb3 } from "../Providers/getWeb";
 
 export default function Header(props) {
   const { address, balance, message, setBalance, setAddress } = useStoreApi();

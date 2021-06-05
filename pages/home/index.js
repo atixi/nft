@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import OpenSeaAPI from "../api/openseaApi";
 import { accountList } from "../../Constants/constants";
 import _ from "lodash";
-import { useWeb3 } from "../../providers/getWeb";
+import { useWeb3 } from "../../Providers/getWeb";
 function Home() {
   const [bundles, setBundles] = useState([]);
   const [topSellers, setTopSellers] = useState();
@@ -37,6 +37,7 @@ function Home() {
 
     if (result.ok) {
       const bundles = result.data?.bundles;
+      // console.log(bundles);
       setBundles(bundles);
     }
   };
