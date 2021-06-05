@@ -20,7 +20,7 @@ const check = (i) => {
 
 function TopSellers({ data }) {
   const [selectedSeller, setSelectedSeller] = useState();
-
+  console.log("data: ", data)
   const topSellerDetails = async (top) => {
     const address = top.address;
     const talent = top.talent;
@@ -54,11 +54,13 @@ function TopSellers({ data }) {
           <div className={styles.topSellerContainer}>
             {data &&
               data.map((seller, index) => (
+              //  <Link href='/profile/[id]' as={`/profile/${seller.address}`} >
+                 <a href={`/profile/index?talent=${seller.address}&`}>
                 <div
                   className={styles.topSellerItem}
                   key={seller.name}
                   onClick={() => topSellerDetails(seller)}
-                >
+                > 
                   <div>{index + 1}</div>
                   <div className={styles.iconContainer}>
                     <img className={styles.icon} src={seller.profile_img_url} />
@@ -72,6 +74,9 @@ function TopSellers({ data }) {
                     </div>
                   </div>
                 </div>
+                </a>
+                //  </Link>
+
               ))}
           </div>
         </div>
