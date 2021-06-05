@@ -40,7 +40,6 @@ function Home() {
 
     if (result.ok) {
       const bundles = result.data?.bundles;
-      // console.log(bundles);
       setBundles(bundles);
     }
   };
@@ -50,7 +49,6 @@ function Home() {
     if (result.ok) {
       const assets = await result.data.assets;
       const tops = OpenSeaAPI.getTopSellers(assets);
-      console.log(tops);
       setTopSellers(tops);
     }
   };
@@ -74,7 +72,9 @@ function Home() {
   const loadExplorers = async () => {
     const result = await OpenSeaAPI.getAssets();
     if (result.ok) {
-      const exp = await result.data.assets;
+      let exp = await result.data.assets;
+      if (exp.length > 20) exp = exp.slice(21);
+      console.log(exp);
       setExplorers(exp);
     }
   };
