@@ -15,7 +15,7 @@ import {
   ProductCardHeader,
   ProductDescription,
   CardsContainer,
-  ProductCardContainer
+  ProductCardContainer,
 } from "./StyledComponents/liveActions-styledComponents";
 
 function Products() {
@@ -38,15 +38,15 @@ function Products() {
   return (
     <>
       <CardsContainer>
-          {PRODUCTS.map((n, index) => (
-            <ProductCardContainer className={"p-1"}>
+        {PRODUCTS.map((n, index) => (
+          <ProductCardContainer className={"p-1"}>
             <ProductCard
               key={index}
               // style={{ width: "280px" }}
               className="p-3 p-sm-2 p-md-2 p-lg-3"
             >
-                <ProductCardHeader className={`mt-1 float-right mb-2`}>
-                  {/* <div className={"pl-3"}>
+              <ProductCardHeader className={`mt-1 float-right mb-2`}>
+                {/* <div className={"pl-3"}>
                     <Avatar.Group>
                       {PRODUCTS.map((m, index) => (
                         <Tooltip title={m.id} placement="top">
@@ -63,35 +63,35 @@ function Products() {
                       ))}
                     </Avatar.Group>
                   </div> */}
-                  <Dropdown
-                    trigger={["click"]}
-                    overlay={menu}
-                    placement="bottomRight"
-                  >
-                    <Button>...</Button>
-                  </Dropdown>
-                </ProductCardHeader>
-                <div className={`col-md-12 p-3`}>
-                  <img src={n.productImage} className="w-100 rounded" />
-                </div>
-                <ProductDescription>
-                  <Link href={`/product-details?id=${n.id}`}>
-                    <CardTitle>{n.productTitle}</CardTitle>
-                  </Link>
-                  <ProductPrice>{n.price}</ProductPrice>
-                  <ProductList>
-                    {" " + n.currentQTY + " of " + n.totalQTY}
-                  </ProductList>{" "}
-                  <br />
-                  <ProductPrice fontSize={"12px"}>{n.price}</ProductPrice>
-                  <LikesContainer>
-                    <HeartIcon right={"-125px"} />
-                    <NumberOfLikes className={"mr-3"}>{n.likes}</NumberOfLikes>
-                  </LikesContainer>
-                </ProductDescription>
-              </ProductCard>
-              </ProductCardContainer>
-          ))}
+                <Dropdown
+                  trigger={["click"]}
+                  overlay={menu}
+                  placement="bottomRight"
+                >
+                  <Button>...</Button>
+                </Dropdown>
+              </ProductCardHeader>
+              <div className={`col-md-12 p-3`}>
+                <img src={n.productImage} className="w-100 rounded" />
+              </div>
+              <ProductDescription>
+                <Link href={`/product-details?id=${n.id}`}>
+                  <CardTitle>{n.productTitle}</CardTitle>
+                </Link>
+                <ProductPrice>{n.price}</ProductPrice>
+                <ProductList>
+                  {" " + n.currentQTY + " of " + n.totalQTY}
+                </ProductList>{" "}
+                <br />
+                <ProductPrice fontSize={"12px"}>{n.price}</ProductPrice>
+                <LikesContainer>
+                  <HeartIcon right={"-125px"} />
+                  <NumberOfLikes className={"mr-3"}>{n.likes}</NumberOfLikes>
+                </LikesContainer>
+              </ProductDescription>
+            </ProductCard>
+          </ProductCardContainer>
+        ))}
       </CardsContainer>
     </>
   );
