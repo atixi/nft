@@ -45,7 +45,7 @@ function TopSellers({ data }) {
             {data &&
               data.map((seller, index) => (
               //  <Link href='/profile/[id]' as={`/profile/${seller.address}`} >
-                 <a href={`/profile/index?talent=${seller.address}&`}>
+                 <a href={`/profile/index?address=${seller.address}&talent=${seller.talent}&avatar=${seller.profile_img_url}`}>
                 <div
                   className={styles.topSellerItem}
                   key={seller.name}

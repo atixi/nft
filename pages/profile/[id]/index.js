@@ -11,6 +11,9 @@ function callback(key) {
 }
 
 function Profile() {
+  const talent = new URLSearchParams(window.location.search).getAll('talent')
+  const address = new URLSearchParams(window.location.search).getAll('address')
+  const avatar = new URLSearchParams(window.location.search).getAll('avatar')
   return (
     <>
       <Header />
@@ -23,17 +26,17 @@ function Profile() {
             <div className={profileStyles.avatar}>
               <img
                 alt="Identicon"
-                src="/images/profile/profile.png"
+                src={avatar}
                 loading="lazy"
                 className="sc-eirseW evgNzS"
               />
             </div>
             <div className={profileStyles.bioDescription}>
               <h3>
-                <strong>People are the pillars of the...</strong>
+                <strong>{talent}</strong>
               </h3>
               <h6>
-                <strong>kasdfkaUksdLWD...745343</strong> <CopyOutlined />
+                <strong>{address}</strong> <CopyOutlined />
               </h6>
               <Row>
                 <Col lg={8} md={6} sm={2} xs={0}></Col>
