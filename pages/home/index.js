@@ -46,14 +46,13 @@ function Home() {
     if (result.ok) {
       const assets = await result.data.assets;
       const tops = OpenSeaAPI.getTopSellers(assets);
-      console.log(tops);
       setTopSellers(tops);
     }
   };
 
   const loadCollections = async () => {
     let collections = [];
-    const result = await OpenSeaAPI.getCollections(
+    const result = await OpenSeaAPI.getAssets(
       account ? account : accountList[0]
     );
     if (result.ok) {

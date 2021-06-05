@@ -35,6 +35,7 @@ async function getBundles(owner, onSale = false) {
   return client.get(`bundles?owner=${owner}&on_sale=${onSale}&limit=50`);
 }
 
+async function getAssetsByOwner() {}
 async function getAssetsByTokenIds(
   tokenIds,
   orderDirection = "desc",
@@ -68,6 +69,16 @@ async function getSingleAsset(accountId, assetId) {
   );
 }
 
+async function getTopSellerDatails(address) {
+  let assets = [];
+  let collections = [];
+  const assetResult = await client.get(`assets?owner=${address}&limit=50`);
+  if (assetResult.ok) {
+    assets = assetResult.data?.assets;
+  }
+
+  console.log(assets);
+}
 // this is helper method to reproduct the topseller data (changes are required)
 function getTopSellers(assets) {
   let topSellers = [];
@@ -88,6 +99,9 @@ function getTopSellers(assets) {
 
   return topSellers;
 }
+
+// hellper functions
+
 export default {
   getAccount,
   getCollections,
@@ -97,4 +111,5 @@ export default {
   getSingleAsset,
   getAssets,
   getTopSellers,
+  getTopSellerDatails,
 };
