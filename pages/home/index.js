@@ -16,6 +16,8 @@ function Home() {
   const [topSellers, setTopSellers] = useState();
   const [liveAuctions, setLiveAuctions] = useState();
   const [collections, setCollections] = useState();
+  const [explorers, setExplorers] = useState();
+
   const account = null;
   const web3 = useWeb3();
 
@@ -30,6 +32,7 @@ function Home() {
     loadBundles();
     loadTopSellers();
     loadCollections();
+    loadExplorers();
   };
 
   const loadBundles = async () => {
@@ -37,7 +40,6 @@ function Home() {
 
     if (result.ok) {
       const bundles = result.data?.bundles;
-      // console.log(bundles);
       setBundles(bundles);
     }
   };
@@ -67,6 +69,15 @@ function Home() {
     }
   };
 
+  const loadExplorers = async () => {
+    const result = await OpenSeaAPI.getAssets();
+    if (result.ok) {
+      let exp = await result.data.assets;
+      if (exp.length > 20) exp = exp.slice(21);
+      console.log(exp);
+      setExplorers(exp);
+    }
+  };
   return (
     <>
       <Head>
@@ -82,7 +93,7 @@ function Home() {
         <TopSellers data={topSellers} />
         <LiveAuctions data={topSellers} />
         <HotCollections data={collections} />
-        <Explore data={bundles} />
+        <Explore data={explorers} />
       </div>
       <Footer />
     </>

@@ -32,6 +32,12 @@ export const CardTitle = styled.div`
     font-weight: 700;
     font-size: 16px;
     color: black !important;
+
+    display: inline-block;
+    width: 180px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
 `;
 export const ProductPrice = styled.span`
 text-transform: uppercase;

@@ -1,9 +1,11 @@
 import profileStyles from "/styles/profile.module.css";
 import { Row, Col, Tabs } from "antd";
 import { CopyOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "/Components/header";
 import Products from "/Components/products";
+import OpenSeaAPI from "../../api/openseaApi";
+import { result, set } from "lodash";
 
 const { TabPane } = Tabs;
 function callback(key) {
@@ -11,38 +13,84 @@ function callback(key) {
 }
 
 function Profile() {
+  const [collections, setCollections] = useState();
+  const [collectionDetails, setCollectionDetails] = useState();
+  const [created, setCreated] = useState();
+  // const [address, setAddress] = useState();
+  const talent = new URLSearchParams(window.location.search).getAll('talent')
+  const address = new URLSearchParams(window.location.search).getAll('address')
+  const avatar = new URLSearchParams(window.location.search).getAll('avatar')
+    useEffect(() => {
+    loadTalentData();
+  }, []);
+
+  const loadTalentData = async () => {
+    const createdRequest = await OpenSeaAPI.getAssetsListByOwner(address);
+    const requestCollection = await OpenSeaAPI.getCollections(address);
+
+    if (createdRequest.ok) {
+      const assets = createdRequest.data?.assets;
+      setCreated(assets);
+    }
+    if (requestCollection.ok) {
+      const collections = requestCollection.data;
+      setCollections(collections);
+    }
+  };
+
+  const loadTabData = async (e) => {
+    if (e === "1") {
+      console.log("onsale");
+    } else if (e === "2") {
+      const collectionSlugs = collections.map((c) => c.slug);
+      let cols = [];
+      let result = await OpenSeaAPI.getCollectionsDetailsBySlugs(
+        collectionSlugs
+      );
+      if(result.length >0)
+      for (let i = 0; i < result.length; i++) {
+        for (let j = 0; j < result[i].assets.length; j++) {
+          cols.push(result[i].assets[j]);
+        }
+      }
+      console.log("collectives: ",cols);
+      setCollectionDetails(cols);
+    } else if (e === "3") {
+      console.log(created);
+    } else {
+      console.log("other tabs");
+    }
+  };
+
+  console.log("created data ", created)
   return (
     <>
       <Header />
       <div style={{ maxWidth: 1400, margin: "auto" }}>
         <div className={profileStyles.profile}>
           <div className={profileStyles.cover}>
-            <img src="/images/profile/profile.png" />
+            {/* <img src="/images/profile/profile.png" /> */}
           </div>
           <div className={profileStyles.bio}>
             <div className={profileStyles.avatar}>
               <img
                 alt="Identicon"
-                src="/images/profile/profile.png"
+                src={avatar}
                 loading="lazy"
                 className="sc-eirseW evgNzS"
               />
             </div>
             <div className={profileStyles.bioDescription}>
               <h3>
-                <strong>People are the pillars of the...</strong>
+                <strong>{talent}</strong>
               </h3>
               <h6>
-                <strong>kasdfkaUksdLWD...745343</strong> <CopyOutlined />
+                <strong>{address}</strong> 
+                {/* <CopyOutlined /> */}
               </h6>
               <Row>
                 <Col lg={8} md={6} sm={2} xs={0}></Col>
                 <Col lg={8} md={12} sm={20} xs={24}>
-                  <span>
-                    Years are passing by and, slowly but surely, the complete
-                    picture of the puzzle that was imagined by a few visionaries
-                    becomes clearer and clearer...{" "}
-                  </span>
                 </Col>
                 <Col lg={8} md={6} sm={2} xs={0}></Col>
               </Row>
@@ -84,12 +132,12 @@ function Profile() {
             </div>
           </div>
         </div>
-        <Tabs defaultActiveKey="1" onChange={callback}>
-          <TabPane tab="On sale" key="1">
-            <Products />
+        <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
+          <TabPane tab="Created" key="1">
+            <Products data={created} />
           </TabPane>
-          <TabPane tab="Collections" key="2">
-            <Products />
+          <TabPane tab="Collectibles" key="2">
+            <Products data={collectionDetails} />
           </TabPane>
         </Tabs>
       </div>

@@ -1,7 +1,7 @@
 import { Row, Col } from "antd";
 import { Menu, Dropdown, Avatar, Tooltip } from "antd";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PRODUCTS } from "/Constants/constants";
 import {
   Button,
@@ -15,10 +15,10 @@ import {
   ProductCardHeader,
   ProductDescription,
   CardsContainer,
-  ProductCardContainer
+  ProductCardContainer,
 } from "./StyledComponents/liveActions-styledComponents";
 
-function Products() {
+function Products(props) {
   function handleButtonClick(e) {
     message.info("Click on left button.");
     console.log("click left button", e);
@@ -35,18 +35,24 @@ function Products() {
       <Menu.Item key="3">Share</Menu.Item>
     </Menu>
   );
+  const [products, setProducts] = useState([])
+
+  useEffect(() =>{
+  console.log("products: ", props.data);
+    setProducts(props.data)
+  });
   return (
     <>
       <CardsContainer>
-          {PRODUCTS.map((n, index) => (
+          {products && products.map((n, index) => (
             <ProductCardContainer className={"p-1"}>
             <ProductCard
               key={index}
               // style={{ width: "280px" }}
               className="p-3 p-sm-2 p-md-2 p-lg-3"
             >
-                <ProductCardHeader className={`mt-1 float-right mb-2`}>
-                  {/* <div className={"pl-3"}>
+              <ProductCardHeader className={`mt-1 float-right mb-2`}>
+                {/* <div className={"pl-3"}>
                     <Avatar.Group>
                       {PRODUCTS.map((m, index) => (
                         <Tooltip title={m.id} placement="top">
@@ -72,21 +78,23 @@ function Products() {
                   </Dropdown>
                 </ProductCardHeader>
                 <div className={`col-md-12 p-3`}>
-                  <img src={n.productImage} className="w-100 rounded" />
+              <a href={`/product-details?id=${n.id}`}>
+                  <img style={{height: "200px"}} src={n.image_preview_url} className="w-100 img-fluid" />
+                </a>
                 </div>
                 <ProductDescription>
-                  <Link href={`/product-details?id=${n.id}`}>
-                    <CardTitle>{n.productTitle}</CardTitle>
-                  </Link>
+                  <a href={`/product-details?id=${n.id}`}>
+                    <CardTitle>{n.name}</CardTitle>
+                  </a>
                   <ProductPrice>{n.price}</ProductPrice>
                   <ProductList>
-                    {" " + n.currentQTY + " of " + n.totalQTY}
-                  </ProductList>{" "}
+                    {/* {" " + n.currentQTY + " of " + n.totalQTY} */}
+                  </ProductList>
                   <br />
-                  <ProductPrice fontSize={"12px"}>{n.price}</ProductPrice>
+                  {/* <ProductPrice fontSize={"12px"}>{n.price}</ProductPrice> */}
                   <LikesContainer>
-                    <HeartIcon right={"-125px"} />
-                    <NumberOfLikes className={"mr-3"}>{n.likes}</NumberOfLikes>
+                    <HeartIcon right={"-165px"} />
+                    <NumberOfLikes className={"mr-3"}>{"100"}</NumberOfLikes>
                   </LikesContainer>
                 </ProductDescription>
               </ProductCard>

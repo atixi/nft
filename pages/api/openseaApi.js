@@ -27,6 +27,26 @@ async function getCollections(owner) {
   return await client.get(`collections?asset_owner=${owner}`);
 }
 
+async function getAssetsInCollection(slug) {
+  return client.get(`assets?collection=${slug}`);
+}
+
+async function getCollectionsDetailsBySlugs(slugs) {
+  let urls = [];
+  for (let i = 0; i < slugs.length; i++) {
+    urls.push(`https://api.opensea.io/api/v1/assets?collection=${slugs[i]}`);
+  }
+  try {
+    var data = await Promise.all(
+      urls.map((url) => fetch(url).then((response) => response.json()))
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+
+    throw error;
+  }
+}
 //topsellers
 async function getAssets() {
   return await client.get(`assets?limit=50`);
@@ -76,8 +96,6 @@ async function getTopSellerDatails(address) {
   if (assetResult.ok) {
     assets = assetResult.data?.assets;
   }
-
-  console.log(assets);
 }
 // this is helper method to reproduct the topseller data (changes are required)
 function getTopSellers(assets) {
@@ -89,6 +107,7 @@ function getTopSellers(assets) {
     topSellers.push({
       talent: item,
       profile_img_url: groupByCreator[item][0].creator?.profile_img_url,
+      number_of_assets: groupByCreator[item].length,
       created: groupByCreator[item],
       address: groupByCreator[item][0].creator?.address,
     })
@@ -112,4 +131,6 @@ export default {
   getAssets,
   getTopSellers,
   getTopSellerDatails,
+  getAssetsInCollection,
+  getCollectionsDetailsBySlugs,
 };
