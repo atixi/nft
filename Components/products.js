@@ -14,6 +14,8 @@ import {
   ProductList,
   ProductCardHeader,
   ProductDescription,
+  CardsContainer,
+  ProductCardContainer
 } from "./StyledComponents/liveActions-styledComponents";
 
 function Products() {
@@ -35,17 +37,16 @@ function Products() {
   );
   return (
     <>
-      <div>
-        <Row>
+      <CardsContainer>
           {PRODUCTS.map((n, index) => (
-            <Col
+            <ProductCardContainer className={"p-1"}>
+            <ProductCard
               key={index}
-              style={{ width: "280px" }}
+              // style={{ width: "280px" }}
               className="p-3 p-sm-2 p-md-2 p-lg-3"
             >
-              <ProductCard className={`p-2 p-lg-1`}>
                 <ProductCardHeader className={`mt-3`}>
-                  <div className={"pl-3"}>
+                  {/* <div className={"pl-3"}>
                     <Avatar.Group>
                       {PRODUCTS.map((m, index) => (
                         <Tooltip title={m.id} placement="top">
@@ -61,7 +62,7 @@ function Products() {
                         </Tooltip>
                       ))}
                     </Avatar.Group>
-                  </div>
+                  </div> */}
                   <Dropdown
                     trigger={["click"]}
                     overlay={menu}
@@ -89,10 +90,9 @@ function Products() {
                   </LikesContainer>
                 </ProductDescription>
               </ProductCard>
-            </Col>
+              </ProductCardContainer>
           ))}
-        </Row>
-      </div>
+      </CardsContainer>
     </>
   );
 }
