@@ -3,12 +3,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 520px;
+    /* min-height: 520px; */
     width: 100%;
 }
 .cover img{
-    height: 100%;
-    width:auto;
+    height: 260px;
+    width: 100%;
     transform: translateX(-50%);
     left: 50%;
     position: relative;
@@ -42,6 +42,7 @@
 }
 .profile>div:first-child{
     background-color: #eee;
+    text-align: center;
 }
 .avatar img{
     width: 100%;

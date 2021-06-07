@@ -3,16 +3,13 @@ import { PRODUCTS } from "/Constants/constants";
 import Carousel from "react-elastic-carousel";
 import { Menu, Dropdown, Avatar, Tooltip } from "antd";
 import Link from "next/link";
-import CONSTANTS from "/Constants/liveActionsConstants";
+import CONSTANTS from "/Constants/liveAuctionsConstants";
 import {
   Button,
   CardTitle,
   ProductPrice,
   BidsStatus,
   ProductCard,
-  HeartIcon,
-  NumberOfLikes,
-  LikesContainer,
   ProductList,
   ProductCardHeader,
   ProductDescriptionBottom,
@@ -21,7 +18,7 @@ import {
   CountDown,
   ProductCardHeaderButton,
   ProductCardHeaderOwners
-} from "./StyledComponents/liveActions-styledComponents";
+} from "./StyledComponents/liveAuctions-styledComponents";
 import { SectionHeading } from "./StyledComponents/globalStyledComponents";
 const breakPoints = [
   { width: 1, itemsToShow: 1 },
@@ -35,7 +32,7 @@ function LiveAuctions() {
     <>
       <div>
         <div className="pl-3">
-          <SectionHeading>{CONSTANTS.liveActions}</SectionHeading>
+          <SectionHeading>{CONSTANTS.liveAuctions}</SectionHeading>
         </div>
 
         <Carousel
@@ -103,10 +100,6 @@ function Product(product) {
           <ProductList>
             {" " + product.currentQTY + " of " + product.totalQTY}
           </ProductList>
-          <LikesContainer>
-            <HeartIcon />
-            <NumberOfLikes className={"mr-3"}>{product.likes}</NumberOfLikes>
-          </LikesContainer>
         </ProductDescriptionBottom>
       </ProductDescription>
     </ProductCard>

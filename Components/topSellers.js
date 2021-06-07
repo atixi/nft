@@ -14,7 +14,6 @@ import {
 
 function TopSellers({ data }) {
   const [selectedSeller, setSelectedSeller] = useState([]);
-  console.log("data: ", data);
   const topSellerDetails = async (top) => {
     const address = top.address;
     const talent = top.talent;
@@ -68,7 +67,7 @@ function TopSellers({ data }) {
                       </SellerName>
                       <SellerPrice>
                         {/* {seller.stats?.average_price} */}
-                        {"37.95 ETH"}
+                        {seller.number_of_assets+" assets"}
                       </SellerPrice>
                     </div>
                   </div>

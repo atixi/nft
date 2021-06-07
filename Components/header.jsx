@@ -355,7 +355,7 @@ export default function Header(props) {
   return (
     <nav className={`${styles.mainNav} ${styles.pageHeader}`}>
       <div>
-        <a href="#">
+        <a href="/">
          <Image src="/logo/logo.png" width="40" height="40"/>
         </a>
       </div>

@@ -2,33 +2,21 @@ import { Row, Col } from "antd";
 import { Menu, Dropdown, Avatar, Tooltip } from "antd";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { PRODUCTS } from "/Constants/constants";
 import {
   Button,
   CardTitle,
   ProductPrice,
   ProductCard,
-  HeartIcon,
-  NumberOfLikes,
-  LikesContainer,
   ProductList,
   ProductCardHeader,
   ProductDescription,
   CardsContainer,
   ProductCardContainer,
-} from "./StyledComponents/liveActions-styledComponents";
+} from "./StyledComponents/liveAuctions-styledComponents";
 
 function Products(props) {
-  function handleButtonClick(e) {
-    message.info("Click on left button.");
-    console.log("click left button", e);
-  }
-  function handleMenuClick(e) {
-    message.info("Click on menu item.");
-    console.log("click", e);
-  }
   const menu = (
-    <Menu onClick={handleMenuClick}>
+    <Menu>
       <Menu.Item key="1">Purchase now</Menu.Item>
       <Menu.Item key="2">Place a bid</Menu.Item>
       <Menu.Item key="3">View on OpenSea</Menu.Item>
@@ -38,7 +26,6 @@ function Products(props) {
   const [products, setProducts] = useState([])
 
   useEffect(() =>{
-  console.log("products: ", props.data);
     setProducts(props.data)
   });
   return (
@@ -92,10 +79,6 @@ function Products(props) {
                   </ProductList>
                   <br />
                   {/* <ProductPrice fontSize={"12px"}>{n.price}</ProductPrice> */}
-                  <LikesContainer>
-                    <HeartIcon right={"-165px"} />
-                    <NumberOfLikes className={"mr-3"}>{"100"}</NumberOfLikes>
-                  </LikesContainer>
                 </ProductDescription>
               </ProductCard>
               </ProductCardContainer>
