@@ -12,7 +12,7 @@ import {
   ProductDescription,
   CardsContainer,
   ProductCardContainer,
-} from "./StyledComponents/liveActions-styledComponents";
+} from "./StyledComponents/liveAuctions-styledComponents";
 
 function Products(props) {
   function handleButtonClick(e) {
