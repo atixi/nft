@@ -48,10 +48,14 @@ async function getCollectionsDetailsBySlugs(slugs) {
   }
 }
 //topsellers
-async function getAssets() {
-  return await client.get(`assets?limit=50`);
+async function getAssets(onSale = true) {
+  return await client.get(`assets?on_sale=${onSale}&limit=50`);
 }
-async function getBundles(owner, onSale = false) {
+async function getBundles() {
+  return client.get(`bundles?limit=50`);
+}
+
+async function getBundlesByOwner(owner, onSale = false) {
   return client.get(`bundles?owner=${owner}&on_sale=${onSale}&limit=50`);
 }
 
