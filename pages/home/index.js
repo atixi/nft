@@ -37,10 +37,13 @@ function Home() {
   };
 
   const loadBundles = async () => {
-    const result = await OpenSeaAPI.getBundles(accountList[1]);
+    const result = await OpenSeaAPI.getBundles();
 
     if (result.ok) {
-      const bundles = result.data?.bundles;
+      let bundles = result.data?.bundles;
+      if (bundles.length > 20) {
+        bundles = bundles.slice(0, 10);
+      }
       setBundles(bundles);
     } else if (result.problem) {
       alert(result.problem);
@@ -96,7 +99,7 @@ function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* <Header /> */}
+      <Header />
       <div style={{ maxWidth: 1450, margin: "auto" }}>
         <Slide />
         <TopSellers data={topSellers} />
