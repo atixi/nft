@@ -15,16 +15,8 @@ import {
 } from "./StyledComponents/liveAuctions-styledComponents";
 
 function Products(props) {
-  function handleButtonClick(e) {
-    message.info("Click on left button.");
-    console.log("click left button", e);
-  }
-  function handleMenuClick(e) {
-    message.info("Click on menu item.");
-    console.log("click", e);
-  }
   const menu = (
-    <Menu onClick={handleMenuClick}>
+    <Menu>
       <Menu.Item key="1">Purchase now</Menu.Item>
       <Menu.Item key="2">Place a bid</Menu.Item>
       <Menu.Item key="3">View on OpenSea</Menu.Item>
@@ -34,7 +26,6 @@ function Products(props) {
   const [products, setProducts] = useState([])
 
   useEffect(() =>{
-  console.log("products: ", props.data);
     setProducts(props.data)
   });
   return (

@@ -1,8 +1,6 @@
 import { CollectionCard, ProfileAvatarContainer, CardTitle, CardDescription, CardImageContainer } from "./StyledComponents/hotCollections-styledComponents"
 import Profile from "/Components/profileAvatar";
 export default function HCItem(props){
-
-    // console.log("reciev ", props)
     return (
         <CollectionCard>
             <CardImageContainer>

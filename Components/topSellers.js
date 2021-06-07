@@ -14,7 +14,6 @@ import {
 
 function TopSellers({ data }) {
   const [selectedSeller, setSelectedSeller] = useState([]);
-  console.log("top seller: ", data);
   const topSellerDetails = async (top) => {
     const address = top.address;
     const talent = top.talent;

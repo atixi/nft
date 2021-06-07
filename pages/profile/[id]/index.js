@@ -35,10 +35,6 @@ function Profile() {
       } else {
         alert(collectionRequest.problem);
       }
-    } else if (e === "3") {
-      console.log("activity");
-    } else {
-      console.log("other tabs");
     }
   };
 

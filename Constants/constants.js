@@ -25,7 +25,6 @@ export async function connectWallet() {
     // web3Provider = new PortisProvider({
     //   // Put your Portis API key here
     // });
-    console.log("enly ethereum");
   } else if (window.ethereum) {
     window.ethereum.enable();
   } else {
