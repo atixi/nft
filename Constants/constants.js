@@ -1,11 +1,14 @@
 import * as Web3 from "web3";
 import BigNumber from "bignumber.js";
+import moment from "moment";
 
 export const GOOGLE_ANALYTICS_ID = "UA-111688253-4";
 export const OPENSEA_URL = "https://opensea.io";
 export const OPENSEA_JS_URL = "https://github.com/ProjectOpenSea/opensea-js";
 export const GITHUB_URL = "https://github.com/ProjectOpenSea/ships-log";
 export const DEFAULT_DECIMALS = 18;
+const MAX_ADDR_LEN = 4;
+
 export let web3Provider =
   typeof web3 !== "undefined"
     ? window.ethereum
@@ -64,6 +67,55 @@ export async function promisify(inner) {
     })
   );
 }
+
+export const getAuctionPriceDetails = (order) => {
+  const { currentPrice, basePrice, paymentTokenContract } = order;
+  const cp = toUnitAmount(currentPrice, paymentTokenContract);
+
+  const priceCurrent = parseFloat(cp).toLocaleString(undefined, {
+    minimumSignificantDigits: 1,
+  });
+
+  const bp = toUnitAmount(basePrice, paymentTokenContract);
+
+  const priceBase = parseFloat(bp).toLocaleString(undefined, {
+    minimumSignificantDigits: 1,
+  });
+
+  return { priceCurrent, priceBase };
+};
+
+export const getAuctionTimeDetails = (order) => {
+  const { listingTime, createdTime, expirationTime } = order;
+
+  const lt = listingTime.toNumber() * 1000;
+  const timeListed = moment(lt).format();
+
+  const ct = createdTime.toNumber() * 1000;
+  const timeCreated = moment(ct).format();
+
+  const exp = parseFloat(expirationTime);
+  if (exp <= 0) {
+    timeLeft = null;
+  }
+  const timeLeft = moment.duration(moment.unix(exp).diff(moment()))._data;
+
+  return { timeListed, timeCreated, timeLeft };
+};
+
+export const getAuctionUserDetails = (order) => {
+  const { makerAccount } = order;
+  const _username = makerAccount.user ? makerAccount.user.username : null;
+  const _address = makerAccount.address;
+
+  const displayName = _username
+    ? _username
+    : _address.substring(0, MAX_ADDR_LEN).toUpperCase() +
+      "..." +
+      _address.substring(_address.length - MAX_ADDR_LEN).toUpperCase();
+
+  return displayName;
+};
 
 export const ACCOUNT_ADDRESS = "0x8ca35f878fd14992b58a18beb484f721b1d07a33";
 export const ASSET_TOKEN = "0x06012c8cf97bead5deae237070f9587f8e7a266d";
