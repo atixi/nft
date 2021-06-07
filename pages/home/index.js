@@ -16,6 +16,7 @@ import {
 } from "../../Constants/constants";
 import _ from "lodash";
 import { useWeb3 } from "../../Providers/getWeb";
+import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 
 import * as Web3 from "web3";
 import { OpenSeaPort, Network } from "opensea-js";
@@ -124,13 +125,13 @@ function Home() {
       </Head>
 
       <Header />
-      <div style={{ maxWidth: 1450, margin: "auto" }}>
+      <MainWrapper>
         <Slide />
         <TopSellers data={topSellers} />
         <LiveAuctions data={liveAuctions} />
         <HotCollections data={collections} />
         <Explore data={explorers} />
-      </div>
+      </MainWrapper>
       <Footer />
     </>
   );

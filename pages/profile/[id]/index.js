@@ -1,10 +1,11 @@
 import profileStyles from "/styles/profile.module.css";
-import { Row, Col, Tabs } from "antd";
+import { Row, Col, Tabs, Spin } from "antd";
 import { CopyOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import Header from "/Components/header";
 import Products from "/Components/products";
 import OpenSeaAPI from "../../api/openseaApi";
+import { LoadingContainer } from "/Components/StyledComponents/globalStyledComponents";
 
 const { TabPane } = Tabs;
 function callback(key) {
@@ -17,34 +18,54 @@ function Profile() {
   const talent = new URLSearchParams(window.location.search).getAll("talent");
   const address = new URLSearchParams(window.location.search).getAll("address");
   const avatar = new URLSearchParams(window.location.search).getAll("avatar");
+  const [isLoading, setIsLoading] = useState(true);
+  const [addressToShow, setAddress] = useState(address[0].toString().replace(address[0].toString().substring(10,address[0].length-10), "....."))
 
+  const FetchCreatedAssets = async (e) => {
+    setIsLoading(true);
+    const createRequest = await OpenSeaAPI.getAssetsListByOwner(address);
+    if (createRequest.ok) {
+      const assets = await createRequest.data?.assets;
+      setCreated(assets);
+      setIsLoading(false);
+    }
+    else {
+      setIsLoading(false);
+      alert(createRequest.problem);
+    }
+  }
+  const FetchCollectibleAssets = async (e) =>{
+    setIsLoading(true);
+    const collectionRequest = await OpenSeaAPI.getCollections(address);
+    if (collectionRequest.ok) {
+      const cols = await collectionRequest.data;
+      setCollections(cols);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+      alert(collectionRequest.problem);
+    }
+  }
   const loadTabData = async (e) => {
     if (e === "1") {
-      const createRequest = await OpenSeaAPI.getAssetsListByOwner(address);
-      if (createRequest.ok) {
-        const assets = await createRequest.data?.assets;
-        setCreated(assets);
-      } else {
-        alert(createRequest.problem);
-      }
+      FetchCreatedAssets();
     } else if (e === "2") {
-      const collectionRequest = await OpenSeaAPI.getCollections(address);
-      if (collectionRequest.ok) {
-        const cols = await collectionRequest.data;
-        setCollections(cols);
-      } else {
-        alert(collectionRequest.problem);
-      }
+      FetchCollectibleAssets()
     }
   };
 
+
+  useEffect(() =>{
+    FetchCreatedAssets()
+    console.log("data fetched")
+  }, []);
   return (
     <>
       <Header />
       <div style={{ maxWidth: 1400, margin: "auto" }}>
         <div className={profileStyles.profile}>
           <div className={profileStyles.cover}>
-            {/* <img src="/images/profile/profile.png" /> */}
+            <img src="/images/talentCover.png" />
           </div>
           <div className={profileStyles.bio}>
             <div className={profileStyles.avatar}>
@@ -60,7 +81,7 @@ function Profile() {
                 <strong>{talent}</strong>
               </h3>
               <h6>
-                <strong>{address}</strong>
+                <strong>{addressToShow}</strong>
                 {/* <CopyOutlined /> */}
               </h6>
               <Row>
@@ -108,10 +129,24 @@ function Profile() {
         </div>
         <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
           <TabPane tab="Created" key="1">
-            <Products data={created} />
+            {isLoading ?
+                      <LoadingContainer>
+                        <Spin />
+                      </LoadingContainer>
+                      :
+                      <Products data={created} /> 
+
+                      }
           </TabPane>
           <TabPane tab="Collectibles" key="2">
-            <Products data={collections} />
+          {isLoading ?
+                      <LoadingContainer>
+                        <Spin />
+                      </LoadingContainer>
+                      :
+                      <Products data={collections} /> 
+
+                      }
           </TabPane>
         </Tabs>
       </div>
