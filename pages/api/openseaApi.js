@@ -59,6 +59,9 @@ async function getBundlesByOwner(owner, onSale = false) {
   return client.get(`bundles?owner=${owner}&on_sale=${onSale}&limit=50`);
 }
 
+async function getLiveAuctions(onSale = true) {
+  return client.get(`bundles?on_sale=${onSale}&limit=50`);
+}
 async function getAssetsByOwner() {}
 async function getAssetsByTokenIds(
   tokenIds,
@@ -137,4 +140,5 @@ export default {
   getTopSellerDatails,
   getAssetsInCollection,
   getCollectionsDetailsBySlugs,
+  getLiveAuctions,
 };

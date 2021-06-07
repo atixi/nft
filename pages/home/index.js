@@ -8,9 +8,23 @@ import Slide from "/Components/slider/slide";
 import HotCollections from "/Components/HotCollections";
 import { useEffect, useState } from "react";
 import OpenSeaAPI from "../api/openseaApi";
-import { accountList } from "../../Constants/constants";
+import {
+  accountList,
+  getAuctionTimesDetail,
+  getAuctionPriceDetails,
+  getAuctionUserDetails,
+} from "../../Constants/constants";
 import _ from "lodash";
 import { useWeb3 } from "../../Providers/getWeb";
+
+import * as Web3 from "web3";
+import { OpenSeaPort, Network } from "opensea-js";
+
+const provider = new Web3.providers.HttpProvider("https://mainnet.infura.io");
+
+const seaport = new OpenSeaPort(provider, {
+  networkName: Network.Main,
+});
 
 function Home() {
   const [bundles, setBundles] = useState([]);
@@ -31,6 +45,7 @@ function Home() {
       console.log(accounts);
     });
     loadBundles();
+    loadLiveAuctions();
     loadTopSellers();
     loadCollections();
     loadExplorers();
@@ -47,6 +62,15 @@ function Home() {
       setBundles(bundles);
     } else if (result.problem) {
       alert(result.problem);
+    }
+  };
+
+  const loadLiveAuctions = async () => {
+    const { orders } = await seaport.api.getOrders({
+      bundled: false,
+    });
+    if (orders) {
+      setLiveAuctions(orders);
     }
   };
 
@@ -103,7 +127,7 @@ function Home() {
       <div style={{ maxWidth: 1450, margin: "auto" }}>
         <Slide />
         <TopSellers data={topSellers} />
-        <LiveAuctions data={bundles} />
+        <LiveAuctions data={liveAuctions} />
         <HotCollections data={collections} />
         <Explore data={explorers} />
       </div>
