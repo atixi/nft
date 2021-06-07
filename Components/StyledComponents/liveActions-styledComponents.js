@@ -116,17 +116,3 @@ font-size: 12px;
 position: relative;
 left: 0px;
 `;
-export const LikesContainer = styled.span`
-
-`
-export const NumberOfLikes = styled.h6`
-color: #818182;
-float: right;
-`;
-export const HeartIcon = styled(HeartTwoTone)`
-color: #818182;
-font-size: 35px;
-position: relative;
-right: ${props => props.right ? props.right : "-80px"};
-top: -3px;
-`

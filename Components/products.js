@@ -2,15 +2,11 @@ import { Row, Col } from "antd";
 import { Menu, Dropdown, Avatar, Tooltip } from "antd";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { PRODUCTS } from "/Constants/constants";
 import {
   Button,
   CardTitle,
   ProductPrice,
   ProductCard,
-  HeartIcon,
-  NumberOfLikes,
-  LikesContainer,
   ProductList,
   ProductCardHeader,
   ProductDescription,
@@ -92,10 +88,6 @@ function Products(props) {
                   </ProductList>
                   <br />
                   {/* <ProductPrice fontSize={"12px"}>{n.price}</ProductPrice> */}
-                  <LikesContainer>
-                    <HeartIcon right={"-165px"} />
-                    <NumberOfLikes className={"mr-3"}>{"100"}</NumberOfLikes>
-                  </LikesContainer>
                 </ProductDescription>
               </ProductCard>
               </ProductCardContainer>

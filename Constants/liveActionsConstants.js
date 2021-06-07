@@ -1,5 +1,5 @@
 const CONSTANTS = {
-    liveActions: "Live Actions",
+    liveAuctions: "Live Auctions",
     purchaseNow: "Purchase Now",
     placeBid: "Place a bid",
     viewOnOpenSea: "View on OpenSea",

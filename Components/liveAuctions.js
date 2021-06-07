@@ -10,9 +10,6 @@ import {
   ProductPrice,
   BidsStatus,
   ProductCard,
-  HeartIcon,
-  NumberOfLikes,
-  LikesContainer,
   ProductList,
   ProductCardHeader,
   ProductDescriptionBottom,
@@ -103,10 +100,6 @@ function Product(product) {
           <ProductList>
             {" " + product.currentQTY + " of " + product.totalQTY}
           </ProductList>
-          <LikesContainer>
-            <HeartIcon />
-            <NumberOfLikes className={"mr-3"}>{product.likes}</NumberOfLikes>
-          </LikesContainer>
         </ProductDescriptionBottom>
       </ProductDescription>
     </ProductCard>
