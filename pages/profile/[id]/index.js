@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import Header from "/Components/header";
 import Products from "/Components/products";
 import OpenSeaAPI from "../../api/openseaApi";
-import { result, set } from "lodash";
 
 const { TabPane } = Tabs;
 function callback(key) {
@@ -14,55 +13,35 @@ function callback(key) {
 
 function Profile() {
   const [collections, setCollections] = useState();
-  const [collectionDetails, setCollectionDetails] = useState();
   const [created, setCreated] = useState();
-  // const [address, setAddress] = useState();
-  const talent = new URLSearchParams(window.location.search).getAll('talent')
-  const address = new URLSearchParams(window.location.search).getAll('address')
-  const avatar = new URLSearchParams(window.location.search).getAll('avatar')
-    useEffect(() => {
-    loadTalentData();
-  }, []);
-
-  const loadTalentData = async () => {
-    const createdRequest = await OpenSeaAPI.getAssetsListByOwner(address);
-    const requestCollection = await OpenSeaAPI.getCollections(address);
-
-    if (createdRequest.ok) {
-      const assets = createdRequest.data?.assets;
-      setCreated(assets);
-    }
-    if (requestCollection.ok) {
-      const collections = requestCollection.data;
-      setCollections(collections);
-    }
-  };
+  const talent = new URLSearchParams(window.location.search).getAll("talent");
+  const address = new URLSearchParams(window.location.search).getAll("address");
+  const avatar = new URLSearchParams(window.location.search).getAll("avatar");
 
   const loadTabData = async (e) => {
     if (e === "1") {
-      console.log("onsale");
-    } else if (e === "2") {
-      const collectionSlugs = collections.map((c) => c.slug);
-      let cols = [];
-      let result = await OpenSeaAPI.getCollectionsDetailsBySlugs(
-        collectionSlugs
-      );
-      if(result.length >0)
-      for (let i = 0; i < result.length; i++) {
-        for (let j = 0; j < result[i].assets.length; j++) {
-          cols.push(result[i].assets[j]);
-        }
+      const createRequest = await OpenSeaAPI.getAssetsListByOwner(address);
+      if (createRequest.ok) {
+        const assets = await createRequest.data?.assets;
+        setCreated(assets);
+      } else {
+        alert(createRequest.problem);
       }
-      console.log("collectives: ",cols);
-      setCollectionDetails(cols);
+    } else if (e === "2") {
+      const collectionRequest = await OpenSeaAPI.getCollections(address);
+      if (collectionRequest.ok) {
+        const cols = await collectionRequest.data;
+        setCollections(cols);
+      } else {
+        alert(collectionRequest.problem);
+      }
     } else if (e === "3") {
-      console.log(created);
+      console.log("activity");
     } else {
       console.log("other tabs");
     }
   };
 
-  console.log("created data ", created)
   return (
     <>
       <Header />
@@ -85,13 +64,12 @@ function Profile() {
                 <strong>{talent}</strong>
               </h3>
               <h6>
-                <strong>{address}</strong> 
+                <strong>{address}</strong>
                 {/* <CopyOutlined /> */}
               </h6>
               <Row>
                 <Col lg={8} md={6} sm={2} xs={0}></Col>
-                <Col lg={8} md={12} sm={20} xs={24}>
-                </Col>
+                <Col lg={8} md={12} sm={20} xs={24}></Col>
                 <Col lg={8} md={6} sm={2} xs={0}></Col>
               </Row>
 
@@ -137,7 +115,7 @@ function Profile() {
             <Products data={created} />
           </TabPane>
           <TabPane tab="Collectibles" key="2">
-            <Products data={collectionDetails} />
+            <Products data={collections} />
           </TabPane>
         </Tabs>
       </div>

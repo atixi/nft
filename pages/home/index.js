@@ -11,6 +11,7 @@ import OpenSeaAPI from "../api/openseaApi";
 import { accountList } from "../../Constants/constants";
 import _ from "lodash";
 import { useWeb3 } from "../../Providers/getWeb";
+
 function Home() {
   const [bundles, setBundles] = useState([]);
   const [topSellers, setTopSellers] = useState();
@@ -41,6 +42,8 @@ function Home() {
     if (result.ok) {
       const bundles = result.data?.bundles;
       setBundles(bundles);
+    } else if (result.problem) {
+      alert(result.problem);
     }
   };
 
@@ -50,6 +53,8 @@ function Home() {
       const assets = await result.data.assets;
       const tops = OpenSeaAPI.getTopSellers(assets);
       setTopSellers(tops);
+    } else if (result.problem) {
+      alert(result.problem);
     }
   };
 
@@ -66,6 +71,8 @@ function Home() {
         collections.push({ collection: item, data: data[item] })
       );
       setCollections(collections);
+    } else if (result.problem) {
+      alert(result.problem);
     }
   };
 
@@ -76,6 +83,8 @@ function Home() {
       if (exp.length > 20) exp = exp.slice(21);
       console.log(exp);
       setExplorers(exp);
+    } else if (result.problem) {
+      alert(result.problem);
     }
   };
   return (
@@ -87,11 +96,11 @@ function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
+      {/* <Header /> */}
       <div style={{ maxWidth: 1450, margin: "auto" }}>
         <Slide />
         <TopSellers data={topSellers} />
-        <LiveAuctions data={topSellers} />
+        <LiveAuctions data={bundles} />
         <HotCollections data={collections} />
         <Explore data={explorers} />
       </div>
