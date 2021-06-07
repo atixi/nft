@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PRODUCTS } from "/Constants/constants";
 import Carousel from "react-elastic-carousel";
 import { Menu, Dropdown, Avatar, Tooltip } from "antd";
@@ -27,7 +27,12 @@ const breakPoints = [
   { width: 1024, itemsToShow: 4, itemsToScroll: 4 },
   { width: 1200, itemsToShow: 5, itemsToScroll: 5 },
 ];
-function LiveAuctions() {
+function LiveAuctions(props) {
+  const [items, setItems] = useState(props.data)
+
+  useEffect(()=> {
+    setItems(props.data)
+  })
   return (
     <>
       <div>
@@ -40,7 +45,12 @@ function LiveAuctions() {
           pagination={false}
           transitionMs={1000}
         >
-          {PRODUCTS.map((product) => Product(product))}
+          {
+            console.log(items)
+          }
+          {items != undefined ? items.map((product) => 
+            Product(product)
+          ) : ""}
         </Carousel>
       </div>
     </>
@@ -48,6 +58,7 @@ function LiveAuctions() {
 }
 
 function Product(product) {
+  console.log(product.asset.name)
   const menu = (
     <Menu>
       <Menu.Item key="1">
@@ -65,7 +76,7 @@ function Product(product) {
     </Menu>
   );
   return (
-    <ProductCard key={product.id} className={`p-2 p-lg-1 mr-3`}>   
+    <ProductCard className={`p-2 p-lg-1 mr-3`}>   
       <ProductCardHeader className={`mt-3`}>
         {/* <ProductCardHeaderOwners>
           <Avatar.Group>
@@ -83,22 +94,22 @@ function Product(product) {
         </ProductCardHeaderButton>
       </ProductCardHeader>
       <div className={`col-md-12 p-3`}>
-      <a href={`/product-details?id=${product.id}`}>
-        <img src={product.productImage} className="w-100 rounded" />
+      <a href={`/product-details`}>
+        <img src={product.asset.imageUrl} style={{height: "250px", width: "auto"}} className="w-100 rounded" />
         </a>
       </div>
       <ProductDescription>
         <CountDownContainer>
           <CountDown>{"043h 34m 34s left"} 🔥</CountDown>
         </CountDownContainer>
-        <a href={`/product-details?id=${product.id}`}>
-          <CardTitle>{product.productTitle}</CardTitle>
+        <a href={`/product-details`}>
+          <CardTitle>{product.asset.name}</CardTitle>
         </a>
         <BidsStatus>{CONSTANTS.bidsStatus}</BidsStatus>
         <ProductDescriptionBottom>
-          <ProductPrice>{product.price}</ProductPrice>
+          <ProductPrice>{"product.price"}</ProductPrice>
           <ProductList>
-            {" " + product.currentQTY + " of " + product.totalQTY}
+            {" " + "product.currentQTY" + " of " + "product.totalQTY"}
           </ProductList>
         </ProductDescriptionBottom>
       </ProductDescription>

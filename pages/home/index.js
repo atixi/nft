@@ -30,7 +30,7 @@ const seaport = new OpenSeaPort(provider, {
 function Home() {
   const [bundles, setBundles] = useState([]);
   const [topSellers, setTopSellers] = useState();
-  const [liveAuctions, setLiveAuctions] = useState();
+  const [liveAuctions, setLiveAuctions] = useState([]);
   const [collections, setCollections] = useState();
   const [explorers, setExplorers] = useState();
 
@@ -62,7 +62,7 @@ function Home() {
       }
       setBundles(bundles);
     } else if (result.problem) {
-      alert(result.problem);
+      alert("load bundles: ", result.problem);
     }
   };
 
@@ -70,7 +70,7 @@ function Home() {
     const { orders } = await seaport.api.getOrders({
       bundled: false,
     });
-    if (orders) {
+    if (orders != undefined) {
       setLiveAuctions(orders);
     }
   };
@@ -82,7 +82,7 @@ function Home() {
       const tops = OpenSeaAPI.getTopSellers(assets);
       setTopSellers(tops);
     } else if (result.problem) {
-      alert(result.problem);
+      alert("load topSellers: ",result.problem);
     }
   };
 
@@ -100,7 +100,7 @@ function Home() {
       );
       setCollections(collections);
     } else if (result.problem) {
-      alert(result.problem);
+      alert("load collections: ",result.problem);
     }
   };
 
@@ -112,7 +112,7 @@ function Home() {
       console.log(exp);
       setExplorers(exp);
     } else if (result.problem) {
-      alert(result.problem);
+      alert("load explores: ",result.problem);
     }
   };
   return (
@@ -128,7 +128,7 @@ function Home() {
       <MainWrapper>
         <Slide />
         <TopSellers data={topSellers} />
-        <LiveAuctions data={liveAuctions} />
+        <LiveAuctions data={liveAuctions && liveAuctions} />
         <HotCollections data={collections} />
         <Explore data={explorers} />
       </MainWrapper>
