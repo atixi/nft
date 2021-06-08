@@ -45,9 +45,6 @@ function LiveAuctions(props) {
           pagination={false}
           transitionMs={1000}
         >
-          {
-            console.log(items)
-          }
           {items != undefined ? items.map((product) => 
             Product(product)
           ) : ""}
@@ -58,9 +55,7 @@ function LiveAuctions(props) {
 }
 
 function Product(product) {
-  console.log(product.asset.name)
   const pr = getAuctionPriceDetails(product);
-  console.log(pr.priceBase)
   const price = pr.priceBase;
   const menu = (
     <Menu>

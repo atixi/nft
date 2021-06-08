@@ -74,8 +74,6 @@ function ProductPage() {
 
   const loadAsset = async (tokenAddress, tokenId) => {
     const asset = await OpenSeaAPI.getAssetDetails(tokenAddress, tokenId);
-
-    console.log(asset);
     setSelectedAsset(asset);
   };
   const item = {

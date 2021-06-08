@@ -9,7 +9,6 @@ export const useWeb3 = () => {
       try {
         instance = new Web3(window.ethereum);
       } catch (e) {
-        console.log(e);
       }
     } else if (window.web3) {
       instance = new Web3(window.web3);

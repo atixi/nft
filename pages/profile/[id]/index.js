@@ -9,7 +9,6 @@ import { LoadingContainer } from "/Components/StyledComponents/globalStyledCompo
 
 const { TabPane } = Tabs;
 function callback(key) {
-  console.log(key);
 }
 
 function Profile() {
@@ -57,7 +56,6 @@ function Profile() {
 
   useEffect(() =>{
     FetchCreatedAssets()
-    console.log("data fetched")
   }, []);
   return (
     <>

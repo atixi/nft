@@ -16,7 +16,6 @@ async function getAccount() {
   const web3 = await seaport.web3;
 
   const result = await web3.eth.getAccounts((e, res) => {
-    console.log(res);
     // accountAddress = res[0];
   });
 

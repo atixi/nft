@@ -76,7 +76,6 @@ function Home() {
     });
     if (orders != undefined) {
       setLiveAuctions(orders);
-      console.log(orders);
     }
   };
 
@@ -114,7 +113,6 @@ function Home() {
     if (result.ok) {
       let exp = await result.data.assets;
       if (exp.length > 20) exp = exp.slice(21);
-      console.log(exp);
       setExplorers(exp);
     } else if (result.problem) {
       alert("load explores: ", result.problem);
