@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { PRODUCTS } from "/Constants/constants";
+import { PRODUCTS, getAuctionPriceDetails } from "/Constants/constants";
 import Carousel from "react-elastic-carousel";
 import { Menu, Dropdown, Avatar, Tooltip } from "antd";
 import Link from "next/link";
@@ -59,6 +59,9 @@ function LiveAuctions(props) {
 
 function Product(product) {
   console.log(product.asset.name)
+  const pr = getAuctionPriceDetails(product);
+  console.log(pr.priceBase)
+  const price = pr.priceBase;
   const menu = (
     <Menu>
       <Menu.Item key="1">
@@ -78,15 +81,16 @@ function Product(product) {
   return (
     <ProductCard className={`p-2 p-lg-1 mr-3`}>   
       <ProductCardHeader className={`mt-3`}>
-        {/* <ProductCardHeaderOwners>
+        <ProductCardHeaderOwners>
           <Avatar.Group>
-            {PRODUCTS.map((m, index) => (
-              <Tooltip title={m.id} placement="top">
-                <Avatar key={index} icon={<img src={m.productImage} width={22} />} />
+              <Tooltip title={"Owner"} placement="top">
+                <Avatar key={product.asset.owner.address} icon={<img src={product.asset.owner.profile_img_url} width={22} />} />
               </Tooltip>
-            ))}
+              <Tooltip title={"Maker"} placement="top">
+                <Avatar key={product.makerAccount.address} icon={<img src={product.makerAccount.profile_img_url} width={22} />} />
+              </Tooltip>
           </Avatar.Group>
-        </ProductCardHeaderOwners> */}
+        </ProductCardHeaderOwners>
         <ProductCardHeaderButton>
         <Dropdown trigger={["click"]} overlay={menu} placement="bottomRight">
           <Button>...</Button>
@@ -103,11 +107,11 @@ function Product(product) {
           <CountDown>{"043h 34m 34s left"} 🔥</CountDown>
         </CountDownContainer>
         <a href={`/product-details`}>
-          <CardTitle>{product.asset.name}</CardTitle>
+          <CardTitle>{product.asset?.name}</CardTitle>
         </a>
-        <BidsStatus>{CONSTANTS.bidsStatus}</BidsStatus>
+        {/* <BidsStatus>{CONSTANTS.bidsStatus}</BidsStatus> */}
         <ProductDescriptionBottom>
-          <ProductPrice>{"price"}</ProductPrice>
+          <ProductPrice>{price+" eth"}</ProductPrice>
           {/* <ProductList>
             {" " + "1" + " of " + "2"}
           </ProductList> */}
