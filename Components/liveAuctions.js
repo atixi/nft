@@ -107,10 +107,10 @@ function Product(product) {
         </a>
         <BidsStatus>{CONSTANTS.bidsStatus}</BidsStatus>
         <ProductDescriptionBottom>
-          <ProductPrice>{"product.price"}</ProductPrice>
-          <ProductList>
-            {" " + "product.currentQTY" + " of " + "product.totalQTY"}
-          </ProductList>
+          <ProductPrice>{"price"}</ProductPrice>
+          {/* <ProductList>
+            {" " + "1" + " of " + "2"}
+          </ProductList> */}
         </ProductDescriptionBottom>
       </ProductDescription>
     </ProductCard>
