@@ -30,7 +30,7 @@ export async function connectWallet() {
   } else {
     const errorMessage =
       "You need an Ethereum wallet to interact with this marketplace. Unlock your wallet, get MetaMask.io or Portis on desktop, or get Trust Wallet or Coinbase Wallet on mobile.";
-    alert(errorMessage);
+    alert("error in connect wallet: ",errorMessage);
     throw new Error(errorMessage);
   }
   networkCallbacks.map((c) => c(web3Provider));

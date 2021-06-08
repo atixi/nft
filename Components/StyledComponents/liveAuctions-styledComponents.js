@@ -50,6 +50,7 @@ text-transform: uppercase;
 export const BidsStatus = styled.small`
     color: #818182;
     font-weight: bold;
+    display: block;
 `;
 
 export const ProductCard = styled.div`
