@@ -51,8 +51,17 @@ async function getCollectionsDetailsBySlugs(slugs) {
 async function getAssets(onSale = true) {
   return await client.get(`assets?on_sale=${onSale}&limit=50`);
 }
+
+async function getAssetDetails(tokenAddress, tokenId) {
+  const asset = await seaport.api.getAsset({
+    tokenAddress, // string
+    tokenId, // string | number | null
+  });
+  console.log(asset);
+}
 async function getBundles() {
-  return client.get(`bundles?limit=50`);
+  const bundles = await seaport.api.getBundles({ on_sale: true, limit: 50 });
+  return bundles;
 }
 
 async function getBundlesByOwner(owner, onSale = false) {
@@ -135,6 +144,7 @@ export default {
   getAssetsByTokenIds,
   getAssetsListByOwner,
   getSingleAsset,
+  getAssetDetails,
   getAssets,
   getTopSellers,
   getTopSellerDatails,

@@ -69,6 +69,10 @@ function Home() {
   const loadLiveAuctions = async () => {
     const { orders } = await seaport.api.getOrders({
       bundled: false,
+      sale_kind: 1,
+      is_expired: false,
+      include_invalid: false,
+      limit: 50,
     });
     if (orders != undefined) {
       setLiveAuctions(orders);
@@ -82,7 +86,7 @@ function Home() {
       const tops = OpenSeaAPI.getTopSellers(assets);
       setTopSellers(tops);
     } else if (result.problem) {
-      alert("load topSellers: ",result.problem);
+      alert("load topSellers: ", result.problem);
     }
   };
 
@@ -100,7 +104,7 @@ function Home() {
       );
       setCollections(collections);
     } else if (result.problem) {
-      alert("load collections: ",result.problem);
+      alert("load collections: ", result.problem);
     }
   };
 
@@ -112,7 +116,7 @@ function Home() {
       console.log(exp);
       setExplorers(exp);
     } else if (result.problem) {
-      alert("load explores: ",result.problem);
+      alert("load explores: ", result.problem);
     }
   };
   return (
@@ -127,10 +131,10 @@ function Home() {
       <Header />
       <MainWrapper>
         <Slide />
-        <TopSellers data={topSellers} />
+        {/* <TopSellers data={topSellers} />
         <LiveAuctions data={liveAuctions && liveAuctions} />
         <HotCollections data={collections} />
-        <Explore data={explorers} />
+        <Explore data={explorers} /> */}
       </MainWrapper>
       <Footer />
     </>
