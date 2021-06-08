@@ -79,10 +79,10 @@ function Product(product) {
         <ProductCardHeaderOwners>
           <Avatar.Group>
               <Tooltip title={"Owner"} placement="top">
-                <Avatar key={product.asset.owner.address} icon={<img src={product.asset.owner.profile_img_url} width={22} />} />
+                <Avatar key={product.asset?.owner.address} icon={<img src={product.asset?.owner.profile_img_url} width={22} />} />
               </Tooltip>
               <Tooltip title={"Maker"} placement="top">
-                <Avatar key={product.makerAccount.address} icon={<img src={product.makerAccount.profile_img_url} width={22} />} />
+                <Avatar key={product?.makerAccount.address} icon={<img src={product?.makerAccount.profile_img_url} width={22} />} />
               </Tooltip>
           </Avatar.Group>
         </ProductCardHeaderOwners>
@@ -94,7 +94,7 @@ function Product(product) {
       </ProductCardHeader>
       <div className={`col-md-12 p-3`}>
       <a href={`/product-details`}>
-        <img src={product.asset.imageUrl} style={{height: "250px", width: "auto"}} className="w-100 rounded" />
+        <img src={product.asset?.imageUrl} style={{height: "250px", width: "auto"}} className="w-100 rounded" />
         </a>
       </div>
       <ProductDescription>
