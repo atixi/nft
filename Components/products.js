@@ -71,7 +71,7 @@ function Products(props) {
                 </div>
                 <ProductDescription>
                   <a href={`/product-details?id=${n.id}`}>
-                    <CardTitle>{n.name}</CardTitle>
+                    <CardTitle>{n?.name}</CardTitle>
                   </a>
                   <ProductPrice>{n.price}</ProductPrice>
                   <ProductList>

@@ -57,6 +57,7 @@ export const ProductCard = styled.div`
 border: 1px solid #ccc;
 border-radius: 15px;
 width: 270px;
+min-height: 400px !important
 // margin-right: 15px;
 padding: 5px;
 `;
