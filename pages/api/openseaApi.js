@@ -57,7 +57,11 @@ async function getAssetDetails(tokenAddress, tokenId) {
     tokenAddress, // string
     tokenId, // string | number | null
   });
-  console.log(asset);
+  const { orders } = await seaport.api.getOrders({
+    asset_contract_address: asset.assetContract?.address,
+    token_id: tokenId,
+  });
+  return { asset, orders };
 }
 async function getBundles() {
   const bundles = await seaport.api.getBundles({ on_sale: true, limit: 50 });
