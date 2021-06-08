@@ -76,6 +76,7 @@ function Home() {
     });
     if (orders != undefined) {
       setLiveAuctions(orders);
+      console.log(orders);
     }
   };
 
@@ -131,10 +132,10 @@ function Home() {
       <Header />
       <MainWrapper>
         <Slide />
-        {/* <TopSellers data={topSellers} />
+        <TopSellers data={topSellers} />
         <LiveAuctions data={liveAuctions && liveAuctions} />
         <HotCollections data={collections} />
-        <Explore data={explorers} /> */}
+        <Explore data={explorers} />
       </MainWrapper>
       <Footer />
     </>
