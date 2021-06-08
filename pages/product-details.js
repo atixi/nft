@@ -15,8 +15,8 @@ const menu = (
         <Menu.Item><ItemLink><span>{"Report"}</span></ItemLink></Menu.Item>
     </DropdownMenu>
   );
-export default class ProductPage extends Component{
-    item = {
+function ProductPage(){
+   const item = {
         image:"/images/p1.jpeg",
         name:"CoinBae #1",
         favorite:62,
@@ -27,21 +27,20 @@ export default class ProductPage extends Component{
             name:'Saltbae Nusret'
         }
     };
-render(){
     return (<>
         <Header/>
         <Wrapper>
             <Content className={`d-sm-flex`}>
                 <ItemImageContainer className="float-none float-sm-left">
-                    <img className={"itemImage"} src={this.item.image}/>
+                    <img className={"itemImage"} src={item.image}/>
                 </ItemImageContainer>
                 <ItemInfo className={'float-none float-sm-left'}>
                 <ItemDetails>
                 <ItemDetailsHeader>
-                    <ItemName>{this.item.name}</ItemName>
+                    <ItemName>{item.name}</ItemName>
                     <ItemTopButtonContainer>
                     <button style={{flex:"none"}}><svg viewBox="0 0 17 16" fill="none" width="16" height="16" xlmns="http://www.w3.org/2000/svg"><path d="M8.2112 14L12.1056 9.69231L14.1853 7.39185C15.2497 6.21455 15.3683 4.46116 14.4723 3.15121V3.15121C13.3207 1.46757 10.9637 1.15351 9.41139 2.47685L8.2112 3.5L6.95566 2.42966C5.40738 1.10976 3.06841 1.3603 1.83482 2.97819V2.97819C0.777858 4.36443 0.885104 6.31329 2.08779 7.57518L8.2112 14Z" stroke="rgba(4, 4, 5, 1)" stroke-width="2"></path></svg> 
-                        {" "+this.item.favorite}
+                        {" "+ item.favorite}
                     </button>
                     <button style={{flex:"none",padding:"0px !important",width:"35px"}}
                     >
@@ -60,30 +59,30 @@ render(){
                     <span className="text-gradient">1 ETH</span><span style={{color:"#ccc"}}> / 1 of 3</span>
                 </div>
                 <div>
-                    <button>{this.item.category}</button><button><span className="text-gradient">Unlockable</span></button>
+                    <button>{item.category}</button><button><span className="text-gradient">Unlockable</span></button>
                 </div>
-                <ItemDescriptionText>{this.item.description}</ItemDescriptionText>
+                <ItemDescriptionText>{item.description}</ItemDescriptionText>
                         <span style={{color:"#ccc"}}>{CONSTANTS.owner}</span><br/>
                         <AvatarContainer>
-                            <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                            <Profile profile={item.owner.avatar} size={"medium"} tick={false} />
 
-                            <span style={{flex:"1"}}>{this.item.owner.name}</span>
+                            <span style={{flex:"1"}}>{item.owner.name}</span>
                         </AvatarContainer>
                         <OwnerProfitContainer><small>{"10% of sales will go to creator"}</small></OwnerProfitContainer>
                 <Tabs defaultActiveKey="4">
                     <TabPane key="1" tab={<span>{CONSTANTS.details}</span>}>
                         <span style={{color:"#ccc"}}>{CONSTANTS.owner}</span><br/>
                         <AvatarContainer>
-                            <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                            <Profile profile={item.owner.avatar} size={"medium"} tick={false} />
 
-                            <span style={{flex:"1"}}>{this.item.owner.name}</span>
+                            <span style={{flex:"1"}}>{item.owner.name}</span>
                         </AvatarContainer>
                     </TabPane>
                     <TabPane key="2" tab={<span>{CONSTANTS.bids}</span>}>
                     <LastBidder>
                             <div className={"content"}>
                                <span className="avatarContainer">
-                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                               <Profile profile={item.owner.avatar} size={"medium"} tick={false} />
                                </span>
                                <span className={"bidInfo"}>
                                     <span className={"bidedPriceContainer"}>
@@ -103,16 +102,16 @@ render(){
                     <TabPane key="3" tab={<span>{CONSTANTS.owners}</span>}>
                     <span style={{color:"#ccc"}}>{CONSTANTS.owner}</span><br/>
                         <AvatarContainer>
-                            <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                            <Profile profile={item.owner.avatar} size={"medium"} tick={false} />
 
-                            <span style={{flex:"1"}}>{this.item.owner.name}</span>
+                            <span style={{flex:"1"}}>{item.owner.name}</span>
                         </AvatarContainer>
                     </TabPane>
                     <TabPane key="4" tab={<span>{CONSTANTS.history}</span>}>
                         <LastBidder>
                             <div className={"content"}>
                                <span className="avatarContainer">
-                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                               <Profile profile={item.owner.avatar} size={"medium"} tick={false} />
                                </span>
                                <span className={"bidInfo"}>
                                     <span className={"bidedPriceContainer"}>
@@ -133,7 +132,7 @@ render(){
                         <LastBidder>
                             <div className={"content"}>
                                <span className="avatarContainer">
-                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                               <Profile profile={item.owner.avatar} size={"medium"} tick={false} />
                                </span>
                                <span className={"bidInfo"}>
                                     <span className={"bidedPriceContainer"}>
@@ -154,7 +153,7 @@ render(){
                         <LastBidder>
                             <div className={"content"}>
                                <span className="avatarContainer">
-                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                               <Profile profile={item.owner.avatar} size={"medium"} tick={false} />
                                </span>
                                <span className={"bidInfo"}>
                                     <span className={"bidedPriceContainer"}>
@@ -175,7 +174,7 @@ render(){
                         <LastBidder>
                             <div className={"content"}>
                                <span className="avatarContainer">
-                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                               <Profile profile={item.owner.avatar} size={"medium"} tick={false} />
                                </span>
                                <span className={"bidInfo"}>
                                     <span className={"bidedPriceContainer"}>
@@ -196,7 +195,7 @@ render(){
                         <LastBidder>
                             <div className={"content"}>
                                <span className="avatarContainer">
-                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                               <Profile profile={item.owner.avatar} size={"medium"} tick={false} />
                                </span>
                                <span className={"bidInfo"}>
                                     <span className={"bidedPriceContainer"}>
@@ -217,7 +216,7 @@ render(){
                         <LastBidder>
                             <div className={"content"}>
                                <span className="avatarContainer">
-                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                               <Profile profile={item.owner.avatar} size={"medium"} tick={false} />
                                </span>
                                <span className={"bidInfo"}>
                                     <span className={"bidedPriceContainer"}>
@@ -238,7 +237,7 @@ render(){
                         <LastBidder>
                             <div className={"content"}>
                                <span className="avatarContainer">
-                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                               <Profile profile={item.owner.avatar} size={"medium"} tick={false} />
                                </span>
                                <span className={"bidInfo"}>
                                     <span className={"bidedPriceContainer"}>
@@ -259,7 +258,7 @@ render(){
                         <LastBidder>
                             <div className={"content"}>
                                <span className="avatarContainer">
-                               <Profile profile={this.item.owner.avatar} size={"medium"} tick={false} />
+                               <Profile profile={item.owner.avatar} size={"medium"} tick={false} />
                                </span>
                                <span className={"bidInfo"}>
                                     <span className={"bidedPriceContainer"}>
@@ -286,7 +285,7 @@ render(){
                                         <BidOwner className={"float-left"}>{CONSTANTS.highestBid} <a>{" userName"}</a></BidOwner>
                                         <BidPrice>
                                                 <BidOwnerProfile className={"mr-3"}>
-                                                    <Profile profile={this.item.owner.avatar} size={"large"} tick={false} />
+                                                    <Profile profile={item.owner.avatar} size={"large"} tick={false} />
                                                 </BidOwnerProfile>
                                                 <BidPriceValue>
                                                     <PriceInCryptoContainer>
@@ -335,4 +334,5 @@ render(){
             </Wrapper></>
         )
     }
-}
+
+export default ProductPage;
