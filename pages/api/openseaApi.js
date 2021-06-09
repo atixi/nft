@@ -2,11 +2,13 @@ import * as Web3 from "web3";
 import { OpenSeaPort, Network } from "opensea-js";
 
 import client from "./openSeaClient";
+import _, { reject } from "lodash";
 
 const provider = new Web3.providers.HttpProvider("https://mainnet.infura.io");
 
 const seaport = new OpenSeaPort(provider, {
   networkName: Network.Main,
+  // apiKey: "7ca37bed6f77481eb889a45bc8520e6c",
 });
 
 async function getAccount() {
@@ -22,9 +24,83 @@ async function getAccount() {
   return { accountAddress, error };
 }
 
-async function getCollections(owner) {
-  return await client.get(`collections?asset_owner=${owner}`);
+/// handled and checked functions //////////////////////////////////////////////////////////////////////
+async function getBundles() {
+  const { bundles } = await seaport.api.getBundles({
+    on_sale: true,
+    limit: 50,
+  });
+  return new Promise((resolve, reject) => {
+    if (bundles) {
+      resolve(bundles);
+    } else {
+      reject();
+    }
+  });
 }
+const getLiveAuctions = async () => {
+  const { orders } = await seaport.api.getOrders({
+    bundled: false,
+    saleKind: 1,
+    is_expired: false,
+    limit: 50,
+    on_sale: true,
+  });
+  return new Promise((resolve, reject) => {
+    if (orders) {
+      resolve(orders);
+    } else {
+      reject(e);
+    }
+  });
+};
+
+const getCollections = async () => {
+  const { bundles } = await seaport.api.getBundles({
+    on_sale: true,
+    search: "",
+    limit: 50,
+  });
+  return new Promise((resolve, reject) => {
+    if (bundles) {
+      resolve(bundles);
+    } else {
+      reject(e);
+    }
+  });
+};
+
+const getExplores = async () => {
+  const { assets } = await seaport.api.getAssets({
+    limit: 50,
+  });
+  return new Promise((resolve, reject) => {
+    if (assets) {
+      resolve(assets);
+    } else {
+      reject();
+    }
+  });
+};
+
+const getTopSellers = async () => {
+  const { orders } = await seaport.api.getOrders({
+    bundled: false,
+    is_expired: false,
+    sale_kind: 1,
+    include_invalid: false,
+    limit: 50,
+  });
+
+  return new Promise((resolve, reject) => {
+    if (orders) {
+      resolve(orders);
+    } else {
+      reject();
+    }
+  });
+};
+// not checket functions
 
 async function getAssetsInCollection(slug) {
   return client.get(`assets?collection=${slug}`);
@@ -62,18 +138,11 @@ async function getAssetDetails(tokenAddress, tokenId) {
   });
   return { asset, orders };
 }
-async function getBundles() {
-  const bundles = await seaport.api.getBundles({ on_sale: true, limit: 50 });
-  return bundles;
-}
 
 async function getBundlesByOwner(owner, onSale = false) {
   return client.get(`bundles?owner=${owner}&on_sale=${onSale}&limit=50`);
 }
 
-async function getLiveAuctions(onSale = true) {
-  return client.get(`bundles?on_sale=${onSale}&limit=50`);
-}
 async function getAssetsByOwner() {}
 async function getAssetsByTokenIds(
   tokenIds,
@@ -117,41 +186,43 @@ async function getTopSellerDatails(address) {
   }
 }
 // this is helper method to reproduct the topseller data (changes are required)
-function getTopSellers(assets) {
-  let topSellers = [];
-  const groupByCreator = _.groupBy(assets, "creator[user[username]]");
-  const keys = Object.keys(groupByCreator);
+// function getTopSellers(assets) {
+//   let topSellers = [];
+//   const groupByCreator = _.groupBy(assets, "creator[user[username]]");
+//   const keys = Object.keys(groupByCreator);
 
-  keys.map((item) =>
-    topSellers.push({
-      talent: item,
-      profile_img_url: groupByCreator[item][0].creator?.profile_img_url,
-      number_of_assets: groupByCreator[item].length,
-      created: groupByCreator[item],
-      address: groupByCreator[item][0].creator?.address,
-    })
-  );
-  topSellers = [...topSellers].filter(
-    (item) => item.talent !== "undefined" && item.talent !== "null"
-  );
+//   keys.map((item) =>
+//     topSellers.push({
+//       talent: item,
+//       profile_img_url: groupByCreator[item][0].creator?.profile_img_url,
+//       number_of_assets: groupByCreator[item].length,
+//       created: groupByCreator[item],
+//       address: groupByCreator[item][0].creator?.address,
+//     })
+//   );
+//   topSellers = [...topSellers].filter(
+//     (item) => item.talent !== "undefined" && item.talent !== "null"
+//   );
 
-  return topSellers;
-}
+//   return topSellers;
+// }
 
 // hellper functions
 
 export default {
   getAccount,
-  getCollections,
   getBundles,
+  getLiveAuctions,
+  getCollections,
+  getExplores,
+  getTopSellers,
+
   getAssetsByTokenIds,
   getAssetsListByOwner,
   getSingleAsset,
   getAssetDetails,
   getAssets,
-  getTopSellers,
   getTopSellerDatails,
   getAssetsInCollection,
   getCollectionsDetailsBySlugs,
-  getLiveAuctions,
 };
