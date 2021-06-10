@@ -108,14 +108,7 @@ async function getSingleAsset(accountId, assetId) {
   );
 }
 
-async function getTopSellerDatails(address) {
-  let assets = [];
-  let collections = [];
-  const assetResult = await client.get(`assets?owner=${address}&limit=50`);
-  if (assetResult.ok) {
-    assets = assetResult.data?.assets;
-  }
-}
+// hellper functions
 // this is helper method to reproduct the topseller data (changes are required)
 function getTopSellers(assets) {
   let topSellers = [];
@@ -138,9 +131,33 @@ function getTopSellers(assets) {
   return topSellers;
 }
 
-// hellper functions
+const getCollectionDetails = (collections) => {
+  let groubByCollection = _.groupBy(collections, "collection[name]");
+  // let groubByCollection = _.groupBy(collections, "tokenAddress");
+  let cols = [];
+  let collectionNames = Object.keys(groubByCollection);
+  for (let i = 0; i < collectionNames.length; i++) {
+    cols.push({
+      collection: collectionNames[i],
+      imagePreviewUrl:
+        groubByCollection[collectionNames[i]][0].collection.imageUrl,
+      totalAssets: groubByCollection[collectionNames[i]].length,
+    });
+  }
+  cols = cols.filter((col) => col.imagePreviewUrl != null);
+  cols = _.orderBy(cols, "totalAssets", "desc");
+  return cols;
+};
+const getExploresDetails = (assets) => {
+  let exps = assets.filter(
+    (exp) =>
+      exp.image_preview_url !== null && exp.image_preview_url != undefined
+  );
+  return exps;
+};
 
 export default {
+  //api methods checked
   getAccount,
   getCollections,
   getBundles,
@@ -150,7 +167,6 @@ export default {
   getAssetDetails,
   getAssets,
   getTopSellers,
-  getTopSellerDatails,
   getAssetsInCollection,
   getCollectionsDetailsBySlugs,
   getLiveAuctions,
