@@ -21,12 +21,18 @@ import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents
 import * as Web3 from "web3";
 import { OpenSeaPort, Network } from "opensea-js";
 
+const provider = new Web3.providers.HttpProvider("https://mainnet.infura.io");
+
+const seaport = new OpenSeaPort(provider, {
+  networkName: Network.Main,
+});
+
 function Home() {
   const [bundles, setBundles] = useState([]);
   const [topSellers, setTopSellers] = useState();
   const [liveAuctions, setLiveAuctions] = useState([]);
   const [collections, setCollections] = useState();
-  const [explores, setExplores] = useState();
+  const [explorers, setExplorers] = useState();
 
   const account = null;
   const web3 = useWeb3();
@@ -40,54 +46,77 @@ function Home() {
       console.log(accounts);
     });
     loadBundles();
-    // loadLiveAuctions();
-    // loadTopSellers();
-    // loadCollections();
-    // loadExplores();
+    loadLiveAuctions();
+    loadTopSellers();
+    loadCollections();
+    loadExplorers();
   };
 
   const loadBundles = async () => {
-    const bundleResult = OpenSeaAPI.getBundles();
-    bundleResult
-      .then((bundles) => {
-        setBundles(bundles);
-      })
-      .then((e) => console.log(e))
-      .catch((e) => alert(e));
+    const result = await OpenSeaAPI.getBundles();
+
+    if (result.ok) {
+      let bundles = result.data?.bundles;
+      if (bundles.length > 20) {
+        bundles = bundles.slice(0, 10);
+      }
+      setBundles(bundles);
+    } else if (result.problem) {
+      alert("load bundles: ", result.problem);
+    }
   };
 
-  const loadLiveAuctions = () => {
-    const liveAuctions = OpenSeaAPI.getLiveAuctions();
-    liveAuctions
-      .then((auctions) => {
-        setLiveAuctions(auctions);
-      })
-      .catch((e) => alert(e));
-  };
-
-  const loadTopSellers = () => {
-    const topSellerResult = OpenSeaAPI.getTopSellers();
-    topSellerResult.then((tops) => {
-      setTopSellers(tops);
+  const loadLiveAuctions = async () => {
+    const { orders } = await seaport.api.getOrders({
+      bundled: false,
+      sale_kind: 1,
+      is_expired: false,
+      include_invalid: false,
+      limit: 50,
     });
+    if (orders != undefined) {
+      setLiveAuctions(orders);
+    }
   };
 
-  const loadCollections = () => {
-    const collectionsResult = OpenSeaAPI.getCollections();
-    collectionsResult
-      .then((collections) => {
-        setCollections(collections);
-      })
-      .catch((e) => alert(e));
+  const loadTopSellers = async () => {
+    const result = await OpenSeaAPI.getAssets();
+    if (result.ok) {
+      const assets = await result.data.assets;
+      const tops = OpenSeaAPI.getTopSellers(assets);
+      setTopSellers(tops);
+    } else if (result.problem) {
+      alert("load topSellers: ", result.problem);
+    }
   };
 
-  const loadExplores = () => {
-    const exploresResult = OpenSeaAPI.getExplores();
-    exploresResult
-      .then((explores) => {
-        setExplores(explores);
-      })
-      .catch((e) => alert(e));
+  const loadCollections = async () => {
+    let collections = [];
+    const result = await OpenSeaAPI.getAssets(
+      account ? account : accountList[0]
+    );
+    if (result.ok) {
+      const assets = await result.data.assets;
+      const data = _.groupBy(assets, "collection[name]");
+      const keys = Object.keys(data);
+      keys.map((item) =>
+        collections.push({ collection: item, data: data[item] })
+      );
+      setCollections(collections);
+    } else if (result.problem) {
+      alert("load collections: ", result.problem);
+    }
+  };
+
+  const loadExplorers = async () => {
+    const result = await OpenSeaAPI.getAssets();
+    if (result.ok) {
+      let exp = await result.data.assets;
+      if (exp.length > 20) exp = exp.slice(21);
+      setExplorers(exp);
+    } else if (result.problem) {
+      alert("load explores: ", result.problem);
+    }
   };
   return (
     <>
@@ -104,7 +133,7 @@ function Home() {
         <TopSellers data={topSellers} />
         <LiveAuctions data={liveAuctions && liveAuctions} />
         <HotCollections data={collections} />
-        <Explore data={explores} />
+        <Explore data={explorers} />
       </MainWrapper>
       <Footer />
     </>
