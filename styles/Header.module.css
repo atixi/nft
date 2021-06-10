@@ -74,7 +74,7 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-weight: 700;
     color:rgba(4, 4, 5, 0.5);
-    font-size: 18px;
+    font-size: 15px;
 }
 .mainNav ul li a{
     display: block;
@@ -82,7 +82,7 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-weight: 700;
     color:rgba(4, 4, 5, 0.5);
-    font-size: 18px;
+    font-size: 14px;
 }
 .mainNav ul li.active a{
     color:#000;
@@ -96,6 +96,8 @@
   border-radius: 25px;
   border: 1px solid rgba(4, 4, 5, 0.1);
   background-color: #fff;
+  font-size: 15px !important;
+
 }
 .btnCreate {
   color: rgb(0, 102, 255);

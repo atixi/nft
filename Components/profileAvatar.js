@@ -23,7 +23,7 @@ const ProfileAvatar = (props) => {
       <a href={"javascript:void(0)"}>
         <Avatar
           size={size}
-          icon={profilePhoto ? <img src={profilePhoto} /> : <UserOutlined />}
+          icon={<img src={profilePhoto} />}
         />
         {tick ? (
           <ProfileTick>
