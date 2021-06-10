@@ -271,48 +271,7 @@ export default function Header(props) {
               <a href="#">Following</a>
             </li>
             <li>
-              <a href="#">
-                Activity{" "}
-                <svg
-                  width="30"
-                  height="14"
-                  viewBox="0 0 30 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <rect
-                    x="0.5"
-                    width="29"
-                    height="14"
-                    rx="7"
-                    fill="url(#paint0_radial)"
-                  ></rect>
-                  <path
-                    d="M11.044 10V4.328H9.78V7.776L7.652 4.328H6.116V10H7.372V6.272L9.708 10H11.044ZM15.8644 10V8.8H13.5284V7.712H15.6404V6.6H13.5284V5.52H15.8564V4.328H12.2644V10H15.8644ZM22.3676 7.968L21.1916 4.328H19.8956L18.7196 7.96L17.7836 4.328H16.4396L17.9836 10H19.3116L20.5276 6.24L21.7356 10H23.0396L24.5836 4.328H23.2876L22.3676 7.968Z"
-                    fill="white"
-                  ></path>
-                  <defs>
-                    <radialGradient
-                      id="paint0_radial"
-                      cx="0"
-                      cy="0"
-                      r="1"
-                      gradientUnits="userSpaceOnUse"
-                      gradientTransform="translate(-10.6167 -5.6875) rotate(24.662) scale(36.6973 39.3316)"
-                    >
-                      <stop stopColor="#0C50FF"></stop>
-                      <stop offset="0.557292" stopColor="#5B9DFF"></stop>
-                      <stop offset="1" stopColor="#FF74F1"></stop>
-                    </radialGradient>
-                  </defs>
-                </svg>
-              </a>
-            </li>
-            <li>
               <a href="#">How it works</a>
-            </li>
-            <li>
-              <a style={{ color: "#e77af3" }}>Community</a>
             </li>
             <li>
               <a href="#">RARI Token</a>
@@ -359,7 +318,7 @@ export default function Header(props) {
          <Image src="/logo/logo.png" width="40" height="40"/>
         </a>
       </div>
-      <div className="d-none d-xl-flex px-1" style={{ flex: 1 }}>
+      <div className="d-none d-xl-flex px-1" style={{ flex: "1", marginRight: "400px" }}>
         <Search />
       </div>
       <ul style={{ paddingRight: "30px" }}>
@@ -369,47 +328,7 @@ export default function Header(props) {
         <li className="d-none d-lg-flex">
           <a href="#">My items</a>
         </li>
-        <li className="d-none d-lg-flex">
-          <a href="#">Following</a>
-        </li>
-        <li className="d-none d-lg-flex">
-          <a href="#">
-            Activity{" "}
-            <svg
-              width="30"
-              height="14"
-              viewBox="0 0 30 14"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect
-                x="0.5"
-                width="29"
-                height="14"
-                rx="7"
-                fill="url(#paint0_radial)"
-              ></rect>
-              <path
-                d="M11.044 10V4.328H9.78V7.776L7.652 4.328H6.116V10H7.372V6.272L9.708 10H11.044ZM15.8644 10V8.8H13.5284V7.712H15.6404V6.6H13.5284V5.52H15.8564V4.328H12.2644V10H15.8644ZM22.3676 7.968L21.1916 4.328H19.8956L18.7196 7.96L17.7836 4.328H16.4396L17.9836 10H19.3116L20.5276 6.24L21.7356 10H23.0396L24.5836 4.328H23.2876L22.3676 7.968Z"
-                fill="white"
-              ></path>
-              <defs>
-                <radialGradient
-                  id="paint0_radial"
-                  cx="0"
-                  cy="0"
-                  r="1"
-                  gradientUnits="userSpaceOnUse"
-                  gradientTransform="translate(-10.6167 -5.6875) rotate(24.662) scale(36.6973 39.3316)"
-                >
-                  <stop stopColor="#0C50FF"></stop>
-                  <stop offset="0.557292" stopColor="#5B9DFF"></stop>
-                  <stop offset="1" stopColor="#FF74F1"></stop>
-                </radialGradient>
-              </defs>
-            </svg>
-          </a>
-        </li>
+       
         <div className="d-none d-lg-flex" style={{ alignItems: "center" }}>
           <div
             style={{
@@ -421,9 +340,6 @@ export default function Header(props) {
         </div>
         <li className="d-none d-xl-flex">
           <a href="#">How it works</a>
-        </li>
-        <li className="d-none d-xl-flex">
-          <Dropdown trigger="Community" menu={menu1}/>
         </li>
         <li className="d-none d-lg-flex d-xl-none">
           
