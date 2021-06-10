@@ -34,6 +34,7 @@ import {
   ItemDetails,
   ItemFooter,
   ItemName,
+  ImageCon,
 } from "../Components/StyledComponents/productDetails-styledComponents";
 import {getAuctionPriceDetails } from "/Constants/constants";
 
@@ -99,8 +100,16 @@ function ProductPage() {
       <Header />
       <Wrapper>
         <Content className={`d-sm-flex`}>
-          <ItemImageContainer className="float-none float-sm-left">
-            <img className={"itemImage"} src={asset.asset?.imageUrl} />
+          <ItemImageContainer className=" text-center">
+            {/* <img className={"itemImage"} src={asset.asset?.imageUrl} /> */}
+            <ImageCon>
+            <Image
+              src={`${asset.asset?.imageUrl}?x-oss-process=image/blur,r_50,s_50/quality,q_1/resize,m_mfit,h_200,w_200`}
+              preview={{
+                src: `${asset.asset?.imageUrl}`,
+              }}
+            />
+            </ImageCon>
           </ItemImageContainer>
           <ItemInfo className={"float-none float-sm-left"}>
             <ItemDetails>
@@ -297,10 +306,10 @@ function ProductPage() {
                   <div className={"auctionDiv"}>
                     <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
                     <AuctionTimer>
-                      <Col>
+                      {/* <Col>
                     <Countdown value={deadline} format={`D d H 时 m 分 s 's'`} />
-                    </Col>
-                      {/* <Counter className={"days"}>
+                    </Col> */}
+                      <Counter className={"days"}>
                         <span className={"timeValue"}>
                           23<span className={"timeLabel1"}>d</span>
                         </span>
@@ -323,7 +332,7 @@ function ProductPage() {
                           23<span className={"timeLabel1"}>s</span>
                         </span>
                         <span className={"timeLabel"}>{CONSTANTS.seconds}</span>
-                      </Counter> */}
+                      </Counter>
                     </AuctionTimer>
                   </div>
                 </Auction>
