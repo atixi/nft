@@ -24,9 +24,6 @@ export default function HotCollections(props) {
         <Carousel breakPoints={breakPoints} pagination={false} transitionMs={1000}>
           {collections && collections.map((item) => (
              <CollectionCard> 
-             {
-               console.log("hot collection data")
-             }
              <CardImageContainer>
                  <img style={{width: "100%"}} src={item.data[0]?.image_url}/>
              </CardImageContainer>
