@@ -93,7 +93,7 @@ function Product(product) {
         </ProductCardHeaderButton>
       </ProductCardHeader>
       <div className={`col-md-12 p-3`}>
-      <a href={`/product-details`}>
+      <a href={`/product-details?ta=${product.asset?.tokenAddress}&ti=${product.asset?.tokenId}`}>
         <img src={product.asset?.imageUrl} style={{height: "250px", width: "auto"}} className="w-100 rounded" />
         </a>
       </div>

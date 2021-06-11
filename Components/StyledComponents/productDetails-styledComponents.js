@@ -32,6 +32,12 @@ export const Content = styled.div`
         }
     }
 `;
+export const ImageCon = styled.div`
+position: relative;
+right: auto;
+left: auto;
+margin: auto;
+`
 export const ItemInfo = styled.div`
     width: 100%;
     height: 100%;

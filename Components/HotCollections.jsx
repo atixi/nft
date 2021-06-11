@@ -23,7 +23,7 @@ export default function HotCollections(props) {
           <SectionHeading>{"Hot collections"} 💥</SectionHeading>
         <Carousel breakPoints={breakPoints} pagination={false} transitionMs={1000}>
           {collections && collections.map((item) => (
-             <CollectionCard>
+             <CollectionCard> 
              <CardImageContainer>
                  <img style={{width: "100%"}} src={item.data[0]?.image_url}/>
              </CardImageContainer>
