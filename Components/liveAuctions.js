@@ -30,12 +30,17 @@ const breakPoints = [
 const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;  
 
 const { Countdown } = Statistic;
-function LiveAuctions(props) {
-  const [items, setItems] = useState(props.data)
+function LiveAuctions({data}) {
 
-  useEffect(()=> {
-    setItems(props.data)
-  })
+  const items = data;
+  console.log("items", data)
+  // const [items, setItems] = useState(data)
+
+  // useEffect(()=> {
+  //   setItems(data)
+  // console.log("items", data)
+
+  // })
   return (
     <>
       <div>

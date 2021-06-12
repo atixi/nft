@@ -13,12 +13,6 @@ const breakPoints = [
 
 export default function HotCollections({data}) {
   const collections = data;
-  // const [collections, setCollections] = useState(props.data)
-
-  //   useEffect(() =>{
-  //     setCollections(props.data)
-  //   }, [collections])
-   
     return (
       <div style={{padding:"25px 0px"}}>
           <SectionHeading>{"Hot collections"} 💥</SectionHeading>
@@ -26,15 +20,15 @@ export default function HotCollections({data}) {
           {collections && collections.map((item) => (
              <CollectionCard> 
              <CardImageContainer>
-                 <img style={{width: "100%"}} src={item.data[0]?.image_url}/>
+                 <img style={{width: "100%"}} src={item.imagePreviewUrl}/>
              </CardImageContainer>
              <CardDescription style={{borderTop:"1px solid #ccc"}}>
                  <ProfileAvatarContainer>
-                     <Profile profile={item.data[0]?.owner.profile_img_url} size={64} tick={false} />
+                     {/* <Profile profile={item.data[0]?.owner.profile_img_url} size={64} tick={false} /> */}
                  </ProfileAvatarContainer>
                  <CardTitle style={{padding:"0px 10px",marginTop:"-35px"}}>
                      <span>{item.collection}</span>
-                     <span>{item.data[0]?.asset_contract.schema_name}</span>
+                     {/* <span>{item.data[0]?.asset_contract.schema_name}</span> */}
                  </CardTitle>
              </CardDescription>
          </CollectionCard>

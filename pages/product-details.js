@@ -81,7 +81,7 @@ function ProductPage() {
   const loadAsset = async (tokenAddress, tokenId) => {
     let asset = await OpenSeaAPI.getAssetDetails(tokenAddress, tokenId);
     setAsset(asset);
-    setBids(asset.asset.orders);
+    setBids(asset.asset.buyOrders);
   };
   console.log(asset)
   const item = {
@@ -206,7 +206,7 @@ function ProductPage() {
                 <TabPane key="2" tab={<span>{CONSTANTS.bids}</span>}>
                   {bids && bids.map(order =>(
 
-                  <LastBidder id={order.makerAccount?.address}>
+                  <LastBidder id={order.owner?.address}>
                     <div className={"content"}>
                       <span className="avatarContainer">
                         <Profile
@@ -238,7 +238,7 @@ function ProductPage() {
                   <br />
                   <AvatarContainer>
                     <Profile
-                      profile={item.owner.avatar}
+                      profile={asset.asset?.owner?.profile_img_url}
                       size={"medium"}
                       tick={false}
                     />
@@ -282,12 +282,12 @@ function ProductPage() {
               <BidCountdown>
                 <BidOwnerContainer className={"border-right pr-2 pl-2"}>
                   <BidOwner className={"float-left"}>
-                    {CONSTANTS.highestBid} <a>{asset.asset?.orders[0]?.makerAccount?.user?.username}</a>
+                    {CONSTANTS.highestBid} <a>{asset.asset?.owner?.user?.username}</a>
                   </BidOwner>
                   <BidPrice>
                     <BidOwnerProfile className={"mr-3"}>
                       <Profile
-                        profile={asset.asset?.orders[0]?.makerAccount?.profile_img_url}
+                        profile={asset.asset?.owner?.profile_img_url}
                         size={"large"}
                         tick={false}
                       />
