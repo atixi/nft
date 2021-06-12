@@ -11,12 +11,13 @@ const breakPoints = [
   { width: 1200, itemsToShow: 5,itemsToScroll:5 }
 ];
 
-export default function HotCollections(props) {
-  const [collections, setCollections] = useState(props.data)
+export default function HotCollections({data}) {
+  const collections = data;
+  // const [collections, setCollections] = useState(props.data)
 
-    useEffect(() =>{
-      setCollections(props.data)
-    }, [collections])
+  //   useEffect(() =>{
+  //     setCollections(props.data)
+  //   }, [collections])
    
     return (
       <div style={{padding:"25px 0px"}}>
