@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { PRODUCTS, getAuctionPriceDetails } from "/Constants/constants";
 import Carousel from "react-elastic-carousel";
-import { Menu, Dropdown, Avatar, Tooltip } from "antd";
+import { Menu, Dropdown, Avatar, Tooltip, Statistic } from "antd";
 import Link from "next/link";
 import CONSTANTS from "/Constants/liveAuctionsConstants";
 import {
@@ -27,12 +27,20 @@ const breakPoints = [
   { width: 1024, itemsToShow: 4, itemsToScroll: 4 },
   { width: 1200, itemsToShow: 5, itemsToScroll: 5 },
 ];
-function LiveAuctions(props) {
-  const [items, setItems] = useState(props.data)
+const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;  
 
-  useEffect(()=> {
-    setItems(props.data)
-  })
+const { Countdown } = Statistic;
+function LiveAuctions({data}) {
+
+  const items = data;
+  console.log("items", data)
+  // const [items, setItems] = useState(data)
+
+  // useEffect(()=> {
+  //   setItems(data)
+  // console.log("items", data)
+
+  // })
   return (
     <>
       <div>
@@ -99,7 +107,9 @@ function Product(product) {
       </div>
       <ProductDescription>
         <CountDownContainer>
-          <CountDown>{"043h 34m 34s left"} 🔥</CountDown>
+          <CountDown><Countdown value={deadline} format={`D[d] HH[h] mm[m] ss[s]`} />{" left"} 🔥</CountDown>
+          
+          
         </CountDownContainer>
         <a href={`/product-details`}>
           <CardTitle>{product.asset?.name}</CardTitle>

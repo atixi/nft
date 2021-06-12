@@ -89,7 +89,7 @@ export const CountDownContainer = styled.div`
 &:before{
     content: " ";
     position: absolute;
-    width: 170px;
+    width: 175px;
     height: 40px;
     left: -12px !important;
     inset: 0px;
@@ -103,11 +103,16 @@ export const CountDown = styled.div`
 position: relative;
 top: 2px;
 background: white;
-width: 165px;
+width: 170px;
 border-radius: 25px;
 height: 36px;
 left: -10px;
 padding-top: 7px;
+div{
+    display: inline-flex;
+    margin: auto;
+    margin-top: -10px;
+}
 `;
 export const ProductDescriptionBottom = styled.div`
 

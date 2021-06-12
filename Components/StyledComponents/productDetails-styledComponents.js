@@ -37,7 +37,7 @@ position: relative;
 right: auto;
 left: auto;
 margin: auto;
-`
+`;
 export const ItemInfo = styled.div`
     width: 100%;
     height: 100%;
@@ -404,67 +404,22 @@ export const AuctionTimer = styled.div`
     min-width: 0px;
     max-width: 100%;
     flex-direction: row;
-`
-export const Counter = styled.div`
-    margin-right: 12px;
-    flex: 1;
-    margin: 0px;
-    padding: 0px;
-    -webkit-box-align: stretch;
-    align-items: stretch;
-    border-width: 0px;
-    border-style: solid;
-    border-color: rgb(4, 4, 5);
-    display: flex;
-    flex-basis: auto;
-    flex-direction: column;
-    flex-shrink: 0;
-    min-height: 0px;
-    min-width: 0px;
-    max-width: 100%;
-    .timeValue{
-        text-align: left;
-        margin-left: 20px;
-        text-decoration: none;
-        color: inherit;
-        font-size: 20px;
-        line-height: 27.6px;
-        font-family: inherit;
-        font-weight: 900;
-    }
-    .timeLabel1{
-        text-decoration: none;
-        display: none;
-        color: inherit;
-        font-size: 20px;
-        line-height: 27.6px;
-        font-family: inherit;
-        font-weight: 900;
-    }
-    .timeLabel{
+    div{
         color: #818182 !important;
-        text-align: left;
-        font-size: 13px;
-        margin-left: 20px; 
+        margin: auto;
+        span{
+        font-size: 25px !important;
+        }
     }
+    @media (max-width:768px) {
+        div{
+        span{
+            font-size: 20px !important;
+        }
+    }
+    }
+`
 
-    @media (max-width:1200px) {
-        .timeLabel1{
-            display: inline;
-            font-size: 15px;
-            font-weight: bold;
-        }
-        .timeValue{
-            font-size: 15px;
-            font-weight: bold;
-            text-align: center;
-        }
-        .timeLabel
-        {
-            display: none;
-        }
-    }
-`;
 export const BidOwnerProfile = styled.div`
     margin-right: 20px;
 

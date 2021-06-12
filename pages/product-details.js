@@ -35,8 +35,9 @@ import {
   ItemFooter,
   ItemName,
   ImageCon,
+  CounterLarge,
 } from "../Components/StyledComponents/productDetails-styledComponents";
-import {getAuctionPriceDetails } from "/Constants/constants";
+import {getAuctionPriceDetails,getAuctionTimeDetails } from "/Constants/constants";
 
 const { TabPane } = Tabs;
 const { Countdown } = Statistic;
@@ -80,7 +81,7 @@ function ProductPage() {
   const loadAsset = async (tokenAddress, tokenId) => {
     let asset = await OpenSeaAPI.getAssetDetails(tokenAddress, tokenId);
     setAsset(asset);
-    setBids(asset.orders)
+    setBids(asset.asset.buyOrders);
   };
   console.log(asset)
   const item = {
@@ -205,7 +206,7 @@ function ProductPage() {
                 <TabPane key="2" tab={<span>{CONSTANTS.bids}</span>}>
                   {bids && bids.map(order =>(
 
-                  <LastBidder id={order.makerAccount?.address}>
+                  <LastBidder id={order.owner?.address}>
                     <div className={"content"}>
                       <span className="avatarContainer">
                         <Profile
@@ -237,7 +238,7 @@ function ProductPage() {
                   <br />
                   <AvatarContainer>
                     <Profile
-                      profile={item.owner.avatar}
+                      profile={asset.asset?.owner?.profile_img_url}
                       size={"medium"}
                       tick={false}
                     />
@@ -281,12 +282,12 @@ function ProductPage() {
               <BidCountdown>
                 <BidOwnerContainer className={"border-right pr-2 pl-2"}>
                   <BidOwner className={"float-left"}>
-                    {CONSTANTS.highestBid} <a>{asset.asset?.orders[0]?.makerAccount?.user?.username}</a>
+                    {CONSTANTS.highestBid} <a>{asset.asset?.owner?.user?.username}</a>
                   </BidOwner>
                   <BidPrice>
                     <BidOwnerProfile className={"mr-3"}>
                       <Profile
-                        profile={asset.asset?.orders[0]?.makerAccount?.profile_img_url}
+                        profile={asset.asset?.owner?.profile_img_url}
                         size={"large"}
                         tick={false}
                       />
@@ -306,33 +307,7 @@ function ProductPage() {
                   <div className={"auctionDiv"}>
                     <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
                     <AuctionTimer>
-                      {/* <Col>
-                    <Countdown value={deadline} format={`D d H 时 m 分 s 's'`} />
-                    </Col> */}
-                      <Counter className={"days"}>
-                        <span className={"timeValue"}>
-                          23<span className={"timeLabel1"}>d</span>
-                        </span>
-                        <span className={"timeLabel"}>{CONSTANTS.days}</span>
-                      </Counter>
-                      <Counter>
-                        <span className={"timeValue"}>
-                          23<span className={"timeLabel1"}>h</span>
-                        </span>
-                        <span className={"timeLabel"}>{CONSTANTS.hours}</span>
-                      </Counter>
-                      <Counter className={"days"}>
-                        <span className={"timeValue"}>
-                          23<span className={"timeLabel1"}>m</span>
-                        </span>
-                        <span className={"timeLabel"}>{CONSTANTS.minutes}</span>
-                      </Counter>
-                      <Counter>
-                        <span className={"timeValue"}>
-                          23<span className={"timeLabel1"}>s</span>
-                        </span>
-                        <span className={"timeLabel"}>{CONSTANTS.seconds}</span>
-                      </Counter>
+                     <Countdown value={deadline} valueStyle={{color: "red", fontSize: "30px !important"}} format={`D[d] HH[h] mm[m] ss[s]`} />
                     </AuctionTimer>
                   </div>
                 </Auction>
@@ -344,7 +319,7 @@ function ProductPage() {
                 >
                   Buy
                 </FooterButton>
-                {/* <FooterButton color={"#0066ff"} style={{background: "#0066ff26"}}>Place a bid</FooterButton> */}
+                <FooterButton color={"#0066ff"} style={{background: "#0066ff26"}}>Place a bid</FooterButton>
               </ButtonContainer>
               <center>Service fee 2.5%. 1.025 ETH (~$4,383.71)</center>
             </ItemFooter>
