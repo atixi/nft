@@ -7,7 +7,7 @@ export const SectionHeading = styled.span`
     font-weight: 700;
     @media (max-width: 700px)
     {
-        // font-size: 16px !important;
+        font-size: 20px !important;
         display: block !important;
     }
 `;

@@ -34,7 +34,6 @@ const exploreMore = (
 );
 function Explore({ data }) {
   const explorers = data;
-  console.log("explore", explorers)
   return (
     <>
       <div>

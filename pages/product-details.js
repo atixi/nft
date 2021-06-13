@@ -83,7 +83,6 @@ function ProductPage() {
     setAsset(asset);
     setBids(asset.asset.buyOrders);
   };
-  console.log(asset)
   const item = {
     image: "/images/p1.jpeg",
     name: "CoinBae #1",

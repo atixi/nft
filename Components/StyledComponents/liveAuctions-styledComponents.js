@@ -5,7 +5,7 @@ export const CardsContainer = styled.div`
     flex-direction: row;
     max-width: 1472px;
     width: 100%;
-
+    padding: auto;
     flex-wrap: wrap;
     div{
         flex: 1;
@@ -14,12 +14,18 @@ export const CardsContainer = styled.div`
 `;
 export const ProductCardContainer = styled.div`
     margin-bottom: 20px;
+    max-width: 350px;
+    padding: 10px;
+    @media (max-width:  900px)
+    {
+    margin: auto;
+        
+    }
     div{
         @media (max-width: 575px)
         {
             max-width: 350px;
-            margin: auto;
-            padding: auto;
+            margin: auto !important;
         }
         }
 `;

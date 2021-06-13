@@ -34,9 +34,6 @@ function Products(props) {
           {products && products.map((n, index) => (
             n.name != null?
             <ProductCardContainer className={"p-1"}>
-              {
-                console.log(n)
-              }
             <ProductCard
               key={index}
               // style={{ width: "280px" }}
