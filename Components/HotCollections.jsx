@@ -14,7 +14,7 @@ const breakPoints = [
 export default function HotCollections({data}) {
   const collections = data;
     return (
-      <div style={{padding:"25px 0px"}}>
+      <div style={{padding:"25px 10px"}}>
           <SectionHeading>{"Hot collections"} 💥</SectionHeading>
         <Carousel breakPoints={breakPoints} pagination={false} transitionMs={1000}>
           {collections && collections.map((item) => (

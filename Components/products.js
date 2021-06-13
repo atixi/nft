@@ -32,30 +32,34 @@ function Products(props) {
     <>
       <CardsContainer>
           {products && products.map((n, index) => (
+            n.name != null?
             <ProductCardContainer className={"p-1"}>
+              {
+                console.log(n)
+              }
             <ProductCard
               key={index}
               // style={{ width: "280px" }}
               className="p-3 p-sm-2 p-md-2 p-lg-3"
             >
-              <ProductCardHeader className={`mt-1 float-right mb-2`}>
-                {/* <div className={"pl-3"}>
+              <ProductCardHeader className={`mt-1`}>
+                <div className={"pl-3 float-left"}>
                     <Avatar.Group>
-                      {PRODUCTS.map((m, index) => (
-                        <Tooltip title={m.id} placement="top">
+                
+                        <Tooltip title={"Owner"} placement="top">
                           <Avatar
                             icon={
                               <img
-                                src={m.productImage}
+                                src={n.owner.profile_img_url}
                                 width={12}
                                 height={12}
                               />
                             }
                           />
                         </Tooltip>
-                      ))}
+                 
                     </Avatar.Group>
-                  </div> */}
+                  </div>
                   <Dropdown
                     trigger={["click"]}
                     overlay={menu}
@@ -64,9 +68,9 @@ function Products(props) {
                     <Button>...</Button>
                   </Dropdown>
                 </ProductCardHeader>
-                <div className={`col-md-12 p-3`}>
+                <div className={`col-md-12 p-1`}>
               <a href={`/product-details?id=${n.id}`}>
-                  <img style={{height: "200px"}} src={n.image_preview_url} className="w-100 img-fluid" />
+                  <img style={{height: "250px", width: "auto"}} src={n.image_preview_url} className="w-100 img-fluid" />
                 </a>
                 </div>
                 <ProductDescription>
@@ -81,7 +85,7 @@ function Products(props) {
                   {/* <ProductPrice fontSize={"12px"}>{n.price}</ProductPrice> */}
                 </ProductDescription>
               </ProductCard>
-              </ProductCardContainer>
+              </ProductCardContainer> : ""
           ))}
       </CardsContainer>
     </>
