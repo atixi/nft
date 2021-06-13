@@ -1,6 +1,6 @@
 import React from "react";
 import Products from "/Components/products";
-import { Dropdown, Menu, Switch, Spin, Col } from "antd";
+import { Dropdown, Menu, Switch, Spin } from "antd";
 import EXPLORE_CONSTANTS from "/Constants/exploreConstants";
 import {
   FilterAndSort,
@@ -8,7 +8,7 @@ import {
   CategoriesListScroll,
   CategoriesList,
 } from "./StyledComponents/explore-styledComponents";
-import { SectionHeading, LoadingContainer, LoadMoreDiv } from "./StyledComponents/globalStyledComponents";
+import { SectionHeading, LoadingContainer, LoadMoreButton } from "./StyledComponents/globalStyledComponents";
 
 const menu = (
   <Menu>
@@ -33,14 +33,12 @@ const exploreMore = (
   </Menu>
 );
 function Explore({ data }) {
-  const explorers = data;
+  const explores = data;
   return (
     <>
       <div>
         <CategoriesListContainer >
-          <Col className="pl-3">
             <SectionHeading>{EXPLORE_CONSTANTS.explore}</SectionHeading>
-          </Col>
           <CategoriesListScroll>
             <CategoriesList className={"m-2"}>
               <li>{EXPLORE_CONSTANTS.all}</li>
@@ -126,8 +124,10 @@ function Explore({ data }) {
             </FilterAndSort>
           </Dropdown>
         </CategoriesListContainer>
-        {explorers ?
-         <Products data={explorers} />
+        {explores ?
+         <><Products data={explores} />
+          <LoadMoreButton block shape={"round"} size={"large"}>{"Load More"}</LoadMoreButton>
+          </>
           : 
         <LoadingContainer>
         <Spin />

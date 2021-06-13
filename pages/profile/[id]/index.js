@@ -1,15 +1,13 @@
-import profileStyles from "/styles/profile.module.css";
-import { Row, Col, Tabs, Spin } from "antd";
-import { CopyOutlined } from "@ant-design/icons";
+import {Tabs, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import Header from "/Components/header";
+import Footer from "/Components/footer";
 import Products from "/Components/products";
 import OpenSeaAPI from "../../api/openseaApi";
-import { LoadingContainer } from "/Components/StyledComponents/globalStyledComponents";
+import { LoadingContainer, LoadMoreButton } from "/Components/StyledComponents/globalStyledComponents";
+import { ProfileContainer, BiographyContainer,BioDescription, ProfileButton } from "/Components/StyledComponents/talentPage-styledComponents";
 
 const { TabPane } = Tabs;
-function callback(key) {
-}
 
 function Profile() {
   const [collections, setCollections] = useState();
@@ -61,12 +59,12 @@ function Profile() {
     <>
       <Header />
       <div style={{ maxWidth: 1400, margin: "auto" }}>
-        <div className={profileStyles.profile}>
-          <div className={profileStyles.cover}>
+        <ProfileContainer>
+          <div>
             <img src="/images/talentCover.png" />
           </div>
-          <div className={profileStyles.bio}>
-            <div className={profileStyles.avatar}>
+          <BiographyContainer>
+            <div className={"avatar"}>
               <img
                 alt="Identicon"
                 src={avatar}
@@ -74,7 +72,7 @@ function Profile() {
                 className="sc-eirseW evgNzS"
               />
             </div>
-            <div className={profileStyles.bioDescription}>
+            <BioDescription>
               <h3>
                 <strong>{talent}</strong>
               </h3>
@@ -82,14 +80,8 @@ function Profile() {
                 <strong>{addressToShow}</strong>
                 {/* <CopyOutlined /> */}
               </h6>
-              <Row>
-                <Col lg={8} md={6} sm={2} xs={0}></Col>
-                <Col lg={8} md={12} sm={20} xs={24}></Col>
-                <Col lg={8} md={6} sm={2} xs={0}></Col>
-              </Row>
-
               <div className="mt-4">
-                <button type="button" className={profileStyles.otherLinks}>
+                <ProfileButton type="button">
                   <svg
                     viewBox="0 0 15 16"
                     fill="none"
@@ -104,8 +96,8 @@ function Profile() {
                       fill="currentColor"
                     ></path>
                   </svg>
-                </button>
-                <button type="button" className={profileStyles.otherLinks}>
+                </ProfileButton>
+                <ProfileButton type="button">
                   <svg
                     viewBox="0 0 14 4"
                     fill="none"
@@ -120,20 +112,22 @@ function Profile() {
                       fill="currentColor"
                     ></path>
                   </svg>
-                </button>
+                </ProfileButton>
               </div>
-            </div>
-          </div>
-        </div>
+            </BioDescription>
+          </BiographyContainer>
+        </ProfileContainer>
         <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
           <TabPane tab="Created" key="1">
             {isLoading ?
                       <LoadingContainer>
                         <Spin />
                       </LoadingContainer>
-                      :
+                      : 
+                      <>
                       <Products data={created} /> 
-
+                      <LoadMoreButton block shape={"round"} size={"large"}>{"Load More"}</LoadMoreButton>
+                      </>
                       }
           </TabPane>
           <TabPane tab="Collectibles" key="2">
@@ -142,12 +136,15 @@ function Profile() {
                         <Spin />
                       </LoadingContainer>
                       :
+                      <>
                       <Products data={collections} /> 
-
+                      <LoadMoreButton block shape={"round"} size={"large"}>{"Load More"}</LoadMoreButton>
+                      </>
                       }
           </TabPane>
         </Tabs>
       </div>
+      <Footer />
     </>
   );
 }
