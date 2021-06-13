@@ -24,6 +24,7 @@ function Products(props) {
     </Menu>
   );
   const [products, setProducts] = useState([])
+  console.log("card", products) 
 
   useEffect(() =>{
     setProducts(props.data)
@@ -34,6 +35,7 @@ function Products(props) {
           {products && products.map((n, index) => (
             n.name != null?
             <ProductCardContainer className={"p-1"}>
+
             <ProductCard
               key={index}
               // style={{ width: "280px" }}
@@ -42,7 +44,6 @@ function Products(props) {
               <ProductCardHeader className={`mt-1`}>
                 <div className={"pl-3 float-left"}>
                     <Avatar.Group>
-                
                         <Tooltip title={"Owner"} placement="top">
                           <Avatar
                             icon={
@@ -66,7 +67,7 @@ function Products(props) {
                   </Dropdown>
                 </ProductCardHeader>
                 <div className={`col-md-12 p-1`}>
-              <a href={`/product-details?id=${n.id}`}>
+                <a href={`/product-details?ta=${n?.asset_contract.address}&ti=${n?.token_id}`}>
                   <img style={{height: "250px", width: "auto"}} src={n.image_preview_url} className="w-100 img-fluid" />
                 </a>
                 </div>
