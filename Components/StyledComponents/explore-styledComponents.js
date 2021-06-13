@@ -13,6 +13,7 @@ list-style-type: none;
 display: flex;
 flex-direction: row;
 align-items: center;
+
 justify-content: space-around;
     div{
         margin: 5px;

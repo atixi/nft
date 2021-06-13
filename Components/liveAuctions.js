@@ -33,18 +33,10 @@ const { Countdown } = Statistic;
 function LiveAuctions({data}) {
 
   const items = data;
-  console.log("items", data)
-  // const [items, setItems] = useState(data)
-
-  // useEffect(()=> {
-  //   setItems(data)
-  // console.log("items", data)
-
-  // })
   return (
     <>
       <div>
-        <div className="pl-3">
+        <div className="pl-2">
           <SectionHeading>{CONSTANTS.liveAuctions}</SectionHeading>
         </div>
 

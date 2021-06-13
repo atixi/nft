@@ -5,7 +5,7 @@ export const CardsContainer = styled.div`
     flex-direction: row;
     max-width: 1472px;
     width: 100%;
-
+    padding: auto;
     flex-wrap: wrap;
     div{
         flex: 1;
@@ -13,12 +13,19 @@ export const CardsContainer = styled.div`
     }
 `;
 export const ProductCardContainer = styled.div`
+    margin-bottom: 20px;
+    max-width: 350px;
+    padding: 10px;
+    @media (max-width:  900px)
+    {
+    margin: auto;
+        
+    }
     div{
-        @media (max-width: 554px)
+        @media (max-width: 575px)
         {
-            width: 500px;
-            margin: auto;
-            padding: auto;
+            max-width: 350px;
+            margin: auto !important;
         }
         }
 `;
@@ -56,7 +63,8 @@ export const BidsStatus = styled.small`
 export const ProductCard = styled.div`
 border: 1px solid #ccc;
 border-radius: 15px;
-width: 270px;
+max-width: 270px;
+min-width: 260px;
 min-height: 400px !important
 // margin-right: 15px;
 padding: 5px;
