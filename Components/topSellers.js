@@ -1,8 +1,5 @@
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import useApi from "./hooks/useApi";
 import "react-multi-carousel/lib/styles.css";
-import { SELLERS } from "../Constants/constants";
 import OpenSeaAPI from "../pages/api/openseaApi";
 import {
   ListCounter,
@@ -43,24 +40,15 @@ function TopSellers({ data }) {
     <>
       {topSellers && (
         <>
-          <div className="p-3">
-            <h3>Top Sellers in 1 Day</h3>
-          </div>
+          <div className="p-3"><h3>{"Top Sellers in 1 Day"}</h3></div>
           <TopSellerContainer>
             {data &&
               data.map((seller, index) => (
-                //  <Link href='/profile/[id]' as={`/profile/${seller.address}`} >
-                <a href={`/profile/index?address=${seller.address}&talent=${seller.talent}&avatar=${seller.profile_img_url}`}>
-                <TopSellerItem
-                    key={seller.name}
-                    onClick={() => topSellerDetails(seller)}
-                  >
+                <a key={seller.address} href={`/profile/index?address=${seller.address}&talent=${seller.talent}&avatar=${seller.profile_img_url}`}>
+                <TopSellerItem  key={seller.name} onClick={() => topSellerDetails(seller)} >
                     <ListCounter>{index + 1}</ListCounter>
                     <AvatarContainer>
-                      <img
-                        
-                        src={seller.profile_img_url}
-                      />
+                      <img src={seller.profile_img_url}  />
                     </AvatarContainer>
                     <SellerDetails>
                       <SellerName key={seller.talent + seller.talent}>
@@ -73,7 +61,6 @@ function TopSellers({ data }) {
                     </SellerDetails>
                   </TopSellerItem>
                 </a>
-                //  </Link>
               ))}
           </TopSellerContainer>
         </>

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {UploadOutlined} from '@ant-design/icons';
 
 export const ProfileContainer = styled.div`
     display: flex;
@@ -61,4 +62,7 @@ transition: all 0.12s ease-in-out 0s;
 border-radius: 40px;
 background-color: transparent;
 transform-origin: center center;
+`
+export const ShareButton = styled(UploadOutlined)`
+    font-size: 30px;
 `
