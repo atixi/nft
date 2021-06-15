@@ -4,12 +4,9 @@ import Header from "/Components/header";
 import Footer from "/Components/footer";
 import Products from "/Components/products";
 import OpenSeaAPI from "../../api/openseaApi";
-
 import { LoadingContainer, LoadMoreButton, MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 import { ProfileContainer, ShareButton, BiographyContainer,BioDescription, ProfileButton } from "/Components/StyledComponents/talentPage-styledComponents";
-
 const { TabPane } = Tabs;
-
 function Profile() {
   const [collections, setCollections] = useState();
   const [created, setCreated] = useState();
@@ -18,7 +15,6 @@ function Profile() {
   const avatar = new URLSearchParams(window.location.search).getAll("avatar");
   const [isLoading, setIsLoading] = useState(true);
   const [addressToShow, setAddress] = useState(address[0].toString().replace(address[0].toString().substring(10,address[0].length-10), "....."))
-
   const FetchCreatedAssets = async (e) => {
     setIsLoading(true);
     const createRequest = await OpenSeaAPI.getAssetsListByOwner(address);
@@ -63,7 +59,7 @@ function Profile() {
       <Header />
       <MainWrapper>
         <ProfileContainer>
-          <div><img src="/images/talentCover.png" /></div>
+            <img src="/images/talentCover.png" />
             <BiographyContainer>
             <div className={"avatar"}>
               <img alt="userAvatar" src={avatar} loading="lazy" lassName="sc-eirseW evgNzS" />
@@ -90,13 +86,9 @@ function Profile() {
           </TabPane>
           <TabPane tab="Collectibles" key="2">
           {isLoading ?
-            <LoadingContainer><Spin /></LoadingContainer>
-            :
-            <>
-            <Products data={collections} /> 
-            <LoadMoreButton block shape={"round"} size={"large"}>{"Load More"}</LoadMoreButton> 
-            {/* the load button will be showed based on a condition */}
-            </>
+            <LoadingContainer><Spin /></LoadingContainer> :
+            <> <Products data={collections} /> 
+            <LoadMoreButton block shape={"round"} size={"large"}>{"Load More"}</LoadMoreButton> {/* the load button will be showed based on a condition */} </>
             }
           </TabPane>
         </Tabs>
@@ -105,5 +97,4 @@ function Profile() {
     </>
   );
 }
-
 export default Profile;
