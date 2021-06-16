@@ -1,15 +1,14 @@
-import { Row, Col, Avatar, Image } from "antd";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import useApi from "./hooks/useApi";
 import "react-multi-carousel/lib/styles.css";
-import styles from "../styles/topSeller.module.css";
-import { SELLERS } from "../Constants/constants";
 import OpenSeaAPI from "../pages/api/openseaApi";
 import {
   ListCounter,
   SellerPrice,
   SellerName,
+  TopSellerContainer,
+  TopSellerItem,
+  AvatarContainer,
+  SellerDetails,
 } from "./StyledComponents/topSeller-styledComponents";
 
 function TopSellers({ data }) {
@@ -40,28 +39,18 @@ function TopSellers({ data }) {
   return (
     <>
       {topSellers && (
-        <div className="">
-          <div className="p-3">
-            <h3>Top Sellers in 1 Day</h3>
-          </div>
-          <div className={styles.topSellerContainer}>
+        <>
+          <div className="p-3"><h3>{"Top Sellers in 1 Day"}</h3></div>
+          <TopSellerContainer>
             {data &&
               data.map((seller, index) => (
-                //  <Link href='/profile/[id]' as={`/profile/${seller.address}`} >
-                <a href={`/profile/index?address=${seller.address}&talent=${seller.talent}&avatar=${seller.profile_img_url}`}>
-                <div
-                    className={styles.topSellerItem}
-                    key={seller.name}
-                    onClick={() => topSellerDetails(seller)}
-                  >
+                <a key={seller.address} href={`/profile/index?address=${seller.address}&talent=${seller.talent}&avatar=${seller.profile_img_url}`}>
+                <TopSellerItem  key={seller.name} onClick={() => topSellerDetails(seller)} >
                     <ListCounter>{index + 1}</ListCounter>
-                    <div className={styles.iconContainer}>
-                      <img
-                        className={styles.icon}
-                        src={seller.profile_img_url}
-                      />
-                    </div>
-                    <div className={styles.sellerDetails}>
+                    <AvatarContainer>
+                      <img src={seller.profile_img_url}  />
+                    </AvatarContainer>
+                    <SellerDetails>
                       <SellerName key={seller.talent + seller.talent}>
                         {seller.talent}
                       </SellerName>
@@ -69,13 +58,12 @@ function TopSellers({ data }) {
                         {/* {seller.stats?.average_price} */}
                         {seller.number_of_assets+" assets"}
                       </SellerPrice>
-                    </div>
-                  </div>
+                    </SellerDetails>
+                  </TopSellerItem>
                 </a>
-                //  </Link>
               ))}
-          </div>
-        </div>
+          </TopSellerContainer>
+        </>
       )}
     </>
   );
