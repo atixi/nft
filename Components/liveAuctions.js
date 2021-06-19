@@ -35,26 +35,21 @@ function LiveAuctions({data}) {
   const items = data;
   return (
     <>
-      <div>
-        <div className="pl-2">
-          <SectionHeading>{CONSTANTS.liveAuctions}</SectionHeading>
-        </div>
-
+        <SectionHeading>{CONSTANTS.liveAuctions}</SectionHeading>
         <Carousel
           breakPoints={breakPoints}
           pagination={false}
           transitionMs={1000}
         >
-          {items != undefined ? items.map((product) => 
-            Product(product)
+          {items != undefined ? items.map((product, index) => 
+            Product(product, index)
           ) : ""}
         </Carousel>
-      </div>
     </>
   );
 }
 
-function Product(product) {
+function Product(product, index) {
   const pr = getAuctionPriceDetails(product);
   const price = pr.priceBase;
   const menu = (
@@ -74,7 +69,7 @@ function Product(product) {
     </Menu>
   );
   return (
-    <ProductCard className={`p-2 p-lg-1 mr-3`}>   
+    <ProductCard key={index} className={`p-2 p-lg-1 mr-3`}>   
       <ProductCardHeader className={`mt-3`}>
         <ProductCardHeaderOwners>
           <Avatar.Group>
@@ -93,9 +88,9 @@ function Product(product) {
         </ProductCardHeaderButton>
       </ProductCardHeader>
       <div className={`col-md-12 p-3`}>
-      <a href={`/product-details?ta=${product.asset?.tokenAddress}&ti=${product.asset?.tokenId}`}>
-        <img src={product.asset?.imageUrl} style={{height: "250px", width: "auto"}} className="w-100 rounded" />
-        </a>
+      <Link href={{pathname: "/product-details", query: {ta: product.asset?.tokenAddress, ti: product.asset?.tokenId},}}>
+       <a> <img src={product.asset?.imageUrl} style={{height: "250px", width: "auto"}} className="w-100 rounded" /></a>
+        </Link>
       </div>
       <ProductDescription>
         <CountDownContainer>

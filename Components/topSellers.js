@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "react-multi-carousel/lib/styles.css";
 import OpenSeaAPI from "/Utils/openseaApi";
+import { SectionHeading } from "./StyledComponents/globalStyledComponents";
 import {
   ListCounter,
   SellerPrice,
@@ -10,7 +11,7 @@ import {
   AvatarContainer,
   SellerDetails,
 } from "./StyledComponents/topSeller-styledComponents";
-
+import Link from "next/link"
 function TopSellers({ data }) {
   const [selectedSeller, setSelectedSeller] = useState([]);
   const topSellerDetails = async (top) => {
@@ -36,20 +37,24 @@ function TopSellers({ data }) {
   };
 
   const topSellers = data;
+  console.log("top", topSellers)
   return (
     <>
       {topSellers && (
         <>
-          <div className="p-3">
-            <h3>{"Top Sellers in 1 Day"}</h3>
+          <div className="pt-3">
+            <SectionHeading>{"Top Sellers in 1 Day"}</SectionHeading>
           </div>
           <TopSellerContainer>
             {data &&
               data.map((seller, index) => (
-                <a
+                <Link
                   key={seller.address}
-                  href={`/profile/index?address=${seller.address}&talent=${seller.talent}&avatar=${seller.profile_img_url}`}
-                >
+                  href = {{pathname: "/profile/index",
+                          query: {address: seller.address, talent: seller.talent, avatar: seller.profile_img_url}
+                          }}
+                  // href={`/profile/index?address=${seller.address}&talent=${seller.talent}&avatar=${seller.profile_img_url}`}
+                ><a>
                   <TopSellerItem
                     key={seller.name}
                     onClick={() => topSellerDetails(seller)}
@@ -68,7 +73,8 @@ function TopSellers({ data }) {
                       </SellerPrice>
                     </SellerDetails>
                   </TopSellerItem>
-                </a>
+                  </a>
+                </Link>
               ))}
           </TopSellerContainer>
         </>

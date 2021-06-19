@@ -26,8 +26,8 @@ import {
   HeaderBottomMenu,
   SearchWrapper,
   SocialLinkContainer,
-} from "./StyledComponents/header-styledComponents";
-export default function Header(props) {
+} from "./StyledComponents/header-styledComponents.js";
+function Header(props) {
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
   const [accountAddress, setAccountAddress] = useState(accountList[0]);
@@ -229,12 +229,13 @@ export default function Header(props) {
         <CreateButton className={`d-none d-lg-block`}>
           {CONSTANTS.create}
         </CreateButton>
+        <ConnectButton>
         <Link href={"/wallet"} passHref>
           <a
-            className={`d-none d-lg-block ${styles.headerLink}`}
+            className={`d-none d-lg-block`}
           >{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
         </Link>
-
+        </ConnectButton>
         <Button
           onClick={() => {
             setSearch(true);
@@ -269,3 +270,4 @@ export default function Header(props) {
     </HeaderNav>
   );
 }
+export default Header;

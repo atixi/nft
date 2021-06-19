@@ -4,6 +4,7 @@ import { Tabs, Menu, Dropdown, Image, Statistic, Col } from "antd";
 import Profile from "/Components/profileAvatar";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import OpenSeaAPI from "/Utils/openseaApi";
+import {useRouter} from "next/router"
 import {
   Wrapper,
   Content,
@@ -69,17 +70,21 @@ const menu = (
   </DropdownMenu>
 );
 function ProductPage() {
+  const router = useRouter();
+  console.log(router)
   const [asset, setAsset] = useState({});
-  const tokenAddress = new URLSearchParams(window.location.search).getAll("ta");
-  const tokenId = new URLSearchParams(window.location.search).getAll("ti");
+  const {ta} = router.query;
+  const {ti} = router.query;
   const [bids, setBids] = useState([]);
 
   useEffect(() => {
-    loadAsset(tokenAddress, tokenId);
-  }, []);
+    console.log(ta)
+    ta && loadAsset(ta, ti);
+  }, [ta]);
 
-  const loadAsset = async (tokenAddress, tokenId) => {
-    let asset = await OpenSeaAPI.getAssetDetails(tokenAddress, tokenId);
+  const loadAsset = async (ta, ti) => {
+    let asset = await OpenSeaAPI.getAssetDetails(ta, ti);
+    console.log("asset", asset)
     setAsset(asset);
     setBids(asset.asset.buyOrders);
   };
@@ -186,7 +191,7 @@ function ProductPage() {
                 />
 
                 <span style={{ flex: "1" }}>
-                  {asset.asset?.owner?.user.username}
+                  {asset.asset?.owner?.user?.username}
                 </span>
               </AvatarContainer>
               <OwnerProfitContainer>
@@ -204,7 +209,7 @@ function ProductPage() {
                     />
 
                     <span style={{ flex: "1" }}>
-                      {asset.asset?.owner?.user.username}
+                      {asset.asset?.owner?.user?.username}
                     </span>
                   </AvatarContainer>
                 </TabPane>
@@ -253,7 +258,7 @@ function ProductPage() {
                     />
 
                     <span style={{ flex: "1" }}>
-                      {asset.asset?.owner?.user.username}
+                      {asset.asset?.owner?.user?.username}
                     </span>
                   </AvatarContainer>
                 </TabPane>

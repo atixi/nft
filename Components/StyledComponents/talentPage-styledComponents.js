@@ -17,8 +17,8 @@ export const ProfileContainer = styled.div`
         &:first-child{
             background-color: #eee;
             text-align: center;
-        }
-    }
+        };
+    };
     &:first-child{
         img{
             height: 260px;
@@ -26,8 +26,8 @@ export const ProfileContainer = styled.div`
             transform: translateX(-50%);
             left: 50%;
             position: relative;
-        }
-    }
+        };
+    };
 `;
 export const BiographyContainer = styled.div`
     .avatar{
@@ -42,8 +42,8 @@ export const BiographyContainer = styled.div`
         img{
             width: 100%;
             height: 100%;
-        }
-    }
+        };
+    };
 `;
 export const BioDescription = styled.div`
         padding: 0px 10px; 

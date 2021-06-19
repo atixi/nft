@@ -13,7 +13,7 @@ import HandleNotification from "/Components/commons/handleNotification";
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 function Home() {
   const [bundles, setBundles] = useState([]);
-  const [topSellers, setTopSellers] = useState();
+  const [topSellers, setTopSellers] = useState([]);
   const [liveAuctions, setLiveAuctions] = useState([]);
   const [collections, setCollections] = useState();
   const [explores, setExplores] = useState();
@@ -34,7 +34,7 @@ function Home() {
   };
   const loadBundles = async () => {
     try {
-      const { bundles } = await OpenSeaAPI.getBundles();
+      let { bundles } = await OpenSeaAPI.getBundles();
       console.log("bundles are as ", bundles);
       setBundles(bundles);
     } catch (e) {
@@ -93,10 +93,10 @@ function Home() {
       <Header />
       <MainWrapper>
         <Slide />
-        <TopSellers data={topSellers} />
-        <LiveAuctions data={liveAuctions} />
-        <HotCollections data={collections} />
-        <Explore data={explores} />
+        {topSellers && <TopSellers data={topSellers} /> }
+        {liveAuctions && <LiveAuctions data={liveAuctions} /> }
+        {collections && <HotCollections data={collections} /> }
+        {explores && <Explore data={explores} /> }
       </MainWrapper>
       <Footer />
     </>

@@ -42,8 +42,8 @@ function Footer() {
             <Col md={12} sm={12} xs={12} className={"text-left pl-5"}>
               <CategoryTitle>{FOOTER_WEBSITE_LINKS.websiteTitle}</CategoryTitle>
               <CategoryListUl>
-              {FOOTER_WEBSITE_LINKS.websiteLinks.map((websiteLink) => (
-                <CategoryListLi>                 
+              {FOOTER_WEBSITE_LINKS.websiteLinks.map((websiteLink, index) => (
+                <CategoryListLi key={index}>                 
                   <CategoryLink href="#" key={websiteLink.websiteLinkTitle}>
                   <LinkText>{websiteLink.websiteLinkTitle}</LinkText>
                 </CategoryLink>
@@ -54,8 +54,8 @@ function Footer() {
             <Col md={12} sm={12} xs={12}  className={"text-left pl-5"}>
               <CategoryTitle>{FOOTER_COMMUNITY.communityTitle}</CategoryTitle>
               <CategoryListUl>
-              {FOOTER_COMMUNITY.communityLinks.map((communitlink) => (
-                <CategoryListLi>
+              {FOOTER_COMMUNITY.communityLinks.map((communitlink, index) => (
+                <CategoryListLi key={index}>
                 <CategoryLink key={communitlink.communityLinktitle}>
                   <LinkText>{communitlink.communityLinktitle}</LinkText>
                 </CategoryLink>
@@ -70,8 +70,8 @@ function Footer() {
               <CategoryTitle>{FOOTER_LANGUAGES.languagesTitle}</CategoryTitle>
               <div className={"mt-2"}>
               <SelectLanguage defaultValue="English">
-                {FOOTER_LANGUAGES.languages.map((language) => (
-                  <Option key={language.language} value={language.language}>
+                {FOOTER_LANGUAGES.languages.map((language, index) => (
+                  <Option key={index} value={language.language}>
                     {language.language}
                   </Option>
                 ))}

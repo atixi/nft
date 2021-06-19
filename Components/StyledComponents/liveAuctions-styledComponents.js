@@ -10,7 +10,7 @@ export const CardsContainer = styled.div`
     div{
         flex: 1;
         // margin: auto;
-    }
+    };
 `;
 export const ProductCardContainer = styled.div`
     margin-bottom: 20px;
@@ -20,14 +20,14 @@ export const ProductCardContainer = styled.div`
     {
     margin: auto;
         
-    }
+    };
     div{
         @media (max-width: 575px)
         {
             max-width: 350px;
             margin: auto !important;
-        }
-        }
+        };
+        };
 `;
 export const Button = styled.button`
     border: none;
@@ -105,7 +105,8 @@ export const CountDownContainer = styled.div`
     border-radius: 25px;
     background: linear-gradient(to right, rgb(12, 80, 255) 0%, rgb(12, 80, 255) 24%, rgb(91, 157, 255) 55.73%, rgb(255, 116, 241) 75%, rgb(255, 116, 241) 100%);
 
-}`;
+};
+`;
 
 export const CountDown = styled.div`
 position: relative;
@@ -120,7 +121,7 @@ div{
     display: inline-flex;
     margin: auto;
     margin-top: -10px;
-}
+}/
 `;
 export const ProductDescriptionBottom = styled.div`
 

@@ -9,7 +9,7 @@ export const FooterContainer = styled.div`
         margin-left: auto;
         margin-right: auto;
         max-width: 1400px;
-    }
+    };
 `;
 
 export const SearchInput = styled.input`
@@ -140,13 +140,13 @@ export const TermAndPolicy = styled.div`
         font-weight: 700;
         color: rgba(4, 4, 5, 0.6); !important;
         padding-left: 10px;
-    }
+    };
 `;
 export const SocialLinksContainer = styled.div`
     margin-right: 10px !important;
     a{
         padding-right: 20px;
         color: rgba(4, 4, 5, 0.6); !important;
-    }
+    };
 `
 

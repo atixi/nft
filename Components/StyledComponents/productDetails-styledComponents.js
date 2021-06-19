@@ -29,8 +29,8 @@ export const Content = styled.div`
         @media (max-width:575px) {
             margin-top: 20px;
             margin-bottom: 10px;
-        }
-    }
+        };
+    };
 `;
 export const ImageCon = styled.div`
 position: relative;
@@ -53,7 +53,7 @@ export const ItemInfo = styled.div`
 
     @media (min-width:768px) {
             width: 550px;
-    }
+    };
 
 `;
 
@@ -80,7 +80,7 @@ export const ItemFooter = styled.div`
         font-size: 16px;
         color:#bbb;
         padding:10px 0px;
-    }
+    };
 `;
 export const ItemName = styled.h1`
     flex: 1;
@@ -111,7 +111,7 @@ export const ItemLink = styled.a`
             white-space: nowrap;
             overflow: hidden;
             max-width: 100%;
-        }
+        };
 `;
 export const ItemDetailsHeader = styled.div`
         display: flex;
@@ -134,7 +134,7 @@ export const AvatarContainer = styled.div`
 
         span{
             margin: 8px;
-        }
+        };
 `;
 export const OwnerProfitContainer = styled.div`
     width: 90%;
@@ -147,7 +147,7 @@ export const OwnerProfitContainer = styled.div`
     small{
         font-size: 12px;
         font-weight: 600;
-    }
+    };
 `;
 export const ButtonContainer = styled.div`
     display: flex;
@@ -175,7 +175,7 @@ export const BidCountdown = styled.div`
         height: 5px;
         inset: 0px;
         background: linear-gradient(to right, rgb(12, 80, 255) 0%, rgb(12, 80, 255) 24%, rgb(91, 157, 255) 55.73%, rgb(255, 116, 241) 75%, rgb(255, 116, 241) 100%);
-    
+    };
 `;
 export const BidOwnerContainer = styled.div`
         display: flex;
@@ -215,7 +215,7 @@ export const BidOwner = styled.div`
     a{
         transition: all 0.12s ease-in-out 0s;
         color: rgb(4, 4, 5) !important;
-    }
+    };
 `;
 export const BidPrice = styled.div`
     margin: 8px 0px 0px;
@@ -239,7 +239,7 @@ export const BidPriceValue = styled.div`
     @media (max-width: 1200px)
     {
     flex-direction: row;
-    }
+    };
 `
 export const PriceInCryptoContainer = styled.div`
     text-decoration: none;
@@ -260,7 +260,7 @@ export const PriceInCryptoContainer = styled.div`
             font-weight: 900;
             color: rgb(4, 4, 5);
             float: left;
-        }
+        };
 `;
 
 export const PriceInDollarContainer = styled.div`
@@ -284,7 +284,7 @@ export const PriceInDollarContainer = styled.div`
             font-weight: inherit;
             float: left;
             margin-left: 5px;
-        }
+        };
 `;
 export const LastBidder = styled.div`
     height: 69px;
@@ -409,15 +409,15 @@ export const AuctionTimer = styled.div`
         margin: auto;
         span{
         font-size: 25px !important;
-        }
-    }
+        };
+    };
     @media (max-width:768px) {
         div{
         span{
             font-size: 20px !important;
-        }
-    }
-    }
+        };
+    };
+    };
 `
 
 export const BidOwnerProfile = styled.div`
@@ -426,5 +426,5 @@ export const BidOwnerProfile = styled.div`
     @media (max-width:1200px)
     {
         display: none;
-    }
+    };
 `
