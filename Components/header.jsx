@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Search from "./search";
 import { Menu } from "antd";
+import Link from "next/link";
+import styles from "/styles/header.module.css";
 import {
   TwitterOutlined,
   YoutubeFilled,
@@ -227,12 +229,11 @@ export default function Header(props) {
         <CreateButton className={`d-none d-lg-block`}>
           {CONSTANTS.create}
         </CreateButton>
-        <ConnectButton
-          className={`d-none d-lg-block`}
-          onClick={() => setUserAccount()}
-        >
-          {`${CONSTANTS.connect} ${CONSTANTS.wallet}`}
-        </ConnectButton>
+        <Link href={"/wallet"} passHref>
+          <a
+            className={`d-none d-lg-block ${styles.headerLink}`}
+          >{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
+        </Link>
 
         <Button
           onClick={() => {

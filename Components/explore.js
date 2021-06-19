@@ -8,7 +8,11 @@ import {
   CategoriesListScroll,
   CategoriesList,
 } from "./StyledComponents/explore-styledComponents";
-import { SectionHeading, LoadingContainer, LoadMoreButton } from "./StyledComponents/globalStyledComponents";
+import {
+  SectionHeading,
+  LoadingContainer,
+  LoadMoreButton,
+} from "./StyledComponents/globalStyledComponents";
 
 const menu = (
   <Menu>
@@ -37,8 +41,8 @@ function Explore({ data }) {
   return (
     <>
       <div>
-        <CategoriesListContainer >
-            <SectionHeading>{EXPLORE_CONSTANTS.explore}</SectionHeading>
+        <CategoriesListContainer>
+          <SectionHeading>{EXPLORE_CONSTANTS.explore}</SectionHeading>
           <CategoriesListScroll>
             <CategoriesList className={"m-2"}>
               <li>{EXPLORE_CONSTANTS.all}</li>
@@ -124,15 +128,18 @@ function Explore({ data }) {
             </FilterAndSort>
           </Dropdown>
         </CategoriesListContainer>
-        {explores ?
-         <><Products data={explores} />
-          <LoadMoreButton block shape={"round"} size={"large"}>{"Load More"}</LoadMoreButton>
+        {explores ? (
+          <>
+            <Products data={explores} />
+            <LoadMoreButton block shape={"round"} size={"large"}>
+              {"Load More"}
+            </LoadMoreButton>
           </>
-          : 
-        <LoadingContainer>
-        <Spin />
-        </LoadingContainer>
-        }
+        ) : (
+          <LoadingContainer>
+            <Spin />
+          </LoadingContainer>
+        )}
       </div>
     </>
   );
