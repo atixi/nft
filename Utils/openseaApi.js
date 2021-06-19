@@ -2,10 +2,13 @@ import * as Web3 from "web3";
 import { OpenSeaPort, Network } from "opensea-js";
 import client from "./openSeaClient";
 import _, { reject } from "lodash";
-const provider = new Web3.providers.HttpProvider("https://mainnet.infura.io");
+const provider = new Web3.providers.HttpProvider(
+  // "https://mainnet.infura.io/v3/7ca37bed6f77481eb889a45bc8520e6c"
+  "https://rinkeby.infura.io/v3/7ca37bed6f77481eb889a45bc8520e6c"
+);
 const seaport = new OpenSeaPort(provider, {
   networkName: Network.Main,
-  // apiKey: "7ca37bed6f77481eb889a45bc8520e6c",
+  apiKey: "7ca37bed6f77481eb889a45bc8520e6c",
 });
 async function getAccount() {
   let error = null;
