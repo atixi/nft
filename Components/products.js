@@ -24,8 +24,6 @@ function Products(props) {
     </Menu>
   );
   const [products, setProducts] = useState([])
-  console.log("card", products) 
-
   useEffect(() =>{
     setProducts(props.data)
   });
