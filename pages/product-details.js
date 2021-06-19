@@ -71,20 +71,17 @@ const menu = (
 );
 function ProductPage() {
   const router = useRouter();
-  console.log(router)
   const [asset, setAsset] = useState({});
   const {ta} = router.query;
   const {ti} = router.query;
   const [bids, setBids] = useState([]);
 
   useEffect(() => {
-    console.log(ta)
     ta && loadAsset(ta, ti);
   }, [ta]);
 
   const loadAsset = async (ta, ti) => {
     let asset = await OpenSeaAPI.getAssetDetails(ta, ti);
-    console.log("asset", asset)
     setAsset(asset);
     setBids(asset.asset.buyOrders);
   };

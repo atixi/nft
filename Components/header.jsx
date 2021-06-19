@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Search from "./search";
-import { Menu } from "antd";
 import Link from "next/link";
-import styles from "/styles/header.module.css";
 import {
   TwitterOutlined,
   YoutubeFilled,

@@ -35,7 +35,6 @@ function Home() {
   const loadBundles = async () => {
     try {
       let { bundles } = await OpenSeaAPI.getBundles();
-      console.log("bundles are as ", bundles);
       setBundles(bundles);
     } catch (e) {
       HandleNotification("error", e.message, "Server Is Not Available");
@@ -45,7 +44,6 @@ function Home() {
     try {
       const { orders } = await OpenSeaAPI.getLiveAuctions();
       setLiveAuctions(orders);
-      console.log("live auctions are as ", orders);
     } catch (e) {
       HandleNotification("error", e.message, "Server Is Not Available");
     }
@@ -54,7 +52,6 @@ function Home() {
     try {
       const { orders } = await OpenSeaAPI.getTopSellers();
       const topSellers = OpenSeaAPI.getTopSellersDatails(orders);
-      console.log("top selers are as ", topSellers);
       setTopSellers(topSellers);
     } catch (e) {
       HandleNotification("error", e.message, "Server Is Not Available");
@@ -65,7 +62,6 @@ function Home() {
       const { assets } = await OpenSeaAPI.getCollections();
       let cols = OpenSeaAPI.getCollectionDetails(assets);
       setCollections(cols);
-      console.log("collections are as ", cols);
     } catch (e) {
       HandleNotification("error", e.message, "Server Is Not Available");
     }
@@ -77,7 +73,6 @@ function Home() {
       const explores = data?.assets;
       const exps = OpenSeaAPI.getExploresDetails(explores);
       setExplores(exps);
-      console.log("explores are as ", explores);
     } catch (e) {
       HandleNotification("error", e.message, "Server Is Not Available");
     }

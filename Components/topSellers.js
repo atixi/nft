@@ -37,7 +37,6 @@ function TopSellers({ data }) {
   };
 
   const topSellers = data;
-  console.log("top", topSellers)
   return (
     <>
       {topSellers && (

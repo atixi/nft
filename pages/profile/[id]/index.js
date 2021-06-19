@@ -27,8 +27,6 @@ const { TabPane } = Tabs;
   const {address}= router.query;
   const {avatar}=router.query;
   const [isLoading, setIsLoading] = useState(true);
-  console.log("address", address)
-
   const [addressToShow, setAddress] = useState(
    address && address
       .toString()
