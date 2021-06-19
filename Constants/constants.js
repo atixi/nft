@@ -69,13 +69,13 @@ export const getAuctionPriceDetails = (order) => {
   const { currentPrice, basePrice, paymentTokenContract } = order;
   const cp = toUnitAmount(currentPrice, paymentTokenContract);
 
-  const priceCurrent = parseFloat(cp).toLocaleString(undefined, {
+  const priceCurrent = parseFloat(cp).toFixed(4).toLocaleString(undefined, {
     minimumSignificantDigits: 1,
   });
 
   const bp = toUnitAmount(basePrice, paymentTokenContract);
 
-  const priceBase = parseFloat(bp).toLocaleString(undefined, {
+  const priceBase = parseFloat(bp).toFixed(4).toLocaleString(undefined, {
     minimumSignificantDigits: 1,
   });
 
