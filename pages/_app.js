@@ -1,10 +1,23 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "antd/dist/antd.css";
 import "../styles/style.css";
-import ReactDOM from "react-dom";
-import { Web3Provider } from "../Providers/store";
+import store from "../store";
+import React from "react";
 
-import React, { useEffect, useRef } from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { Provider } from "react-redux";
+const defaultQueryFn = async () => {
+  return new Promise((resolve) => {
+    resolve(loadAsset);
+  });
+};
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      queryFn: defaultQueryFn,
+    },
+  },
+});
 
 function getLibrary(provider) {
   const library = new Web3Provider(provider);
@@ -13,17 +26,13 @@ function getLibrary(provider) {
 }
 
 function MyApp({ Component, pageProps }) {
-  let ref = useRef();
-
-  useEffect(() => {
-    ReactDOM.render(
-      <Web3Provider>
+  return (
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
         <Component {...pageProps} />
-      </Web3Provider>,
-      ref.current
-    );
-  }, []);
-  return <div ref={ref} />;
+      </QueryClientProvider>
+    </Provider>
+  );
 }
 
 export default MyApp;

@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
-import Home from "./home/index";
+import Home from "/Components/home/index";
 const defaultQueryFn = async () => {
   return new Promise((resolve) => {
     resolve(loadAsset);

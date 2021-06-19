@@ -1,112 +1,131 @@
 import { useEffect, useState } from "react";
-import Image from 'next/image'
+import Image from "next/image";
 import Search from "./search";
 import { Menu } from "antd";
-import { TwitterOutlined, YoutubeFilled, InstagramFilled, SearchOutlined, CloseOutlined } from "@ant-design/icons";
+import {
+  TwitterOutlined,
+  YoutubeFilled,
+  InstagramFilled,
+  SearchOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
 
 import { accountList } from "../Constants/constants";
 import CONSTANTS from "../Constants/headerConstants";
-import { useStoreApi } from "../Providers/storeApi";
-import { useWeb3 } from "../Providers/getWeb";
-import { Wrapper, WrapperItemContainer, SearchContainer,
-  HeaderContainer, HeaderNav, CreateButton, ConnectButton, Button, HeaderBottomMenu,
-  SearchWrapper, SocialLinkContainer
- } from "./StyledComponents/header-styledComponents";
+import {
+  Wrapper,
+  WrapperItemContainer,
+  SearchContainer,
+  HeaderContainer,
+  HeaderNav,
+  CreateButton,
+  ConnectButton,
+  Button,
+  HeaderBottomMenu,
+  SearchWrapper,
+  SocialLinkContainer,
+} from "./StyledComponents/header-styledComponents";
 export default function Header(props) {
-  const { address, balance, message, setBalance, setAddress } = useStoreApi();
-  const web3 = useWeb3();
-
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
-  const [accountAddress, setAccountAddress] = useState(address ? address : accountList[0]);
+  const [accountAddress, setAccountAddress] = useState(accountList[0]);
 
-  useEffect(()=>{
-    window.ethereum.on("accountsChanged", function(accounts) {
-      setAccountAddress(accounts[0])
-    });    
-  }, [])
-
-
-  const setUserAccount = async () => {
-    if (window.ethereum) {
-      await window.ethereum.enable();
-      web3.eth.getAccounts().then((account) => {
-        setAddress(account[0]);
-        setUserBalance(account[0]);
-      });
-    }
-  };
-
-  const displayAddress = ()=>{
-    return 'Account: '+ accountAddress.substring(1, 4) +'...'+ accountAddress.substring(accountAddress.length-5, accountAddress.length);
-  }
-  const setUserBalance = async (fromAddress) => {
-    await web3.eth.getBalance(fromAddress).then((value) => {
-      const credit = web3.utils.fromWei(value, "ether");
-      setBalance(credit);
+  useEffect(() => {
+    window.ethereum.on("accountsChanged", function (accounts) {
+      setAccountAddress(accounts[0]);
     });
+  }, []);
+
+  const displayAddress = () => {
+    return (
+      "Account: " +
+      accountAddress.substring(1, 4) +
+      "..." +
+      accountAddress.substring(accountAddress.length - 5, accountAddress.length)
+    );
   };
 
-  const sendTransaction = async (e) => {
-    e.preventDefault();
-    const amount = e.target[0].value;
-    const recepeint = e.target[1].value;
-    await web3.eth.sendTransaction({
-      from: address,
-      to: recepeint,
-      value: web3.utils.toWei(amount, "ether"),
-    });
-    setUserBalance(address);
-  };
   const menuFooter = (
     <SocialLinkContainer>
-      <div>  
+      <div>
         <a href="#">
-        <TwitterOutlined/>
+          <TwitterOutlined />
         </a>
       </div>
       <div>
         <a href="#">
-          <svg viewBox="0 0 16 14" fill="none" width="17" height="17" xlmns="http://www.w3.org/2000/svg">
-            <path d="M15.9513 1.29916L13.5438 13.1556C13.377 13.997 12.8902 14.1987 12.21 13.8093L8.542 10.979L6.76804 12.7662C6.56797 12.9748 6.40125 13.1556 6.03445 13.1556C5.55428 13.1556 5.63431 12.9679 5.47425 12.495L4.20714 8.19051L0.572523 7.00834C-0.214421 6.76495 -0.22109 6.20168 0.745918 5.7914L14.9243 0.0891779C15.5711 -0.209841 16.1914 0.256072 15.9446 1.29221L15.9513 1.29916Z"fill="currentColor"></path>
+          <svg
+            viewBox="0 0 16 14"
+            fill="none"
+            width="17"
+            height="17"
+            xlmns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M15.9513 1.29916L13.5438 13.1556C13.377 13.997 12.8902 14.1987 12.21 13.8093L8.542 10.979L6.76804 12.7662C6.56797 12.9748 6.40125 13.1556 6.03445 13.1556C5.55428 13.1556 5.63431 12.9679 5.47425 12.495L4.20714 8.19051L0.572523 7.00834C-0.214421 6.76495 -0.22109 6.20168 0.745918 5.7914L14.9243 0.0891779C15.5711 -0.209841 16.1914 0.256072 15.9446 1.29221L15.9513 1.29916Z"
+              fill="currentColor"
+            ></path>
           </svg>
         </a>
       </div>
       <div>
         <a href="#">
-        <InstagramFilled/>
+          <InstagramFilled />
         </a>
       </div>
       <div>
         <a href="#">
-          <svg viewBox="0 0 18 13" fill="none" width="18" height="18" xlmns="http://www.w3.org/2000/svg">
-            <path fillRule="evenodd" clipRule="evenodd" d="M11.5507 0.0036464H11.5624L11.5612 0L11.5507 0.0036464ZM11.5108 0.0176323L11.5507 0.0036464H11.5252L11.5108 0.0176323ZM11.5039 0.0243315L11.5108 0.0176323L11.4917 0.0243072L11.5039 0.0243315ZM11.5039 0.0243315L11.2748 0.246719C13.8446 0.975936 15.088 2.11473 15.088 2.11473C13.4318 1.30287 11.9393 0.896938 10.4467 0.732864C9.36818 0.56879 8.28967 0.65508 7.37851 0.732864H7.13058C6.54793 0.732864 5.30826 0.975936 3.64711 1.62616C3.06818 1.87287 2.73595 2.03452 2.73595 2.03452C2.73595 2.03452 3.9781 0.816724 6.71529 0.166505L6.54793 0.00243113C6.54793 0.00243113 4.47521 -0.075352 2.2376 1.54594C2.2376 1.54594 0 5.36704 0 10.0778C0 10.0778 1.23967 12.1925 4.64008 12.2727C4.64008 12.2727 5.13595 11.6249 5.63802 11.0549C3.72893 10.4861 2.98512 9.34857 2.98512 9.34857C2.98512 9.34857 3.15124 9.42878 3.40041 9.59164H3.47479C3.50979 9.59164 3.52722 9.60778 3.54568 9.62487C3.54684 9.62595 3.548 9.62702 3.54917 9.6281V9.63539C3.56901 9.65484 3.58636 9.67185 3.62355 9.67185C3.6596 9.68642 3.69564 9.70096 3.73164 9.71548C4.10416 9.8658 4.47123 10.0139 4.77645 10.158C5.35413 10.4035 6.09669 10.6478 7.00785 10.8094C8.16074 10.9735 9.48223 11.0525 10.9872 10.8094L11.0353 10.7988L11.0353 10.7988C11.7631 10.6384 12.4908 10.4779 13.2186 10.1592C13.3516 10.0923 13.4931 10.0255 13.6419 9.95511C14.0339 9.76978 14.4769 9.56038 14.9504 9.26349C14.9504 9.26349 14.2066 10.4011 12.2169 10.9699C12.626 11.5362 13.2025 12.1852 13.2025 12.1852C15.9898 12.1255 17.3804 10.6948 17.8328 10.2295C17.9325 10.1269 17.9866 10.0713 18 10.0875C18 5.38405 15.75 1.55566 15.75 1.55566C13.7464 0.097178 11.8701 0.0257804 11.5039 0.0243315ZM6.13886 5.36701C7.00663 5.36701 7.70828 6.09623 7.70828 6.98952C7.70828 7.88889 7.00167 8.61811 6.1339 8.61811C5.26613 8.61811 4.55952 7.88889 4.55952 6.99682C4.55952 6.09745 5.26613 5.37066 6.1339 5.37066L6.13886 5.36701ZM11.7707 5.36701C12.6422 5.36701 13.3451 6.09623 13.3451 6.98952C13.3451 7.88889 12.6384 8.61811 11.7707 8.61811C10.9029 8.61811 10.1963 7.88889 10.1963 6.99682C10.1988 6.09745 10.9066 5.37066 11.7707 5.37066V5.36701Z" fill="currentColor"></path>
+          <svg
+            viewBox="0 0 18 13"
+            fill="none"
+            width="18"
+            height="18"
+            xlmns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M11.5507 0.0036464H11.5624L11.5612 0L11.5507 0.0036464ZM11.5108 0.0176323L11.5507 0.0036464H11.5252L11.5108 0.0176323ZM11.5039 0.0243315L11.5108 0.0176323L11.4917 0.0243072L11.5039 0.0243315ZM11.5039 0.0243315L11.2748 0.246719C13.8446 0.975936 15.088 2.11473 15.088 2.11473C13.4318 1.30287 11.9393 0.896938 10.4467 0.732864C9.36818 0.56879 8.28967 0.65508 7.37851 0.732864H7.13058C6.54793 0.732864 5.30826 0.975936 3.64711 1.62616C3.06818 1.87287 2.73595 2.03452 2.73595 2.03452C2.73595 2.03452 3.9781 0.816724 6.71529 0.166505L6.54793 0.00243113C6.54793 0.00243113 4.47521 -0.075352 2.2376 1.54594C2.2376 1.54594 0 5.36704 0 10.0778C0 10.0778 1.23967 12.1925 4.64008 12.2727C4.64008 12.2727 5.13595 11.6249 5.63802 11.0549C3.72893 10.4861 2.98512 9.34857 2.98512 9.34857C2.98512 9.34857 3.15124 9.42878 3.40041 9.59164H3.47479C3.50979 9.59164 3.52722 9.60778 3.54568 9.62487C3.54684 9.62595 3.548 9.62702 3.54917 9.6281V9.63539C3.56901 9.65484 3.58636 9.67185 3.62355 9.67185C3.6596 9.68642 3.69564 9.70096 3.73164 9.71548C4.10416 9.8658 4.47123 10.0139 4.77645 10.158C5.35413 10.4035 6.09669 10.6478 7.00785 10.8094C8.16074 10.9735 9.48223 11.0525 10.9872 10.8094L11.0353 10.7988L11.0353 10.7988C11.7631 10.6384 12.4908 10.4779 13.2186 10.1592C13.3516 10.0923 13.4931 10.0255 13.6419 9.95511C14.0339 9.76978 14.4769 9.56038 14.9504 9.26349C14.9504 9.26349 14.2066 10.4011 12.2169 10.9699C12.626 11.5362 13.2025 12.1852 13.2025 12.1852C15.9898 12.1255 17.3804 10.6948 17.8328 10.2295C17.9325 10.1269 17.9866 10.0713 18 10.0875C18 5.38405 15.75 1.55566 15.75 1.55566C13.7464 0.097178 11.8701 0.0257804 11.5039 0.0243315ZM6.13886 5.36701C7.00663 5.36701 7.70828 6.09623 7.70828 6.98952C7.70828 7.88889 7.00167 8.61811 6.1339 8.61811C5.26613 8.61811 4.55952 7.88889 4.55952 6.99682C4.55952 6.09745 5.26613 5.37066 6.1339 5.37066L6.13886 5.36701ZM11.7707 5.36701C12.6422 5.36701 13.3451 6.09623 13.3451 6.98952C13.3451 7.88889 12.6384 8.61811 11.7707 8.61811C10.9029 8.61811 10.1963 7.88889 10.1963 6.99682C10.1988 6.09745 10.9066 5.37066 11.7707 5.37066V5.36701Z"
+              fill="currentColor"
+            ></path>
           </svg>
         </a>
       </div>
       <div>
         <a href="#">
-        <YoutubeFilled />
+          <YoutubeFilled />
         </a>
       </div>
       <div>
         <a href="#">
-          <svg viewBox="0 0 18 12" fill="none" width="20" height="20" xlmns="http://www.w3.org/2000/svg">
-            <path d="M5.07644 11.25C7.88022 11.25 10.1531 8.89939 10.1531 5.99991C10.1531 3.10043 7.88004 0.75 5.07644 0.75C2.27284 0.75 0 3.09972 0 5.99991C0 8.9001 2.27267 11.25 5.07644 11.25Z" fill="currentColor"></path>
-            <path d="M13.1839 10.9419C14.5857 10.9419 15.7222 8.72942 15.7222 5.99991C15.7222 3.27111 14.5857 1.0579 13.1839 1.0579C11.7821 1.0579 10.6455 3.27111 10.6455 5.99991C10.6455 8.72871 11.7821 10.9419 13.1839 10.9419Z" fill="currentColor"></path>
-            <path d="M17.1072 10.4277C17.6003 10.4277 18 8.44542 18 5.99991C18 3.55458 17.6006 1.57207 17.1074 1.57207C16.6142 1.57207 16.2145 3.55511 16.2145 5.99991C16.2145 8.44471 16.6142 10.4277 17.1072 10.4277Z" fill="currentColor"></path>
+          <svg
+            viewBox="0 0 18 12"
+            fill="none"
+            width="20"
+            height="20"
+            xlmns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5.07644 11.25C7.88022 11.25 10.1531 8.89939 10.1531 5.99991C10.1531 3.10043 7.88004 0.75 5.07644 0.75C2.27284 0.75 0 3.09972 0 5.99991C0 8.9001 2.27267 11.25 5.07644 11.25Z"
+              fill="currentColor"
+            ></path>
+            <path
+              d="M13.1839 10.9419C14.5857 10.9419 15.7222 8.72942 15.7222 5.99991C15.7222 3.27111 14.5857 1.0579 13.1839 1.0579C11.7821 1.0579 10.6455 3.27111 10.6455 5.99991C10.6455 8.72871 11.7821 10.9419 13.1839 10.9419Z"
+              fill="currentColor"
+            ></path>
+            <path
+              d="M17.1072 10.4277C17.6003 10.4277 18 8.44542 18 5.99991C18 3.55458 17.6006 1.57207 17.1074 1.57207C16.6142 1.57207 16.2145 3.55511 16.2145 5.99991C16.2145 8.44471 16.6142 10.4277 17.1072 10.4277Z"
+              fill="currentColor"
+            ></path>
           </svg>
         </a>
       </div>
-  </SocialLinkContainer>
+    </SocialLinkContainer>
   );
   if (search)
     return (
       <Wrapper>
-        <HeaderContainer
-          
-          style={{ borderBottom: "1px solid #e5e5e5" }}
-        >
+        <HeaderContainer style={{ borderBottom: "1px solid #e5e5e5" }}>
           <Button
             onClick={() => {
               setSearch(false);
@@ -115,7 +134,7 @@ export default function Header(props) {
             <CloseOutlined />
           </Button>
           <SearchWrapper style={{ flex: 1 }}>
-            <SearchOutlined style={{marginRight: "10px", color: "inherit"}}/>
+            <SearchOutlined style={{ marginRight: "10px", color: "inherit" }} />
             <input
               type="text"
               style={{ flex: 1, width: "auto" }}
@@ -125,9 +144,7 @@ export default function Header(props) {
         </HeaderContainer>
         <SearchContainer>
           <br />
-          <center>
-            {CONSTANTS.searchBy}
-          </center>
+          <center>{CONSTANTS.searchBy}</center>
         </SearchContainer>
       </Wrapper>
     );
@@ -135,11 +152,11 @@ export default function Header(props) {
     return (
       <Wrapper>
         <HeaderContainer>
-          <div style={{marginRight: "15px"}}>
-        <a href="/">
-         <Image src="/logo/logo.png" width="40" height="40"/>
-        </a>
-      </div>
+          <div style={{ marginRight: "15px" }}>
+            <a href="/">
+              <Image src="/logo/logo.png" width="40" height="40" />
+            </a>
+          </div>
           {/* might be changed to dropdown */}
           <Button className={`mx-3`}>{CONSTANTS.english}</Button>
           <div style={{ flex: 1 }}></div>
@@ -148,7 +165,7 @@ export default function Header(props) {
               setMenu(false);
             }}
           >
-          <CloseOutlined />
+            <CloseOutlined />
           </Button>
         </HeaderContainer>
         <WrapperItemContainer>
@@ -162,16 +179,17 @@ export default function Header(props) {
             <li>
               <a href="#">{CONSTANTS.howItWorks}</a>
             </li>
-
           </ul>
 
           <HeaderBottomMenu>
             {menuFooter}
             <div style={{ display: "flex", padding: "20px 10px" }}>
-              <Button style={{ flex: 1, backgroundColor: "#0066ff", color: "#fff" }} >
+              <Button
+                style={{ flex: 1, backgroundColor: "#0066ff", color: "#fff" }}
+              >
                 {CONSTANTS.create}
               </Button>
-              <CreateButton style={{ flex: 1 }} >
+              <CreateButton style={{ flex: 1 }}>
                 {CONSTANTS.connect}
               </CreateButton>
             </div>
@@ -181,12 +199,15 @@ export default function Header(props) {
     );
   return (
     <HeaderNav>
-      <div style={{marginRight: "15px"}}>
+      <div style={{ marginRight: "15px" }}>
         <a href="/">
-         <Image src="/logo/logo.png" width="40" height="40"/>
+          <Image src="/logo/logo.png" width="40" height="40" />
         </a>
       </div>
-      <div className="d-none d-xl-flex px-1" style={{ flex: "1", marginRight: "260px", height: "40px" }}>
+      <div
+        className="d-none d-xl-flex px-1"
+        style={{ flex: "1", marginRight: "260px", height: "40px" }}
+      >
         <Search />
       </div>
       <ul style={{ paddingRight: "30px" }}>
@@ -196,7 +217,7 @@ export default function Header(props) {
         <li className="d-none d-lg-flex">
           <a href="#">{CONSTANTS.myItems}</a>
         </li>
-       
+
         <li className="d-none d-lg-flex">
           <a href="#">{CONSTANTS.howItWorks}</a>
         </li>
@@ -204,11 +225,14 @@ export default function Header(props) {
       <div style={{ flex: 1 }} className="d-block d-xl-none"></div>
       <div style={{ display: "flex" }}>
         <CreateButton className={`d-none d-lg-block`}>
-        {CONSTANTS.create}
+          {CONSTANTS.create}
         </CreateButton>
-        <ConnectButton className={`d-none d-lg-block` } onClick={() => setUserAccount()} >
+        <ConnectButton
+          className={`d-none d-lg-block`}
+          onClick={() => setUserAccount()}
+        >
           {`${CONSTANTS.connect} ${CONSTANTS.wallet}`}
-        </ConnectButton> 
+        </ConnectButton>
 
         <Button
           onClick={() => {
@@ -216,7 +240,7 @@ export default function Header(props) {
           }}
           className={`d-block d-xl-none`}
         >
-         <SearchOutlined />
+          <SearchOutlined />
         </Button>
         <Button
           onClick={() => {
