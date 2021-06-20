@@ -11,6 +11,7 @@ import OpenSeaAPI from "/Utils/openseaApi";
 import { isMobileDevice } from "../../Constants/constants";
 import HandleNotification from "/Components/commons/handleNotification";
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
+import bundlesAPI from "/Constants/lists";
 function Home() {
   const [bundles, setBundles] = useState([]);
   const [topSellers, setTopSellers] = useState();
@@ -35,8 +36,11 @@ function Home() {
   const loadBundles = async () => {
     try {
       const { bundles } = await OpenSeaAPI.getBundles();
-      console.log("bundles are as ", bundles);
-      setBundles(bundles);
+      if (bundles) {
+        setBundles(bundles);
+      } else {
+        const bunds = bundlesAPI;
+      }
     } catch (e) {
       HandleNotification("error", e.message, "Server Is Not Available");
     }
@@ -45,7 +49,6 @@ function Home() {
     try {
       const { orders } = await OpenSeaAPI.getLiveAuctions();
       setLiveAuctions(orders);
-      console.log("live auctions are as ", orders);
     } catch (e) {
       HandleNotification("error", e.message, "Server Is Not Available");
     }
@@ -54,7 +57,6 @@ function Home() {
     try {
       const { orders } = await OpenSeaAPI.getTopSellers();
       const topSellers = OpenSeaAPI.getTopSellersDatails(orders);
-      console.log("top selers are as ", topSellers);
       setTopSellers(topSellers);
     } catch (e) {
       HandleNotification("error", e.message, "Server Is Not Available");
