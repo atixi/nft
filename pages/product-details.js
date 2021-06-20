@@ -1,9 +1,10 @@
 import { Component, useEffect, useState } from "react";
 import Header from "/Components/header";
-import { Tabs, Menu, Dropdown, Image, Statistic, Col} from "antd";
+import { Tabs, Menu, Dropdown, Image, Statistic, Col } from "antd";
 import Profile from "/Components/profileAvatar";
 import CONSTANTS from "/Constants/productDetailsConstants";
-import OpenSeaAPI from "../pages/api/openseaApi";
+import OpenSeaAPI from "/Utils/openseaApi";
+import {useRouter} from "next/router"
 import {
   Wrapper,
   Content,
@@ -37,7 +38,10 @@ import {
   ImageCon,
   CounterLarge,
 } from "../Components/StyledComponents/productDetails-styledComponents";
-import {getAuctionPriceDetails,getAuctionTimeDetails } from "/Constants/constants";
+import {
+  getAuctionPriceDetails,
+  getAuctionTimeDetails,
+} from "/Constants/constants";
 
 const { TabPane } = Tabs;
 const { Countdown } = Statistic;
@@ -66,20 +70,18 @@ const menu = (
   </DropdownMenu>
 );
 function ProductPage() {
+  const router = useRouter();
   const [asset, setAsset] = useState({});
-  const tokenAddress = new URLSearchParams(window.location.search).getAll("ta");
-  const tokenId = new URLSearchParams(window.location.search).getAll("ti");
-  const [bids, setBids] = useState([])
+  const {ta} = router.query;
+  const {ti} = router.query;
+  const [bids, setBids] = useState([]);
 
   useEffect(() => {
-    loadAsset(
-      tokenAddress,
-      tokenId
-    );
-  }, []);
+    ta && loadAsset(ta, ti);
+  }, [ta]);
 
-  const loadAsset = async (tokenAddress, tokenId) => {
-    let asset = await OpenSeaAPI.getAssetDetails(tokenAddress, tokenId);
+  const loadAsset = async (ta, ti) => {
+    let asset = await OpenSeaAPI.getAssetDetails(ta, ti);
     setAsset(asset);
     setBids(asset.asset.buyOrders);
   };
@@ -94,7 +96,7 @@ function ProductPage() {
       name: "Saltbae Nusret",
     },
   };
-  const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;  
+  const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;
   return (
     <>
       <Header />
@@ -103,12 +105,12 @@ function ProductPage() {
           <ItemImageContainer className=" text-center">
             {/* <img className={"itemImage"} src={asset.asset?.imageUrl} /> */}
             <ImageCon>
-            <Image
-              src={`${asset.asset?.imageUrl}?x-oss-process=image/blur,r_50,s_50/quality,q_1/resize,m_mfit,h_200,w_200`}
-              preview={{
-                src: `${asset.asset?.imageUrl}`,
-              }}
-            />
+              <Image
+                src={`${asset.asset?.imageUrl}?x-oss-process=image/blur,r_50,s_50/quality,q_1/resize,m_mfit,h_200,w_200`}
+                preview={{
+                  src: `${asset.asset?.imageUrl}`,
+                }}
+              />
             </ImageCon>
           </ItemImageContainer>
           <ItemInfo className={"float-none float-sm-left"}>
@@ -173,7 +175,9 @@ function ProductPage() {
                   <span className="text-gradient">Unlockable</span>
                 </button>
               </div>
-              <ItemDescriptionText>{asset.asset?.collection?.description}</ItemDescriptionText>
+              <ItemDescriptionText>
+                {asset.asset?.collection?.description}
+              </ItemDescriptionText>
               <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
               <br />
               <AvatarContainer>
@@ -183,7 +187,9 @@ function ProductPage() {
                   tick={false}
                 />
 
-                <span style={{ flex: "1" }}>{asset.asset?.owner?.user.username}</span>
+                <span style={{ flex: "1" }}>
+                  {asset.asset?.owner?.user?.username}
+                </span>
               </AvatarContainer>
               <OwnerProfitContainer>
                 <small>{"10% of sales will go to creator"}</small>
@@ -199,38 +205,44 @@ function ProductPage() {
                       tick={false}
                     />
 
-                    <span style={{ flex: "1" }}>{asset.asset?.owner?.user.username}</span>
+                    <span style={{ flex: "1" }}>
+                      {asset.asset?.owner?.user?.username}
+                    </span>
                   </AvatarContainer>
                 </TabPane>
                 <TabPane key="2" tab={<span>{CONSTANTS.bids}</span>}>
-                  {bids && bids.map(order =>(
-
-                  <LastBidder id={order.owner?.address}>
-                    <div className={"content"}>
-                      <span className="avatarContainer">
-                        <Profile
-                          profile={order.makerAccount?.profile_img_url}
-                          size={"medium"}
-                          tick={false}
-                        />
-                      </span>
-                      <span className={"bidInfo"}>
-                        <span className={"bidedPriceContainer"}>
-                          <span className={"bidedPriceText"}>
-                            <span className={"bidValue"}>{`${getAuctionPriceDetails(order).priceBase} wETH`}</span>
-                            {" by "}
-                            <a className={"bidderLink"}>{order.makerAccount?.user?.username}</a>
+                  {bids &&
+                    bids.map((order) => (
+                      <LastBidder id={order.owner?.address}>
+                        <div className={"content"}>
+                          <span className="avatarContainer">
+                            <Profile
+                              profile={order.makerAccount?.profile_img_url}
+                              size={"medium"}
+                              tick={false}
+                            />
                           </span>
-                        </span>
-                        <span className={"bidOwnerAndDateContainer"}>
-                          <span className={"bidDate"}>
-                            {"6/2/2021, 11:50 PM"}
+                          <span className={"bidInfo"}>
+                            <span className={"bidedPriceContainer"}>
+                              <span className={"bidedPriceText"}>
+                                <span className={"bidValue"}>{`${
+                                  getAuctionPriceDetails(order).priceBase
+                                } wETH`}</span>
+                                {" by "}
+                                <a className={"bidderLink"}>
+                                  {order.makerAccount?.user?.username}
+                                </a>
+                              </span>
+                            </span>
+                            <span className={"bidOwnerAndDateContainer"}>
+                              <span className={"bidDate"}>
+                                {"6/2/2021, 11:50 PM"}
+                              </span>
+                            </span>
                           </span>
-                        </span>
-                      </span>
-                    </div>
-                  </LastBidder>
-                  ))}
+                        </div>
+                      </LastBidder>
+                    ))}
                 </TabPane>
                 <TabPane key="3" tab={<span>{CONSTANTS.owners}</span>}>
                   <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
@@ -242,7 +254,9 @@ function ProductPage() {
                       tick={false}
                     />
 
-                    <span style={{ flex: "1" }}>{asset.asset?.owner?.user.username}</span>
+                    <span style={{ flex: "1" }}>
+                      {asset.asset?.owner?.user?.username}
+                    </span>
                   </AvatarContainer>
                 </TabPane>
                 <TabPane key="4" tab={<span>{CONSTANTS.history}</span>}>
@@ -273,7 +287,6 @@ function ProductPage() {
                       </span>
                     </div>
                   </LastBidder>
-                  
                 </TabPane>
               </Tabs>
             </ItemDetails>
@@ -281,7 +294,8 @@ function ProductPage() {
               <BidCountdown>
                 <BidOwnerContainer className={"border-right pr-2 pl-2"}>
                   <BidOwner className={"float-left"}>
-                    {CONSTANTS.highestBid} <a>{asset.asset?.owner?.user?.username}</a>
+                    {CONSTANTS.highestBid}{" "}
+                    <a>{asset.asset?.owner?.user?.username}</a>
                   </BidOwner>
                   <BidPrice>
                     <BidOwnerProfile className={"mr-3"}>
@@ -306,7 +320,14 @@ function ProductPage() {
                   <div className={"auctionDiv"}>
                     <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
                     <AuctionTimer>
-                     <Countdown value={deadline} valueStyle={{color: "red", fontSize: "30px !important"}} format={`D[d] HH[h] mm[m] ss[s]`} />
+                      <Countdown
+                        value={deadline}
+                        valueStyle={{
+                          color: "red",
+                          fontSize: "30px !important",
+                        }}
+                        format={`D[d] HH[h] mm[m] ss[s]`}
+                      />
                     </AuctionTimer>
                   </div>
                 </Auction>
@@ -318,7 +339,12 @@ function ProductPage() {
                 >
                   Buy
                 </FooterButton>
-                <FooterButton color={"#0066ff"} style={{background: "#0066ff26"}}>Place a bid</FooterButton>
+                <FooterButton
+                  color={"#0066ff"}
+                  style={{ background: "#0066ff26" }}
+                >
+                  Place a bid
+                </FooterButton>
               </ButtonContainer>
               <center>Service fee 2.5%. 1.025 ETH (~$4,383.71)</center>
             </ItemFooter>

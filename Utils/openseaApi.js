@@ -2,10 +2,13 @@ import * as Web3 from "web3";
 import { OpenSeaPort, Network } from "opensea-js";
 import client from "./openSeaClient";
 import _, { reject } from "lodash";
-const provider = new Web3.providers.HttpProvider("https://mainnet.infura.io");
+const provider = new Web3.providers.HttpProvider(
+  // "https://mainnet.infura.io/v3/7ca37bed6f77481eb889a45bc8520e6c"
+  "https://rinkeby.infura.io/v3/7ca37bed6f77481eb889a45bc8520e6c"
+);
 const seaport = new OpenSeaPort(provider, {
   networkName: Network.Main,
-  // apiKey: "7ca37bed6f77481eb889a45bc8520e6c",
+  apiKey: "7ca37bed6f77481eb889a45bc8520e6c",
 });
 async function getAccount() {
   let error = null;
@@ -18,70 +21,38 @@ async function getAccount() {
 }
 /// handled and checked functions //////////////////////////////////////////////////////////////////////
 async function getBundles() {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const { bundles } = await seaport.api.getBundles({
-        on_sale: true,
-        limit: 50,
-      });
-      resolve(bundles);
-    } catch (e) {
-      reject(e);
-    }
+  return await seaport.api.getBundles({
+    on_sale: true,
+    limit: 50,
   });
 }
 const getLiveAuctions = () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const { orders } = await seaport.api.getOrders({
-        bundled: false,
-        saleKind: 1,
-        is_expired: false,
-        limit: 50,
-        on_sale: true,
-      });
-      resolve(orders);
-    } catch (e) {
-      reject(e);
-    }
+  return seaport.api.getOrders({
+    bundled: false,
+    saleKind: 1,
+    is_expired: false,
+    limit: 50,
+    on_sale: true,
   });
 };
-const getCollections = async () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const { assets } = await seaport.api.getAssets({
-        limit: 50,
-      });
-      resolve(assets);
-    } catch (e) {
-      reject(e);
-    }
+
+const getCollections = () => {
+  return seaport.api.getAssets({
+    limit: 50,
   });
 };
-const getExplores = async () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const { data } = await client.get("assets?limit=50");
-      resolve(data?.assets);
-    } catch (e) {
-      reject(e);
-    }
-  });
+
+const getExplores = () => {
+  return client.get("assets?limit=50");
 };
-const getTopSellers = async () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const { orders } = await seaport.api.getOrders({
-        bundled: false,
-        is_expired: false,
-        sale_kind: 1,
-        include_invalid: false,
-        limit: 50,
-      });
-      resolve(orders);
-    } catch (e) {
-      reject(e);
-    }
+
+const getTopSellers = () => {
+  return seaport.api.getOrders({
+    bundled: false,
+    is_expired: false,
+    sale_kind: 1,
+    include_invalid: false,
+    limit: 50,
   });
 };
 // not checket functions

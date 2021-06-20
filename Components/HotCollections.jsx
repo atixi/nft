@@ -14,11 +14,11 @@ const breakPoints = [
 export default function HotCollections({data}) {
   const collections = data;
     return (
-      <div style={{padding:"25px 10px"}}>
+      <div className={"mt-5"}>
           <SectionHeading>{"Hot collections"} 💥</SectionHeading>
         <Carousel breakPoints={breakPoints} pagination={false} transitionMs={1000}>
-          {collections && collections.map((item) => (
-             <CollectionCard> 
+          {collections && collections.map((item, index) => (
+             <CollectionCard key={index}> 
              <CardImageContainer>
                  <img style={{width: "100%"}} src={item.imagePreviewUrl}/>
              </CardImageContainer>

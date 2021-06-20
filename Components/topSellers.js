@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "react-multi-carousel/lib/styles.css";
-import OpenSeaAPI from "../pages/api/openseaApi";
+import OpenSeaAPI from "/Utils/openseaApi";
+import { SectionHeading } from "./StyledComponents/globalStyledComponents";
 import {
   ListCounter,
   SellerPrice,
@@ -10,7 +11,7 @@ import {
   AvatarContainer,
   SellerDetails,
 } from "./StyledComponents/topSeller-styledComponents";
-
+import Link from "next/link"
 function TopSellers({ data }) {
   const [selectedSeller, setSelectedSeller] = useState([]);
   const topSellerDetails = async (top) => {
@@ -40,15 +41,26 @@ function TopSellers({ data }) {
     <>
       {topSellers && (
         <>
-          <div className="p-3"><h3>{"Top Sellers in 1 Day"}</h3></div>
+          <div className="pt-3">
+            <SectionHeading>{"Top Sellers in 1 Day"}</SectionHeading>
+          </div>
           <TopSellerContainer>
             {data &&
               data.map((seller, index) => (
-                <a key={seller.address} href={`/profile/index?address=${seller.address}&talent=${seller.talent}&avatar=${seller.profile_img_url}`}>
-                <TopSellerItem  key={seller.name} onClick={() => topSellerDetails(seller)} >
+                <Link
+                  key={seller.address}
+                  href = {{pathname: "/profile/index",
+                          query: {address: seller.address, talent: seller.talent, avatar: seller.profile_img_url}
+                          }}
+                  // href={`/profile/index?address=${seller.address}&talent=${seller.talent}&avatar=${seller.profile_img_url}`}
+                ><a>
+                  <TopSellerItem
+                    key={seller.name}
+                    onClick={() => topSellerDetails(seller)}
+                  >
                     <ListCounter>{index + 1}</ListCounter>
                     <AvatarContainer>
-                      <img src={seller.profile_img_url}  />
+                      <img src={seller.profile_img_url} />
                     </AvatarContainer>
                     <SellerDetails>
                       <SellerName key={seller.talent + seller.talent}>
@@ -56,11 +68,12 @@ function TopSellers({ data }) {
                       </SellerName>
                       <SellerPrice>
                         {/* {seller.stats?.average_price} */}
-                        {seller.number_of_assets+" assets"}
+                        {seller.number_of_assets + " assets"}
                       </SellerPrice>
                     </SellerDetails>
                   </TopSellerItem>
-                </a>
+                  </a>
+                </Link>
               ))}
           </TopSellerContainer>
         </>
