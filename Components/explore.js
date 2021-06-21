@@ -38,6 +38,7 @@ const exploreMore = (
 );
 function Explore({ data }) {
   const explores = data;
+  console.log(explores)
   return (
     <>
       <div>

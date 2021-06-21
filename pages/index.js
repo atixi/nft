@@ -11,26 +11,9 @@ import OpenSeaAPI from "/Utils/openseaApi";
 import { isMobileDevice } from "/Constants/constants";
 import HandleNotification from "/Components/commons/handleNotification";
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
+import openseaApi from "../Utils/openseaApi";
 
-function Home({ topSellers, bundles, liveAuctions, collections }) {
-  // const [explores, setExplores] = useState();
-
-  // const initData = () => {
-  //   // loadTopSellers();
-  //   loadExplores();
-  // };
-
-  // const loadExplores = async () => {
-  //   try {
-  //     const { data } = await OpenSeaAPI.getExplores();
-  //     const explores = data?.assets;
-  //     const exps = OpenSeaAPI.getExploresDetails(explores);
-  //     setExplores(exps);
-  //   } catch (e) {
-  //     HandleNotification("error", e.message, "Server Is Not Available");
-  //   }
-  // };
-  // console.log(topSellers)
+function Home({ topSellers, liveAuctions, collections, explores }) {
   return (
     <>
       <Head>
@@ -45,7 +28,7 @@ function Home({ topSellers, bundles, liveAuctions, collections }) {
         <TopSellers data={topSellers} />
         <LiveAuctions data={liveAuctions} />
         <HotCollections data={collections} />
-        {/* {explores && <Explore data={explores} />} */}
+        <Explore data={explores} />
       </MainWrapper>
       <Footer />
     </>
@@ -66,16 +49,29 @@ export const getServerSideProps = async () => {
     const assets = await OpenSeaAPI.getCollections()
     const topSellers = OpenSeaAPI.getTopSellersDetails(orders.orders);
     const collections = OpenSeaAPI.getCollectionDetails(assets.assets);
+    console.log(assets.assets)
+    const { data } = await openseaApi.getExplores()
+    const explores = OpenSeaAPI.getExploresDetails(data?.assets)
     return {
       props: {
         topSellers: JSON.parse(JSON.stringify(topSellers)),
         // bundles: JSON.parse(JSON.stringify(bundles.bundles)),
         liveAuctions: JSON.parse(JSON.stringify(liveAuctions.orders)),
-        collections: JSON.parse(JSON.stringify(collections))
+        collections: JSON.parse(JSON.stringify(collections)),
+        explores: JSON.parse(JSON.stringify(explores))
       }
     }
   } catch (error) {
     console.log(error)
+    return {
+      props: {
+        topSellers: [],
+        // bundles: JSON.parse(JSON.stringify(bundles.bundles)),
+        liveAuctions: [],
+        collections: [],
+        explores: []
+      }
+    }
   }
 
 
