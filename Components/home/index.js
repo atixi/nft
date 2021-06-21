@@ -51,7 +51,7 @@ function Home() {
   const loadTopSellers = async () => {
     try {
       const { orders } = await OpenSeaAPI.getTopSellers();
-      const topSellers = OpenSeaAPI.getTopSellersDatails(orders);
+      const topSellers = OpenSeaAPI.getTopSellersDetails(orders);
       setTopSellers(topSellers);
     } catch (e) {
       HandleNotification("error", e.message, "Server Is Not Available");

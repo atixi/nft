@@ -153,9 +153,9 @@ function Header(props) {
       <Wrapper>
         <HeaderContainer>
           <div style={{ marginRight: "15px" }}>
-            <a href="/">
+            <Link href="/">
               <Image src="/logo/logo.png" width="40" height="40" />
-            </a>
+            </Link>
           </div>
           {/* might be changed to dropdown */}
           <Button className={`mx-3`}>{CONSTANTS.english}</Button>
@@ -200,9 +200,11 @@ function Header(props) {
   return (
     <HeaderNav>
       <div style={{ marginRight: "15px" }}>
-        <a href="/">
-          <Image src="/logo/logo.png" width="40" height="40" />
-        </a>
+        <Link href="/" passHref>
+          <a>
+            <Image src="/logo/logo.png" width="40" height="40" />
+          </a>
+        </Link>
       </div>
       <div
         className="d-none d-xl-flex px-1"
@@ -228,11 +230,11 @@ function Header(props) {
           {CONSTANTS.create}
         </CreateButton>
         <ConnectButton>
-        <Link href={"/wallet"} passHref>
-          <a
-            className={`d-none d-lg-block`}
-          >{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
-        </Link>
+          <Link href={"/wallet"} passHref>
+            <a
+              className={`d-none d-lg-block`}
+            >{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
+          </Link>
         </ConnectButton>
         <Button
           onClick={() => {
