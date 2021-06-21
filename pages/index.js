@@ -35,45 +35,23 @@ function Home({ topSellers, liveAuctions, collections, explores }) {
   );
 }
 export const getServerSideProps = async () => {
-  // const [orders, liveAuctions, bundles, assets] = await Promise.all([
-  //   OpenSeaAPI.getOrders({}),
-  //   OpenSeaAPI.getOrders({ "on_sale": true }),
-  //   OpenSeaAPI.getBundles(),
-  //   OpenSeaAPI.getCollections()
-  // ])
-  try {
-    const orders = await OpenSeaAPI.getOrders({})
 
-    const liveAuctions = await OpenSeaAPI.getOrders({ "on_sale": true })
-    // const bundles = await OpenSeaAPI.getBundles()
-    const assets = await OpenSeaAPI.getCollections()
-    const topSellers = OpenSeaAPI.getTopSellersDetails(orders.orders);
-    const collections = OpenSeaAPI.getCollectionDetails(assets.assets);
-    console.log(assets.assets)
-    const { data } = await openseaApi.getExplores()
-    const explores = OpenSeaAPI.getExploresDetails(data?.assets)
-    return {
-      props: {
-        topSellers: JSON.parse(JSON.stringify(topSellers)),
-        // bundles: JSON.parse(JSON.stringify(bundles.bundles)),
-        liveAuctions: JSON.parse(JSON.stringify(liveAuctions.orders)),
-        collections: JSON.parse(JSON.stringify(collections)),
-        explores: JSON.parse(JSON.stringify(explores))
-      }
-    }
-  } catch (error) {
-    console.log(error)
-    return {
-      props: {
-        topSellers: [],
-        // bundles: JSON.parse(JSON.stringify(bundles.bundles)),
-        liveAuctions: [],
-        collections: [],
-        explores: []
-      }
+  const orders = await OpenSeaAPI.getOrders({})
+
+  const liveAuctions = await OpenSeaAPI.getOrders({ "on_sale": true })
+  // const bundles = await OpenSeaAPI.getBundles()
+  const assets = await OpenSeaAPI.getCollections()
+  const topSellers = OpenSeaAPI.getTopSellersDetails(orders.orders);
+  const collections = OpenSeaAPI.getCollectionDetails(assets.assets);
+  const { data } = await openseaApi.getExplores()
+  const explores = OpenSeaAPI.getExploresDetails(data?.assets)
+  return {
+    props: {
+      topSellers: JSON.parse(JSON.stringify(topSellers)),
+      liveAuctions: JSON.parse(JSON.stringify(liveAuctions.orders)),
+      collections: JSON.parse(JSON.stringify(collections)),
+      explores: JSON.parse(JSON.stringify(explores))
     }
   }
-
-
 }
 export default Home;
