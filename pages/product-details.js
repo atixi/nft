@@ -1,47 +1,16 @@
-import { Component, useEffect, useState } from "react";
-import Header from "/Components/header";
-import { Tabs, Menu, Dropdown, Image, Statistic, Col } from "antd";
+import { Dropdown, Image, Menu, Statistic, Tabs } from "antd";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import {
+  Auction, AuctionLabel, AuctionTimer, AvatarContainer, BidCountdown, BidOwner, BidOwnerContainer, BidOwnerProfile, BidPrice, BidPriceValue, ButtonContainer, Content, DropdownMenu, FooterButton, ImageCon, ItemDescriptionText, ItemDetails, ItemDetailsHeader, ItemFooter, ItemImageContainer, ItemInfo, ItemLink, ItemName, ItemTopButtonContainer, LastBidder, OwnerProfitContainer, PriceInCryptoContainer,
+  PriceInDollarContainer, Wrapper
+} from "../Components/StyledComponents/productDetails-styledComponents";
 import Profile from "/Components/profileAvatar";
+import {
+  getAuctionPriceDetails
+} from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import OpenSeaAPI from "/Utils/openseaApi";
-import {useRouter} from "next/router"
-import {
-  Wrapper,
-  Content,
-  ItemTopButtonContainer,
-  ItemDetailsHeader,
-  Auction,
-  BidOwnerContainer,
-  Counter,
-  BidPriceValue,
-  BidOwnerProfile,
-  AuctionTimer,
-  BidCountdown,
-  LastBidder,
-  AuctionLabel,
-  PriceInCryptoContainer,
-  PriceInDollarContainer,
-  BidOwner,
-  BidPrice,
-  FooterButton,
-  AvatarContainer,
-  ButtonContainer,
-  OwnerProfitContainer,
-  ItemImageContainer,
-  ItemDescriptionText,
-  DropdownMenu,
-  ItemLink,
-  ItemInfo,
-  ItemDetails,
-  ItemFooter,
-  ItemName,
-  ImageCon,
-  CounterLarge,
-} from "../Components/StyledComponents/productDetails-styledComponents";
-import {
-  getAuctionPriceDetails,
-  getAuctionTimeDetails,
-} from "/Constants/constants";
 
 const { TabPane } = Tabs;
 const { Countdown } = Statistic;
@@ -211,8 +180,8 @@ function ProductPage() {
                 </TabPane>
                 <TabPane key="2" tab={<span>{CONSTANTS.bids}</span>}>
                   {bids &&
-                    bids.map((order) => (
-                      <LastBidder id={order.owner?.address}>
+                    bids.map((order, i) => (
+                      <LastBidder key={i} id={order.owner?.address}>
                         <div className={"content"}>
                           <span className="avatarContainer">
                             <Profile
