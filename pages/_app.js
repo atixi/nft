@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "antd/dist/antd.min.css";
 import store from "../store";
 import React from "react";
+import Layout from '/Components/Layout/Layout'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
@@ -100,10 +101,12 @@ const queryClient = new QueryClient({
 function MyApp({ Component, pageProps }) {
   return (
     <Provider store={store}>
-
       <QueryClientProvider client={queryClient}>
+        <GlobalStyle />
         <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </ThemeProvider>
       </QueryClientProvider>
     </Provider>
