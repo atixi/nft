@@ -1,14 +1,5 @@
 import { Tabs, Spin } from "antd";
 import React, { useEffect, useState } from "react";
-import Header from "/Components/header";
-import Footer from "/Components/footer";
-import Products from "/Components/products";
-import OpenSeaAPI from "/Utils/openseaApi";
-import {
-  LoadingContainer,
-  LoadMoreButton,
-  MainWrapper,
-} from "/Components/StyledComponents/globalStyledComponents";
 import {
   ProfileContainer,
   ShareButton,
@@ -16,25 +7,35 @@ import {
   BioDescription,
   ProfileButton,
 } from "/Components/StyledComponents/talentPage-styledComponents";
+import Products from "/Components/products";
+import OpenSeaAPI from "/Utils/openseaApi";
+import {
+  LoadingContainer,
+  LoadMoreButton,
+  MainWrapper,
+} from "/Components/StyledComponents/globalStyledComponents";
+
+import {useRouter} from "next/router";
 const { TabPane } = Tabs;
-function Profile() {
+ function Profile ()  {
+  const router = useRouter();
   const [collections, setCollections] = useState();
   const [created, setCreated] = useState();
-  const talent = new URLSearchParams(window.location.search).getAll("talent");
-  const address = new URLSearchParams(window.location.search).getAll("address");
-  const avatar = new URLSearchParams(window.location.search).getAll("avatar");
+  const {talent}=router.query;
+  const {address}= router.query;
+  const {avatar}=router.query;
   const [isLoading, setIsLoading] = useState(true);
   const [addressToShow, setAddress] = useState(
-    address[0]
+   address && address
       .toString()
       .replace(
-        address[0].toString().substring(10, address[0].length - 10),
+        address.toString().substring(10, address.length - 10),
         "....."
       )
   );
   const FetchCreatedAssets = async (e) => {
     setIsLoading(true);
-    const createRequest = await OpenSeaAPI.getAssetsListByOwner(address);
+    const createRequest =  await OpenSeaAPI.getAssetsListByOwner(address);
     if (createRequest.ok) {
       const assets = await createRequest.data?.assets;
       setCreated(assets);
@@ -58,18 +59,17 @@ function Profile() {
   };
   const loadTabData = async (e) => {
     if (e === "1") {
-      FetchCreatedAssets();
+    address && FetchCreatedAssets();
     } else if (e === "2") {
       FetchCollectibleAssets();
     }
   };
 
   useEffect(() => {
-    FetchCreatedAssets();
-  }, []);
+  address && FetchCreatedAssets();
+  }, [address]);
   return (
     <>
-      <Header />
       <MainWrapper>
         <ProfileContainer>
           <img src="/images/talentCover.png" />
@@ -79,7 +79,6 @@ function Profile() {
                 alt="userAvatar"
                 src={avatar}
                 loading="lazy"
-                lassName="sc-eirseW evgNzS"
               />
             </div>
             <BioDescription>
@@ -132,7 +131,6 @@ function Profile() {
           </TabPane>
         </Tabs>
       </MainWrapper>
-      <Footer />
     </>
   );
 }

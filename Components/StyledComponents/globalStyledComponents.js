@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Button} from "antd"
+import {Button} from "antd";
 
 export const SectionHeading = styled.span`
     position: relative;
@@ -10,7 +10,7 @@ export const SectionHeading = styled.span`
     {
         font-size: 20px !important;
         display: block !important;
-    }
+    };
 `;
 export const LoadingContainer = styled.div`
     text-align: center;

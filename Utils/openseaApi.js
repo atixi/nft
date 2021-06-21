@@ -4,7 +4,7 @@ import client from "./openSeaClient";
 import _, { reject } from "lodash";
 const provider = new Web3.providers.HttpProvider(
   // "https://mainnet.infura.io/v3/7ca37bed6f77481eb889a45bc8520e6c"
-  "https://rinkeby.infura.io/v3/7ca37bed6f77481eb889a45bc8520e6c"
+  "https://mainnet.infura.io/v3/7ca37bed6f77481eb889a45bc8520e6c"
 );
 const seaport = new OpenSeaPort(provider, {
   networkName: Network.Main,
@@ -20,22 +20,40 @@ async function getAccount() {
   return { accountAddress, error };
 }
 /// handled and checked functions //////////////////////////////////////////////////////////////////////
-async function getBundles() {
-  return await seaport.api.getBundles({
+function getBundles() {
+  return seaport.api.getBundles({
     on_sale: true,
     limit: 50,
   });
 }
-const getLiveAuctions = () => {
+const getLiveAuctions = ({params}) => {
   return seaport.api.getOrders({
     bundled: false,
-    saleKind: 1,
+    sale_kind: 1,
     is_expired: false,
     limit: 50,
     on_sale: true,
   });
 };
-
+const getOrders = (params) => {
+  return seaport.api.getOrders({
+    bundled: false,
+    sale_kind: 1,
+    is_expired: false,
+    limit: 50,
+    on_sale: true,
+    ...params
+  });
+};
+const getTopSellers = () => {
+  return seaport.api.getOrders({
+    bundled: false,
+    is_expired: false,
+    sale_kind: 1,
+    include_invalid: false,
+    limit: 50,
+  });
+};
 const getCollections = () => {
   return seaport.api.getAssets({
     limit: 50,
@@ -46,15 +64,7 @@ const getExplores = () => {
   return client.get("assets?limit=50");
 };
 
-const getTopSellers = () => {
-  return seaport.api.getOrders({
-    bundled: false,
-    is_expired: false,
-    sale_kind: 1,
-    include_invalid: false,
-    limit: 50,
-  });
-};
+
 // not checket functions
 async function getAssetsInCollection(slug) {
   return client.get(`assets?collection=${slug}`);
@@ -123,7 +133,7 @@ async function getSingleAsset(accountId, assetId) {
 }
 // hellper functions
 // this is helper method to reproduct the topseller data (changes are required)
-function getTopSellersDatails(assets) {
+function getTopSellersDetails(assets) {
   let topSellers = [];
   const groupByCreator = _.groupBy(assets, "makerAccount[user[username]]");
   const keys = Object.keys(groupByCreator);
@@ -181,8 +191,9 @@ export default {
   getAssets,
   getAssetsInCollection,
   getCollectionsDetailsBySlugs,
+  getOrders,
   //hellper methods checked
-  getTopSellersDatails,
+  getTopSellersDetails,
   getCollectionDetails,
   getExploresDetails,
 };

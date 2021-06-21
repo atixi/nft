@@ -19,12 +19,14 @@ justify-content: space-around;
         margin: 5px;
         white-space: nowrap;
     };
-    ul li{
-    padding: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 30px;
-    border: 1px solid #f2f2f2;
+    ul{
+        li{
+            padding: 10px;
+            padding-left: 20px;
+            padding-right: 20px;
+            border-radius: 30px;
+            border: 1px solid #f2f2f2;
+            };
     };
 `;
 export const CategoriesListScroll = styled.div`

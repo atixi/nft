@@ -14,7 +14,7 @@ import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents
 import bundlesAPI from "/Constants/lists";
 function Home() {
   const [bundles, setBundles] = useState([]);
-  const [topSellers, setTopSellers] = useState();
+  const [topSellers, setTopSellers] = useState([]);
   const [liveAuctions, setLiveAuctions] = useState([]);
   const [collections, setCollections] = useState();
   const [explores, setExplores] = useState();
@@ -35,12 +35,8 @@ function Home() {
   };
   const loadBundles = async () => {
     try {
-      const { bundles } = await OpenSeaAPI.getBundles();
-      if (bundles) {
-        setBundles(bundles);
-      } else {
-        const bunds = bundlesAPI;
-      }
+      let { bundles } = await OpenSeaAPI.getBundles();
+      setBundles(bundles);
     } catch (e) {
       HandleNotification("error", e.message, "Server Is Not Available");
     }
@@ -56,7 +52,7 @@ function Home() {
   const loadTopSellers = async () => {
     try {
       const { orders } = await OpenSeaAPI.getTopSellers();
-      const topSellers = OpenSeaAPI.getTopSellersDatails(orders);
+      const topSellers = OpenSeaAPI.getTopSellersDetails(orders);
       setTopSellers(topSellers);
     } catch (e) {
       HandleNotification("error", e.message, "Server Is Not Available");
@@ -67,7 +63,6 @@ function Home() {
       const { assets } = await OpenSeaAPI.getCollections();
       let cols = OpenSeaAPI.getCollectionDetails(assets);
       setCollections(cols);
-      console.log("collections are as ", cols);
     } catch (e) {
       HandleNotification("error", e.message, "Server Is Not Available");
     }
@@ -79,7 +74,6 @@ function Home() {
       const explores = data?.assets;
       const exps = OpenSeaAPI.getExploresDetails(explores);
       setExplores(exps);
-      console.log("explores are as ", explores);
     } catch (e) {
       HandleNotification("error", e.message, "Server Is Not Available");
     }
@@ -95,10 +89,10 @@ function Home() {
       <Header />
       <MainWrapper>
         <Slide />
-        <TopSellers data={topSellers} />
-        <LiveAuctions data={liveAuctions} />
-        <HotCollections data={collections} />
-        <Explore data={explores} />
+        {topSellers && <TopSellers data={topSellers} />}
+        {liveAuctions && <LiveAuctions data={liveAuctions} />}
+        {collections && <HotCollections data={collections} />}
+        {explores && <Explore data={explores} />}
       </MainWrapper>
       <Footer />
     </>

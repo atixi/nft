@@ -38,6 +38,7 @@ const exploreMore = (
 );
 function Explore({ data }) {
   const explores = data;
+  console.log(explores)
   return (
     <>
       <div>
@@ -131,9 +132,9 @@ function Explore({ data }) {
         {explores ? (
           <>
             <Products data={explores} />
-            <LoadMoreButton block shape={"round"} size={"large"}>
+            {/* <LoadMoreButton block shape={"round"} size={"large"}>
               {"Load More"}
-            </LoadMoreButton>
+            </LoadMoreButton> */}
           </>
         ) : (
           <LoadingContainer>

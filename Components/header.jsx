@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Search from "./search";
-import { Menu } from "antd";
 import Link from "next/link";
-import styles from "/styles/header.module.css";
 import {
   TwitterOutlined,
   YoutubeFilled,
@@ -26,8 +24,8 @@ import {
   HeaderBottomMenu,
   SearchWrapper,
   SocialLinkContainer,
-} from "./StyledComponents/header-styledComponents";
-export default function Header(props) {
+} from "./StyledComponents/header-styledComponents.js";
+function Header(props) {
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
   const [accountAddress, setAccountAddress] = useState(accountList[0]);
@@ -155,9 +153,9 @@ export default function Header(props) {
       <Wrapper>
         <HeaderContainer>
           <div style={{ marginRight: "15px" }}>
-            <a href="/">
+            <Link href="/">
               <Image src="/logo/logo.png" width="40" height="40" />
-            </a>
+            </Link>
           </div>
           {/* might be changed to dropdown */}
           <Button className={`mx-3`}>{CONSTANTS.english}</Button>
@@ -202,9 +200,11 @@ export default function Header(props) {
   return (
     <HeaderNav>
       <div style={{ marginRight: "15px" }}>
-        <a href="/">
-          <Image src="/logo/logo.png" width="40" height="40" />
-        </a>
+        <Link href="/" passHref>
+          <a>
+            <Image src="/logo/logo.png" width="40" height="40" />
+          </a>
+        </Link>
       </div>
       <div
         className="d-none d-xl-flex px-1"
@@ -229,12 +229,13 @@ export default function Header(props) {
         <CreateButton className={`d-none d-lg-block`}>
           {CONSTANTS.create}
         </CreateButton>
-        <Link href={"/wallet"} passHref>
-          <a
-            className={`d-none d-lg-block ${styles.headerLink}`}
-          >{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
-        </Link>
-
+        <ConnectButton>
+          <Link href={"/wallet"} passHref>
+            <a
+              className={`d-none d-lg-block`}
+            >{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
+          </Link>
+        </ConnectButton>
         <Button
           onClick={() => {
             setSearch(true);
@@ -269,3 +270,4 @@ export default function Header(props) {
     </HeaderNav>
   );
 }
+export default Header;
