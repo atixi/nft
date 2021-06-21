@@ -1,19 +1,12 @@
 import Error from 'next/error'
 
-export async function getServerSideProps() {
-  const res = await fetch('https://api.github.com/repos/vercel/next.js')
-  const errorCode = res.ok ? false : res.statusCode
-  const json = await res.json()
-
-  return {
-    props: { errorCode, stars: json.stargazers_count },
-  }
+function Page({ statusCode }) {
+    return <Error statusCode={statusCode} />
 }
 
-export default function Page({ errorCode, stars }) {
-  if (errorCode) {
-    return <Error statusCode={errorCode} />
-  }
-
-  return <div>Next stars: {stars}</div>
+Error.getInitialProps = ({ res, err }) => {
+    const statusCode = res ? res.statusCode : err ? err.statusCode : 404
+    return { statusCode }
 }
+
+export default Page
