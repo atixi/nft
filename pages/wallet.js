@@ -386,7 +386,7 @@ const Wallet = () => {
     </div>
   );
 };
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
   return {
     props: {}, // will be passed to the page component as props
   };
