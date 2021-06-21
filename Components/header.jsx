@@ -25,12 +25,16 @@ import {
   SearchWrapper,
   SocialLinkContainer,
 } from "./StyledComponents/header-styledComponents.js";
+import {fetchUsers} from "/Utils/strapiApi";
 function Header(props) {
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
   const [accountAddress, setAccountAddress] = useState(accountList[0]);
 
-  useEffect(() => {
+  useEffect( async () => {
+    // this is just to test that we receive data from strapi
+    const data = await fetchUsers();
+    console.log("new data", data)
     window.ethereum.on("accountsChanged", function (accounts) {
       setAccountAddress(accounts[0]);
     });
