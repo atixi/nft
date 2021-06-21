@@ -7,8 +7,6 @@ import {
   BioDescription,
   ProfileButton,
 } from "/Components/StyledComponents/talentPage-styledComponents";
-import Header from "/Components/header";
-import Footer from "/Components/footer";
 import Products from "/Components/products";
 import OpenSeaAPI from "/Utils/openseaApi";
 import {
@@ -72,7 +70,6 @@ const { TabPane } = Tabs;
   }, [address]);
   return (
     <>
-      <Header />
       <MainWrapper>
         <ProfileContainer>
           <img src="/images/talentCover.png" />
@@ -134,7 +131,6 @@ const { TabPane } = Tabs;
           </TabPane>
         </Tabs>
       </MainWrapper>
-      <Footer />
     </>
   );
 }

@@ -99,7 +99,6 @@ function ProductPage() {
   const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;
   return (
     <>
-      <Header />
       <Wrapper>
         <Content className={`d-sm-flex`}>
           <ItemImageContainer className=" text-center">
