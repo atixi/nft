@@ -22,10 +22,6 @@ function Home() {
   }, []);
   const initData = () => {
     if (!isMobileDevice())
-      window.ethereum.on("accountsChanged", function (accounts) {
-        console.log(accounts);
-      });
-
     loadBundles();
     loadLiveAuctions();
     loadTopSellers();

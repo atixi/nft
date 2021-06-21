@@ -19,12 +19,6 @@ const queryClient = new QueryClient({
   },
 });
 
-function getLibrary(provider) {
-  const library = new Web3Provider(provider);
-  library.pollingInterval = 12000;
-  return library;
-}
-
 function MyApp({ Component, pageProps }) {
   return (
     <Provider store={store}>
