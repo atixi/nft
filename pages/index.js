@@ -21,7 +21,6 @@ function Home() {
     initData();
   }, []);
   const initData = () => {
-    if (!isMobileDevice())
     loadBundles();
     loadLiveAuctions();
     loadTopSellers();
