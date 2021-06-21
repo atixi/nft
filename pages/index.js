@@ -1,7 +1,6 @@
 import Head from "next/head";
 import openseaApi from "../Utils/openseaApi";
 import Explore from "/Components/explore";
-import Footer from "/Components/footer";
 import HotCollections from "/Components/HotCollections";
 import LiveAuctions from "/Components/liveAuctions";
 import Slide from "/Components/slider/slide";
@@ -21,9 +20,7 @@ function Home({ topSellers, liveAuctions, collections, explores }) {
   );
 }
 export const getServerSideProps = async () => {
-
   const orders = await OpenSeaAPI.getOrders({})
-
   const liveAuctions = await OpenSeaAPI.getOrders({ "on_sale": true })
   // const bundles = await OpenSeaAPI.getBundles()
   const assets = await OpenSeaAPI.getCollections()

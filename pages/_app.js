@@ -1,7 +1,10 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "antd/dist/antd.min.css";
-import store from "../store";
+import store, { persistor } from "../store";
+import { PersistGate } from "redux-persist/integration/react";
 import React from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { Provider } from "react-redux";
 import Layout from '/Components/Layout/Layout'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 
@@ -83,8 +86,7 @@ const theme = {
     primary: '#0070f3',
   },
 }
-import { QueryClient, QueryClientProvider } from "react-query";
-import { Provider } from "react-redux";
+
 const defaultQueryFn = async () => {
   return new Promise((resolve) => {
     resolve(loadAsset);
@@ -101,14 +103,16 @@ const queryClient = new QueryClient({
 function MyApp({ Component, pageProps }) {
   return (
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <GlobalStyle />
-        <ThemeProvider theme={theme}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ThemeProvider>
-      </QueryClientProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <QueryClientProvider client={queryClient}>
+          <GlobalStyle />
+          <ThemeProvider theme={theme}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </PersistGate>
     </Provider>
   );
 }
