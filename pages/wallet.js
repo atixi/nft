@@ -1,6 +1,5 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import Web3 from "web3";
 import Web3Modal from "web3modal";
 import HandleNotification from "/Components/commons/handleNotification";
@@ -8,7 +7,6 @@ import { isMobileDevice, providerOptions } from "/Constants/constants";
 import styles from "/styles/wallet.module.css";
 
 const Wallet = () => {
-  const dispatch = useDispatch();
   const [isMobile, setIsMobile] = useState(false);
   const [metamaskModal, setMetamaskModal] = useState(null);
   const [web3Modal, setWeb3Modal] = useState(null);
