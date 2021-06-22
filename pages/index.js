@@ -10,6 +10,12 @@ import OpenSeaAPI from "/Utils/openseaApi";
 
 function Home({ topSellers, liveAuctions, collections, explores }) {
   return (
+    <>
+    <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet"/>
+    </Head>
     <MainWrapper>
       <Slide />
       <TopSellers data={topSellers} />
@@ -17,6 +23,7 @@ function Home({ topSellers, liveAuctions, collections, explores }) {
       <HotCollections data={collections} />
       <Explore data={explores} />
     </MainWrapper>
+    </>
   );
 }
 export const getServerSideProps = async () => {
