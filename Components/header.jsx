@@ -33,8 +33,8 @@ function Header(props) {
 
   useEffect( async () => {
     // this is just to test that we receive data from strapi
-    const data = await fetchUsers();
-    console.log("new data", data)
+    // const data = await fetchUsers();
+    // console.log("new data", data)
     window.ethereum.on("accountsChanged", function (accounts) {
       setAccountAddress(accounts[0]);
     });
@@ -193,8 +193,12 @@ function Header(props) {
               >
                 {CONSTANTS.create}
               </Button>
-              <CreateButton style={{ flex: 1 }}>
+              <CreateButton  onClick={() => {
+                setMenu(false);
+              }} style={{ flex: 1 }}>
+              <Link href="/wallet" passHref><a>
                 {CONSTANTS.connect}
+                </a></Link>
               </CreateButton>
             </div>
           </HeaderBottomMenu>
@@ -233,10 +237,10 @@ function Header(props) {
         <CreateButton className={`d-none d-lg-block`}>
           {CONSTANTS.create}
         </CreateButton>
-        <ConnectButton>
+        <ConnectButton className={`d-none d-lg-block`}>
           <Link href={"/wallet"} passHref>
             <a
-              className={`d-none d-lg-block`}
+              
             >{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
           </Link>
         </ConnectButton>
