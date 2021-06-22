@@ -1,10 +1,10 @@
-import styles from '../../styles/slider.module.css';
+import {SliderItem, SliderTitle, SliderSubTitle} from "../StyledComponents/slider-styledComponents";
 export default function SlideItem(props){
-    return (<div className={styles.slideItem}>
+    return (<SliderItem>
         <div>
-            <span className={styles.title}>{props.item.title}</span>
-            <span className={styles.subtitle}>{props.item.subtitle}</span>
+            <SliderTitle>{props.item.title}</SliderTitle>
+            <SliderSubTitle>{props.item.subtitle}</SliderSubTitle>
             <img src={props.item.image}/>
         </div>
-    </div>);
+    </SliderItem>);
 }

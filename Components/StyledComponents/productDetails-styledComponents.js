@@ -4,6 +4,10 @@ export const Wrapper = styled.div`
     display: flex;
     height: calc(100vh - 74px);
     flex-direction: column;
+
+    a{
+        color: black !important;
+    }
 `;
 
 export const Content = styled.div`
