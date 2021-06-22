@@ -1,6 +1,5 @@
 import SlideItem from "./slideItem";
-import styles from '../../styles/slider.module.css';
-
+import {SliderWrapper} from "../StyledComponents/slider-styledComponents";
 export default function Slide(props){
     const items = [
         {image:"/images/1.png",title:"AsyncArt",subtitle:"Programmable music"},
@@ -11,7 +10,7 @@ export default function Slide(props){
         {image:"/images/6.jpg",title:"AsyncArt",subtitle:"Programmable music"},
         {image:"/images/7.gif",title:"AsyncArt",subtitle:"Programmable music"},
     ];
-    return (<div className={styles.slideWrapper}>
+    return (<SliderWrapper>
             {items.map((v,i)=><SlideItem item={v} key={i}/>)}
-    </div>);
+    </SliderWrapper>);
 }

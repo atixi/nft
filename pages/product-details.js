@@ -1,11 +1,11 @@
-import { Dropdown, Image, Menu, Statistic, Tabs } from "antd";
+import { Dropdown, Image, Menu, Statistic, Tabs, Avatar } from "antd";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
-  Auction, AuctionLabel, AuctionTimer, AvatarContainer, BidCountdown, BidOwner, BidOwnerContainer, BidOwnerProfile, BidPrice, BidPriceValue, ButtonContainer, Content, DropdownMenu, FooterButton, ImageCon, ItemDescriptionText, ItemDetails, ItemDetailsHeader, ItemFooter, ItemImageContainer, ItemInfo, ItemLink, ItemName, ItemTopButtonContainer, LastBidder, OwnerProfitContainer, PriceInCryptoContainer,
+  Auction, AuctionLabel, AuctionTimer, AvatarContainer, BidCountdown, BidOwner, BidOwnerContainer, BidOwnerProfile, BidPrice, BidPriceValue, ButtonContainer, Content, DropdownMenu, FooterButton, ImageCon, ItemDescriptionText, ItemDetails, ItemDetailsHeader, ItemFooter, ItemImageContainer, ItemInfo, ItemLink, ItemName, ItemTopButtonContainer, LastBidder, PriceInCryptoContainer,
   PriceInDollarContainer, Wrapper
 } from "../Components/StyledComponents/productDetails-styledComponents";
-import Profile from "/Components/profileAvatar";
 import {
   getAuctionPriceDetails
 } from "/Constants/constants";
@@ -24,16 +24,6 @@ const menu = (
     <Menu.Item>
       <ItemLink>
         <span>{"View on OpenSea"}</span>
-      </ItemLink>
-    </Menu.Item>
-    <Menu.Item>
-      <ItemLink>
-        <span>{"Share"}</span>
-      </ItemLink>
-    </Menu.Item>
-    <Menu.Item>
-      <ItemLink>
-        <span>{"Report"}</span>
       </ItemLink>
     </Menu.Item>
   </DropdownMenu>
@@ -86,22 +76,6 @@ function ProductPage() {
               <ItemDetailsHeader>
                 <ItemName>{asset.asset?.collection?.name}</ItemName>
                 <ItemTopButtonContainer>
-                  {/* <button style={{ flex: "none" }}>
-                    <svg
-                      viewBox="0 0 17 16"
-                      fill="none"
-                      width="16"
-                      height="16"
-                      xlmns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.2112 14L12.1056 9.69231L14.1853 7.39185C15.2497 6.21455 15.3683 4.46116 14.4723 3.15121V3.15121C13.3207 1.46757 10.9637 1.15351 9.41139 2.47685L8.2112 3.5L6.95566 2.42966C5.40738 1.10976 3.06841 1.3603 1.83482 2.97819V2.97819C0.777858 4.36443 0.885104 6.31329 2.08779 7.57518L8.2112 14Z"
-                        stroke="rgba(4, 4, 5, 1)"
-                        strokeWidth="2"
-                      ></path>
-                    </svg>
-                    {" " + item.favorite}
-                  </button> */}
                   <button
                     style={{
                       flex: "none",
@@ -139,44 +113,48 @@ function ProductPage() {
               </div>
               <div>
                 <button>{item.category}</button>
-                <button>
-                  <span className="text-gradient">Unlockable</span>
-                </button>
               </div>
               <ItemDescriptionText>
                 {asset.asset?.collection?.description}
               </ItemDescriptionText>
               <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
               <br />
+              <Link 
+               href = {{pathname: "/profile/index",
+               query: {address: asset.asset?.owner?.address,
+               talent: checkName(asset.asset?.owner?.user?.username),
+               avatar: asset.asset?.owner?.profile_img_url}
+               }} passHref><a>
               <AvatarContainer>
-                <Profile
-                  profile={asset.asset?.owner?.profile_img_url}
-                  size={"medium"}
-                  tick={false}
+                <Avatar
+                  size={"small"}
+                  icon={<img src={asset.asset?.owner?.profile_img_url} />}
                 />
-
                 <span style={{ flex: "1" }}>
-                  {asset.asset?.owner?.user?.username}
+                  {checkName(asset.asset?.owner?.user?.username)}
                 </span>
               </AvatarContainer>
-              <OwnerProfitContainer>
-                <small>{"10% of sales will go to creator"}</small>
-              </OwnerProfitContainer>
+              </a></Link>
               <Tabs defaultActiveKey="4">
                 <TabPane key="1" tab={<span>{CONSTANTS.details}</span>}>
                   <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
                   <br />
+                  <Link 
+                    href = {{pathname: "/profile/index",
+                    query: {address: asset.asset?.owner?.address,
+                    talent: checkName(asset.asset?.owner?.user?.username),
+                    avatar: asset.asset?.owner?.profile_img_url}
+                    }} passHref><a>
                   <AvatarContainer>
-                    <Profile
-                      profile={asset.asset?.owner?.profile_img_url}
-                      size={"medium"}
-                      tick={false}
+                  <Avatar
+                      size={"small"}
+                      icon={<img src={asset.asset?.owner?.profile_img_url} />}
                     />
 
                     <span style={{ flex: "1" }}>
-                      {asset.asset?.owner?.user?.username}
+                    {checkName(asset.asset?.owner?.user?.username)}
                     </span>
-                  </AvatarContainer>
+                  </AvatarContainer> </a></Link>
                 </TabPane>
                 <TabPane key="2" tab={<span>{CONSTANTS.bids}</span>}>
                   {bids &&
@@ -184,11 +162,17 @@ function ProductPage() {
                       <LastBidder key={i} id={order.owner?.address}>
                         <div className={"content"}>
                           <span className="avatarContainer">
-                            <Profile
-                              profile={order.makerAccount?.profile_img_url}
-                              size={"medium"}
-                              tick={false}
+                          <Link 
+                            href = {{pathname: "/profile/index",
+                            query: {address: order.makerAccount?.address,
+                            talent: checkName(order.makerAccount?.user?.username),
+                            avatar: order.makerAccount?.profile_img_url}
+                            }} passHref><a>
+                           <Avatar
+                            size={"small"}
+                            icon={<img src={order.makerAccount?.profile_img_url} />}
                             />
+                            </a></Link>
                           </span>
                           <span className={"bidInfo"}>
                             <span className={"bidedPriceContainer"}>
@@ -197,9 +181,15 @@ function ProductPage() {
                                   getAuctionPriceDetails(order).priceBase
                                 } wETH`}</span>
                                 {" by "}
+                                <Link 
+                                  href = {{pathname: "/profile/index",
+                                  query: {address: order.makerAccount?.address,
+                                  talent: checkName(order.makerAccount?.user?.username),
+                                  avatar: order.makerAccount?.profile_img_url}
+                                  }} passHref>
                                 <a className={"bidderLink"}>
-                                  {order.makerAccount?.user?.username}
-                                </a>
+                                  {checkName(order.makerAccount?.user?.username)}
+                                </a></Link>
                               </span>
                             </span>
                             <span className={"bidOwnerAndDateContainer"}>
@@ -215,46 +205,22 @@ function ProductPage() {
                 <TabPane key="3" tab={<span>{CONSTANTS.owners}</span>}>
                   <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
                   <br />
+                  <Link 
+                    href = {{pathname: "/profile/index",
+                    query: {address: asset.asset?.owner?.address,
+                    talent: checkName(asset.asset?.owner?.user?.username),
+                    avatar: asset.asset?.owner?.profile_img_url}
+                    }} passHref><a>
                   <AvatarContainer>
-                    <Profile
-                      profile={asset.asset?.owner?.profile_img_url}
-                      size={"medium"}
-                      tick={false}
+                    <Avatar
+                    size={"small"}
+                    icon={<img src={asset.asset?.owner?.profile_img_url} />}
                     />
-
                     <span style={{ flex: "1" }}>
-                      {asset.asset?.owner?.user?.username}
+                    {checkName(asset.asset?.owner?.user?.username)}
                     </span>
                   </AvatarContainer>
-                </TabPane>
-                <TabPane key="4" tab={<span>{CONSTANTS.history}</span>}>
-                  <LastBidder>
-                    <div className={"content"}>
-                      <span className="avatarContainer">
-                        <Profile
-                          profile={item.owner.avatar}
-                          size={"medium"}
-                          tick={false}
-                        />
-                      </span>
-                      <span className={"bidInfo"}>
-                        <span className={"bidedPriceContainer"}>
-                          <span className={"bidedPriceText"}>
-                            {CONSTANTS.bid + " "}
-                            <span className={"bidValue"}>{"0.01 wETH"}</span>
-                          </span>
-                        </span>
-                        <span className={"bidOwnerAndDateContainer"}>
-                          {"by "}
-                          <a className={"bidderLink"}>kandee</a>
-                          {" at "}
-                          <span className={"bidDate"}>
-                            {"6/2/2021, 11:50 PM"}
-                          </span>
-                        </span>
-                      </span>
-                    </div>
-                  </LastBidder>
+                  </a></Link>
                 </TabPane>
               </Tabs>
             </ItemDetails>
@@ -263,16 +229,29 @@ function ProductPage() {
                 <BidOwnerContainer className={"border-right pr-2 pl-2"}>
                   <BidOwner className={"float-left"}>
                     {CONSTANTS.highestBid}{" "}
-                    <a>{asset.asset?.owner?.user?.username}</a>
+                    <Link 
+                    href = {{pathname: "/profile/index",
+                    query: {address: asset.asset?.owner?.address,
+                    talent: checkName(asset.asset?.owner?.user?.username),
+                    avatar: asset.asset?.owner?.profile_img_url}
+                    }} passHref><a>
+                    {checkName(asset.asset?.owner?.user?.username)}
+                    </a></Link>
                   </BidOwner>
                   <BidPrice>
+                  <Link 
+                    href = {{pathname: "/profile/index",
+                    query: {address: asset.asset?.owner?.address,
+                    talent: checkName(asset.asset?.owner?.user?.username),
+                    avatar: asset.asset?.owner?.profile_img_url}
+                    }} passHref><a>
                     <BidOwnerProfile className={"mr-3"}>
-                      <Profile
-                        profile={asset.asset?.owner?.profile_img_url}
-                        size={"large"}
-                        tick={false}
-                      />
+                    <Avatar
+                    size={"large"}
+                    icon={<img src={asset.asset?.owner?.profile_img_url} />}
+                    />
                     </BidOwnerProfile>
+                    </a></Link>
                     <BidPriceValue>
                       <PriceInCryptoContainer>
                         <span>{`0.02 eth`}</span>
@@ -322,5 +301,11 @@ function ProductPage() {
     </>
   );
 }
-
+function checkName(name)
+{
+  if(name != null && name != undefined && name != "NullAddress")
+  return name;
+  else
+  return "Anonymous";
+}
 export default ProductPage;
