@@ -96,15 +96,15 @@ function ConnectedWallet(){
         <List itemLayout="horizontal"  >
             <List.Item>
                 <List.Item.Meta
-                avatar={<Avatar src="" size={"large"} />}
+                avatar={<Avatar src="/images/svg/ethcoin.png" size={"large"} />}
                 title={<ListTitle>{CONSTANTS.balance}</ListTitle>}
                 description={<ListDescription>{"0 wETH "} <span>{"0"}</span></ListDescription>}
                 />
             </List.Item>
             <List.Item extra={<Button><SwapOutlined /></Button>}>
                 <List.Item.Meta
-                avatar={<Avatar src="" size={"large"} />}
-                title={<ListTitle>{`${CONSTANTS.bidding} ${balance}`} <QuestionCircleOutlined style={{marginLeft: "20px", marginTop: "5px", position: "absolute", color: "black !important"}} /></ListTitle>}
+                avatar={<Avatar src="/images/svg/ethcoin.png" size={"large"} />}
+                title={<ListTitle>{`${CONSTANTS.bidding} ${CONSTANTS.balance}`} <QuestionCircleOutlined style={{marginLeft: "20px", marginTop: "5px", position: "absolute", color: "black !important"}} /></ListTitle>}
                 description={<ListDescription>{"0 wETH "} <span>{"0"}</span></ListDescription>}
                 />
             </List.Item>
