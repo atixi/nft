@@ -4,11 +4,11 @@ import client from "./openSeaClient";
 import _, { reject } from "lodash";
 const provider = new Web3.providers.HttpProvider(
   // "https://mainnet.infura.io/v3/7ca37bed6f77481eb889a45bc8520e6c"
-  "https://mainnet.infura.io/v3/7ca37bed6f77481eb889a45bc8520e6c"
+  "https://rinkeby-api.opensea.io/api/v1/"
 );
 const seaport = new OpenSeaPort(provider, {
-  networkName: Network.Main,
-  apiKey: "7ca37bed6f77481eb889a45bc8520e6c",
+  networkName: Network.Rinkeby,
+  apiKey: "2e7ef0ac679f4860bbe49a34a98cf5ac",
 });
 async function getAccount() {
   let error = null;
@@ -26,7 +26,7 @@ function getBundles() {
     limit: 50,
   });
 }
-const getLiveAuctions = ({params}) => {
+const getLiveAuctions = ({ params }) => {
   return seaport.api.getOrders({
     bundled: false,
     sale_kind: 1,
@@ -42,7 +42,7 @@ const getOrders = (params) => {
     is_expired: false,
     limit: 50,
     on_sale: true,
-    ...params
+    ...params,
   });
 };
 const getTopSellers = () => {
@@ -63,7 +63,6 @@ const getCollections = () => {
 const getExplores = () => {
   return client.get("assets?limit=50");
 };
-
 
 // not checket functions
 async function getAssetsInCollection(slug) {
@@ -147,9 +146,9 @@ function getTopSellersDetails(assets) {
       address: groupByCreator[item][0].makerAccount?.address,
     })
   );
-  // topSellers = [...topSellers].filter(
-  //   (item) => item.talent !== "undefined" && item.talent !== "null"
-  // );
+  topSellers = [...topSellers].filter(
+    (item) => item.talent !== "undefined" && item.talent !== "null"
+  );
   return topSellers;
 }
 const getCollectionDetails = (collections) => {

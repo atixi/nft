@@ -5,8 +5,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Provider } from "react-redux";
-import Layout from '/Components/Layout/Layout'
-import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import Layout from "/Components/Layout/Layout";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -79,13 +79,13 @@ body::-webkit-scrollbar-thumb:hover {
   width: auto !important;
 }
 
-`
+`;
 
 const theme = {
   colors: {
-    primary: '#0070f3',
+    primary: "#0070f3",
   },
-}
+};
 
 const defaultQueryFn = async () => {
   return new Promise((resolve) => {

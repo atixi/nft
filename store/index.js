@@ -1,4 +1,8 @@
-import { configureStore, getDefaultMiddleware, combineReducers } from '@reduxjs/toolkit'
+import {
+  configureStore,
+  getDefaultMiddleware,
+  combineReducers,
+} from "@reduxjs/toolkit";
 import accountSlice from "./action/accountSlice";
 import {
   persistStore,
@@ -9,20 +13,19 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
-} from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
-import logger from 'redux-logger'
-
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import logger from "redux-logger";
 
 const persistConfig = {
-  key: 'root',
+  key: "root",
   version: 1,
   storage,
-}
+};
 const multiReducer = combineReducers({
   account: accountSlice,
 });
-const persistedReducer = persistReducer(persistConfig, multiReducer)
+const persistedReducer = persistReducer(persistConfig, multiReducer);
 
 const store = configureStore({
   reducer: persistedReducer,
@@ -31,10 +34,9 @@ const store = configureStore({
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     },
   }).concat(logger),
-  devTools: true
-})
+  devTools: true,
+});
 
+export const persistor = persistStore(store);
 
-export const persistor = persistStore(store)
-
-export default store
+export default store;

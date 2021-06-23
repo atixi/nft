@@ -17,9 +17,11 @@ import {
   CountDownContainer,
   CountDown,
   ProductCardHeaderButton,
-  ProductCardHeaderOwners
+  ProductCardHeaderOwners,
 } from "./StyledComponents/liveAuctions-styledComponents";
 import { SectionHeading } from "./StyledComponents/globalStyledComponents";
+import Products from "./products";
+
 const breakPoints = [
   { width: 1, itemsToShow: 1 },
   { width: 550, itemsToShow: 2, itemsToScroll: 2 },
@@ -31,7 +33,6 @@ const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;
 
 const { Countdown } = Statistic;
 function LiveAuctions({ data }) {
-
   const items = data;
   return (
     <>
@@ -41,9 +42,7 @@ function LiveAuctions({ data }) {
         pagination={false}
         transitionMs={1000}
       >
-        {items && items.map((product, index) =>
-          Product(product, index)
-        )}
+        {items && items.map((product, index) => Product(product, index))}
       </Carousel>
     </>
   );
@@ -74,10 +73,20 @@ function Product(product, index) {
         <ProductCardHeaderOwners>
           <Avatar.Group>
             <Tooltip title={"Owner"} placement="top">
-              <Avatar key={product.asset?.owner.address} icon={<img src={product.asset?.owner.profile_img_url} width={22} />} />
+              <Avatar
+                key={product.asset?.owner.address}
+                icon={
+                  <img src={product.asset?.owner.profile_img_url} width={22} />
+                }
+              />
             </Tooltip>
             <Tooltip title={"Maker"} placement="top">
-              <Avatar key={product?.makerAccount.address} icon={<img src={product?.makerAccount.profile_img_url} width={22} />} />
+              <Avatar
+                key={product?.makerAccount.address}
+                icon={
+                  <img src={product?.makerAccount.profile_img_url} width={22} />
+                }
+              />
             </Tooltip>
           </Avatar.Group>
         </ProductCardHeaderOwners>
@@ -88,15 +97,38 @@ function Product(product, index) {
         </ProductCardHeaderButton>
       </ProductCardHeader>
       <div className={`col-md-12 p-3`}>
-        <Link href={{ pathname: "/product-details", query: { ta: product.asset?.tokenAddress, ti: product.asset?.tokenId }, }}>
-          <a> <img src={product.asset?.imageUrl} style={{ height: "250px", width: "auto" }} className="w-100 rounded" /></a>
+        {/* <Link
+          href={{
+            pathname: "/product-details",
+            query: {
+              ta: product.asset?.tokenAddress,
+              ti: product.asset?.tokenId,
+            },
+          }} */}
+        <Link
+          href={{
+            pathname: "/product-details",
+            query: {
+              liveAuction: JSON.stringify(product),
+            },
+          }}
+        >
+          <a>
+            {" "}
+            <img
+              src={product.asset?.imageUrl}
+              style={{ height: "250px", width: "auto" }}
+              className="w-100 rounded"
+            />
+          </a>
         </Link>
       </div>
       <ProductDescription>
         <CountDownContainer>
-          <CountDown><Countdown value={deadline} format={`D[d] HH[h] mm[m] ss[s]`} />{" left"} 🔥</CountDown>
-
-
+          <CountDown>
+            <Countdown value={deadline} format={`D[d] HH[h] mm[m] ss[s]`} />
+            {" left"} 🔥
+          </CountDown>
         </CountDownContainer>
         <a href={`/product-details`}>
           <CardTitle>{product.asset?.name}</CardTitle>
