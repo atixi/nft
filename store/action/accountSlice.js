@@ -7,17 +7,25 @@ const accountSlice = createSlice({
   name: "account",
   initialState: {
     accountToken: null,
+    onConnect: false,
   },
   reducers: {
     setAccountToken: (state, action) => {
       state.accountToken = action.payload;
     },
+    trigerConnection: (state, action) => {
+      state.onConnect = action.payload;
+    },
   },
 });
 
-export const { setAccountToken } = accountSlice.actions;
+export const { setAccountToken, trigerConnection } = accountSlice.actions;
 export const getAccountToken = (state) => {
   return state.account.accountToken;
+};
+
+export const getTriggerConnection = (state) => {
+  return state.account.onConnect;
 };
 
 export default accountSlice.reducer;
