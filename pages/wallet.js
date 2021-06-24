@@ -6,13 +6,14 @@ import HandleNotification from "/Components/commons/handleNotification";
 import { isMobileDevice, providerOptions } from "/Constants/constants";
 import styles from "/styles/wallet.module.css";
 import {
-  trigerConnection,
+  triggerWalletConnectionChange,
   getTriggerConnection,
 } from "/store/action/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
+import router from "next/router";
 
 const Wallet = () => {
-  const dispatchAccountConnection = useDispatch();
+  const dispatchWalletConnection = useDispatch();
   const isConnectedToAnyWallet = useSelector(getTriggerConnection);
   const [isMobile, setIsMobile] = useState(false);
   const [metamaskModal, setMetamaskModal] = useState(null);
@@ -22,7 +23,7 @@ const Wallet = () => {
     if (typeof window !== "undefined") {
       const browserModal = new Web3Modal({
         network: "mainnet", // optional
-        cacheProvider: true, // optional
+        cacheProvider: false, // optional
         providerOptions, // required
         disableInjectedProvider: true,
       });
@@ -74,13 +75,8 @@ const Wallet = () => {
 
   const connectToMetamask = async (wallet) => {
     console.log("connecting to metamask");
-    if (isConnectedToAnyWallet) {
-      HandleNotification(
-        "info",
-        "Metamask",
-        "Metamask is connected",
-        "topLeft"
-      );
+    if (isConnectedToAnyWallet === true) {
+      router.push("/");
     } else {
       const metamaskProvider = await metamaskModal.connectTo(wallet);
       await subscribeMetamaskProvider(metamaskProvider);
@@ -122,27 +118,15 @@ const Wallet = () => {
     provider.on("accountsChanged", async (accounts) => {
       console.log("Metamask accounts:", accounts);
       if (accounts.length == 0) {
-        const connectionStatus = await dispatchAccountConnection(
-          trigerConnection(false)
+        const connectionStatus = await dispatchWalletConnection(
+          triggerWalletConnectionChange(false)
         );
-        console.log("connectino to wallet is lost", connectionStatus);
-        HandleNotification(
-          "warning",
-          "Metamask disconnected",
-          "Your Metamask wallet account is disconnected",
-          "topLeft"
-        );
+        console.log("connectino to wcallet is lost", connectionStatus);
       } else {
-        const connectionStatus = await dispatchAccountConnection(
-          trigerConnection(true)
+        const connectionStatus = await dispatchWalletConnection(
+          triggerWalletConnectionChange(true)
         );
-        console.log("connectino to wallet is established", connectionStatus);
-        HandleNotification(
-          "success",
-          "Metamask",
-          "Your Metamask wallet: " + accounts[0],
-          "topLeft"
-        );
+        console.log("connectino to wallet is ", connectionStatus);
       }
       // await getAccountAssets();
     });
