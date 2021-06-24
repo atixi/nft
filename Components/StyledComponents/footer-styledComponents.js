@@ -4,7 +4,7 @@ import {Select} from "antd"
 const inputHeight = "45px";
 export const FooterContainer = styled.div`
     background-color: #f2f2f2;
-    padding-top: 2rem;
+    position: relative;
     div {
         margin-left: auto;
         margin-right: auto;
@@ -25,7 +25,7 @@ export const SearchButton = styled.button`
     border-radius: 20px;
     width: 80px;
     margin-left: -15px;
-    z-index: 1000;
+    z-index: 1;
     background-color: #0066ff !important;
     color: #fff;
     font-weight: bold;
@@ -100,49 +100,90 @@ export const LinkText = styled.span`
     font-family: inherit;
     font-weight: 900;
 `;
+export const LanguageContainer = styled.div`
+    @media (max-width: 700px)
+    {
+        padding: 0px 20px;
+    }
+`
 export const FooterExtraLinkContainer = styled.div`
-margin: 0px;
-padding: 32px 0px;
-border-width: 0px;
-border-style: solid;
-border-color: rgb(4, 4, 5);
-display: flex;
-flex-basis: auto;
-flex-shrink: 0;
-min-height: 0px;
-min-width: 0px;
-max-width: 100%;
-flex-direction: row;
--webkit-box-align: center;
-align-items: center;
--webkit-box-pack: justify;
-justify-content: space-between;
+    margin: 0px;
+    padding: 32px 0px;
+    border-width: 0px;
+    border-style: solid;
+    border-color: rgb(4, 4, 5);
+    display: flex;
+    flex-basis: auto;
+    flex-shrink: 0;
+    min-height: 0px;
+    min-width: 0px;
+    max-width: 100%;
+    flex-direction: row;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    @media (max-width:  700px)
+    {
+        flex-direction: column;
+    }
+
 `;
 export const CopyRightAndPolicyContainer = styled.div`
-    display: flex;
+    // flex: 1;
     flex-direction: row;
     align-items: center;
     margin-left: 10px !important;
+    @media (max-width:  700px)
+    {
+         margin: auto !important;
+         position: relative;
+         top: 50px;
+    }
 `;
 export const CopyRight = styled.span`
-text-decoration: none;
-color: rgba(4, 4, 5, 0.6); !important;
-font-size: 14px;
-line-height: 19.32px;
-font-family: inherit;
-font-weight: inherit;
-margin-right: 50px;
+    text-decoration: none;
+    color: rgba(4, 4, 5, 0.6); !important;
+    font-size: 14px;
+    line-height: 19.32px;
+    font-family: inherit;
+    font-weight: inherit;
+    margin-right: 50px;
+    @media (max-width:  700px)
+    {
+         position: relative;
+         left: 5px;
+    }
+
 `;
 
 export const TermAndPolicy = styled.div`
+    flex: 1;
     margin-left: 20px;
     span{
         font-weight: 700;
         color: rgba(4, 4, 5, 0.6); !important;
         padding-left: 10px;
     };
+    @media (max-width:  700px)
+    {
+         margin: auto !important;
+         position: relative;
+         top: -30px;
+         left: -20px;
+         span{
+             margin: 5px;
+         }
+    }
 `;
 export const SocialLinksContainer = styled.div`
+    @media (max-width:  700px)
+    {
+        margin: auto !important;
+        position: relative;
+        left: -10px;
+        top: -25px;
+    }
     margin-right: 10px !important;
     a{
         padding-right: 20px;
