@@ -60,8 +60,7 @@ export const HeaderContainer = styled.div`
   min-height: 0px;
   height: 74px;
   background-color: #ffffff;
-  font-family: "Gill Sans", "Gill Sans MT", "Calibri", "Trebuchet MS",
-    sans-serif;
+  font-family: inherit;
   display: flex;
   margin: auto;
   flex-direction: row;
@@ -74,8 +73,7 @@ export const HeaderNav = styled.nav`
   min-height: 0px;
   height: 74px;
   background-color: #ffffff;
-  font-family: "Gill Sans", "Gill Sans MT", "Calibri", "Trebuchet MS",
-    sans-serif;
+  font-family: 'Poppins', sans-serif !important;
   display: flex;
   margin: auto;
   flex-direction: row;
@@ -104,18 +102,16 @@ export const HeaderNav = styled.nav`
         color: #333;
       };
       button {
-        font-family: "Gill Sans", "Gill Sans MT", "Calibri", "Trebuchet MS",
-          sans-serif;
+        font-family: inherit;
         font-weight: 900;
         color: rgba(4, 4, 5, 0.5);
-        font-size: 15px;
+        font-size: 0.98rem;
       };
       a {
         display: block;
         text-decoration: none;
-        font-family: "Gill Sans", "Gill Sans MT", "Calibri", "Trebuchet MS",
-          sans-serif;
-        font-size: 15px;
+        font-family: inherit;
+        font-size: 0.98rem;
         font-weight: 900 !important;
         color: rgba(4, 4, 5, 0.5);
         &.active {
@@ -131,7 +127,7 @@ export const CreateButton = styled.button`
   line-height: 12px;
   font-weight: 600;
   border-radius: 25px;
-  font-size: 15px !important;
+  font-size: 0.98rem !important;
   color: rgb(0, 102, 255);
   background: rgba(0, 102, 255, 0.15);
   border: none !important;
@@ -144,12 +140,34 @@ export const ConnectButton = styled.button`
   border-radius: 25px;
   border: 1px solid rgba(4, 4, 5, 0.1);
   background-color: #fff;
-  font-size: 15px !important;
+  font-size: 0.98rem !important;
   padding: 13px 20px;
   a{
     color: black !important;
   };
 `;
+export const ConnectedButton = styled.button`
+  margin: 0px 5px;
+  line-height: 12px;
+  max-height: 44px;
+  font-weight: 600;
+  border-radius: 25px;
+  border: 1px solid rgba(4, 4, 5, 0.1);
+  background-color: #fff;
+  font-size: 0.98rem !important;
+  padding-right: 0px;
+  a{
+    color: black !important;
+  };
+`;
+export const BalanceLabel = styled.div`
+    display: inline;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-right: 10px;
+    min-width: 146px;
+
+`
 export const Button = styled.button`
   margin: 0px 5px;
   line-height: 12px;
@@ -158,7 +176,7 @@ export const Button = styled.button`
   border-radius: 25px;
   border: 1px solid rgba(4, 4, 5, 0.1);
   background-color: #fff;
-  font-size: 15px !important;
+  font-size: 0.98rem !important;
 
   &:hover {
     border: 1px solid #333;
@@ -203,8 +221,7 @@ export const SearchWrapper = styled.div`
     flex: 1;
     font-weight: 600;
     background-color: transparent;
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-      sans-serif;
+    font-family: inherit;
     &:focus {
       outline: none !important;
     };
