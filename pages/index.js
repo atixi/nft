@@ -7,7 +7,6 @@ import Slide from "/Components/slider/slide";
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 import TopSellers from "/Components/topSellers";
 import OpenSeaAPI from "/Utils/openseaApi";
-import { useEffect } from "react";
 import { topSellersAPI } from "/Constants/mockApi/topSellerApi";
 import { liveAuctionsAPI } from "/Constants/mockApi/liveAuctionApi";
 import { collectionsAPI } from "/Constants/mockApi/collectionApi";
