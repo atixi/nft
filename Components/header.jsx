@@ -31,7 +31,7 @@ import {
 import ConnectedWallet from "./connectedWalletDropdown";
 import { fetchUsers } from "/Utils/strapiApi";
 import {
-  trigerConnection,
+  triggerWalletConnectionChange,
   getTriggerConnection,
 } from "/store/action/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -260,9 +260,9 @@ function Header(props) {
         <CreateButton className={`d-none d-lg-block`}>
           {CONSTANTS.create}
         </CreateButton>
-        {isConnectedToAnyWallet ? (
+        {isConnectedToAnyWallet === true ? (
           <Dropdown
-            overlay={ConnectedWallet}
+            overlay={<ConnectedWallet />}
             placement="bottomRight"
             trigger={["hover"]}
           >

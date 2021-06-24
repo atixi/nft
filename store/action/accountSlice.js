@@ -13,13 +13,14 @@ const accountSlice = createSlice({
     setAccountToken: (state, action) => {
       state.accountToken = action.payload;
     },
-    trigerConnection: (state, action) => {
+    triggerWalletConnectionChange: (state, action) => {
       state.onConnect = action.payload;
     },
   },
 });
 
-export const { setAccountToken, trigerConnection } = accountSlice.actions;
+export const { setAccountToken, triggerWalletConnectionChange } =
+  accountSlice.actions;
 export const getAccountToken = (state) => {
   return state.account.accountToken;
 };

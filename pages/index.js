@@ -7,6 +7,7 @@ import Slide from "/Components/slider/slide";
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 import TopSellers from "/Components/topSellers";
 import OpenSeaAPI from "/Utils/openseaApi";
+import { useEffect } from "react";
 import { topSellersAPI } from "/Constants/mockApi/topSellerApi";
 import { liveAuctionsAPI } from "/Constants/mockApi/liveAuctionApi";
 import { collectionsAPI } from "/Constants/mockApi/collectionApi";
@@ -14,12 +15,6 @@ import { exploresAPI } from "/Constants/mockApi/exploreApi";
 
 function Home({ topSellers, liveAuctions, collections, explores }) {
   return (
-    <>
-    <Head>
-        <link rel="preconnect" href="https://fonts.googleapis.com"/>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin/>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet"/>
-    </Head>
     <MainWrapper>
       <Slide />
       <TopSellers data={topSellersAPI} />
@@ -27,7 +22,6 @@ function Home({ topSellers, liveAuctions, collections, explores }) {
       <HotCollections data={collectionsAPI} />
       <Explore data={exploresAPI} />
     </MainWrapper>
-    </>
   );
 }
 export const getServerSideProps = async () => {

@@ -67,6 +67,7 @@ export const subscribeToMetamask = () => {
   })
   ethereum.on("accountsChanged", function (ac) {
     accounts = ac;
+    console.log('accounts are chaning mohammdin', accounts)
   });
 
   ethereum.on("chainChanged", (chain) => {
