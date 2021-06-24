@@ -1,4 +1,4 @@
-import { Dropdown, Image, Menu, Statistic, Tabs, Avatar } from "antd";
+import { Dropdown, Image, Menu, Statistic, Tabs, Avatar, Skeleton } from "antd";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useEffect, useState } from "react";
