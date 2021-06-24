@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Search from "./search";
 import Link from "next/link";
-import {Avatar, Dropdown} from "antd";
+import { Avatar, Dropdown } from "antd";
 import {
   TwitterOutlined,
   YoutubeFilled,
@@ -26,24 +26,41 @@ import {
   SearchWrapper,
   SocialLinkContainer,
   ConnectedButton,
-  BalanceLabel
+  BalanceLabel,
 } from "./StyledComponents/header-styledComponents.js";
 import ConnectedWallet from "./connectedWalletDropdown";
-import {fetchUsers} from "/Utils/strapiApi";
+import { fetchUsers } from "/Utils/strapiApi";
+import {
+  trigerConnection,
+  getTriggerConnection,
+} from "/store/action/accountSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 function Header(props) {
+  const router = useRouter();
+  const dispatchAccountConnection = useDispatch();
+  const isConnectedToAnyWallet = useSelector(getTriggerConnection);
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
   const [accountAddress, setAccountAddress] = useState(accountList[0]);
 
-  useEffect( async () => {
+  useEffect(async () => {
     // this is just to test that we receive data from strapi
     // const data = await fetchUsers();
     // console.log("new data", data)
-    window.ethereum.on("accountsChanged", function (accounts) {
-      setAccountAddress(accounts[0]);
-    });
   }, []);
 
+  const connectToWallet = async () => {
+    if (!isConnectedToAnyWallet) {
+      router.push("/wallet");
+      console.log("routong to main");
+    } else {
+      router.push("/");
+    }
+    // const data = await dispatchAccountConnection(
+    //   trigerConnection(!isConnectedToAnyWallet)
+    // );
+  };
   const displayAddress = () => {
     return (
       "Account: " +
@@ -197,12 +214,15 @@ function Header(props) {
               >
                 {CONSTANTS.create}
               </Button>
-              <CreateButton  onClick={() => {
-                setMenu(false);
-              }} style={{ flex: 1 }}>
-              <Link href="/wallet" passHref><a>
-                {CONSTANTS.connect}
-                </a></Link>
+              <CreateButton
+                onClick={() => {
+                  setMenu(false);
+                }}
+                style={{ flex: 1 }}
+              >
+                <Link href="/wallet" passHref>
+                  <a>{CONSTANTS.connect}</a>
+                </Link>
               </CreateButton>
             </div>
           </HeaderBottomMenu>
@@ -240,17 +260,27 @@ function Header(props) {
         <CreateButton className={`d-none d-lg-block`}>
           {CONSTANTS.create}
         </CreateButton>
-        <Dropdown  overlay={ConnectedWallet} placement="bottomRight" trigger={['hover']}>
-        <ConnectedButton className={`d-lg-block`}>
-          <BalanceLabel>
-            {"235234 Eth"}
-          </BalanceLabel><Avatar size={36} /></ConnectedButton>
-        </Dropdown>
-        <ConnectButton className={`d-none d-lg-block`}>
-          <Link href={"/wallet"} passHref>
-            <a >{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
-          </Link>
-        </ConnectButton>
+        {isConnectedToAnyWallet ? (
+          <Dropdown
+            overlay={ConnectedWallet}
+            placement="bottomRight"
+            trigger={["hover"]}
+          >
+            <ConnectedButton className={`d-lg-block`}>
+              <BalanceLabel>{"235234 Eth"}</BalanceLabel>
+              <Avatar size={36} />
+            </ConnectedButton>
+          </Dropdown>
+        ) : (
+          <ConnectButton
+            className={`d-none d-lg-block`}
+            onClick={connectToWallet}
+          >
+            <Link href={"/wallet"} passHref>
+              <a>{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
+            </Link>
+          </ConnectButton>
+        )}
         <Button
           onClick={() => {
             setSearch(true);

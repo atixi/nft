@@ -5,11 +5,19 @@ import Web3Modal from "web3modal";
 import HandleNotification from "/Components/commons/handleNotification";
 import { isMobileDevice, providerOptions } from "/Constants/constants";
 import styles from "/styles/wallet.module.css";
+import {
+  trigerConnection,
+  getTriggerConnection,
+} from "/store/action/accountSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Wallet = () => {
+  const dispatchAccountConnection = useDispatch();
+  const isConnectedToAnyWallet = useSelector(getTriggerConnection);
   const [isMobile, setIsMobile] = useState(false);
   const [metamaskModal, setMetamaskModal] = useState(null);
   const [web3Modal, setWeb3Modal] = useState(null);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const browserModal = new Web3Modal({
@@ -65,7 +73,8 @@ const Wallet = () => {
   };
 
   const connectToMetamask = async (wallet) => {
-    if (metamaskConnected) {
+    console.log("connecting to metamask");
+    if (isConnectedToAnyWallet) {
       HandleNotification(
         "info",
         "Metamask",
@@ -113,7 +122,10 @@ const Wallet = () => {
     provider.on("accountsChanged", async (accounts) => {
       console.log("Metamask accounts:", accounts);
       if (accounts.length == 0) {
-        setMetamaskConnected(false);
+        const connectionStatus = await dispatchAccountConnection(
+          trigerConnection(false)
+        );
+        console.log("connectino to wallet is lost", connectionStatus);
         HandleNotification(
           "warning",
           "Metamask disconnected",
@@ -121,7 +133,10 @@ const Wallet = () => {
           "topLeft"
         );
       } else {
-        setMetamaskConnected(true);
+        const connectionStatus = await dispatchAccountConnection(
+          trigerConnection(true)
+        );
+        console.log("connectino to wallet is established", connectionStatus);
         HandleNotification(
           "success",
           "Metamask",
@@ -129,7 +144,6 @@ const Wallet = () => {
           "topLeft"
         );
       }
-      await setAddress(accounts[0]);
       // await getAccountAssets();
     });
     provider.on("chainChanged", async (chainId) => {
