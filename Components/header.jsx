@@ -299,7 +299,11 @@ function Header(props) {
             trigger={["hover"]}
           >
             <ConnectedButton className={`d-lg-block`}>
-              <BalanceLabel>{displayAddress(metaToken)}</BalanceLabel>
+              <BalanceLabel>
+                {walletToken != null
+                  ? displayAddress(walletToken)
+                  : metaToken != null && displayAddress(metaToken)}
+              </BalanceLabel>
               <Avatar size={36} />
             </ConnectedButton>
           </Dropdown>
