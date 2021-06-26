@@ -4,12 +4,34 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { useDispatch, useSelector } from "react-redux";
-import { triggerWalletConnectionChange } from "/store/action/accountSlice";
+import { setConnected } from "/store/action/accountSlice";
 import { useRouter } from "next/router";
-import { getTriggerConnection } from "../../store/action/accountSlice";
+import {
+  setAccountTokens,
+  setMetaToken,
+  setWalletToken,
+  setMetaConnected,
+  setWalletConnected,
+  getAccountTokens,
+  getMetaToken,
+  getWalletToken,
+  getMetaConnected,
+  getWalletConnected,
+} from "/store/action/accountSlice";
+
 const Layout = ({ children }) => {
-  const dispatchWalletConnection = useDispatch();
-  const isConnectedToAnyWallet = useSelector(getTriggerConnection);
+  const dispatchAccountTokens = useDispatch();
+  const dispatchMetaToken = useDispatch();
+  const dispatchWalletToken = useDispatch();
+  const dispatchMetaConnected = useDispatch();
+  const dispatchWalletconneted = useDispatch();
+
+  const accountTokens = useSelector(getAccountTokens);
+  const metaToken = useSelector(getMetaToken);
+  const walletToken = useSelector(getWalletToken);
+  const isMetaconnected = useSelector(getMetaConnected);
+  const isWalletConnected = useSelector(getWalletConnected);
+
   const router = useRouter();
   const [displayHeader, setDisplayHeader] = useState(true);
   useEffect(() => {
@@ -26,18 +48,20 @@ const Layout = ({ children }) => {
   const subscribeMetamaskProvider = async () => {
     const provider = await detectEthereumProvider();
     if (provider !== window.ethereum) {
-      console.error("Do you have multiple wallets installed?");
+      return;
     }
-    ethereum.on("accountsChanged", handleAccountsChanged);
+    ethereum.on("accountsChanged", handleMetaAccount);
     ethereum.on("chainChanged", (chainId) => {
       console.log(chainId);
     });
   };
-  const handleAccountsChanged = async (accounts) => {
+  const handleMetaAccount = async (accounts) => {
     if (accounts.length === 0) {
-      await dispatchWalletConnection(triggerWalletConnectionChange(false));
+      await dispatchMetaConnected(setMetaConnected(false));
+      await dispatchMetaToken(setMetaToken(null));
     } else {
-      await dispatchWalletConnection(triggerWalletConnectionChange(true));
+      await dispatchMetaConnected(setMetaConnected(true));
+      await dispatchMetaToken(setMetaToken(accounts));
       if (router.pathname === "/wallet") {
         router.push("/");
       }
