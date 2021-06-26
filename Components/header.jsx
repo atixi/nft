@@ -28,45 +28,77 @@ import {
   ConnectedButton,
   BalanceLabel,
 } from "./StyledComponents/header-styledComponents.js";
-import ConnectedWallet from "./connectedWalletDropdown";
+import WalletInfoDropdown from "./connectedWalletDropdown";
 import { fetchUsers } from "/Utils/strapiApi";
 import {
-  triggerWalletConnectionChange,
-  getTriggerConnection,
+  setAccountTokens,
+  setMetaToken,
+  setWalletToken,
+  setMetaConnected,
+  setWalletConnected,
+  getAccountTokens,
+  getMetaToken,
+  getWalletToken,
+  getMetaConnected,
+  getWalletConnected,
+  getIsDisconnectedFromServer,
 } from "/store/action/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 function Header(props) {
   const router = useRouter();
-  const dispatchAccountConnection = useDispatch();
-  const isConnectedToAnyWallet = useSelector(getTriggerConnection);
+
+  const dispatchAccountTokens = useDispatch();
+  const dispatchMetaToken = useDispatch();
+  const dispatchWalletToken = useDispatch();
+  const dispatchMetaConnected = useDispatch();
+  const dispatchWalletconneted = useDispatch();
+
+  const accountTokens = useSelector(getAccountTokens);
+  const metaToken = useSelector(getMetaToken);
+  const walletToken = useSelector(getWalletToken);
+  const isMetaconnected = useSelector(getMetaConnected);
+  const isWalletConnected = useSelector(getWalletConnected);
+
+  const [profileDetails, setProfileDetails] = useState(null);
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
   const [accountAddress, setAccountAddress] = useState(accountList[0]);
-
-  useEffect(async () => {
+  const [connected, setConnected] = useState(false);
+  useEffect(() => {
+    isConnectedToAnyWallet();
     // this is just to test that we receive data from strapi
     // const data = await fetchUsers();
     // console.log("new data", data)
-  }, []);
+  }, [isMetaconnected, isWalletConnected]);
 
+  const isConnectedToAnyWallet = async () => {
+    if (isMetaconnected == false && isWalletConnected == false) {
+      setConnected(false);
+    } else if (
+      isMetaconnected == false &&
+      isWalletConnected == false &&
+      metaToken == null &&
+      walletToken == null
+    ) {
+      setConnected(false);
+    } else {
+      setConnected(true);
+    }
+  };
   const connectToWallet = async () => {
-    if (!isConnectedToAnyWallet) {
+    if (!connected) {
       router.push("/wallet");
-      console.log("routong to main");
     } else {
       router.push("/");
     }
-    // const data = await dispatchAccountConnection(
-    //   trigerConnection(!isConnectedToAnyWallet)
-    // );
   };
-  const displayAddress = () => {
+  const displayAddress = (token) => {
+    const address = token[0];
     return (
-      "Account: " +
-      accountAddress.substring(1, 4) +
+      address.substring(1, 4) +
       "..." +
-      accountAddress.substring(accountAddress.length - 5, accountAddress.length)
+      address.substring(address.length - 5, address.length)
     );
   };
 
@@ -260,14 +292,14 @@ function Header(props) {
         <CreateButton className={`d-none d-lg-block`}>
           {CONSTANTS.create}
         </CreateButton>
-        {isConnectedToAnyWallet === true ? (
+        {connected == true ? (
           <Dropdown
-            overlay={<ConnectedWallet />}
+            overlay={<WalletInfoDropdown />}
             placement="bottomRight"
             trigger={["hover"]}
           >
             <ConnectedButton className={`d-lg-block`}>
-              <BalanceLabel>{"235234 Eth"}</BalanceLabel>
+              <BalanceLabel>{displayAddress(metaToken)}</BalanceLabel>
               <Avatar size={36} />
             </ConnectedButton>
           </Dropdown>

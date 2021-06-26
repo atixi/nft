@@ -5,9 +5,13 @@ import styled from "styled-components";
 import Link from "next/link";
 import { Button } from "./StyledComponents/header-styledComponents";
 import { useDispatch } from "react-redux";
+import WalletConnect from "@walletconnect/client";
+import QRCodeModal from "@walletconnect/qrcode-modal";
+
 import {
-  triggerWalletConnectionChange,
-  getTriggerConnection,
+  setMetaConnected,
+  setWalletConnected,
+  setWalletToken,
 } from "/store/action/accountSlice";
 const Label = styled.div`
   margin: 0px;
@@ -88,21 +92,45 @@ const CONSTANTS = {
   manageFunds: "Manage Funds",
   disconnect: "Disconnect",
 };
-function ConnectedWallet() {
-  const dispatchDisconnect = useDispatch();
+const MenuItem = styled.div`
+  &:hover {
+    cursor: pointer !important;
+  }
+`;
+function WalletInfoDropdown() {
+  const dispatchMetaConnected = useDispatch();
+  const dispatchWalletConnected = useDispatch();
+  const dispatchWalletToken = useDispatch();
   let address = "0x15d25c1d4c0410514f01ee0953b3db495ccf112d";
   address = address
     .toString()
     .replace(address.toString().substring(10, address.length - 10), ".....");
 
   const disconnectWallet = async () => {
-    const data = await dispatchDisconnect(triggerWalletConnectionChange(false));
-    console.log("account is disconnected", data);
+    const bridge = "https://bridge.walletconnect.org";
+
+    const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
+
+    if (!connector.connected) {
+    } else {
+      await connector.killSession();
+    }
+
+    await dispatchMetaConnected(setMetaConnected(false));
+    await dispatchWalletConnected(setWalletConnected(false));
+    await dispatchWalletToken(setWalletToken(null));
+  };
+  const displayAddress = (token) => {
+    return (
+      token.substring(1, 4) +
+      "..." +
+      token.substring(token.length - 5, token.length)
+    );
   };
   return (
     <DropdownMenu>
       <Label>
-        <span>{address}</span>
+        <span>{"address"}</span>
         <span>
           <Link href={"#"}>
             <a>
@@ -173,12 +201,12 @@ function ConnectedWallet() {
         </Link>
       </Menu.Item>
       <Menu.Item key={"4"}>
-        <div onClick={disconnectWallet}>
+        <MenuItem style={{ cursor: "pointer" }} onClick={disconnectWallet}>
           <label>{`Disconnect`}</label>
-        </div>
+        </MenuItem>
       </Menu.Item>
     </DropdownMenu>
   );
 }
 
-export default ConnectedWallet;
+export default WalletInfoDropdown;

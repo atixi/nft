@@ -5,19 +5,41 @@ import Web3Modal from "web3modal";
 import HandleNotification from "/Components/commons/handleNotification";
 import { isMobileDevice, providerOptions } from "/Constants/constants";
 import styles from "/styles/wallet.module.css";
+import WalletConnect from "@walletconnect/client";
 import {
-  triggerWalletConnectionChange,
-  getTriggerConnection,
+  setAccountTokens,
+  setMetaToken,
+  setWalletToken,
+  setMetaConnected,
+  setWalletConnected,
+  getAccountTokens,
+  getMetaToken,
+  getWalletToken,
+  getMetaConnected,
+  getWalletConnected,
 } from "/store/action/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
 import router from "next/router";
-
+import QRCodeModal from "@walletconnect/qrcode-modal";
+const bridge = "https://bridge.walletconnect.org";
 const Wallet = () => {
-  const dispatchWalletConnection = useDispatch();
-  const isConnectedToAnyWallet = useSelector(getTriggerConnection);
+  const dispatchAccountTokens = useDispatch();
+  const dispatchMetaToken = useDispatch();
+  const dispatchWalletToken = useDispatch();
+  const dispatchMetaConnected = useDispatch();
+  const dispatchWalletconnected = useDispatch();
+
+  const isMetaconnected = useSelector(getMetaConnected);
+  const isWalletConnected = useSelector(getWalletConnected);
+  const accountTokens = useSelector(getAccountTokens);
+  const metaToken = useSelector(getMetaToken);
+  const walletToken = useSelector(getWalletToken);
+
+  const [connected, setConnected] = useState();
   const [isMobile, setIsMobile] = useState(false);
   const [metamaskModal, setMetamaskModal] = useState(null);
-  const [web3Modal, setWeb3Modal] = useState(null);
+  const [mobileModal, setMobileModal] = useState(null);
+  const [mobileConnector, setMobileConnector] = useState();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -29,16 +51,20 @@ const Wallet = () => {
       });
       const mobileModal = new Web3Modal({
         network: "mainnet", // optional
-        cacheProvider: true, // optional
+        cacheProvider: false, // optional
         providerOptions, // required
-        // disableInjectedProvider: false,
+        disableInjectedProvider: true,
       });
       setIsMobile(isMobileDevice());
       if (browserModal.cachedProvider && isMobile) {
-        onMobileConnect();
+        // onMobileConnect();
       }
-      setMetamaskModal(mobileModal);
-      setWeb3Modal(browserModal);
+      setMetamaskModal(browserModal);
+      setMobileModal(mobileModal);
+      setMobileConnector(
+        new WalletConnect({ bridge, qrcodeModal: QRCodeModal })
+      );
+      subscribeWalletProvider();
     }
   }, []);
   const [metamaskWeb3, setMetamaskWeb3] = useState(null);
@@ -49,14 +75,13 @@ const Wallet = () => {
   const [address, setAddress] = useState();
   const [web3, setWeb3] = useState(null);
   const [provider, setProvider] = useState(null);
-  const [connected, setConnected] = useState(false);
+  // const [connected, setConnected] = useState(false);
   const [chainId, setChainId] = useState(1);
   const [networkId, setNetworkId] = useState(1);
   const [assets, setAssets] = useState();
   const [showModal, setShowModal] = useState(false);
   const [pendingRequest, setPendingRequest] = useState(false);
   const [result, setResult] = useState();
-
   const initWeb3 = (provider) => {
     const web3 = new Web3(provider);
 
@@ -72,10 +97,10 @@ const Wallet = () => {
 
     return web3;
   };
-
   const connectToMetamask = async (wallet) => {
     console.log("connecting to metamask");
-    if (isConnectedToAnyWallet === true) {
+    if (metaToken !== null) {
+      await dispatchMetaConnected(setMetaConnected(true));
       router.push("/");
     } else {
       const metamaskProvider = await metamaskModal.connectTo(wallet);
@@ -107,26 +132,14 @@ const Wallet = () => {
 
     provider.on("disconnect", () => {
       setMetamaskConnected(false);
-      console.log("closing metamask");
-      HandleNotification(
-        "success",
-        "Metamask disconnected yeah",
-        "Your Metamask wallet account is disconnected",
-        "topLeft"
-      );
     });
     provider.on("accountsChanged", async (accounts) => {
-      console.log("Metamask accounts:", accounts);
       if (accounts.length == 0) {
-        const connectionStatus = await dispatchWalletConnection(
-          triggerWalletConnectionChange(false)
-        );
-        console.log("connectino to wcallet is lost", connectionStatus);
+        await dispatchMetaConnected(setMetaConnected(false));
+        await dispatchAccountToken(setAccountToken(null));
       } else {
-        const connectionStatus = await dispatchWalletConnection(
-          triggerWalletConnectionChange(true)
-        );
-        console.log("connectino to wallet is ", connectionStatus);
+        await dispatchMetaConnected(setMetaConnected(true));
+        await dispatchAccountToken(setAccountToken(accounts));
       }
       // await getAccountAssets();
     });
@@ -154,135 +167,111 @@ const Wallet = () => {
       "topLeft"
     );
   };
-  const disconnectMetamask = () => {
-    // const metamask = await detectEthereumProvider();
-    // if (metamask) {
-    //   console.log("Ethereum successfully detected!");
-    //   if (ethereum.isMetaMask) {
-    //     if (ethereum.isConnected()) {
-    //       HandleNotification(
-    //         "success",
-    //         "Metamask is connected",
-    //         "You are connected to metamask",
-    //         "topLeft"
-    //       );
-    //     }
-    //   }
-    // } else {
-    //   // if the provider is not detected, detectEthereumProvider resolves to null
-    //   console.error("Please install MetaMask!", error);
-    // }
-  };
+
   const onMobileConnect = async () => {
-    if (connected) {
-      HandleNotification(
-        "info",
-        "Wallet is connected",
-        "You are currently connected to wallet",
-        "topLeft"
-      );
-    } else {
-      const provider = await web3Modal.connect();
+    const bridge = "https://bridge.walletconnect.org";
 
-      await subscribeWalletProvider(provider);
+    // create new connector
+    const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
 
-      const web3 = initWeb3(provider);
-      console.log("web3", web3);
-      const accounts = await web3.eth.getAccounts();
-      console.log("account is ", accounts);
-
-      const address = accounts[0];
-
-      const networkId = await web3.eth.net.getId();
-
-      const chainId = await web3.eth.chainId();
-
-      await setWeb3(web3);
-      await setProvider(provider);
-      await setConnected(true);
-      await setAddress(address);
-      await setChainId(chainId);
-      await setNetworkId(networkId);
+    // check if already connected
+    if (!connector.connected) {
+      // create new session
+      await connector.createSession();
     }
+
+    // subscribe to events
+    subscribeWalletProvider(connector);
   };
 
-  const subscribeWalletProvider = async (provider) => {
-    if (!provider.on) {
+  const subscribeWalletProvider = async (connector) => {
+    if (isWalletConnected == false) {
+      resetApp();
+    }
+    if (!connector) {
       return;
     }
-    provider.on("close", () => resetApp());
-    provider.on("accountsChanged", async (accounts) => {
-      await setAddress(accounts[0]);
-      // await getAccountAssets();
-    });
-    provider.on("chainChanged", async (chainId) => {
-      const metamaskWeb3 = new Web3(provider);
-      const networkId = await metamaskWeb3.eth.net.getId();
-      await setChainId(chainId);
-      await setNetworkId(networkId);
-      // await getAccountAssets();
+
+    connector.on("session_update", async (error, payload) => {
+      if (error) {
+        throw error;
+      }
+
+      const { chainId, accounts } = payload.params[0];
+      console.log("accounts in event ", accounts);
     });
 
-    provider.on("chainChanged", async (networkId) => {
-      const web3 = new Web3(provider);
-      const chainId = await web3.eth.chainId();
-      await setChainId(chainId);
-      await setNetworkId(networkId);
-      // await getAccountAssets();
+    connector.on("connect", (error, payload) => {
+      if (error) {
+        throw error;
+      }
+      onConnect(payload);
     });
+
+    connector.on("disconnect", (error, payload) => {
+      if (error) {
+        throw error;
+      }
+
+      disconnectWallet();
+    });
+
+    if (connector.connected) {
+      const { chainId, accounts } = connector;
+      const address = accounts[0];
+      console.log(connector);
+      // this.setState({
+      //   connected: true,
+      //   chainId,
+      //   accounts,
+      //   address,
+      // });
+      // this.onSessionUpdate(accounts, chainId);
+    }
+
+    setMobileConnector(connector);
   };
 
+  const onConnect = async (payload) => {
+    const { accounts } = payload.params[0];
+    dispatchWalletToken(setWalletToken(accounts));
+    dispatchWalletconnected(setWalletConnected(true));
+    router.push("/");
+  };
   const getAccountAssets = async () => {
     setFetching(true);
     try {
-      // get account balances
-      // const assets = await apiGetAccountAssets(address, chainId);
-
       await setFetching(true);
       await setAssets(assets);
     } catch (error) {
-      console.error(error); // tslint:disable-line
       await setFetching(false);
     }
   };
 
-  const disconnectWallet = async () => {
-    if (connected) {
-      await resetApp();
-      HandleNotification(
-        "success",
-        "WalletConnect Disconnected",
-        "Successfully Disconnected Your Wallet",
-        "topLeft"
-      );
-    } else {
-      HandleNotification(
-        "info",
-        "WalletConnect",
-        "You are not connected to any Mobile wallet",
-        "topLeft"
-      );
-    }
+  const disconnectWallet = () => {
+    dispatchWalletconnected(setWalletConnected(false));
+    dispatchWalletToken(setWalletToken(null));
+    resetApp();
   };
 
   const resetApp = async () => {
     if (web3 && web3.currentProvider && web3.currentProvider.close) {
       await web3.currentProvider.close();
-      console.log("await web3.currentProvider.close()");
     }
 
-    await web3Modal.clearCachedProvider();
-    setFetching(false);
-    setAddress(null);
-    setWeb3(null);
-    setProvider(null);
-    setConnected(false);
-    setChainId(1);
-    setNetworkId(1);
-    setAssets([]);
-    setShowModal(false);
-    setPendingRequest(false);
-    setResult(null);
+    await dispatchWalletToken(setWalletToken(null));
+    await dispatchWalletconnected(setWalletConnected(false));
+    // setFetching(false);
+    // setAddress(null);
+    // setWeb3(null);
+    // setProvider(null);
+    // setConnected(false);
+    // setChainId(1);
+    // setNetworkId(1);
+    // setAssets([]);
+    // setShowModal(false);
+    // setPendingRequest(false);
+    // setResult(null);
   };
   return (
     <div className={styles.container}>
@@ -316,20 +305,7 @@ const Wallet = () => {
                 <div>Metamask</div>
               </div>
             )}
-            <div
-              className={styles.walletCard}
-              onClick={() => comingSoon("Portis")}
-            >
-              <div className={styles.walletCardPopup}>
-                <span>Credit Card Flow</span>
-              </div>
-              <img
-                width={28}
-                height={28}
-                src={"/images/walletIcons/portis.svg"}
-              />
-              <div>Portis</div>
-            </div>
+
             <div className={styles.walletCard} onClick={onMobileConnect}>
               <div className={styles.walletCardPopup}>
                 <span>Mobile Wallets</span>
@@ -355,20 +331,6 @@ const Wallet = () => {
                 />
               </div>
               <div className={styles.walletDetails}>WalletConnect</div>
-            </div>
-            <div
-              className={styles.walletCard}
-              onClick={() => disconnectWallet()}
-            >
-              <div className={styles.walletCardPopup}>
-                <span>Disconnect </span>
-              </div>
-              <img
-                width={28}
-                height={28}
-                src={"/images/walletIcons/disconnect.svg"}
-              />
-              <div>Disconnect Mobile Wallet</div>
             </div>
           </div>
           <div>
