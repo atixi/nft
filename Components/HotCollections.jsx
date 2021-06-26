@@ -20,7 +20,7 @@ export default function HotCollections({data}) {
           {collections && collections.map((item, index) => (
              <CollectionCard key={index}> 
              <CardImageContainer>
-                 <img style={{width: "100%"}} src={item.imagePreviewUrl}/>
+                 <img style={{width: "auto"}} src={item.imagePreviewUrl}/>
              </CardImageContainer>
              <CardDescription style={{borderTop:"1px solid #ccc"}}>
                  <ProfileAvatarContainer>
