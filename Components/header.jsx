@@ -35,9 +35,11 @@ function Header(props) {
     // this is just to test that we receive data from strapi
     // const data = await fetchUsers();
     // console.log("new data", data)
-    window.ethereum.on("accountsChanged", function (accounts) {
-      setAccountAddress(accounts[0]);
-    });
+    if(window !== 'undefined' && window.ethereum) {
+      window.ethereum.on("accountsChanged", function (accounts) {
+        setAccountAddress(accounts[0]);
+      });
+    }
   }, []);
 
   const displayAddress = () => {
