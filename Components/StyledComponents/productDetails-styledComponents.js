@@ -4,7 +4,6 @@ export const Wrapper = styled.div`
     display: flex;
     height: calc(100vh - 74px);
     flex-direction: column;
-
     a{
         color: black !important;
     }
@@ -54,7 +53,9 @@ export const ItemInfo = styled.div`
             width: 400px;
             height: auto;
     };
-
+    @media (max-width:576px){
+        border-left: none;
+    };
     @media (min-width:768px) {
             width: 550px;
     };
@@ -64,9 +65,10 @@ export const ItemInfo = styled.div`
 export const ItemDetails = styled.div`
     width: 100%;
     height: 100%;
+    max-height: 800px !important;
     overflow-y: scroll;    
     padding:25px;
-    padding-bottom: 180px;
+    padding-bottom: 250px;
 `;
 export const ItemFooter = styled.div`
     padding:15px;
@@ -79,6 +81,10 @@ export const ItemFooter = styled.div`
     backdrop-filter: blur(15px);
     background-color: rgba(255,255,255,.5);
     border-top: 1px solid #ccc;
+    @media (max-width:575px) {
+        position: relative;
+        top: -180px;
+    }
 
     center{
         font-size: 16px;
@@ -87,7 +93,7 @@ export const ItemFooter = styled.div`
     };
 `;
 export const ItemName = styled.h1`
-    flex: 1;
+    padding-right: 10px;
     margin: 0px;
     font-weight: 900;
 `;

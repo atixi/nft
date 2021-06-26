@@ -55,8 +55,8 @@ export const CardImageContainer = styled.div`
     img{
         height: 100%;
         width:auto;
-        transform: translateX(-50%);
-        left: 50%;
+        // transform: translateX(-50%);
+        // left: 50%;
         position: relative;
         margin: 0px auto; 
     };

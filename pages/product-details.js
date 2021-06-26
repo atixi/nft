@@ -1,4 +1,4 @@
-import { Dropdown, Image, Menu, Statistic, Tabs, Avatar } from "antd";
+import { Dropdown, Image, Menu, Statistic, Tabs, Avatar, Skeleton } from "antd";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -41,8 +41,9 @@ function ProductPage() {
 
   const loadAsset = async (ta, ti) => {
     let asset = await OpenSeaAPI.getAssetDetails(ta, ti);
+    console.log("assets", asset)
     setAsset(asset);
-    setBids(asset.asset.buyOrders);
+    setBids(asset.orders);
   };
   const item = {
     image: "/images/p1.jpeg",
@@ -63,12 +64,14 @@ function ProductPage() {
           <ItemImageContainer className=" text-center">
             {/* <img className={"itemImage"} src={asset.asset?.imageUrl} /> */}
             <ImageCon>
-              <Image
+              {asset.asset?.imageUrl ? <Image
                 src={`${asset.asset?.imageUrl}?x-oss-process=image/blur,r_50,s_50/quality,q_1/resize,m_mfit,h_200,w_200`}
                 preview={{
                   src: `${asset.asset?.imageUrl}`,
                 }}
-              />
+              /> : 
+              <Skeleton.Image />
+              }
             </ImageCon>
           </ItemImageContainer>
           <ItemInfo className={"float-none float-sm-left"}>

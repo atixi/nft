@@ -146,6 +146,28 @@ export const ConnectButton = styled.button`
     color: black !important;
   };
 `;
+export const ConnectedButton = styled.button`
+  margin: 0px 5px;
+  line-height: 12px;
+  max-height: 44px;
+  font-weight: 600;
+  border-radius: 25px;
+  border: 1px solid rgba(4, 4, 5, 0.1);
+  background-color: #fff;
+  font-size: 0.98rem !important;
+  padding-right: 0px;
+  a{
+    color: black !important;
+  };
+`;
+export const BalanceLabel = styled.div`
+    display: inline;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-right: 10px;
+    min-width: 146px;
+
+`
 export const Button = styled.button`
   margin: 0px 5px;
   line-height: 12px;

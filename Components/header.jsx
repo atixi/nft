@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Search from "./search";
 import Link from "next/link";
+import {Avatar, Dropdown} from "antd";
 import {
   TwitterOutlined,
   YoutubeFilled,
@@ -24,8 +25,11 @@ import {
   HeaderBottomMenu,
   SearchWrapper,
   SocialLinkContainer,
+  ConnectedButton,
+  BalanceLabel
 } from "./StyledComponents/header-styledComponents.js";
-import { fetchUsers } from "/Utils/strapiApi";
+import ConnectedWallet from "./connectedWalletDropdown";
+import {fetchUsers} from "/Utils/strapiApi";
 function Header(props) {
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
@@ -221,7 +225,7 @@ function Header(props) {
       </div>
       <div
         className="d-none d-xl-flex px-1"
-        style={{ flex: "1", marginRight: "260px", height: "40px" }}
+        style={{ flex: "1", marginRight: "0px", height: "40px" }}
       >
         <Search />
       </div>
@@ -232,7 +236,6 @@ function Header(props) {
         <li className="d-none d-lg-flex">
           <a href="#">{CONSTANTS.myItems}</a>
         </li>
-
         <li className="d-none d-lg-flex">
           <a href="#">{CONSTANTS.howItWorks}</a>
         </li>
@@ -242,9 +245,15 @@ function Header(props) {
         <CreateButton className={`d-none d-lg-block`}>
           {CONSTANTS.create}
         </CreateButton>
+        <Dropdown  overlay={ConnectedWallet} placement="bottomRight" trigger={['hover']}>
+        <ConnectedButton className={`d-lg-block`}>
+          <BalanceLabel>
+            {"235234 Eth"}
+          </BalanceLabel><Avatar size={36} /></ConnectedButton>
+        </Dropdown>
         <ConnectButton className={`d-none d-lg-block`}>
           <Link href={"/wallet"} passHref>
-            <a>{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
+            <a >{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
           </Link>
         </ConnectButton>
         <Button

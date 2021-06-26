@@ -11,13 +11,13 @@ const {
   terms,
   policy,
 } = FOOTER;
-import { FooterContainer, SearchInput, TermAndPolicy, SocialLinksContainer, SearchButton, CopyRight, CopyRightAndPolicyContainer, FooterExtraLinkContainer, CategoryListUl, LinkText, CategoryLink, CategoryListLi, CategoryTitle, SelectLanguage } from "./StyledComponents/footer-styledComponents"
+import { FooterContainer, SearchInput, LanguageContainer, TermAndPolicy, SocialLinksContainer, SearchButton, CopyRight, CopyRightAndPolicyContainer, FooterExtraLinkContainer, CategoryListUl, LinkText, CategoryLink, CategoryListLi, CategoryTitle, SelectLanguage } from "./StyledComponents/footer-styledComponents"
 const { Option } = SelectLanguage;
 
 function Footer() {
   return (
     <>
-      <FooterContainer className={` pt-5 pl-3 pr-3 pb-3 mt-5`}>
+      <FooterContainer className={` pt-5 pl-3 pr-3 pb-3`}>
         <Row>
           <Col md={6} lg={6} sm={24} xs={24} className="mb-3 mb-md-0">
             <div className="col-md-12 col-sm-12">
@@ -37,7 +37,7 @@ function Footer() {
               </div>
             </div>
           </Col>
-          <Col md={12} sm={8} xs={12} className={"text-center"}>
+          <Col md={12} sm={24} xs={24} className={"text-center"}>
             <Row>
               <Col md={12} sm={12} xs={12} className={"text-left pl-5"}>
                 <CategoryTitle>{FOOTER_WEBSITE_LINKS.websiteTitle}</CategoryTitle>
@@ -65,8 +65,8 @@ function Footer() {
               </Col>
             </Row>
           </Col>
-          <Col md={6} sm={8} xs={24} className="mt-4 mt-sm-0">
-            <div className="col-md-12 col-sm-10">
+          <Col md={6} lg={6} sm={24} xs={24} className="mt-4 mt-sm-0">
+            <LanguageContainer className="col-md-12 col-sm-6 col-xs-10">
               <CategoryTitle>{FOOTER_LANGUAGES.languagesTitle}</CategoryTitle>
               <div className={"mt-2"}>
                 <SelectLanguage defaultValue="English">
@@ -77,19 +77,18 @@ function Footer() {
                   ))}
                 </SelectLanguage>
               </div>
-            </div>
+            </LanguageContainer>
           </Col>
           <Col md={24} xs={24}>
             <hr />
             <FooterExtraLinkContainer>
               <CopyRightAndPolicyContainer>
                 <CopyRight>{`© ${FOOTER_WEBSITE_LINKS.websiteTitle}, Inc. ${FOOTER_WEBSITE_LINKS.allRightReserved}`}</CopyRight>
+              </CopyRightAndPolicyContainer>
                 <TermAndPolicy>
                   <span>{terms}</span>
                   <span>{policy}</span>
                 </TermAndPolicy>
-
-              </CopyRightAndPolicyContainer>
               <SocialLinksContainer>
                 <a
                   rel="noreferrer"
