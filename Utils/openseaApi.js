@@ -20,6 +20,12 @@ async function getAccount() {
   return { accountAddress, error };
 }
 /// handled and checked functions //////////////////////////////////////////////////////////////////////
+const getAssets = (slug) => {
+  return client.get(`collections?limit=50`);
+};
+// const getAssets = () => {
+//   return seaport.api.getBundle({ slug: "bitcoinphotos" });
+// };
 function getBundles() {
   return seaport.api.getBundles({
     on_sale: true,
@@ -84,9 +90,7 @@ async function getCollectionsDetailsBySlugs(slugs) {
   }
 }
 //topsellers
-async function getAssets(onSale = true) {
-  return await client.get(`assets?on_sale=${onSale}&limit=50`);
-}
+
 async function getAssetDetails(tokenAddress, tokenId) {
   const asset = await seaport.api.getAsset({
     tokenAddress, // string
@@ -132,6 +136,7 @@ async function getSingleAsset(accountId, assetId) {
 }
 // hellper functions
 // this is helper method to reproduct the topseller data (changes are required)
+// ==================== not checked
 function getTopSellersDetails(assets) {
   let topSellers = [];
   const groupByCreator = _.groupBy(assets, "makerAccount[user[username]]");
@@ -152,22 +157,27 @@ function getTopSellersDetails(assets) {
   return topSellers;
 }
 const getCollectionDetails = (collections) => {
+  console.log("in collection details");
   let groubByCollection = _.groupBy(collections, "collection[name]");
+  let groubBySlug = _.groupBy(collections, "collection[slug]");
+  console.log("group By Collection", groubByCollection);
   // let groubByCollection = _.groupBy(collections, "tokenAddress");
   let cols = [];
-  let collectionNames = Object.keys(groubByCollection);
-  for (let i = 0; i < collectionNames.length; i++) {
+  let slugs = Object.keys(groubByCollection);
+  for (let i = 0; i < slugs.length; i++) {
     cols.push({
-      collection: collectionNames[i],
-      imagePreviewUrl:
-        groubByCollection[collectionNames[i]][0].collection.imageUrl,
-      totalAssets: groubByCollection[collectionNames[i]].length,
+      collection: groubByCollection[slugs[i]][0].collection.name,
+      imagePreviewUrl: groubByCollection[slugs[i]][0].collection.imageUrl,
+      slug: groubByCollection[slugs[i]][0].collection.slug,
+      totalAssets: groubByCollection[slugs[i]].length,
     });
   }
   cols = cols.filter((col) => col.imagePreviewUrl != null);
   cols = _.orderBy(cols, "totalAssets", "desc");
   return cols;
 };
+
+// ==================== not checked
 const getExploresDetails = (assets) => {
   let exps = assets.filter(
     (exp) =>

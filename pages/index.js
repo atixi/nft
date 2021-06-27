@@ -12,8 +12,7 @@ import { topSellersAPI } from "/Constants/mockApi/topSellerApi";
 import { liveAuctionsAPI } from "/Constants/mockApi/liveAuctionApi";
 import { collectionsAPI } from "/Constants/mockApi/collectionApi";
 import { exploresAPI } from "/Constants/mockApi/exploreApi";
-
-function Home({ topSellers, liveAuctions, collections, explores }) {
+function Home({ topSellers, liveAuctions, collections, explores, assets }) {
   return (
     <MainWrapper>
       <Slide />
@@ -24,6 +23,7 @@ function Home({ topSellers, liveAuctions, collections, explores }) {
     </MainWrapper>
   );
 }
+
 export const getServerSideProps = async () => {
   // const orders = await OpenSeaAPI.getOrders({});
   // const liveAuctions = await OpenSeaAPI.getOrders({ on_sale: true });
@@ -38,6 +38,7 @@ export const getServerSideProps = async () => {
       // topSellers: JSON.parse(JSON.stringify(topSellers)),
       // liveAuctions: JSON.parse(JSON.stringify(liveAuctions.orders)),
       // collections: JSON.parse(JSON.stringify(collections)),
+      // assets: JSON.parse(JSON.stringify(assets)),
       // explores: JSON.parse(JSON.stringify(explores)),
     },
   };
