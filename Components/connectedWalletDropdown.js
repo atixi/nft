@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Button as But, List, Avatar } from "antd";
+import { Menu, List, Avatar } from "antd";
 import { SwapOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import Link from "next/link";
@@ -60,10 +60,6 @@ const Label = styled.div`
     min-width: 0px;
     max-width: 100%;
   }
-`;
-const AddFundsButton = styled(But)`
-  margin-top: 10px;
-  margin-bottom: 10px;
 `;
 const ListTitle = styled.span`
   color: gray;
@@ -181,9 +177,6 @@ function WalletInfoDropdown() {
           />
         </List.Item>
       </List>
-      <AddFundsButton block shape={"round"} size={"large"}>
-        {CONSTANTS.addFunds}
-      </AddFundsButton>
       <hr />
       <Menu.Item key={"1"}>
         <Link href={"#"}>
