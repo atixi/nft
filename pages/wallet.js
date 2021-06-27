@@ -136,10 +136,10 @@ const Wallet = () => {
     provider.on("accountsChanged", async (accounts) => {
       if (accounts.length == 0) {
         await dispatchMetaConnected(setMetaConnected(false));
-        await dispatchAccountToken(setAccountToken(null));
+        await dispatchMetaToken(setMetaToken(null));
       } else {
         await dispatchMetaConnected(setMetaConnected(true));
-        await dispatchAccountToken(setAccountToken(accounts));
+        await dispatchMetaToken(setMetaToken(accounts));
       }
       // await getAccountAssets();
     });
