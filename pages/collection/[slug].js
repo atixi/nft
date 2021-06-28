@@ -9,7 +9,7 @@ import {
 } from "/Components/StyledComponents/talentPage-styledComponents";
 import Products from "/Components/products";
 import OpenSeaAPI from "/Utils/openseaApi";
-import { collectionAssets as assets } from "/Constants/mockApi/collectionApi";
+import { clientCollections } from "/Constants/mockApi/collectionApi";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import {
   LoadingContainer,
@@ -17,89 +17,59 @@ import {
   MainWrapper,
 } from "/Components/StyledComponents/globalStyledComponents";
 
-import { useRouter } from "next/router";
 const { TabPane } = Tabs;
 function CollectionDetails() {
-  const router = useRouter();
   const [collections, setCollections] = useState();
+  const [slug, setSlug] = useState();
   const [banner, setBanner] = useState();
   const [created, setCreated] = useState();
-  const { collection } = router.query;
-  const { address } = router.query;
-  const { avatar } = router.query;
+  const [collectionName, setCollectionName] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [addressToShow, setAddress] = useState(
-    address &&
-      address
-        .toString()
-        .replace(address.toString().substring(10, address.length - 10), ".....")
-  );
-  const FetchCreatedAssets = async (e) => {
-    setIsLoading(true);
-    const createRequest = await OpenSeaAPI.getAssetsListByOwner(address);
-    if (createRequest.ok) {
-      const assets = await createRequest.data?.assets;
-      setCreated(assets);
-      setIsLoading(false);
-    } else {
-      setIsLoading(false);
-      alert(createRequest.problem);
-    }
-  };
-  const FetchCollectibleAssets = async (e) => {
-    setIsLoading(true);
-    const collectionRequest = await OpenSeaAPI.getCollections(address);
-    if (collectionRequest.ok) {
-      const cols = await collectionRequest.data;
-      setCollections(cols);
-      setIsLoading(false);
-    } else {
-      setIsLoading(false);
-      alert(collectionRequest.problem);
-    }
-  };
   const loadTabData = async (e) => {
     if (e === "1") {
-      loadAssets();
+      loadAssets(slug);
     } else if (e === "2") {
-      loadCollections();
+      loadCollections(slug);
     }
   };
-  const loadCollections = (tal) => {
-    setCollections(assets);
+  const loadCollections = (slug) => {
+    const data = clientCollections[slug];
+    setCollections(data?.slice(1, data.length / 2));
   };
-  const loadAssets = (tal) => {
-    const data = assets.slice(assets.length / 2, assets.length);
-    setCreated(data);
+  const loadAssets = (slug) => {
+    const data = clientCollections[slug];
+    setCreated(data?.slice(data.length / 2, data.length));
   };
   const query = useQueryParam();
   useEffect(() => {
     if (!query) {
       return;
+    } else {
+      setSlug(query.slug);
+      setBanner(query.banner_image_url);
+      loadAssets(query.slug);
+      loadCollections(query.slug);
+      setCollectionName(query.collection);
     }
-    var item = assets[Math.floor(Math.random() * assets.length)];
-    setBanner(item.image_url);
-    loadAssets();
-    loadCollections();
   }, [query]);
-  // useEffect(() => {
-  // setCreated(assets.assets);
-  // }, [assets]);
+  if (!slug) {
+    return <p>Loading....</p>;
+  }
   return (
     <>
       <MainWrapper>
         <ProfileContainer>
-          <img src={`https://picsum.photos/1000/400`} />
+          <img src={query.banner_image_url} />
           <BiographyContainer>
             <div className={"avatar"}>
               <img alt="userAvatar" src={query.image_url} loading="lazy" />
             </div>
             <BioDescription>
               <h3>
-                <strong>{collection}</strong>
+                <strong>{collectionName}</strong>
               </h3>
               <h6>
-                <strong>{addressToShow}</strong>
+                <strong>{"addressToShow"}</strong>
               </h6>
               <div className="mt-4">
                 <ProfileButton type="button">
@@ -131,16 +101,17 @@ function CollectionDetails() {
     </>
   );
 }
-export const getServerSideProps = async () => {
-  // const { data: assets } = await OpenSeaAPI.getAssets("bitcoinphotos");
-  return {
-    props: {
-      // assets: JSON.parse(JSON.stringify(assets.assets)),
-      // assets: JSON.parse(JSON.stringify(assets)),
-      // liveAuctions: JSON.parse(JSON.stringify(liveAuctions.orders)),
-      // collections: JSON.parse(JSON.stringify(collections)),
-      // explores: JSON.parse(JSON.stringify(explores)),
-    },
-  };
-};
+
+// export const getServerSideProps = async () => {
+//   // const { data: assets } = await OpenSeaAPI.getAssets("bitcoinphotos");
+//   return {
+//     props: {
+//       // assets: JSON.parse(JSON.stringify(assets.assets)),
+//       // assets: JSON.parse(JSON.stringify(assets)),
+//       // liveAuctions: JSON.parse(JSON.stringify(liveAuctions.orders)),
+//       // collections: JSON.parse(JSON.stringify(collections)),
+//       // explores: JSON.parse(JSON.stringify(explores)),
+//     },
+//   };
+// };
 export default CollectionDetails;

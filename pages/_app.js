@@ -1,12 +1,18 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "antd/dist/antd.min.css";
+import "/styles/nprogress.css";
 import store, { persistor } from "../store";
 import { PersistGate } from "redux-persist/integration/react";
 import React from "react";
+import Router from "next/router";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Provider } from "react-redux";
 import Layout from "/Components/Layout/Layout";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
+import NProgress from "nprogress"; //nprogress module
+Router.events.on("routeChangeStart", () => NProgress.start());
+Router.events.on("routeChangeComplete", () => NProgress.done());
+Router.events.on("routeChangeError", () => NProgress.done());
 
 const GlobalStyle = createGlobalStyle`
   body {
