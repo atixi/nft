@@ -37,8 +37,9 @@ export default function HotCollections({ data }) {
                     pathname: `/collection/${item.slug}`,
                     query: {
                       slug: item.slug,
+                      banner_image_url: item.banner_image_url,
                       image_url: item.image_url,
-                      collection: item.name,
+                      collection: item.collection,
                     },
                   }}
                 >

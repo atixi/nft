@@ -7,18 +7,30 @@ import Slide from "/Components/slider/slide";
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 import TopSellers from "/Components/topSellers";
 import OpenSeaAPI from "/Utils/openseaApi";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { topSellersAPI } from "/Constants/mockApi/topSellerApi";
 import { liveAuctionsAPI } from "/Constants/mockApi/liveAuctionApi";
-import { collectionsAPI } from "/Constants/mockApi/collectionApi";
+import {
+  collectionsAPI,
+  clientCollections,
+} from "/Constants/mockApi/collectionApi";
 import { exploresAPI } from "/Constants/mockApi/exploreApi";
 function Home({ topSellers, liveAuctions, collections, explores, assets }) {
+  const [clientCols, setClientCols] = useState();
+
+  useEffect(() => {
+    getCollections();
+  }, []);
+  const getCollections = () => {
+    const cols = OpenSeaAPI.mockCollections(clientCollections);
+    setClientCols(cols);
+  };
   return (
     <MainWrapper>
       <Slide />
       <TopSellers data={topSellersAPI} />
       <LiveAuctions data={liveAuctionsAPI} />
-      <HotCollections data={collectionsAPI} />
+      <HotCollections data={clientCols} />
       <Explore data={exploresAPI} />
     </MainWrapper>
   );
