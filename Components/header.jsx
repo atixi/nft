@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Search from "./search";
 import Link from "next/link";
-import {Avatar, Dropdown} from "antd";
+import { Avatar, Dropdown } from "antd";
 import {
   TwitterOutlined,
   YoutubeFilled,
@@ -28,32 +28,79 @@ import {
   SearchWrapper,
   SocialLinkContainer,
   ConnectedButton,
-  BalanceLabel
+  BalanceLabel,
 } from "./StyledComponents/header-styledComponents.js";
-import ConnectedWallet from "./connectedWalletDropdown";
-import {fetchUsers} from "/Utils/strapiApi";
+import WalletInfoDropdown from "./connectedWalletDropdown";
+import { fetchUsers } from "/Utils/strapiApi";
+import {
+  setAccountTokens,
+  setMetaToken,
+  setWalletToken,
+  setMetaConnected,
+  setWalletConnected,
+  getAccountTokens,
+  getMetaToken,
+  getWalletToken,
+  getMetaConnected,
+  getWalletConnected,
+  getIsDisconnectedFromServer,
+} from "/store/action/accountSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 function Header(props) {
+  const router = useRouter();
+
+  const dispatchAccountTokens = useDispatch();
+  const dispatchMetaToken = useDispatch();
+  const dispatchWalletToken = useDispatch();
+  const dispatchMetaConnected = useDispatch();
+  const dispatchWalletconneted = useDispatch();
+
+  const accountTokens = useSelector(getAccountTokens);
+  const metaToken = useSelector(getMetaToken);
+  const walletToken = useSelector(getWalletToken);
+  const isMetaconnected = useSelector(getMetaConnected);
+  const isWalletConnected = useSelector(getWalletConnected);
+
+  const [profileDetails, setProfileDetails] = useState(null);
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
   const [accountAddress, setAccountAddress] = useState(accountList[0]);
-
-  useEffect(async () => {
+  const [connected, setConnected] = useState(false);
+  useEffect(() => {
+    isConnectedToAnyWallet();
     // this is just to test that we receive data from strapi
     // const data = await fetchUsers();
     // console.log("new data", data)
-    if (window !== "undefined" && window.ethereum) {
-      window.ethereum.on("accountsChanged", function (accounts) {
-        setAccountAddress(accounts[0]);
-      });
-    }
-  }, []);
+  }, [isMetaconnected, isWalletConnected]);
 
-  const displayAddress = () => {
+  const isConnectedToAnyWallet = async () => {
+    if (isMetaconnected == false && isWalletConnected == false) {
+      setConnected(false);
+    } else if (
+      isMetaconnected == false &&
+      isWalletConnected == false &&
+      metaToken == null &&
+      walletToken == null
+    ) {
+      setConnected(false);
+    } else {
+      setConnected(true);
+    }
+  };
+  const connectToWallet = async () => {
+    if (!connected) {
+      router.push("/wallet");
+    } else {
+      router.push("/");
+    }
+  };
+  const displayAddress = (token) => {
+    const address = token[0];
     return (
-      "Account: " +
-      accountAddress.substring(1, 4) +
+      address.substring(1, 4) +
       "..." +
-      accountAddress.substring(accountAddress.length - 5, accountAddress.length)
+      address.substring(address.length - 5, address.length)
     );
   };
 
@@ -247,17 +294,31 @@ function Header(props) {
         <CreateButton className={`d-none d-lg-block`}>
           {CONSTANTS.create}
         </CreateButton>
-        <Dropdown  overlay={ConnectedWallet} placement="bottomRight" trigger={['hover']}>
-        <ConnectedButton className={`d-lg-block`}>
-          <BalanceLabel>
-            {"235234 Eth"}
-          </BalanceLabel><Avatar size={36} /></ConnectedButton>
-        </Dropdown>
-        <ConnectButton className={`d-none d-lg-block`}>
-          <Link href={"/wallet"} passHref>
-            <a >{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
-          </Link>
-        </ConnectButton>
+        {connected == true ? (
+          <Dropdown
+            overlay={<WalletInfoDropdown />}
+            placement="bottomRight"
+            trigger={["hover"]}
+          >
+            <ConnectedButton className={`d-lg-block`}>
+              <BalanceLabel>
+                {walletToken != null
+                  ? displayAddress(walletToken)
+                  : metaToken != null && displayAddress(metaToken)}
+              </BalanceLabel>
+              <Avatar size={36} />
+            </ConnectedButton>
+          </Dropdown>
+        ) : (
+          <ConnectButton
+            className={`d-none d-lg-block`}
+            onClick={connectToWallet}
+          >
+            <Link href={"/wallet"} passHref>
+              <a>{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
+            </Link>
+          </ConnectButton>
+        )}
         <Button
           onClick={() => {
             setSearch(true);

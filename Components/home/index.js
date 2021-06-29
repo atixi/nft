@@ -11,14 +11,22 @@ import OpenSeaAPI from "/Utils/openseaApi";
 import { isMobileDevice } from "../../Constants/constants";
 import HandleNotification from "/Components/commons/handleNotification";
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
+import {
+  bundlesAPI,
+  collectionsAPI,
+  exploresAPI,
+  liveAuctionsAPI,
+  topSellersAPI,
+} from "../../Constants/lists";
 function Home() {
   const [bundles, setBundles] = useState([]);
   const [topSellers, setTopSellers] = useState([]);
   const [liveAuctions, setLiveAuctions] = useState([]);
-  const [collections, setCollections] = useState();
-  const [explores, setExplores] = useState();
+  const [collections, setCollections] = useState([]);
+  const [explores, setExplores] = useState([]);
   useEffect(() => {
-    initData();
+    console.log("hello");
+    // initData();
   }, []);
   const initData = () => {
     if (!isMobileDevice())
@@ -52,6 +60,7 @@ function Home() {
     try {
       const { orders } = await OpenSeaAPI.getTopSellers();
       const topSellers = OpenSeaAPI.getTopSellersDetails(orders);
+      console.log("Top sellers : ", topSellers);
       setTopSellers(topSellers);
     } catch (e) {
       HandleNotification("error", e.message, "Server Is Not Available");
@@ -88,10 +97,10 @@ function Home() {
       <Header />
       <MainWrapper>
         <Slide />
-        {topSellers && <TopSellers data={topSellers} /> }
-        {liveAuctions && <LiveAuctions data={liveAuctions} /> }
-        {collections && <HotCollections data={collections} /> }
-        {explores && <Explore data={explores} /> }
+        <TopSellers data={topSellers} />
+        <LiveAuctions data={liveAuctions} />
+        <HotCollections data={collections} />
+        <Explore data={explores} />
       </MainWrapper>
       <Footer />
     </>

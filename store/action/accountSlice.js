@@ -6,18 +6,54 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 const accountSlice = createSlice({
   name: "account",
   initialState: {
-    accountToken: null,
+    accountTokens: {
+      metaToken: null,
+      walletToken: null,
+    },
+    metaConnected: false,
+    walletConnected: false,
+    isDisconnectedFromServer: false,
   },
   reducers: {
-    setAccountToken: (state, action) => {
-      state.accountToken = action.payload;
+    setAccountTokens: (state, action) => {
+      state.accountTokens.walletToken = action.payload;
+    },
+    setMetaToken: (state, action) => {
+      state.accountTokens.metaToken = action.payload;
+    },
+    setWalletToken: (state, action) => {
+      state.accountTokens.walletToken = action.payload;
+    },
+    setMetaConnected: (state, action) => {
+      state.metaConnected = action.payload;
+    },
+    setWalletConnected: (state, action) => {
+      state.walletConnected = action.payload;
     },
   },
 });
 
-export const { setAccountToken } = accountSlice.actions;
-export const getAccountToken = (state) => {
+export const {
+  setAccountTokens,
+  setMetaToken,
+  setWalletToken,
+  setMetaConnected,
+  setWalletConnected,
+} = accountSlice.actions;
+export const getAccountTokens = (state) => {
   return state.account.accountToken;
 };
 
+export const getMetaToken = (state) => {
+  return state.account.accountTokens.metaToken;
+};
+export const getWalletToken = (state) => {
+  return state.account.accountTokens.walletToken;
+};
+export const getWalletConnected = (state) => {
+  return state.account.walletConnected;
+};
+export const getMetaConnected = (state) => {
+  return state.account.metaConnected;
+};
 export default accountSlice.reducer;

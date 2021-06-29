@@ -1,14 +1,14 @@
 import * as Web3 from "web3";
 import { OpenSeaPort, Network } from "opensea-js";
 import client from "./openSeaClient";
-import _, { reject } from "lodash";
+import _ from "lodash";
 const provider = new Web3.providers.HttpProvider(
-  // "https://mainnet.infura.io/v3/7ca37bed6f77481eb889a45bc8520e6c"
-  "https://mainnet.infura.io/v3/7ca37bed6f77481eb889a45bc8520e6c"
+  "https://mainnet.infura.io/"
+  // `https://rinkeby-api.opensea.io/api/v1/`
 );
 const seaport = new OpenSeaPort(provider, {
   networkName: Network.Main,
-  apiKey: "7ca37bed6f77481eb889a45bc8520e6c",
+  apiKey: "2e7ef0ac679f4860bbe49a34a98cf5ac",
 });
 async function getAccount() {
   let error = null;
@@ -20,13 +20,55 @@ async function getAccount() {
   return { accountAddress, error };
 }
 /// handled and checked functions //////////////////////////////////////////////////////////////////////
+const getAssets = (slug) => {
+  return client.get("collections?limit=50");
+};
+const getCollectionBySlug = (slug, order_direction = `desc`) => {
+  return client.get(
+    `assets?order_direction=${order_direction}&offset=0&limit=50&collection=${slug}`
+  );
+};
+
+const getCollectionBySlugs = async () => {
+  const slugs = [
+    "reika-mandala-art",
+    "atixi",
+    "cosplay-made-in-japan",
+    "unofficial-bayc-collectibles",
+    "delorean-s-40th-anniversary-nft-collection",
+    "glewme-city-master-of-permits-uriel",
+    "plaguedoctor-1",
+    "builsontheblock",
+    "fnd",
+    "uniswap-v3-positions",
+    "penguin-dummy-club-1",
+    "iconpunks",
+    "airlord",
+    "monalisa-art",
+    "unique-one-v2",
+    "slumdoge-billionaires",
+  ];
+  const promises = [];
+  for (let i = 0; i < slugs.length; i++) {
+    promises.push(getCollectionBySlug(slugs[i]));
+  }
+  return Promise.allSettled(promises);
+};
+const mapCollection = (results) => {
+  const collections = [];
+  results.map((result) => collections.push(result.value.data.assets));
+  return collections;
+};
+// const getAssets = () => {
+//   return seaport.api.getBundle({ slug: `bitcoinphotos` });
+// };
 function getBundles() {
   return seaport.api.getBundles({
     on_sale: true,
     limit: 50,
   });
 }
-const getLiveAuctions = ({params}) => {
+const getLiveAuctions = ({ params }) => {
   return seaport.api.getOrders({
     bundled: false,
     sale_kind: 1,
@@ -42,7 +84,7 @@ const getOrders = (params) => {
     is_expired: false,
     limit: 50,
     on_sale: true,
-    ...params
+    ...params,
   });
 };
 const getTopSellers = () => {
@@ -61,9 +103,8 @@ const getCollections = () => {
 };
 
 const getExplores = () => {
-  return client.get("assets?limit=50");
+  return client.get(`assets?limit=50`);
 };
-
 
 // not checket functions
 async function getAssetsInCollection(slug) {
@@ -85,9 +126,7 @@ async function getCollectionsDetailsBySlugs(slugs) {
   }
 }
 //topsellers
-async function getAssets(onSale = true) {
-  return await client.get(`assets?on_sale=${onSale}&limit=50`);
-}
+
 async function getAssetDetails(tokenAddress, tokenId) {
   const asset = await seaport.api.getAsset({
     tokenAddress, // string
@@ -105,8 +144,8 @@ async function getBundlesByOwner(owner, onSale = false) {
 async function getAssetsByOwner() {}
 async function getAssetsByTokenIds(
   tokenIds,
-  orderDirection = "desc",
-  orderBy = "token_id"
+  orderDirection = `desc`,
+  orderBy = `token_id`
 ) {
   let query = `assets?&order_by=${orderBy}&order_direction=${orderDirection}&`;
   tokenIds.map((token_id) => {
@@ -119,8 +158,8 @@ async function getAssetsByTokenIds(
 // Keep in mind that if you are using orderBy if the attribute you are ordering by is not available the reponse will return null
 async function getAssetsListByOwner(
   owner,
-  orderDirection = "desc",
-  orderBy = "token_id"
+  orderDirection = `desc`,
+  orderBy = `token_id`
 ) {
   return await client.get(
     `assets?owner=${owner}&order_direction=${orderDirection}&order_by=${orderBy}`
@@ -133,9 +172,10 @@ async function getSingleAsset(accountId, assetId) {
 }
 // hellper functions
 // this is helper method to reproduct the topseller data (changes are required)
+// ==================== not checked
 function getTopSellersDetails(assets) {
   let topSellers = [];
-  const groupByCreator = _.groupBy(assets, "makerAccount[user[username]]");
+  const groupByCreator = _.groupBy(assets, `makerAccount[user[username]]`);
   const keys = Object.keys(groupByCreator);
   keys.map((item) =>
     topSellers.push({
@@ -147,34 +187,57 @@ function getTopSellersDetails(assets) {
       address: groupByCreator[item][0].makerAccount?.address,
     })
   );
-  // topSellers = [...topSellers].filter(
-  //   (item) => item.talent !== "undefined" && item.talent !== "null"
-  // );
+  topSellers = [...topSellers].filter(
+    (item) => item.talent !== `undefined` && item.talent !== `null`
+  );
   return topSellers;
 }
 const getCollectionDetails = (collections) => {
-  let groubByCollection = _.groupBy(collections, "collection[name]");
-  // let groubByCollection = _.groupBy(collections, "tokenAddress");
+  console.log(`in collection details`);
+  let groubByCollection = _.groupBy(collections, `collection[name]`);
+  let groubBySlug = _.groupBy(collections, `collection[slug]`);
+  console.log(`group By Collection`, groubByCollection);
+  // let groubByCollection = _.groupBy(collections, `tokenAddress`);
   let cols = [];
-  let collectionNames = Object.keys(groubByCollection);
-  for (let i = 0; i < collectionNames.length; i++) {
+  let slugs = Object.keys(groubByCollection);
+  for (let i = 0; i < slugs.length; i++) {
     cols.push({
-      collection: collectionNames[i],
-      imagePreviewUrl:
-        groubByCollection[collectionNames[i]][0].collection.imageUrl,
-      totalAssets: groubByCollection[collectionNames[i]].length,
+      collection: groubByCollection[slugs[i]][0].collection.name,
+      imagePreviewUrl: groubByCollection[slugs[i]][0].collection.imageUrl,
+      slug: groubByCollection[slugs[i]][0].collection.slug,
+      totalAssets: groubByCollection[slugs[i]].length,
     });
   }
   cols = cols.filter((col) => col.imagePreviewUrl != null);
-  cols = _.orderBy(cols, "totalAssets", "desc");
+  cols = _.orderBy(cols, `totalAssets`, `desc`);
   return cols;
 };
+
+// ==================== not checked
 const getExploresDetails = (assets) => {
   let exps = assets.filter(
     (exp) =>
       exp.image_preview_url !== null && exp.image_preview_url != undefined
   );
   return exps;
+};
+const mockCollections = (cols) => {
+  const slugs = Object.keys(cols);
+  const collections = [];
+  for (let i = 0; i < slugs.length; i++) {
+    collections.push({
+      slug: slugs[i],
+      assets: cols[slugs[i]].length,
+      collection: cols[slugs[i]][0].collection.name,
+      banner_image_url: cols[slugs[i]][0].collection?.banner_image_url
+        ? cols[slugs[i]][0].collection?.banner_image_url
+        : "https://picsum.photos/1000/400",
+      image_url: cols[slugs[i]][0].collection?.image_url,
+    });
+  }
+  console.log(slugs);
+  console.log(collections);
+  return collections;
 };
 export default {
   //api methods checked
@@ -186,6 +249,9 @@ export default {
   getTopSellers,
   getAssetsByTokenIds,
   getAssetsListByOwner,
+  getCollectionBySlug,
+  getCollectionBySlugs,
+  mapCollection,
   getSingleAsset,
   getAssetDetails,
   getAssets,
@@ -196,4 +262,5 @@ export default {
   getTopSellersDetails,
   getCollectionDetails,
   getExploresDetails,
+  mockCollections,
 };
