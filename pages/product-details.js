@@ -156,7 +156,7 @@ function ProductPage() {
                 </ItemDetailsHeader>
                 <div>
                   <span className="text-gradient">
-                    {priceDetails.priceBase}
+                    {`${priceDetails.priceBase} ETH`}
                   </span>
                   <span style={{ color: "#ccc" }}>
                     / 1 of {bids ? bids.length : 1}

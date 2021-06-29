@@ -55,7 +55,7 @@ function Explore({ data }) {
               <li>💰 {EXPLORE_CONSTANTS.defi}</li>
               <li>🤡 {EXPLORE_CONSTANTS.memes}</li>
               <li>🤘 {EXPLORE_CONSTANTS.punks}</li>
-              <li>
+              {/* <li>
                 <Dropdown
                   overlay={exploreMore}
                   placement="bottomCenter"
@@ -76,7 +76,7 @@ function Explore({ data }) {
                     ></path>
                   </svg>
                 </Dropdown>
-              </li>
+              </li> */}
             </CategoriesList>
           </CategoriesListScroll>
           {/* <Dropdown
