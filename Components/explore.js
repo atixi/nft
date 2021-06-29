@@ -3,7 +3,7 @@ import Products from "/Components/products";
 import { Dropdown, Menu, Switch, Spin } from "antd";
 import EXPLORE_CONSTANTS from "/Constants/exploreConstants";
 import {
-  FilterAndSort,
+  // FilterAndSort,
   CategoriesListContainer,
   CategoriesListScroll,
   CategoriesList,
@@ -14,22 +14,22 @@ import {
   LoadMoreButton,
 } from "./StyledComponents/globalStyledComponents";
 
-const menu = (
-  <Menu>
-    <Menu.ItemGroup title="Sort by">
-      <Menu.Item>{"Recently added"}</Menu.Item>
-      <Menu.Item>{"Cheapest"}</Menu.Item>
-      <Menu.Item>{"Highest price"}</Menu.Item>
-      <Menu.Item>{"Most Liked"}</Menu.Item>
-      <Menu.Item>2nd menu item</Menu.Item>
-    </Menu.ItemGroup>
-    <Menu.ItemGroup title="Options">
-      <Menu.Item>
-        {"Verified only"} <Switch size="small" defaultChecked />
-      </Menu.Item>
-    </Menu.ItemGroup>
-  </Menu>
-);
+// const menu = (
+//   <Menu>
+//     <Menu.ItemGroup title="Sort by">
+//       <Menu.Item>{"Recently added"}</Menu.Item>
+//       <Menu.Item>{"Cheapest"}</Menu.Item>
+//       <Menu.Item>{"Highest price"}</Menu.Item>
+//       <Menu.Item>{"Most Liked"}</Menu.Item>
+//       <Menu.Item>2nd menu item</Menu.Item>
+//     </Menu.ItemGroup>
+//     <Menu.ItemGroup title="Options">
+//       <Menu.Item>
+//         {"Verified only"} <Switch size="small" defaultChecked />
+//       </Menu.Item>
+//     </Menu.ItemGroup>
+//   </Menu>
+// );
 const exploreMore = (
   <Menu>
     <Menu.Item>{"item 1"}</Menu.Item>
@@ -79,7 +79,7 @@ function Explore({ data }) {
               </li>
             </CategoriesList>
           </CategoriesListScroll>
-          <Dropdown
+          {/* <Dropdown
             overlay={menu}
             placement="bottomCenter"
             visible={false}
@@ -126,7 +126,7 @@ function Explore({ data }) {
               </svg>
               <span>{`${EXPLORE_CONSTANTS.filter} & ${EXPLORE_CONSTANTS.sort}`}</span>
             </FilterAndSort>
-          </Dropdown>
+          </Dropdown> */}
         </CategoriesListContainer>
         {explores ? (
           <>
