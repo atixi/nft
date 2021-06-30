@@ -116,9 +116,9 @@ function Profile() {
               <>
                 {" "}
                 <Products data={created} />
-                <LoadMoreButton block shape={"round"} size={"large"}>
+                {/* <LoadMoreButton block shape={"round"} size={"large"}>
                   {"Load More"}
-                </LoadMoreButton>
+                </LoadMoreButton> */}
               </>
             )}
           </TabPane>
