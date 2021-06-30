@@ -121,14 +121,7 @@ function WalletInfoDropdown() {
   };
   return (
     <DropdownMenu>
-      <Label
-        style={{
-          background: "red",
-          minHeight: 60,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      <Label>
         <span
           style={{
             paddingTop: 20,
