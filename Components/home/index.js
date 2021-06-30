@@ -25,7 +25,6 @@ function Home() {
   const [collections, setCollections] = useState([]);
   const [explores, setExplores] = useState([]);
   useEffect(() => {
-    console.log("hello");
     // initData();
   }, []);
   const initData = () => {

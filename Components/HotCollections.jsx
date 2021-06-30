@@ -9,7 +9,6 @@ import {
   CardDescription,
   CardImageContainer,
 } from "./StyledComponents/hotCollections-styledComponents";
-import Profile from "/Components/profileAvatar";
 const breakPoints = [
   { width: 1, itemsToShow: 1 },
   { width: 550, itemsToShow: 2, itemsToScroll: 2 },
@@ -57,7 +56,7 @@ export default function HotCollections({ data }) {
                   /> */}
                 </ProfileAvatarContainer>
                 <CardTitle style={{ padding: "0px 10px", marginTop: "-35px" }}>
-                  <span>{item.name}</span>
+                  <span>{item.collection}</span>
                   <span>{`ERC-721`}</span>
                   {/* <span>{item.data[0]?.asset_contract.schema_name}</span> */}
                 </CardTitle>

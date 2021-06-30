@@ -13,7 +13,7 @@ apiClient.addAsyncRequestTransform(async (request) => {
   // if (!authToken) return;
   // request.headers["x-auth-token"] = authToken;
   // request.headers["X-API-KEY"] = "Bearer " + authToken;
-  // request.headers["X-API-KEY"] = "2e7ef0ac679f4860bbe49a34a98cf5ac";
+  request.headers["X-API-KEY"] = "2e7ef0ac679f4860bbe49a34a98cf5ac";
 });
 
 const get = apiClient.get;

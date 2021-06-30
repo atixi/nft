@@ -28,10 +28,6 @@ const Label = styled.div`
   min-height: 0px;
   min-width: 0px;
   max-width: 100%;
-  h4 {
-    margin-bottom: 0px !important;
-    margin-top: -5px !important;
-  }
   &:first-child {
     text-decoration: none;
     color: inherit;
@@ -125,9 +121,30 @@ function WalletInfoDropdown() {
   };
   return (
     <DropdownMenu>
-      <Label>
-        <span>{"address"}</span>
-        <span>
+      <Label
+        style={{
+          background: "red",
+          minHeight: 60,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <span
+          style={{
+            paddingTop: 20,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {address}
+        </span>
+        <span
+          style={{
+            paddingTop: 20,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           <Link href={"#"}>
             <a>
               <small>{CONSTANTS.setDisplay}</small>
