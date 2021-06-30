@@ -56,7 +56,11 @@ const getCollectionBySlugs = async () => {
 };
 const mapCollection = (results) => {
   const collections = [];
-  results.map((result) => collections.push(result.value.data.assets));
+  results.map((result) =>
+    result.value.data
+      ? collections.push(result.value.data.assets)
+      : collections.push(results)
+  );
   return collections;
 };
 // const getAssets = () => {
@@ -235,8 +239,6 @@ const mockCollections = (cols) => {
       image_url: cols[slugs[i]][0].collection?.image_url,
     });
   }
-  console.log(slugs);
-  console.log(collections);
   return collections;
 };
 export default {

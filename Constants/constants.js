@@ -82,6 +82,15 @@ export const getAuctionPriceDetails = (order) => {
   return { priceCurrent, priceBase };
 };
 
+export const toDeciamlAmount = (number) => {
+  const value = toUnitAmount(number, null);
+
+  const result = parseFloat(value).toFixed(4).toLocaleString(undefined, {
+    minimumSignificantDigits: 1,
+  });
+
+  return result;
+};
 export const getAuctionTimeDetails = (order) => {
   const { listingTime, createdTime, expirationTime } = order;
 
