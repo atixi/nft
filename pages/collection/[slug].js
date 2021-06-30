@@ -34,10 +34,12 @@ function CollectionDetails() {
   };
   const loadCollections = (slug) => {
     const data = clientCollections[slug];
+    console.log("assets in collection is : ", data);
     setCollections(data?.slice(1, data.length / 2));
   };
   const loadAssets = (slug) => {
     const data = clientCollections[slug];
+    console.log("assets in collection", data);
     setCreated(data?.slice(data.length / 2, data.length));
   };
   const query = useQueryParam();
