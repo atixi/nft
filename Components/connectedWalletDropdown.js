@@ -89,11 +89,11 @@ const MenuItem = styled.div`
     cursor: pointer !important;
   }
 `;
-function WalletInfoDropdown() {
+function WalletInfoDropdown({data}) {
   const dispatchMetaConnected = useDispatch();
   const dispatchWalletConnected = useDispatch();
   const dispatchWalletToken = useDispatch();
-  let address = "0x15d25c1d4c0410514f01ee0953b3db495ccf112d";
+  let address = data;
   address = address
     .toString()
     .replace(address.toString().substring(10, address.length - 10), ".....");

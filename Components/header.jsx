@@ -47,6 +47,7 @@ import {
 } from "/store/action/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { meta } from "eslint/lib/rules/*";
 function Header(props) {
   const router = useRouter();
 
@@ -296,7 +297,9 @@ function Header(props) {
         </CreateButton>
         {connected == true ? (
           <Dropdown
-            overlay={<WalletInfoDropdown />}
+            overlay={<WalletInfoDropdown data={walletToken != null
+              ? displayAddress(walletToken)
+              : metaToken != null && displayAddress(metaToken)} />}
             placement="bottomRight"
             trigger={["hover"]}
           >
