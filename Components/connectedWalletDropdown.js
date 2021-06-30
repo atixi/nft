@@ -16,6 +16,7 @@ import {
 const Label = styled.div`
   margin: 0px;
   padding: 0px;
+  height: 50px;
   -webkit-box-align: stretch;
   align-items: stretch;
   border-width: 0px;
@@ -93,7 +94,7 @@ function WalletInfoDropdown({data}) {
   const dispatchMetaConnected = useDispatch();
   const dispatchWalletConnected = useDispatch();
   const dispatchWalletToken = useDispatch();
-  let address = data;
+  let address = data[0];
   address = address
     .toString()
     .replace(address.toString().substring(10, address.length - 10), ".....");

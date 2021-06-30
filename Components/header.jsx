@@ -47,7 +47,6 @@ import {
 } from "/store/action/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { meta } from "eslint/lib/rules/*";
 function Header(props) {
   const router = useRouter();
 
@@ -60,7 +59,7 @@ function Header(props) {
   const accountTokens = useSelector(getAccountTokens);
   const metaToken = useSelector(getMetaToken);
   const walletToken = useSelector(getWalletToken);
-  const isMetaconnected = useSelector(getMetaConnected);
+  const isMetaConnected = useSelector(getMetaConnected);
   const isWalletConnected = useSelector(getWalletConnected);
 
   const [profileDetails, setProfileDetails] = useState(null);
@@ -73,13 +72,13 @@ function Header(props) {
     // this is just to test that we receive data from strapi
     // const data = await fetchUsers();
     // console.log("new data", data)
-  }, [isMetaconnected, isWalletConnected]);
+  }, [isMetaConnected, isWalletConnected]);
 
   const isConnectedToAnyWallet = async () => {
-    if (isMetaconnected == false && isWalletConnected == false) {
+    if (isMetaConnected == false && isWalletConnected == false) {
       setConnected(false);
     } else if (
-      isMetaconnected == false &&
+      isMetaConnected == false &&
       isWalletConnected == false &&
       metaToken == null &&
       walletToken == null
@@ -96,15 +95,6 @@ function Header(props) {
       router.push("/");
     }
   };
-  const displayAddress = (token) => {
-    const address = token[0];
-    return (
-      address.substring(1, 4) +
-      "..." +
-      address.substring(address.length - 5, address.length)
-    );
-  };
-
   const menuFooter = (
     <SocialLinkContainer>
       <div>
@@ -298,16 +288,14 @@ function Header(props) {
         {connected == true ? (
           <Dropdown
             overlay={<WalletInfoDropdown data={walletToken != null
-              ? displayAddress(walletToken)
-              : metaToken != null && displayAddress(metaToken)} />}
+              ? walletToken
+              : metaToken != null && metaToken} />}
             placement="bottomRight"
             trigger={["hover"]}
           >
             <ConnectedButton className={`d-lg-block`}>
               <BalanceLabel>
-                {walletToken != null
-                  ? displayAddress(walletToken)
-                  : metaToken != null && displayAddress(metaToken)}
+                {"0 eth"}
               </BalanceLabel>
               <Avatar size={36} />
             </ConnectedButton>
