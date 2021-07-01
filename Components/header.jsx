@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Search from "./search";
 import Link from "next/link";
+import {Avatar, Dropdown} from "antd";
 import {
   TwitterOutlined,
   YoutubeFilled,
@@ -9,6 +10,8 @@ import {
   SearchOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
+
+
 
 import { accountList } from "../Constants/constants";
 import CONSTANTS from "../Constants/headerConstants";
@@ -24,20 +27,25 @@ import {
   HeaderBottomMenu,
   SearchWrapper,
   SocialLinkContainer,
+  ConnectedButton,
+  BalanceLabel
 } from "./StyledComponents/header-styledComponents.js";
+import ConnectedWallet from "./connectedWalletDropdown";
 import {fetchUsers} from "/Utils/strapiApi";
 function Header(props) {
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
   const [accountAddress, setAccountAddress] = useState(accountList[0]);
 
-  useEffect( async () => {
+  useEffect(async () => {
     // this is just to test that we receive data from strapi
     // const data = await fetchUsers();
     // console.log("new data", data)
-    window.ethereum.on("accountsChanged", function (accounts) {
-      setAccountAddress(accounts[0]);
-    });
+    if (window !== "undefined" && window.ethereum) {
+      window.ethereum.on("accountsChanged", function (accounts) {
+        setAccountAddress(accounts[0]);
+      });
+    }
   }, []);
 
   const displayAddress = () => {
@@ -193,12 +201,15 @@ function Header(props) {
               >
                 {CONSTANTS.create}
               </Button>
-              <CreateButton  onClick={() => {
-                setMenu(false);
-              }} style={{ flex: 1 }}>
-              <Link href="/wallet" passHref><a>
-                {CONSTANTS.connect}
-                </a></Link>
+              <CreateButton
+                onClick={() => {
+                  setMenu(false);
+                }}
+                style={{ flex: 1 }}
+              >
+                <Link href="/wallet" passHref>
+                  <a>{CONSTANTS.connect}</a>
+                </Link>
               </CreateButton>
             </div>
           </HeaderBottomMenu>
@@ -216,7 +227,7 @@ function Header(props) {
       </div>
       <div
         className="d-none d-xl-flex px-1"
-        style={{ flex: "1", marginRight: "260px", height: "40px" }}
+        style={{ flex: "1", marginRight: "0px", height: "40px" }}
       >
         <Search />
       </div>
@@ -227,7 +238,6 @@ function Header(props) {
         <li className="d-none d-lg-flex">
           <a href="#">{CONSTANTS.myItems}</a>
         </li>
-
         <li className="d-none d-lg-flex">
           <a href="#">{CONSTANTS.howItWorks}</a>
         </li>
@@ -237,11 +247,15 @@ function Header(props) {
         <CreateButton className={`d-none d-lg-block`}>
           {CONSTANTS.create}
         </CreateButton>
+        <Dropdown  overlay={ConnectedWallet} placement="bottomRight" trigger={['hover']}>
+        <ConnectedButton className={`d-lg-block`}>
+          <BalanceLabel>
+            {"235234 Eth"}
+          </BalanceLabel><Avatar size={36} /></ConnectedButton>
+        </Dropdown>
         <ConnectButton className={`d-none d-lg-block`}>
           <Link href={"/wallet"} passHref>
-            <a
-              
-            >{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
+            <a >{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
           </Link>
         </ConnectButton>
         <Button
