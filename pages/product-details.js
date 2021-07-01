@@ -88,15 +88,16 @@ function ProductPage() {
     setAsset(asset);
     if (queryParam.liveAuction != undefined) {
       console.log("this is auction", asset)
+    setBids(asset?.asset?.orders);
 
     } else if (queryParam.explore != undefined) {
       console.log("this is explore", asset)
         setAsset({
           asset: { owner: asset.owner, imageUrl: asset.image_preview_url, collection: asset.collection}
         });
+        setBids(asset?.orders);
 
     }
-    setBids(asset?.asset?.orders);
   };
   const item = {
     image: "/images/p1.jpeg",
@@ -165,10 +166,11 @@ function ProductPage() {
                 </ItemDetailsHeader>
                 <div>
                   <span className="text-gradient">
-                    {/* {`${priceDetails.priceBase && priceDetails.priceBase} ETH`} */}
+                    {asset?.currentPrice &&  getAuctionPriceDetails(asset).priceBase}
+                    {asset?.paymentTokenContract && asset.paymentTokenContract.symbol}
                   </span>
                   <span style={{ color: "#ccc" }}>
-                    / 1 of {bids ? bids.length : 1}
+                     1 of {bids ? bids.length : 1}
                   </span>
                 </div>
                 <div>
@@ -395,6 +397,7 @@ function ProductPage() {
                       </BidPriceValue>
                     </BidPrice>
                   </BidOwnerContainer>
+                  {asset?.saleKind && asset?.saleKind ?
                   <Auction>
                     <div className={"auctionDiv"}>
                       <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
@@ -409,7 +412,7 @@ function ProductPage() {
                         />
                       </AuctionTimer>
                     </div>
-                  </Auction>
+                  </Auction> : ""}
                 </BidCountdown>
                 <ButtonContainer>
                   <FooterButton
@@ -425,7 +428,6 @@ function ProductPage() {
                     Place a bid
                   </FooterButton>
                 </ButtonContainer>
-                <center>Service fee 2.5%. 1.025 ETH (~$4,383.71)</center>
               </ItemFooter>
             </ItemInfo>
           </Content>
