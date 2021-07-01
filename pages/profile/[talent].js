@@ -168,13 +168,13 @@ export async function getStaticPaths() {
 export const getStaticProps = async (context) => {
   const talent = context.params.talent;
   const assets = seller_assets[talent];
-  const profile_img_url = topSellersAPI.filter((top) => top.talent == talent)[0]
-    .profile_img_url;
+  // const profile_img_url = topSellersAPI.filter((top) => top.talent == talent)[0]
+  //   .profile_img_url;
   return {
     props: {
       assets: JSON.parse(JSON.stringify(assets)),
       talent: JSON.parse(JSON.stringify(talent)),
-      profile_img_url: JSON.parse(JSON.stringify(profile_img_url)),
+      // profile_img_url: JSON.parse(JSON.stringify(profile_img_url)),
     },
   };
 };
