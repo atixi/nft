@@ -29,7 +29,16 @@ const getCollectionBySlug = (slug, order_direction = `desc`) => {
   );
 };
 
-const getCollectionBySlugs = async () => {
+//collection functions
+const getCollectionByAssetOwner = (ownerAddress) => {
+  return client.get(`collections?asset_owner=${ownerAddress}`);
+};
+const getAllCollectionByOwners = async (assetOwners) => {
+  const promises = [];
+  assetOwners.forEach((item) => promises.push(getCollectionByAssetOwner(item)));
+  return Promise.all(promises);
+};
+const getCollectionAssetsBySlug = async () => {
   const slugs = [
     "reika-mandala-art",
     "atixi",
@@ -72,7 +81,7 @@ function getBundles() {
     limit: 50,
   });
 }
-const getLiveAuctions = ({ params }) => {
+const getLiveAuctions = () => {
   return seaport.api.getOrders({
     bundled: false,
     sale_kind: 1,
@@ -91,6 +100,13 @@ const getOrders = (params) => {
     ...params,
   });
 };
+const getFixedAuctions = () => {
+  return seaport.api.getOrders({
+    saleKind: 0,
+  });
+};
+
+const getAssetOrders = () => {};
 const getTopSellers = () => {
   return seaport.api.getOrders({
     bundled: false,
@@ -146,6 +162,19 @@ async function getBundlesByOwner(owner, onSale = false) {
   return client.get(`bundles?owner=${owner}&on_sale=${onSale}&limit=50`);
 }
 async function getAssetsByOwner() {}
+const getAsset = (address, id) => {
+  return seaport.api.getAsset({
+    tokenAddress: address,
+    tokenId: id,
+  });
+};
+
+const getAssetBalance = (accountAddress, asset) => {
+  return seaport.getAssetBalance({
+    accountAddress, // string
+    asset, // Asset
+  });
+};
 async function getAssetsByTokenIds(
   tokenIds,
   orderDirection = `desc`,
@@ -251,8 +280,11 @@ export default {
   getTopSellers,
   getAssetsByTokenIds,
   getAssetsListByOwner,
+  //collection functions
+  getCollectionByAssetOwner,
+  getAllCollectionByOwners,
   getCollectionBySlug,
-  getCollectionBySlugs,
+  getCollectionAssetsBySlug,
   mapCollection,
   getSingleAsset,
   getAssetDetails,
@@ -265,4 +297,7 @@ export default {
   getCollectionDetails,
   getExploresDetails,
   mockCollections,
+
+  getAsset,
+  getAssetBalance,
 };

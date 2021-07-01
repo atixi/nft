@@ -18,7 +18,9 @@ import {
 } from "/Components/StyledComponents/globalStyledComponents";
 
 const { TabPane } = Tabs;
-function CollectionDetails() {
+function CollectionDetails({ assets, banner_image_url }) {
+  const [collectibles, setCollectibles] = useState();
+  const [owned, setOwned] = useState();
   const [collections, setCollections] = useState();
   const [slug, setSlug] = useState();
   const [banner, setBanner] = useState();
@@ -53,6 +55,9 @@ function CollectionDetails() {
       loadCollections(query.slug);
       setCollectionName(query.collection);
     }
+
+    console.log("assetsa are ", assets);
+    console.log("banner_image_url are ", banner_image_url);
   }, [query]);
   if (!slug) {
     return <p>Loading....</p>;
@@ -64,7 +69,7 @@ function CollectionDetails() {
           <img src={query.banner_image_url} />
           <BiographyContainer>
             <div className={"avatar"}>
-              <img alt="userAvatar" src={query.image_url} loading="lazy" />
+              <img alt="userAvatar" src={banner_image_url} loading="lazy" />
             </div>
             <BioDescription>
               <h3>
@@ -103,6 +108,53 @@ function CollectionDetails() {
     </>
   );
 }
+export async function getStaticPaths() {
+  const result = await OpenSeaAPI.getCollectionAssetsBySlug();
+  const collections = await OpenSeaAPI.mapCollection(result);
+  console.log("result by slug", result);
+  console.log("collections by slug", collections);
+
+  const slugs = [
+    "reika-mandala-art",
+    "atixi",
+    "cosplay-made-in-japan",
+    "unofficial-bayc-collectibles",
+    "delorean-s-40th-anniversary-nft-collection",
+    "glewme-city-master-of-permits-uriel",
+    "plaguedoctor-1",
+    "builsontheblock",
+    "fnd",
+    "uniswap-v3-positions",
+    "penguin-dummy-club-1",
+    "iconpunks",
+    "airlord",
+    "monalisa-art",
+    "unique-one-v2",
+    "slumdoge-billionaires",
+  ];
+  const paths = slugs.map((slug) => {
+    return {
+      params: { slug: slug.toString() },
+    };
+  });
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
+export const getStaticProps = async (context) => {
+  const slug = context.params.slug;
+  const result = await OpenSeaAPI.getAssetsInCollection(slug);
+  const assets = result.data;
+  // const banner_image_url = assets[0].collection.banner_image_url;
+  return {
+    props: {
+      assets: JSON.parse(JSON.stringify(assets)),
+      // banner_image_url: JSON.parse(JSON.stringify(banner_image_url)),
+    },
+  };
+};
 
 // export const getServerSideProps = async () => {
 //   // const { data: assets } = await OpenSeaAPI.getAssets("bitcoinphotos");

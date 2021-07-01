@@ -50,12 +50,13 @@ function TopSellers({ data }) {
                 <Link
                   key={seller.address}
                   href={{
-                    pathname: "/profile/index",
-                    query: {
-                      address: seller.address,
-                      talent: seller.talent,
-                      avatar: seller.profile_img_url,
-                    },
+                    // pathname: "/profile/index",
+                    pathname: `/profile/${seller.talent}`,
+                    // query: {
+                    //   address: seller.address,
+                    //   talent: seller.talent,
+                    //   avatar: seller.profile_img_url,
+                    // },
                   }}
                   // href={`/profile/index?address=${seller.address}&talent=${seller.talent}&avatar=${seller.profile_img_url}`}
                 >

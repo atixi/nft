@@ -17,14 +17,15 @@ import {
 
 import { useRouter } from "next/router";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
-import { assets } from "/Constants/mockApi/assets";
+import { seller_assets } from "/Constants/mockApi/assets";
+import { topSellersAPI } from "../../Constants/mockApi/topSellerApi";
 
 const { TabPane } = Tabs;
-function Profile() {
+function Profile({ assets, talent, profile_img_url }) {
   const router = useRouter();
   const [collections, setCollections] = useState();
   const [created, setCreated] = useState();
-  const { talent } = router.query;
+  // const { talent } = router.query;
   const { address } = router.query;
   const { avatar } = router.query;
   const [isLoading, setIsLoading] = useState(true);
@@ -60,17 +61,19 @@ function Profile() {
   };
   const loadTabData = async (e) => {
     if (e === "1") {
-      loadAssets(talent);
+      loadAssets();
     } else if (e === "2") {
-      loadCollections(talent);
+      loadCollections();
     }
   };
 
-  const loadCollections = (tal) => {
-    setCollections(assets[tal]);
+  const loadCollections = () => {
+    const collections = assets.slice(assets.length / 2, assets.length);
+
+    setCollections(collections);
   };
-  const loadAssets = (tal) => {
-    const data = assets[tal].slice(assets[tal].length / 2, assets[tal].length);
+  const loadAssets = () => {
+    const data = assets.slice(0, assets.length / 2);
     setCreated(data);
   };
   const query = useQueryParam();
@@ -78,17 +81,26 @@ function Profile() {
     if (!query) {
       return;
     }
-    loadAssets(query.talent);
-    loadCollections(query.talent);
+    loadAssets();
+    loadCollections();
+    console.log("profile_img_url ", profile_img_url);
   }, [query]);
   return (
     <>
       <MainWrapper>
         <ProfileContainer>
-          <img src="/images/talentCover.png" />
+          <img
+            src={profile_img_url ? profile_img_url : "/images/talentCover.png"}
+          />
           <BiographyContainer>
             <div className={"avatar"}>
-              <img alt="userAvatar" src={avatar} loading="lazy" />
+              <img
+                alt="userAvatar"
+                src={
+                  profile_img_url ? profile_img_url : "/images/talentCover.png"
+                }
+                loading="lazy"
+              />
             </div>
             <BioDescription>
               <h3>
@@ -137,4 +149,34 @@ function Profile() {
     </>
   );
 }
+
+export async function getStaticPaths() {
+  const talentResult = seller_assets;
+  const talents = Object.keys(talentResult);
+
+  const paths = talents.map((talent) => {
+    return {
+      params: { talent: talent.toString() },
+    };
+  });
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
+export const getStaticProps = async (context) => {
+  const talent = context.params.talent;
+  const assets = seller_assets[talent];
+  const profile_img_url = topSellersAPI.filter((top) => top.talent == talent)[0]
+    .profile_img_url;
+  return {
+    props: {
+      assets: JSON.parse(JSON.stringify(assets)),
+      talent: JSON.parse(JSON.stringify(talent)),
+      profile_img_url: JSON.parse(JSON.stringify(profile_img_url)),
+    },
+  };
+};
+
 export default Profile;

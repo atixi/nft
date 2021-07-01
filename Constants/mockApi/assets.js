@@ -1,4 +1,4 @@
-export const assets = {
+export const seller_assets = {
   mohcen: [
     {
       id: 25682733,

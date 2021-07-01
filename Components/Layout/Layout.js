@@ -18,6 +18,7 @@ import {
   getMetaConnected,
   getWalletConnected,
 } from "/store/action/accountSlice";
+import OpenseaApi from "../../Utils/openseaApi";
 
 const Layout = ({ children }) => {
   const dispatchAccountTokens = useDispatch();
@@ -37,7 +38,16 @@ const Layout = ({ children }) => {
   useEffect(() => {
     subscribeMetamaskProvider();
     handleHeader();
+    hello();
   });
+  const hello = async () => {
+    console.log("hello");
+    const result = await OpenseaApi.getCollectionByAssetOwner(
+      "0x8CA35f878fD14992b58a18bEB484f721b1d07A33",
+      "0x92a7B748b270759E318B702D9a7E7EC7218dcB39"
+    );
+    console.log("collections is ", result.data);
+  };
   const handleHeader = () => {
     if (router.pathname !== "/wallet") {
       setDisplayHeader(true);

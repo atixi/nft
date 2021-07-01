@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Carousel from "react-elastic-carousel";
+import OpenSeaAPI from "/Utils/openseaApi";
+
 import { SectionHeading } from "./StyledComponents/globalStyledComponents";
 import {
   CollectionCard,
@@ -19,9 +21,7 @@ const breakPoints = [
 
 export default function HotCollections({ data }) {
   const collections = data;
-  useEffect(() => {
-    console.log(data);
-  }, []);
+  useEffect(() => {}, []);
   return (
     <div className={"mt-5"}>
       <SectionHeading>{"Hot collections"} 💥</SectionHeading>
@@ -37,12 +37,12 @@ export default function HotCollections({ data }) {
                 <Link
                   href={{
                     pathname: `/collection/${item.slug}`,
-                    query: {
-                      slug: item.slug,
-                      banner_image_url: item.banner_image_url,
-                      image_url: item.image_url,
-                      collection: item.collection,
-                    },
+                    // query: {
+                    //   slug: item.slug,
+                    //   banner_image_url: item.banner_image_url,
+                    //   image_url: item.image_url,
+                    //   collection: item.collection,
+                    // },
                   }}
                 >
                   <a>
