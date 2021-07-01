@@ -18,7 +18,7 @@ import {
   getMetaConnected,
   getWalletConnected,
 } from "/store/action/accountSlice";
-import OpenseaApi from "../../Utils/openseaApi";
+import Web3 from "web3";
 
 const Layout = ({ children }) => {
   const dispatchAccountTokens = useDispatch();
@@ -38,16 +38,7 @@ const Layout = ({ children }) => {
   useEffect(() => {
     subscribeMetamaskProvider();
     handleHeader();
-    hello();
   });
-  const hello = async () => {
-    console.log("hello");
-    const result = await OpenseaApi.getCollectionByAssetOwner(
-      "0x8CA35f878fD14992b58a18bEB484f721b1d07A33",
-      "0x92a7B748b270759E318B702D9a7E7EC7218dcB39"
-    );
-    console.log("collections is ", result.data);
-  };
   const handleHeader = () => {
     if (router.pathname !== "/wallet") {
       setDisplayHeader(true);
@@ -66,12 +57,27 @@ const Layout = ({ children }) => {
     });
   };
   const handleMetaAccount = async (accounts) => {
+    console.log("Listen to account changes");
     if (accounts.length === 0) {
       await dispatchMetaConnected(setMetaConnected(false));
       await dispatchMetaToken(setMetaToken(null));
     } else {
       await dispatchMetaConnected(setMetaConnected(true));
       await dispatchMetaToken(setMetaToken(accounts));
+      // const web3 = new Web3(
+      //   new Web3.providers.HttpProvider(
+      //     "https://mainnet.infura.io/v3/2e7ef0ac679f4860bbe49a34a98cf5ac"
+      //   )
+      // );
+      const web3 = new Web3(window.ethereum);
+      console.log("web3 is ", web3);
+      web3.eth.getBalance(accounts[0], function (err, result) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(web3.utils.fromWei(result, "ether") + " ETH");
+        }
+      });
       if (router.pathname === "/wallet") {
         router.push("/");
       }
