@@ -46,6 +46,8 @@ const Layout = ({ children }) => {
       setDisplayHeader(false);
     }
   };
+
+  const getWalletAccountData = () => {};
   const subscribeMetamaskProvider = async () => {
     const provider = await detectEthereumProvider();
     if (provider !== window.ethereum) {
