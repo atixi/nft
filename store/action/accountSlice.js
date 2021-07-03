@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createAsyncThunk } from "@reduxjs/toolkit";
 
 // const fetchAccountToken = createAsyncThunk("fetchAccountToken", async () => {});
 
@@ -8,11 +7,14 @@ const accountSlice = createSlice({
   initialState: {
     accountTokens: {
       metaToken: null,
+      metaBalance: null,
+      walletBalance: null,
       walletToken: null,
     },
     metaConnected: false,
     walletConnected: false,
-    isDisconnectedFromServer: false,
+    requestMetaOpen: false,
+    requestWalletOpen: false,
   },
   reducers: {
     setAccountTokens: (state, action) => {
@@ -21,8 +23,14 @@ const accountSlice = createSlice({
     setMetaToken: (state, action) => {
       state.accountTokens.metaToken = action.payload;
     },
+    setMetaBalance: (state, action) => {
+      state.accountTokens.metaBalance = action.payload;
+    },
     setWalletToken: (state, action) => {
       state.accountTokens.walletToken = action.payload;
+    },
+    setWalletBalance: (state, action) => {
+      state.accountTokens.walletBalance = action.payload;
     },
     setMetaConnected: (state, action) => {
       state.metaConnected = action.payload;
@@ -30,13 +38,21 @@ const accountSlice = createSlice({
     setWalletConnected: (state, action) => {
       state.walletConnected = action.payload;
     },
+    setRequestMetaOpen: (state, action) => {
+      state.requestMetaOpen = action.payload;
+    },
+    setRequestWalletOpen: (state, action) => {
+      state.requestEnableWallet = action.payload;
+    },
   },
 });
 
 export const {
   setAccountTokens,
   setMetaToken,
+  setMetaBalance,
   setWalletToken,
+  setWalletBalance,
   setMetaConnected,
   setWalletConnected,
 } = accountSlice.actions;
@@ -47,13 +63,25 @@ export const getAccountTokens = (state) => {
 export const getMetaToken = (state) => {
   return state.account.accountTokens.metaToken;
 };
+export const getMetaBalance = (state) => {
+  state.account.accountTokens.metaBalance;
+};
 export const getWalletToken = (state) => {
   return state.account.accountTokens.walletToken;
+};
+export const getWalletBalance = (state) => {
+  return state.account.accountTokens.walletBalance;
 };
 export const getWalletConnected = (state) => {
   return state.account.walletConnected;
 };
 export const getMetaConnected = (state) => {
   return state.account.metaConnected;
+};
+export const getRequestMetaOpen = (state) => {
+  return state.account.requestMetaOpen;
+};
+export const getRequestWalletOpen = (state) => {
+  return state.account.requestWalletOpen;
 };
 export default accountSlice.reducer;

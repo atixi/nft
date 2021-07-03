@@ -11,8 +11,6 @@ import {
   CloseOutlined,
 } from "@ant-design/icons";
 
-
-
 import { accountList } from "../Constants/constants";
 import CONSTANTS from "../Constants/headerConstants";
 import {
@@ -40,6 +38,7 @@ import {
   setWalletConnected,
   getAccountTokens,
   getMetaToken,
+  getMetaBalance,
   getWalletToken,
   getMetaConnected,
   getWalletConnected,
@@ -58,8 +57,9 @@ function Header(props) {
 
   const accountTokens = useSelector(getAccountTokens);
   const metaToken = useSelector(getMetaToken);
+  const metaBlance = useSelector(getMetaBalance);
   const walletToken = useSelector(getWalletToken);
-  const isMetaConnected = useSelector(getMetaConnected);
+  const isMetaconnected = useSelector(getMetaConnected);
   const isWalletConnected = useSelector(getWalletConnected);
 
   const [profileDetails, setProfileDetails] = useState(null);
@@ -72,13 +72,13 @@ function Header(props) {
     // this is just to test that we receive data from strapi
     // const data = await fetchUsers();
     // console.log("new data", data)
-  }, [isMetaConnected, isWalletConnected]);
+  }, [isMetaconnected, isWalletConnected]);
 
   const isConnectedToAnyWallet = async () => {
-    if (isMetaConnected == false && isWalletConnected == false) {
+    if (isMetaconnected == false && isWalletConnected == false) {
       setConnected(false);
     } else if (
-      isMetaConnected == false &&
+      isMetaconnected == false &&
       isWalletConnected == false &&
       metaToken == null &&
       walletToken == null
@@ -94,6 +94,18 @@ function Header(props) {
     } else {
       router.push("/");
     }
+  };
+  const displayMetaBalance = () => {
+    console.log("metabalance", metaBlance);
+    return metaBlance;
+  };
+  const displayAddress = (token) => {
+    const address = token[0];
+    return (
+      address.substring(1, 4) +
+      "..." +
+      address.substring(address.length - 5, address.length)
+    );
   };
   const menuFooter = (
     <SocialLinkContainer>
@@ -287,16 +299,20 @@ function Header(props) {
         </CreateButton>
         {connected == true ? (
           <Dropdown
-            overlay={<WalletInfoDropdown data={walletToken != null
-              ? walletToken
-              : metaToken != null && metaToken} />}
+            overlay={
+              <WalletInfoDropdown
+                data={
+                  walletToken != null
+                    ? walletToken
+                    : metaToken != null && metaToken
+                }
+              />
+            }
             placement="bottomRight"
             trigger={["hover"]}
           >
             <ConnectedButton className={`d-lg-block`}>
-              <BalanceLabel>
-                {"0 eth"}
-              </BalanceLabel>
+              <BalanceLabel>{"0 eth"}</BalanceLabel>
               <Avatar size={36} />
             </ConnectedButton>
           </Dropdown>

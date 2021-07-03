@@ -2,11 +2,12 @@ import * as Web3 from "web3";
 import { OpenSeaPort, Network } from "opensea-js";
 import client from "./openSeaClient";
 import _ from "lodash";
-const provider = new Web3.providers.HttpProvider(
-  "https://mainnet.infura.io/"
-  // `https://rinkeby-api.opensea.io/api/v1/`
+export const seaportProvider = new Web3.providers.HttpProvider(
+  "https://mainnet.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
+  // 'https://rinkeby-api.opensea.io/api/v1/'
 );
-const seaport = new OpenSeaPort(provider, {
+
+const seaport = new OpenSeaPort(seaportProvider, {
   networkName: Network.Main,
   apiKey: "2e7ef0ac679f4860bbe49a34a98cf5ac",
 });
@@ -29,7 +30,16 @@ const getCollectionBySlug = (slug, order_direction = `desc`) => {
   );
 };
 
-const getCollectionBySlugs = async () => {
+//collection functions
+const getCollectionByAssetOwner = (ownerAddress) => {
+  return client.get(`collections?asset_owner=${ownerAddress}`);
+};
+const getAllCollectionByOwners = async (assetOwners) => {
+  const promises = [];
+  assetOwners.forEach((item) => promises.push(getCollectionByAssetOwner(item)));
+  return Promise.all(promises);
+};
+const getCollectionAssetsBySlug = async () => {
   const slugs = [
     "reika-mandala-art",
     "atixi",
@@ -72,7 +82,7 @@ function getBundles() {
     limit: 50,
   });
 }
-const getLiveAuctions = ({ params }) => {
+const getLiveAuctions = () => {
   return seaport.api.getOrders({
     bundled: false,
     sale_kind: 1,
@@ -91,6 +101,13 @@ const getOrders = (params) => {
     ...params,
   });
 };
+const getFixedAuctions = () => {
+  return seaport.api.getOrders({
+    saleKind: 0,
+  });
+};
+
+const getAssetOrders = () => {};
 const getTopSellers = () => {
   return seaport.api.getOrders({
     bundled: false,
@@ -146,6 +163,19 @@ async function getBundlesByOwner(owner, onSale = false) {
   return client.get(`bundles?owner=${owner}&on_sale=${onSale}&limit=50`);
 }
 async function getAssetsByOwner() {}
+const getAsset = (address, id) => {
+  return seaport.api.getAsset({
+    tokenAddress: address,
+    tokenId: id,
+  });
+};
+
+const getAssetBalance = (accountAddress, asset) => {
+  return seaport.getAssetBalance({
+    accountAddress, // string
+    asset, // Asset
+  });
+};
 async function getAssetsByTokenIds(
   tokenIds,
   orderDirection = `desc`,
@@ -251,8 +281,11 @@ export default {
   getTopSellers,
   getAssetsByTokenIds,
   getAssetsListByOwner,
+  //collection functions
+  getCollectionByAssetOwner,
+  getAllCollectionByOwners,
   getCollectionBySlug,
-  getCollectionBySlugs,
+  getCollectionAssetsBySlug,
   mapCollection,
   getSingleAsset,
   getAssetDetails,
@@ -265,4 +298,7 @@ export default {
   getCollectionDetails,
   getExploresDetails,
   mockCollections,
+
+  getAsset,
+  getAssetBalance,
 };

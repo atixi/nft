@@ -63,11 +63,10 @@ function ProductPage() {
   const [bids, setBids] = useState([]);
   const [priceDetails, setPriceDetails] = useState(null);
   useEffect(async () => {
-
-   const data = await fetchNft("0x06012c8cf97bead5deae237070f9587f8e7a266d","556324")
-    console.log("data from opensea", data.data)
-   if (!queryParam) {
-      return null;  
+    //  const data = await fetchNft("0x06012c8cf97bead5deae237070f9587f8e7a266d","556324")
+    //   console.log("data from opensea", data.data)
+    if (!queryParam) {
+      return null;
     }
     if (queryParam.liveAuction != undefined) {
       loadAsset(JSON.parse(queryParam.liveAuction));
@@ -92,16 +91,18 @@ function ProductPage() {
     }
     setAsset(asset);
     if (queryParam.liveAuction != undefined) {
-      console.log("this is auction", asset)
-    setBids(asset?.asset?.orders);
-
+      console.log("this is auction", asset);
+      setBids(asset?.asset?.orders);
     } else if (queryParam.explore != undefined) {
       // console.log("this is explore", asset)
-        setAsset({
-          asset: { owner: asset.owner, imageUrl: asset.image_preview_url, collection: asset.collection}
-        });
-        setBids(asset?.orders);
-
+      setAsset({
+        asset: {
+          owner: asset.owner,
+          imageUrl: asset.image_preview_url,
+          collection: asset.collection,
+        },
+      });
+      setBids(asset?.orders);
     }
   };
   const item = {
@@ -120,201 +121,248 @@ function ProductPage() {
   return (
     <>
       <Wrapper>
-      
-          <Content className={`d-sm-flex`}>
-            <ItemImageContainer className=" text-center">
-              {/* <img className={"itemImage"} src={asset.asset?.imageUrl} /> */}
-              <ImageCon>
-                <Image
-                  src={`${asset.asset?.imageUrl}`}
-                  preview={{
-                    src: `${asset.asset?.imageUrl}`,
-                  }}
-                />
-              </ImageCon>
-            </ItemImageContainer>
-            <ItemInfo className={"float-none float-sm-left"}>
-              <ItemDetails>
-                <ItemDetailsHeader>
-                  <ItemName>{asset.asset?.collection?.name}</ItemName>
-                  <ItemTopButtonContainer>
-                    <button
-                      style={{
-                        flex: "none",
-                        padding: "0px !important",
-                        width: "35px",
-                      }}
+        <Content className={`d-sm-flex`}>
+          <ItemImageContainer className=" text-center">
+            {/* <img className={"itemImage"} src={asset.asset?.imageUrl} /> */}
+            <ImageCon>
+              <Image
+                src={`${asset.asset?.imageUrl}`}
+                preview={{
+                  src: `${asset.asset?.imageUrl}`,
+                }}
+              />
+            </ImageCon>
+          </ItemImageContainer>
+          <ItemInfo className={"float-none float-sm-left"}>
+            <ItemDetails>
+              <ItemDetailsHeader>
+                <ItemName>{asset.asset?.collection?.name}</ItemName>
+                <ItemTopButtonContainer>
+                  <button
+                    style={{
+                      flex: "none",
+                      padding: "0px !important",
+                      width: "35px",
+                    }}
+                  >
+                    <Dropdown
+                      overlay={menu}
+                      placement="bottomLeft"
+                      trigger={["click"]}
                     >
-                      <Dropdown
-                        overlay={menu}
-                        placement="bottomLeft"
-                        trigger={["click"]}
+                      <svg
+                        style={{ marginLeft: "-5px", color: "gray" }}
+                        viewBox="1 2 14 4"
+                        fill="none"
+                        width="13.200000000000001"
+                        height="13.200000000000001"
+                        xlmns="http://www.w3.org/2000/svg"
                       >
-                        <svg
-                          style={{ marginLeft: "-5px", color: "gray" }}
-                          viewBox="1 2 14 4"
-                          fill="none"
-                          width="13.200000000000001"
-                          height="13.200000000000001"
-                          xlmns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z"
-                            fill="currentColor"
-                          ></path>
-                        </svg>
-                      </Dropdown>
-                    </button>
-                  </ItemTopButtonContainer>
-                </ItemDetailsHeader>
-                <div>
-                  <span className="text-gradient">
-                    {asset?.currentPrice &&  getAuctionPriceDetails(asset).priceBase}
-                    {asset?.paymentTokenContract && asset.paymentTokenContract.symbol}
-                  </span>
-                  <span style={{ color: "#ccc" }}>
-                     1 of {bids ? bids.length : 1}
-                  </span>
-                </div>
-                <div>
-                  <button>{item.category}</button>
-                </div>
-                <ItemDescriptionText>
-                  {asset.asset?.collection?.description}
-                </ItemDescriptionText>
-                <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
-                <br />
-                <Link
-                  href={{
-                    pathname: "/profile/index",
-                    query: {
-                      address: asset.asset?.owner?.address,
-                      talent: checkName(asset.asset?.owner?.user?.username),
-                      avatar: asset.asset?.owner?.profile_img_url,
-                    },
-                  }}
-                  passHref
-                >
-                  <a>
-                    <AvatarContainer>
-                      <Avatar
-                        size={"small"}
-                        icon={<img src={asset.asset?.owner?.profile_img_url} />}
-                      />
-                      <span style={{ flex: "1" }}>
-                        {checkName(asset.asset?.owner?.user?.username)}
-                      </span>
-                    </AvatarContainer>
-                  </a>
-                </Link>
-                <Tabs defaultActiveKey="4">
-                  <TabPane key="1" tab={<span>{CONSTANTS.details}</span>}>
-                    <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
-                    <br />
-                    <Link
-                      href={{
-                        pathname: "/profile/index",
-                        query: {
-                          address: asset.asset?.owner?.address,
-                          talent: checkName(asset.asset?.owner?.user?.username),
-                          avatar: asset.asset?.owner?.profile_img_url,
-                        },
-                      }}
-                      passHref
-                    >
-                      <a>
-                        <AvatarContainer>
-                          <Avatar
-                            size={"small"}
-                            icon={
-                              <img src={asset.asset?.owner?.profile_img_url} />
-                            }
-                          />
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z"
+                          fill="currentColor"
+                        ></path>
+                      </svg>
+                    </Dropdown>
+                  </button>
+                </ItemTopButtonContainer>
+              </ItemDetailsHeader>
+              <div>
+                <span className="text-gradient">
+                  {asset?.currentPrice &&
+                    getAuctionPriceDetails(asset).priceBase}
+                  {asset?.paymentTokenContract &&
+                    asset.paymentTokenContract.symbol}
+                </span>
+                <span style={{ color: "#ccc" }}>
+                  1 of {bids ? bids.length : 1}
+                </span>
+              </div>
+              <div>
+                <button>{item.category}</button>
+              </div>
+              <ItemDescriptionText>
+                {asset.asset?.collection?.description}
+              </ItemDescriptionText>
+              <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
+              <br />
+              <Link
+                href={{
+                  pathname: "/profile/index",
+                  query: {
+                    address: asset.asset?.owner?.address,
+                    talent: checkName(asset.asset?.owner?.user?.username),
+                    avatar: asset.asset?.owner?.profile_img_url,
+                  },
+                }}
+                passHref
+              >
+                <a>
+                  <AvatarContainer>
+                    <Avatar
+                      size={"small"}
+                      icon={<img src={asset.asset?.owner?.profile_img_url} />}
+                    />
+                    <span style={{ flex: "1" }}>
+                      {checkName(asset.asset?.owner?.user?.username)}
+                    </span>
+                  </AvatarContainer>
+                </a>
+              </Link>
+              <Tabs defaultActiveKey="4">
+                <TabPane key="1" tab={<span>{CONSTANTS.details}</span>}>
+                  <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
+                  <br />
+                  <Link
+                    href={{
+                      pathname: "/profile/index",
+                      query: {
+                        address: asset.asset?.owner?.address,
+                        talent: checkName(asset.asset?.owner?.user?.username),
+                        avatar: asset.asset?.owner?.profile_img_url,
+                      },
+                    }}
+                    passHref
+                  >
+                    <a>
+                      <AvatarContainer>
+                        <Avatar
+                          size={"small"}
+                          icon={
+                            <img src={asset.asset?.owner?.profile_img_url} />
+                          }
+                        />
 
-                          <span style={{ flex: "1" }}>
-                            {checkName(asset.asset?.owner?.user?.username)}
+                        <span style={{ flex: "1" }}>
+                          {checkName(asset.asset?.owner?.user?.username)}
+                        </span>
+                      </AvatarContainer>{" "}
+                    </a>
+                  </Link>
+                </TabPane>
+                <TabPane key="2" tab={<span>{CONSTANTS.bids}</span>}>
+                  {bids &&
+                    bids.map((order, i) => (
+                      <LastBidder key={i} id={order.owner?.address}>
+                        <div className={"content"}>
+                          <span className="avatarContainer">
+                            <Link
+                              href={{
+                                pathname: "/profile/index",
+                                query: {
+                                  address: order.makerAccount?.address,
+                                  talent: checkName(
+                                    order.makerAccount?.user?.username
+                                  ),
+                                  avatar: order.makerAccount?.profile_img_url,
+                                },
+                              }}
+                              passHref
+                            >
+                              <a>
+                                <Avatar
+                                  size={"small"}
+                                  icon={
+                                    <img
+                                      src={order.makerAccount?.profile_img_url}
+                                    />
+                                  }
+                                />
+                              </a>
+                            </Link>
                           </span>
-                        </AvatarContainer>{" "}
-                      </a>
-                    </Link>
-                  </TabPane>
-                  <TabPane key="2" tab={<span>{CONSTANTS.bids}</span>}>
-                    {bids &&
-                      bids.map((order, i) => (
-                        <LastBidder key={i} id={order.owner?.address}>
-                          <div className={"content"}>
-                            <span className="avatarContainer">
-                              <Link
-                                href={{
-                                  pathname: "/profile/index",
-                                  query: {
-                                    address: order.makerAccount?.address,
-                                    talent: checkName(
-                                      order.makerAccount?.user?.username
-                                    ),
-                                    avatar: order.makerAccount?.profile_img_url,
-                                  },
-                                }}
-                                passHref
-                              >
-                                <a>
-                                  <Avatar
-                                    size={"small"}
-                                    icon={
-                                      <img
-                                        src={
-                                          order.makerAccount?.profile_img_url
-                                        }
-                                      />
-                                    }
-                                  />
-                                </a>
-                              </Link>
-                            </span>
-                            <span className={"bidInfo"}>
-                              <span className={"bidedPriceContainer"}>
-                                <span className={"bidedPriceText"}>
-                                  <span className={"bidValue"}>{`${
-                                    getAuctionPriceDetails(order).priceBase
-                                  } wETH`}</span>
-                                  {" by "}
-                                  <Link
-                                    href={{
-                                      pathname: "/profile/index",
-                                      query: {
-                                        address: order.makerAccount?.address,
-                                        talent: checkName(
-                                          order.makerAccount?.user?.username
-                                        ),
-                                        avatar:
-                                          order.makerAccount?.profile_img_url,
-                                      },
-                                    }}
-                                    passHref
-                                  >
-                                    <a className={"bidderLink"}>
-                                      {checkName(
+                          <span className={"bidInfo"}>
+                            <span className={"bidedPriceContainer"}>
+                              <span className={"bidedPriceText"}>
+                                <span className={"bidValue"}>{`${
+                                  getAuctionPriceDetails(order).priceBase
+                                } wETH`}</span>
+                                {" by "}
+                                <Link
+                                  href={{
+                                    pathname: "/profile/index",
+                                    query: {
+                                      address: order.makerAccount?.address,
+                                      talent: checkName(
                                         order.makerAccount?.user?.username
-                                      )}
-                                    </a>
-                                  </Link>
-                                </span>
-                              </span>
-                              <span className={"bidOwnerAndDateContainer"}>
-                                <span className={"bidDate"}>
-                                  {"6/2/2021, 11:50 PM"}
-                                </span>
+                                      ),
+                                      avatar:
+                                        order.makerAccount?.profile_img_url,
+                                    },
+                                  }}
+                                  passHref
+                                >
+                                  <a className={"bidderLink"}>
+                                    {checkName(
+                                      order.makerAccount?.user?.username
+                                    )}
+                                  </a>
+                                </Link>
                               </span>
                             </span>
-                          </div>
-                        </LastBidder>
-                      ))}
-                  </TabPane>
-                  <TabPane key="3" tab={<span>{CONSTANTS.owners}</span>}>
-                    <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
-                    <br />
+                            <span className={"bidOwnerAndDateContainer"}>
+                              <span className={"bidDate"}>
+                                {"6/2/2021, 11:50 PM"}
+                              </span>
+                            </span>
+                          </span>
+                        </div>
+                      </LastBidder>
+                    ))}
+                </TabPane>
+                <TabPane key="3" tab={<span>{CONSTANTS.owners}</span>}>
+                  <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
+                  <br />
+                  <Link
+                    href={{
+                      pathname: "/profile/index",
+                      query: {
+                        address: asset.asset?.owner?.address,
+                        talent: checkName(asset.asset?.owner?.user?.username),
+                        avatar: asset.asset?.owner?.profile_img_url,
+                      },
+                    }}
+                    passHref
+                  >
+                    <a>
+                      <AvatarContainer>
+                        <Avatar
+                          size={"small"}
+                          icon={
+                            <img src={asset.asset?.owner?.profile_img_url} />
+                          }
+                        />
+                        <span style={{ flex: "1" }}>
+                          {checkName(asset.asset?.owner?.user?.username)}
+                        </span>
+                      </AvatarContainer>
+                    </a>
+                  </Link>
+                </TabPane>
+              </Tabs>
+            </ItemDetails>
+            <ItemFooter>
+              <BidCountdown>
+                <BidOwnerContainer className={"border-right pr-2 pl-2"}>
+                  <BidOwner className={"float-left"}>
+                    {CONSTANTS.highestBid}{" "}
+                    <Link
+                      href={{
+                        pathname: "/profile/index",
+                        query: {
+                          address: asset.asset?.owner?.address,
+                          talent: checkName(asset.asset?.owner?.user?.username),
+                          avatar: asset.asset?.owner?.profile_img_url,
+                        },
+                      }}
+                      passHref
+                    >
+                      <a>{checkName(asset.asset?.owner?.user?.username)}</a>
+                    </Link>
+                  </BidOwner>
+                  <BidPrice>
                     <Link
                       href={{
                         pathname: "/profile/index",
@@ -327,82 +375,28 @@ function ProductPage() {
                       passHref
                     >
                       <a>
-                        <AvatarContainer>
+                        <BidOwnerProfile className={"mr-3"}>
                           <Avatar
-                            size={"small"}
+                            size={"large"}
                             icon={
                               <img src={asset.asset?.owner?.profile_img_url} />
                             }
                           />
-                          <span style={{ flex: "1" }}>
-                            {checkName(asset.asset?.owner?.user?.username)}
-                          </span>
-                        </AvatarContainer>
+                        </BidOwnerProfile>
                       </a>
                     </Link>
-                  </TabPane>
-                </Tabs>
-              </ItemDetails>
-              <ItemFooter>
-                <BidCountdown>
-                  <BidOwnerContainer className={"border-right pr-2 pl-2"}>
-                    <BidOwner className={"float-left"}>
-                      {CONSTANTS.highestBid}{" "}
-                      <Link
-                        href={{
-                          pathname: "/profile/index",
-                          query: {
-                            address: asset.asset?.owner?.address,
-                            talent: checkName(
-                              asset.asset?.owner?.user?.username
-                            ),
-                            avatar: asset.asset?.owner?.profile_img_url,
-                          },
-                        }}
-                        passHref
-                      >
-                        <a>{checkName(asset.asset?.owner?.user?.username)}</a>
-                      </Link>
-                    </BidOwner>
-                    <BidPrice>
-                      <Link
-                        href={{
-                          pathname: "/profile/index",
-                          query: {
-                            address: asset.asset?.owner?.address,
-                            talent: checkName(
-                              asset.asset?.owner?.user?.username
-                            ),
-                            avatar: asset.asset?.owner?.profile_img_url,
-                          },
-                        }}
-                        passHref
-                      >
-                        <a>
-                          <BidOwnerProfile className={"mr-3"}>
-                            <Avatar
-                              size={"large"}
-                              icon={
-                                <img
-                                  src={asset.asset?.owner?.profile_img_url}
-                                />
-                              }
-                            />
-                          </BidOwnerProfile>
-                        </a>
-                      </Link>
-                      <BidPriceValue>
-                        <PriceInCryptoContainer>
-                          <span>{`0.02 eth`}</span>
-                          {/* <span>{`${getAuctionPriceDetails(asset.asset?.orders[0]).priceBase} eth`}</span> */}
-                        </PriceInCryptoContainer>
-                        <PriceInDollarContainer>
-                          <span>{"~$32"}</span>
-                        </PriceInDollarContainer>
-                      </BidPriceValue>
-                    </BidPrice>
-                  </BidOwnerContainer>
-                  {asset?.saleKind && asset?.saleKind ?
+                    <BidPriceValue>
+                      <PriceInCryptoContainer>
+                        <span>{`0.02 eth`}</span>
+                        {/* <span>{`${getAuctionPriceDetails(asset.asset?.orders[0]).priceBase} eth`}</span> */}
+                      </PriceInCryptoContainer>
+                      <PriceInDollarContainer>
+                        <span>{"~$32"}</span>
+                      </PriceInDollarContainer>
+                    </BidPriceValue>
+                  </BidPrice>
+                </BidOwnerContainer>
+                {asset?.saleKind && asset?.saleKind ? (
                   <Auction>
                     <div className={"auctionDiv"}>
                       <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
@@ -417,26 +411,28 @@ function ProductPage() {
                         />
                       </AuctionTimer>
                     </div>
-                  </Auction> : ""}
-                </BidCountdown>
-                <ButtonContainer>
-                  <FooterButton
-                    color={"#ffffff"}
-                    style={{ background: "#0066ff" }}
-                  >
-                    Buy
-                  </FooterButton>
-                  <FooterButton
-                    color={"#0066ff"}
-                    style={{ background: "#0066ff26" }}
-                  >
-                    Place a bid
-                  </FooterButton>
-                </ButtonContainer>
-              </ItemFooter>
-            </ItemInfo>
-          </Content>
-        
+                  </Auction>
+                ) : (
+                  ""
+                )}
+              </BidCountdown>
+              <ButtonContainer>
+                <FooterButton
+                  color={"#ffffff"}
+                  style={{ background: "#0066ff" }}
+                >
+                  Buy
+                </FooterButton>
+                <FooterButton
+                  color={"#0066ff"}
+                  style={{ background: "#0066ff26" }}
+                >
+                  Place a bid
+                </FooterButton>
+              </ButtonContainer>
+            </ItemFooter>
+          </ItemInfo>
+        </Content>
       </Wrapper>
     </>
   );
