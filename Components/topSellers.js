@@ -11,7 +11,7 @@ import {
   AvatarContainer,
   SellerDetails,
 } from "./StyledComponents/topSeller-styledComponents";
-import Link from "next/link"
+import Link from "next/link";
 function TopSellers({ data }) {
   const [selectedSeller, setSelectedSeller] = useState([]);
   const topSellerDetails = async (top) => {
@@ -49,29 +49,36 @@ function TopSellers({ data }) {
               data.map((seller, index) => (
                 <Link
                   key={seller.address}
-                  href = {{pathname: "/profile/index",
-                          query: {address: seller.address, talent: seller.talent, avatar: seller.profile_img_url}
-                          }}
+                  href={{
+                    // pathname: "/profile/index",
+                    pathname: `/profile/${seller.talent}`,
+                    // query: {
+                    //   address: seller.address,
+                    //   talent: seller.talent,
+                    //   avatar: seller.profile_img_url,
+                    // },
+                  }}
                   // href={`/profile/index?address=${seller.address}&talent=${seller.talent}&avatar=${seller.profile_img_url}`}
-                ><a>
-                  <TopSellerItem
-                    key={seller.name}
-                    onClick={() => topSellerDetails(seller)}
-                  >
-                    <ListCounter>{index + 1}</ListCounter>
-                    <AvatarContainer>
-                      <img src={seller.profile_img_url} />
-                    </AvatarContainer>
-                    <SellerDetails>
-                      <SellerName key={seller.talent + seller.talent}>
-                        {seller.talent}
-                      </SellerName>
-                      <SellerPrice>
-                        {/* {seller.stats?.average_price} */}
-                        {seller.number_of_assets + " assets"}
-                      </SellerPrice>
-                    </SellerDetails>
-                  </TopSellerItem>
+                >
+                  <a>
+                    <TopSellerItem
+                      key={seller.name}
+                      onClick={() => topSellerDetails(seller)}
+                    >
+                      <ListCounter>{index + 1}</ListCounter>
+                      <AvatarContainer>
+                        <img src={seller.profile_img_url} />
+                      </AvatarContainer>
+                      <SellerDetails>
+                        <SellerName key={seller.talent + seller.talent}>
+                          {seller.talent}
+                        </SellerName>
+                        <SellerPrice>
+                          {/* {seller.stats?.average_price} */}
+                          {seller.number_of_assets + " assets"}
+                        </SellerPrice>
+                      </SellerDetails>
+                    </TopSellerItem>
                   </a>
                 </Link>
               ))}

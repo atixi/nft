@@ -12,8 +12,10 @@ export const DEFAULT_DECIMALS = 18;
 const MAX_ADDR_LEN = 4;
 export let web3Provider =
   typeof web3 !== "undefined"
-    ? window.ethereum
-    : new Web3.providers.HttpProvider("https://mainnet.infura.io");
+    ? window.web3.currentProvider
+    : new Web3.providers.HttpProvider(
+        "https://mainnet.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
+      );
 
 // Replace this with Redux for more complex logic
 const networkCallbacks = [];
@@ -82,6 +84,15 @@ export const getAuctionPriceDetails = (order) => {
   return { priceCurrent, priceBase };
 };
 
+export const toDeciamlAmount = (number) => {
+  const value = toUnitAmount(number, null);
+
+  const result = parseFloat(value).toFixed(4).toLocaleString(undefined, {
+    minimumSignificantDigits: 1,
+  });
+
+  return result;
+};
 export const getAuctionTimeDetails = (order) => {
   const { listingTime, createdTime, expirationTime } = order;
 

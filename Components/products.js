@@ -22,25 +22,24 @@ function Products(props) {
       <Menu.Item key="3">Share</Menu.Item>
     </Menu>
   );
-  const [products, setProducts] = useState([])
-  useEffect(() =>{
-    setProducts(props.data)
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    setProducts(props.data);
   });
   return (
     <>
       <CardsContainer>
-          {products && products.map((n, index) => (
-            n.name != null?
-            <ProductCardContainer key={index} className={"p-1"}>
-
-            <ProductCard
-              
-              // style={{ width: "280px" }}
-              className="p-3 p-sm-2 p-md-2 p-lg-3"
-            >
-              <ProductCardHeader className={`mt-1`}>
-                <div className={"pl-3 float-left"}>
-                    <Avatar.Group>
+        {products &&
+          products.map((n, index) =>
+            n.name != null ? (
+              <ProductCardContainer key={index} className={"p-1"}>
+                <ProductCard
+                  // style={{ width: "280px" }}
+                  className="p-3 p-sm-2 p-md-2 p-lg-3"
+                >
+                  <ProductCardHeader className={`mt-1`}>
+                    <div className={"pl-3 float-left"}>
+                      <Avatar.Group>
                         <Tooltip title={"Owner"} placement="top">
                           <Avatar
                             icon={
@@ -52,38 +51,64 @@ function Products(props) {
                             }
                           />
                         </Tooltip>
-                 
-                    </Avatar.Group>
+                      </Avatar.Group>
+                    </div>
+                    <Dropdown
+                      trigger={["click"]}
+                      overlay={menu}
+                      placement="bottomRight"
+                    >
+                      <Button>...</Button>
+                    </Dropdown>
+                  </ProductCardHeader>
+                  <div className={`col-md-12 p-1`}>
+                    <Link
+                      href={{
+                        pathname: "/product-details",
+                        query: {
+                          explore: JSON.stringify(n),
+                        },
+                      }}
+                    >
+                      <a>
+                        {" "}
+                        <img
+                          style={{ height: "250px", width: "auto" }}
+                          src={n.image_preview_url}
+                          className="w-100 img-fluid"
+                        />
+                      </a>
+                    </Link>
                   </div>
-                  <Dropdown
-                    trigger={["click"]}
-                    overlay={menu}
-                    placement="bottomRight"
-                  >
-                    <Button>...</Button>
-                  </Dropdown>
-                </ProductCardHeader>
-                <div className={`col-md-12 p-1`}>
-                <Link href={`/product-details?ta=${n?.asset_contract.address}&ti=${n?.token_id}`} >
-                <a> <img style={{height: "250px", width: "auto"}} src={n.image_preview_url} className="w-100 img-fluid" /></a>
-                </Link>
-                </div>
-                <ProductDescription>
-                <Link href={`/product-details?ta=${n?.asset_contract.address}&ti=${n?.token_id}`} >
-                  <a>
-                    <CardTitle>{n?.name}</CardTitle>
-                  </a>
-                  </Link>
-                  <ProductPrice>{n.price}</ProductPrice>
-                  <ProductList>
-                    {/* {" " + n.currentQTY + " of " + n.totalQTY} */}
-                  </ProductList>
-                  <br />
-                  {/* <ProductPrice fontSize={"12px"}>{n.price}</ProductPrice> */}
-                </ProductDescription>
-              </ProductCard>
-              </ProductCardContainer> : ""
-          ))}
+                  <ProductDescription>
+                    {/* <Link
+                      href={`/product-details?ta=${n?.asset_contract.address}&ti=${n?.token_id}`}
+                    > */}
+                    <Link
+                      href={{
+                        pathname: "/product-details",
+                        query: {
+                          explore: JSON.stringify(n),
+                        },
+                      }}
+                    >
+                      <a>
+                        <CardTitle>{n?.name}</CardTitle>
+                      </a>
+                    </Link>
+                    <ProductPrice>{n.price}</ProductPrice>
+                    <ProductList>
+                      {/* {" " + n.currentQTY + " of " + n.totalQTY} */}
+                    </ProductList>
+                    <br />
+                    {/* <ProductPrice fontSize={"12px"}>{n.price}</ProductPrice> */}
+                  </ProductDescription>
+                </ProductCard>
+              </ProductCardContainer>
+            ) : (
+              ""
+            )
+          )}
       </CardsContainer>
     </>
   );

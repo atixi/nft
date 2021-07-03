@@ -15,27 +15,29 @@ import {
   MainWrapper,
 } from "/Components/StyledComponents/globalStyledComponents";
 
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
+import { useQueryParam } from "/Components/hooks/useQueryParam";
+import { seller_assets } from "/Constants/mockApi/assets";
+import { topSellersAPI } from "../../Constants/mockApi/topSellerApi";
+
 const { TabPane } = Tabs;
- function Profile ()  {
+function Profile({ assets, talent, profile_img_url }) {
   const router = useRouter();
   const [collections, setCollections] = useState();
   const [created, setCreated] = useState();
-  const {talent}=router.query;
-  const {address}= router.query;
-  const {avatar}=router.query;
+  // const { talent } = router.query;
+  const { address } = router.query;
+  const { avatar } = router.query;
   const [isLoading, setIsLoading] = useState(true);
   const [addressToShow, setAddress] = useState(
-   address && address
-      .toString()
-      .replace(
-        address.toString().substring(10, address.length - 10),
-        "....."
-      )
+    address &&
+      address
+        .toString()
+        .replace(address.toString().substring(10, address.length - 10), ".....")
   );
   const FetchCreatedAssets = async (e) => {
     setIsLoading(true);
-    const createRequest =  await OpenSeaAPI.getAssetsListByOwner(address);
+    const createRequest = await OpenSeaAPI.getAssetsListByOwner(address);
     if (createRequest.ok) {
       const assets = await createRequest.data?.assets;
       setCreated(assets);
@@ -59,25 +61,44 @@ const { TabPane } = Tabs;
   };
   const loadTabData = async (e) => {
     if (e === "1") {
-    address && FetchCreatedAssets();
+      loadAssets();
     } else if (e === "2") {
-      FetchCollectibleAssets();
+      loadCollections();
     }
   };
 
+  const loadCollections = () => {
+    const collections = assets.slice(assets.length / 2, assets.length);
+
+    setCollections(collections);
+  };
+  const loadAssets = () => {
+    const data = assets.slice(0, assets.length / 2);
+    setCreated(data);
+  };
+  const query = useQueryParam();
   useEffect(() => {
-  address && FetchCreatedAssets();
-  }, [address]);
+    if (!query) {
+      return;
+    }
+    loadAssets();
+    loadCollections();
+    console.log("profile_img_url ", profile_img_url);
+  }, [query]);
   return (
     <>
       <MainWrapper>
         <ProfileContainer>
-          <img src="/images/talentCover.png" />
+          <img
+            src={profile_img_url ? profile_img_url : "/images/talentCover.png"}
+          />
           <BiographyContainer>
             <div className={"avatar"}>
               <img
                 alt="userAvatar"
-                src={avatar}
+                src={
+                  profile_img_url ? profile_img_url : "/images/talentCover.png"
+                }
                 loading="lazy"
               />
             </div>
@@ -99,7 +120,7 @@ const { TabPane } = Tabs;
         </ProfileContainer>
         <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
           <TabPane tab="Created" key="1">
-            {isLoading ? (
+            {false ? (
               <LoadingContainer>
                 <Spin />
               </LoadingContainer>
@@ -107,31 +128,55 @@ const { TabPane } = Tabs;
               <>
                 {" "}
                 <Products data={created} />
-                <LoadMoreButton block shape={"round"} size={"large"}>
+                {/* <LoadMoreButton block shape={"round"} size={"large"}>
                   {"Load More"}
-                </LoadMoreButton>
+                </LoadMoreButton> */}
               </>
             )}
           </TabPane>
           <TabPane tab="Collectibles" key="2">
-            {isLoading ? (
-              <LoadingContainer>
-                <Spin />
-              </LoadingContainer>
-            ) : (
-              <>
-                {" "}
-                <Products data={collections} />
-                <LoadMoreButton block shape={"round"} size={"large"}>
-                  {"Load More"}
-                </LoadMoreButton>{" "}
-                {/* the load button will be showed based on a condition */}{" "}
-              </>
-            )}
+            <>
+              {" "}
+              <Products data={collections} />
+              <LoadMoreButton block shape={"round"} size={"large"}>
+                {"Load More"}
+              </LoadMoreButton>{" "}
+              {/* the load button will be showed based on a condition */}{" "}
+            </>
           </TabPane>
         </Tabs>
       </MainWrapper>
     </>
   );
 }
+
+export async function getStaticPaths() {
+  const talentResult = seller_assets;
+  const talents = Object.keys(talentResult);
+
+  const paths = talents.map((talent) => {
+    return {
+      params: { talent: talent.toString() },
+    };
+  });
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
+export const getStaticProps = async (context) => {
+  const talent = context.params.talent;
+  const assets = seller_assets[talent];
+  // const profile_img_url = topSellersAPI.filter((top) => top.talent == talent)[0]
+  //   .profile_img_url;
+  return {
+    props: {
+      assets: JSON.parse(JSON.stringify(assets)),
+      talent: JSON.parse(JSON.stringify(talent)),
+      // profile_img_url: JSON.parse(JSON.stringify(profile_img_url)),
+    },
+  };
+};
+
 export default Profile;
