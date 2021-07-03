@@ -36,6 +36,8 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import OpenSeaAPI from "/Utils/openseaApi";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
+import { fetchNft } from "/Utils/strapiApi";
+
 const { TabPane } = Tabs;
 const { Countdown } = Statistic;
 const menu = (
@@ -60,16 +62,19 @@ function ProductPage() {
   const { ti } = router.query;
   const [bids, setBids] = useState([]);
   const [priceDetails, setPriceDetails] = useState(null);
-  useEffect(() => {
-    if (!queryParam) {
-      return null;
+  useEffect(async () => {
+
+   const data = await fetchNft("0x06012c8cf97bead5deae237070f9587f8e7a266d","556324")
+    console.log("data from opensea", data.data)
+   if (!queryParam) {
+      return null;  
     }
     if (queryParam.liveAuction != undefined) {
       loadAsset(JSON.parse(queryParam.liveAuction));
-      console.log("live", JSON.parse(queryParam.liveAuction));
+      // console.log("live", JSON.parse(queryParam.liveAuction));
     } else if (queryParam.explore != undefined) {
       loadAsset(JSON.parse(queryParam.explore));
-      console.log("explor", JSON.parse(queryParam.explore));
+      // console.log("explor", JSON.parse(queryParam.explore));
     }
   }, [queryParam]);
   // useEffect(() => {
@@ -91,7 +96,7 @@ function ProductPage() {
     setBids(asset?.asset?.orders);
 
     } else if (queryParam.explore != undefined) {
-      console.log("this is explore", asset)
+      // console.log("this is explore", asset)
         setAsset({
           asset: { owner: asset.owner, imageUrl: asset.image_preview_url, collection: asset.collection}
         });

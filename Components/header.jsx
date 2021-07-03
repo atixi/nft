@@ -67,7 +67,7 @@ function Header(props) {
   const [menu, setMenu] = useState(false);
   const [accountAddress, setAccountAddress] = useState(accountList[0]);
   const [connected, setConnected] = useState(false);
-  useEffect(() => {
+  useEffect(async () => {
     isConnectedToAnyWallet();
     // this is just to test that we receive data from strapi
     // const data = await fetchUsers();
