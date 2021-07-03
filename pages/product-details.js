@@ -34,10 +34,8 @@ import {
 } from "../Components/StyledComponents/productDetails-styledComponents";
 import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
-import OpenSeaAPI from "/Utils/openseaApi";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchNft } from "/Utils/strapiApi";
-import { LoadingOutlined } from '@ant-design/icons';
 const { TabPane } = Tabs;
 const { Countdown } = Statistic;
 const menu = (
