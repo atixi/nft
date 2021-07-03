@@ -66,7 +66,8 @@ function Products(props) {
                       href={{
                         pathname: "/product-details",
                         query: {
-                          explore: JSON.stringify(n),
+                          ta: n?.asset_contract?.address,
+                          ti: n?.token_id,
                         },
                       }}
                     >
@@ -81,16 +82,8 @@ function Products(props) {
                     </Link>
                   </div>
                   <ProductDescription>
-                    {/* <Link
-                      href={`/product-details?ta=${n?.asset_contract.address}&ti=${n?.token_id}`}
-                    > */}
                     <Link
-                      href={{
-                        pathname: "/product-details",
-                        query: {
-                          explore: JSON.stringify(n),
-                        },
-                      }}
+                      href={`/product-details?ta=${n?.asset_contract.address}&ti=${n?.token_id}`}
                     >
                       <a>
                         <CardTitle>{n?.name}</CardTitle>
