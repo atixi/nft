@@ -10,27 +10,16 @@ import OpenSeaAPI from "/Utils/openseaApi";
 import { useEffect, useState } from "react";
 import { topSellersAPI } from "/Constants/mockApi/topSellerApi";
 import { liveAuctionsAPI } from "/Constants/mockApi/liveAuctionApi";
-import {
-  collectionsAPI,
-  clientCollections,
-} from "/Constants/mockApi/collectionApi";
-import { exploresAPI } from "/Constants/mockApi/exploreApi";
-function Home({ topSellers, liveAuctions, collections, explores, assets }) {
-  const [clientCols, setClientCols] = useState();
 
-  useEffect(() => {
-    getCollections();
-  }, []);
-  const getCollections = () => {
-    const cols = OpenSeaAPI.mockCollections(clientCollections);
-    setClientCols(cols);
-  };
+import { exploresAPI } from "/Constants/mockApi/exploreApi";
+
+function Home({ topSellers, liveAuctions, explores, assets }) {
   return (
     <MainWrapper>
       <Slide />
       <TopSellers data={topSellersAPI} />
       <LiveAuctions data={liveAuctionsAPI} />
-      <HotCollections data={clientCols} />
+      <HotCollections />
       <Explore data={exploresAPI} />
     </MainWrapper>
   );

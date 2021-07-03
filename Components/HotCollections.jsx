@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Carousel from "react-elastic-carousel";
-import OpenSeaAPI from "/Utils/openseaApi";
-
+import axios from "axios";
 import { SectionHeading } from "./StyledComponents/globalStyledComponents";
 import {
   CollectionCard,
@@ -18,11 +17,41 @@ const breakPoints = [
   { width: 1024, itemsToShow: 4, itemsToScroll: 4 },
   { width: 1200, itemsToShow: 5, itemsToScroll: 5 },
 ];
+const api = axios.create({
+  baseURL: "http://localhost:1337",
+  timeout: 30000, // 30 secs
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+});
+export default function HotCollections() {
+  const [collections, setCollection] = useState([]);
+  // let collections = [];
 
-export default function HotCollections({ data }) {
-  const collections = data;
   useEffect(() => {
-    console.log(data);
+    // async function getCollection() {
+    //   try {
+    //     const response = await api.get(
+    //       // "https://rim-entertainment.herokuapp.com/collections"
+    //       "/collections"
+    //     );
+    //     // setCollection(response.data);
+    //     console.log(response.data);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // }
+    // getCollection();
+    axios
+      .get(
+        "https://rim-entertainment.herokuapp.com/collections"
+        // "http://localhost:1337/collections"
+      )
+      .then((response) => {
+        setCollection(response.data);
+        // collections = response.data;
+      });
   }, []);
   return (
     <div className={"mt-5"}>
@@ -48,7 +77,10 @@ export default function HotCollections({ data }) {
                   }}
                 >
                   <a>
-                    <img style={{ width: "auto" }} src={item.image_url} />
+                    <img
+                      style={{ width: "auto" }}
+                      src={item.collectionImageURL.name}
+                    />
                   </a>
                 </Link>
               </CardImageContainer>
@@ -61,7 +93,7 @@ export default function HotCollections({ data }) {
                   /> */}
                 </ProfileAvatarContainer>
                 <CardTitle style={{ padding: "0px 10px", marginTop: "-35px" }}>
-                  <span>{item.collection}</span>
+                  <span>{item.collectionName}</span>
                   <span>{`ERC-721`}</span>
                   {/* <span>{item.data[0]?.asset_contract.schema_name}</span> */}
                 </CardTitle>
