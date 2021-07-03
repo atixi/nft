@@ -21,7 +21,9 @@ const breakPoints = [
 
 export default function HotCollections({ data }) {
   const collections = data;
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log(data);
+  }, []);
   return (
     <div className={"mt-5"}>
       <SectionHeading>{"Hot collections"} 💥</SectionHeading>

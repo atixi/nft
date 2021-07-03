@@ -107,7 +107,6 @@ function Header(props) {
       address.substring(address.length - 5, address.length)
     );
   };
-
   const menuFooter = (
     <SocialLinkContainer>
       <div>
@@ -300,16 +299,20 @@ function Header(props) {
         </CreateButton>
         {connected == true ? (
           <Dropdown
-            overlay={<WalletInfoDropdown />}
+            overlay={
+              <WalletInfoDropdown
+                data={
+                  walletToken != null
+                    ? walletToken
+                    : metaToken != null && metaToken
+                }
+              />
+            }
             placement="bottomRight"
             trigger={["hover"]}
           >
             <ConnectedButton className={`d-lg-block`}>
-              <BalanceLabel>
-                {walletToken != null
-                  ? displayAddress(walletToken)
-                  : metaToken != null && displayMetaBalance()}
-              </BalanceLabel>
+              <BalanceLabel>{"0 eth"}</BalanceLabel>
               <Avatar size={36} />
             </ConnectedButton>
           </Dropdown>

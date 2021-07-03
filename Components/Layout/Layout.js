@@ -49,7 +49,6 @@ const Layout = ({ children }) => {
     subscribeMetamaskProvider();
     handleHeader();
   });
-
   const handleHeader = () => {
     if (router.pathname !== "/wallet") {
       setDisplayHeader(true);

@@ -25,6 +25,7 @@ import {
 const Label = styled.div`
   margin: 0px;
   padding: 0px;
+  height: 50px;
   -webkit-box-align: stretch;
   align-items: stretch;
   border-width: 0px;
@@ -98,12 +99,12 @@ const MenuItem = styled.div`
     cursor: pointer !important;
   }
 `;
-function WalletInfoDropdown() {
+function WalletInfoDropdown({ data }) {
   const dispatchMetaConnected = useDispatch();
   const dispatchWalletConnected = useDispatch();
   const dispatchWalletToken = useDispatch();
   const metaBlance = useSelector(getMetaBalance);
-  let address = "0x15d25c1d4c0410514f01ee0953b3db495ccf112d";
+  let address = data[0];
   address = address
     .toString()
     .replace(address.toString().substring(10, address.length - 10), ".....");
