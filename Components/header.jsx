@@ -38,6 +38,7 @@ import {
   setWalletConnected,
   getAccountTokens,
   getMetaToken,
+  getMetaBalance,
   getWalletToken,
   getMetaConnected,
   getWalletConnected,
@@ -56,6 +57,7 @@ function Header(props) {
 
   const accountTokens = useSelector(getAccountTokens);
   const metaToken = useSelector(getMetaToken);
+  const metaBlance = useSelector(getMetaBalance);
   const walletToken = useSelector(getWalletToken);
   const isMetaconnected = useSelector(getMetaConnected);
   const isWalletConnected = useSelector(getWalletConnected);
@@ -92,6 +94,10 @@ function Header(props) {
     } else {
       router.push("/");
     }
+  };
+  const displayMetaBalance = () => {
+    console.log("metabalance", metaBlance);
+    return metaBlance;
   };
   const displayAddress = (token) => {
     const address = token[0];
@@ -302,7 +308,7 @@ function Header(props) {
               <BalanceLabel>
                 {walletToken != null
                   ? displayAddress(walletToken)
-                  : metaToken != null && displayAddress(metaToken)}
+                  : metaToken != null && displayMetaBalance()}
               </BalanceLabel>
               <Avatar size={36} />
             </ConnectedButton>

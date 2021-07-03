@@ -4,14 +4,23 @@ import { SwapOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import Link from "next/link";
 import { Button } from "./StyledComponents/header-styledComponents";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "@walletconnect/qrcode-modal";
 
 import {
+  setAccountTokens,
+  setMetaToken,
+  setWalletToken,
   setMetaConnected,
   setWalletConnected,
-  setWalletToken,
+  getAccountTokens,
+  getMetaToken,
+  getMetaBalance,
+  getWalletToken,
+  getMetaConnected,
+  getWalletConnected,
+  getIsDisconnectedFromServer,
 } from "/store/action/accountSlice";
 const Label = styled.div`
   margin: 0px;
@@ -93,6 +102,7 @@ function WalletInfoDropdown() {
   const dispatchMetaConnected = useDispatch();
   const dispatchWalletConnected = useDispatch();
   const dispatchWalletToken = useDispatch();
+  const metaBlance = useSelector(getMetaBalance);
   let address = "0x15d25c1d4c0410514f01ee0953b3db495ccf112d";
   address = address
     .toString()

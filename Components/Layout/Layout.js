@@ -4,11 +4,11 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { useDispatch, useSelector } from "react-redux";
-import { setConnected } from "/store/action/accountSlice";
 import { useRouter } from "next/router";
 import {
   setAccountTokens,
   setMetaToken,
+  setMetaBalance,
   setWalletToken,
   setMetaConnected,
   setWalletConnected,
@@ -19,6 +19,15 @@ import {
   getWalletConnected,
 } from "/store/action/accountSlice";
 import Web3 from "web3";
+import { OpenSeaPort, Network } from "opensea-js";
+import { seaportProvider } from "/Utils/openseaApi";
+
+// This example provider won't let you make transactions, only read-only calls:
+
+const seaport = new OpenSeaPort(seaportProvider, {
+  networkName: Network.Main,
+  apiKey: "2e7ef0ac679f4860bbe49a34a98cf5ac",
+});
 
 const Layout = ({ children }) => {
   const dispatchAccountTokens = useDispatch();
@@ -26,6 +35,7 @@ const Layout = ({ children }) => {
   const dispatchWalletToken = useDispatch();
   const dispatchMetaConnected = useDispatch();
   const dispatchWalletconneted = useDispatch();
+  const dipsatchMetaBalance = useDispatch();
 
   const accountTokens = useSelector(getAccountTokens);
   const metaToken = useSelector(getMetaToken);
@@ -39,6 +49,7 @@ const Layout = ({ children }) => {
     subscribeMetamaskProvider();
     handleHeader();
   });
+
   const handleHeader = () => {
     if (router.pathname !== "/wallet") {
       setDisplayHeader(true);
@@ -55,29 +66,32 @@ const Layout = ({ children }) => {
     }
     ethereum.on("accountsChanged", handleMetaAccount);
     ethereum.on("chainChanged", (chainId) => {
+      console.log("chain changed");
       console.log(chainId);
     });
   };
   const handleMetaAccount = async (accounts) => {
     console.log("Listen to account changes");
+    console.log("My Meta accounts are", accounts);
     if (accounts.length === 0) {
       await dispatchMetaConnected(setMetaConnected(false));
       await dispatchMetaToken(setMetaToken(null));
     } else {
       await dispatchMetaConnected(setMetaConnected(true));
       await dispatchMetaToken(setMetaToken(accounts));
-      // const web3 = new Web3(
-      //   new Web3.providers.HttpProvider(
-      //     "https://mainnet.infura.io/v3/2e7ef0ac679f4860bbe49a34a98cf5ac"
-      //   )
-      // );
       const web3 = new Web3(window.ethereum);
       console.log("web3 is ", web3);
       web3.eth.getBalance(accounts[0], function (err, result) {
         if (err) {
           console.log(err);
         } else {
-          console.log(web3.utils.fromWei(result, "ether") + " ETH");
+          dipsatchMetaBalance(
+            setMetaBalance(web3.utils.fromWei(result, "ether"))
+          );
+          console.log(
+            "account balance is ",
+            web3.utils.fromWei(result, "ether") + " ETH"
+          );
         }
       });
       if (router.pathname === "/wallet") {

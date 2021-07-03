@@ -109,10 +109,10 @@ function CollectionDetails({ assets, banner_image_url }) {
   );
 }
 export async function getStaticPaths() {
-  const result = await OpenSeaAPI.getCollectionAssetsBySlug();
-  const collections = await OpenSeaAPI.mapCollection(result);
-  console.log("result by slug", result);
-  console.log("collections by slug", collections);
+  // const result = await OpenSeaAPI.getCollectionAssetsBySlug();
+  // const collections = await OpenSeaAPI.mapCollection(result);
+  // console.log("result by slug", result);
+  // console.log("collections by slug", collections);
 
   const slugs = [
     "reika-mandala-art",

@@ -12,8 +12,10 @@ export const DEFAULT_DECIMALS = 18;
 const MAX_ADDR_LEN = 4;
 export let web3Provider =
   typeof web3 !== "undefined"
-    ? window.ethereum
-    : new Web3.providers.HttpProvider("https://mainnet.infura.io");
+    ? window.web3.currentProvider
+    : new Web3.providers.HttpProvider(
+        "https://mainnet.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
+      );
 
 // Replace this with Redux for more complex logic
 const networkCallbacks = [];
