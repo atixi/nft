@@ -84,7 +84,6 @@ function ProductPage() {
       {
         console.log("error", data.status)
       }
-      console.log("data from opensea", data.data)
     }
   }, [queryParam]);
 
