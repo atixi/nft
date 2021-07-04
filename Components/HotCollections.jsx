@@ -18,8 +18,7 @@ const breakPoints = [
   { width: 1200, itemsToShow: 5, itemsToScroll: 5 },
 ];
 const api = axios.create({
-  baseURL: "http://localhost:1337",
-  timeout: 30000, // 30 secs
+  baseURL: "https://rim-entertainment.herokuapp.com",
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
@@ -29,15 +28,10 @@ export default function HotCollections() {
   const [collections, setCollection] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(
-        "https://rim-entertainment.herokuapp.com/collections"
-        // "http://localhost:1337/collections"
-      )
-      .then((response) => {
-        setCollection(response.data);
-        // collections = response.data;
-      });
+    api.get("/collections").then((response) => {
+      setCollection(response.data);
+      // collections = response.data;
+    });
   }, []);
   return (
     <div className={"mt-5"}>

@@ -16,10 +16,35 @@ import {
   LoadMoreButton,
   MainWrapper,
 } from "/Components/StyledComponents/globalStyledComponents";
-
+import axios from "axios";
 const { TabPane } = Tabs;
+const api = axios.create({
+  baseURL: "https://rim-entertainment.herokuapp.com",
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+});
+
 function CollectionDetails({ assets, banner_image_url }) {
   const [collections, setCollections] = useState();
+  const [collect, setCollect] = useState({
+    collectionName: "",
+    collectionImageURL: {
+      formats: {
+        thumbnail: {
+          url: "",
+        },
+      },
+    },
+    collectionBanner: {
+      formats: {
+        thumbnail: {
+          url: "",
+        },
+      },
+    },
+  });
   const [slug, setSlug] = useState();
   const [created, setCreated] = useState();
   const [collectionName, setCollectionName] = useState();
@@ -39,7 +64,12 @@ function CollectionDetails({ assets, banner_image_url }) {
     setCreated(data?.slice(data.length / 2, data.length));
   };
   const query = useQueryParam();
+
   useEffect(() => {
+    api.get(`/collections/${query.slug}`).then((response) => {
+      setCollect(response.data);
+      console.log("kasdfj", response.data);
+    });
     setSlug(query.slug);
     loadAssets(query.slug);
     loadCollections(query.slug);
@@ -50,14 +80,18 @@ function CollectionDetails({ assets, banner_image_url }) {
     <>
       <MainWrapper>
         <ProfileContainer>
-          <img src={query.banner_image_url} />
+          <img src={collect.collectionBanner?.formats.thumbnail.url} />
           <BiographyContainer>
             <div className={"avatar"}>
-              <img alt="userAvatar" src={banner_image_url} loading="lazy" />
+              <img
+                alt="userAvatar"
+                src={collect.collectionImageURL?.formats.thumbnail.url}
+                loading="lazy"
+              />
             </div>
             <BioDescription>
               <h3>
-                <strong>{collectionName}</strong>
+                <strong>{collect.collectionName}</strong>
               </h3>
               <h6>
                 <strong>{"addressToShow"}</strong>
@@ -93,11 +127,6 @@ function CollectionDetails({ assets, banner_image_url }) {
   );
 }
 export async function getStaticPaths() {
-  // const result = await OpenSeaAPI.getCollectionAssetsBySlug();
-  // const collections = await OpenSeaAPI.mapCollection(result);
-  // console.log("result by slug", result);
-  // console.log("collections by slug", collections);
-
   const slugs = [
     "reika-mandala-art",
     "atixi",
@@ -140,16 +169,4 @@ export const getStaticProps = async (context) => {
   };
 };
 
-// export const getServerSideProps = async () => {
-//   // const { data: assets } = await OpenSeaAPI.getAssets("bitcoinphotos");
-//   return {
-//     props: {
-//       // assets: JSON.parse(JSON.stringify(assets.assets)),
-//       // assets: JSON.parse(JSON.stringify(assets)),
-//       // liveAuctions: JSON.parse(JSON.stringify(liveAuctions.orders)),
-//       // collections: JSON.parse(JSON.stringify(collections)),
-//       // explores: JSON.parse(JSON.stringify(explores)),
-//     },
-//   };
-// };
 export default CollectionDetails;
