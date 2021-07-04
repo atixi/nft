@@ -1,7 +1,5 @@
-import { Dropdown, Image, Menu, Statistic, Tabs, Avatar, Skeleton, Spin } from "antd";
-
+import { Dropdown, Image, Menu, Statistic, Tabs, Avatar, Skeleton, Result, Button, Spin } from "antd";
 import Link from "next/link";
-import { useRouter } from 'next/router'
 import { useEffect, useState } from "react";
 import {
   Auction,
@@ -54,12 +52,11 @@ const menu = (
   </DropdownMenu>
 );
 function ProductPage() {
-    const router = useRouter();
-    console.log(router.query)
   const queryParam = useQueryParam();
   const [asset, setAsset] = useState({});
   const [bids, setBids] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false)
   const [priceDetails, setPriceDetails] = useState(null);
   useEffect(async () => {
     if (!queryParam) {
@@ -67,6 +64,9 @@ function ProductPage() {
     }
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchNft(queryParam.tokenAddress,queryParam.tokenId);
+      if(data)
+      setLoading(false);
+
       if(data.status == 200)
       {
         const nft = data.data;
@@ -80,10 +80,10 @@ function ProductPage() {
         });
         console.log("data", data.data)
       setBids(nft?.orders);
-      setLoading(false)
       }
       else 
       {
+        setNotFound(true)
         console.log("error", data.status)
       }
     }
@@ -105,7 +105,17 @@ function ProductPage() {
   return (
     <>
       <Wrapper>
-        {loading ? <Spin style={{marginTop: "200px"}} /> : <Content className={`d-sm-flex`}>
+        {loading ? <Spin style={{marginTop: "200px"}} /> : 
+        notFound
+         ?  <Result
+         status="500"
+         title="Error!"
+         subTitle="Please try again!"
+         extra={[
+          <Link href={"/"}><a><Button key="buy">Back to home</Button></a></Link>
+         ]}
+       /> :
+        <Content className={`d-sm-flex`}>
           <ItemImageContainer className=" text-center">
             {/* <img className={"itemImage"} src={asset.asset?.imageUrl} /> */}
             <ImageCon>
