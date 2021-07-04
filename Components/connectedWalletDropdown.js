@@ -14,10 +14,12 @@ import {
   setWalletToken,
   setMetaConnected,
   setWalletConnected,
+  setWalletBalance,
   getAccountTokens,
   getMetaToken,
   getMetaBalance,
   getWalletToken,
+  getWalletBalance,
   getMetaConnected,
   getWalletConnected,
   getIsDisconnectedFromServer,
@@ -103,7 +105,11 @@ function WalletInfoDropdown({ data }) {
   const dispatchMetaConnected = useDispatch();
   const dispatchWalletConnected = useDispatch();
   const dispatchWalletToken = useDispatch();
-  const metaBlance = useSelector(getMetaBalance);
+  const dispatchWalletBalance = useDispatch();
+  const metaBalance = useSelector(getMetaBalance);
+  const walletBalance = useSelector(getWalletBalance);
+  const metaToken = useSelector(getMetaToken);
+  const walletToken = useSelector(getWalletToken);
   let address = data[0];
   address = address
     .toString()
@@ -118,10 +124,10 @@ function WalletInfoDropdown({ data }) {
     } else {
       await connector.killSession();
     }
-
     await dispatchMetaConnected(setMetaConnected(false));
     await dispatchWalletConnected(setWalletConnected(false));
     await dispatchWalletToken(setWalletToken(null));
+    await dispatchWalletBalance(setWalletBalance(""));
   };
   const displayAddress = (token) => {
     return (
@@ -163,7 +169,9 @@ function WalletInfoDropdown({ data }) {
             title={<ListTitle>{CONSTANTS.balance}</ListTitle>}
             description={
               <ListDescription>
-                {"0 wETH "} <span>{"0"}</span>
+                {walletBalance !== ""
+                  ? walletBalance + " ETH "
+                  : metaBalance + " ETH"}
               </ListDescription>
             }
           />
@@ -192,7 +200,9 @@ function WalletInfoDropdown({ data }) {
             }
             description={
               <ListDescription>
-                {"0 wETH "} <span>{"0"}</span>
+                {walletBalance !== ""
+                  ? walletBalance + " WETH "
+                  : metaBalance + " WETH"}
               </ListDescription>
             }
           />
@@ -200,7 +210,19 @@ function WalletInfoDropdown({ data }) {
       </List>
       <hr />
       <Menu.Item key={"1"}>
-        <Link href={"#"}>
+        <Link
+          href={{
+            // pathname: "/profile/index",
+            pathname: `/profile/${
+              metaToken[0] ? metaToken[0] : walletToken[0]
+            }`,
+            // query: {
+            //   address: seller.address,
+            //   talent: seller.talent,
+            //   avatar: seller.profile_img_url,
+            // },
+          }}
+        >
           <a>{"My Items"}</a>
         </Link>
       </Menu.Item>
@@ -209,11 +231,11 @@ function WalletInfoDropdown({ data }) {
           <a>{"Edit Profile"}</a>
         </Link>
       </Menu.Item>
-      <Menu.Item key={"3"}>
+      {/* <Menu.Item key={"3"}>
         <Link href={"#"}>
           <a>{"Manage Funds"}</a>
         </Link>
-      </Menu.Item>
+      </Menu.Item> */}
       <Menu.Item key={"4"}>
         <MenuItem style={{ cursor: "pointer" }} onClick={disconnectWallet}>
           <label>{`Disconnect`}</label>

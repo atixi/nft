@@ -75,23 +75,23 @@ const Layout = ({ children }) => {
     if (accounts.length === 0) {
       await dispatchMetaConnected(setMetaConnected(false));
       await dispatchMetaToken(setMetaToken(null));
+      await dipsatchMetaBalance(setMetaBalance(""));
     } else {
       await dispatchMetaConnected(setMetaConnected(true));
       await dispatchMetaToken(setMetaToken(accounts));
       const web3 = new Web3(window.ethereum);
-      console.log("web3 is ", web3);
-      web3.eth.getBalance(accounts[0], function (err, result) {
+      web3.eth.getBalance(accounts[0], async (err, result) => {
         if (err) {
           console.log(err);
         } else {
-          dipsatchMetaBalance(
+          await dipsatchMetaBalance(
             setMetaBalance(web3.utils.fromWei(result, "ether"))
           );
-          console.log(
-            "account balance is ",
-            web3.utils.fromWei(result, "ether") + " ETH"
-          );
         }
+        console.log(
+          "account balance is ",
+          web3.utils.fromWei(result, "ether") + " ETH"
+        );
       });
       if (router.pathname === "/wallet") {
         router.push("/");

@@ -10,6 +10,7 @@ import {
   setAccountTokens,
   setMetaToken,
   setWalletToken,
+  setWalletBalance,
   setMetaConnected,
   setWalletConnected,
   getAccountTokens,
@@ -26,6 +27,7 @@ const Wallet = () => {
   const dispatchAccountTokens = useDispatch();
   const dispatchMetaToken = useDispatch();
   const dispatchWalletToken = useDispatch();
+  const dispatchWalletBalance = useDispatch();
   const dispatchMetaConnected = useDispatch();
   const dispatchWalletconnected = useDispatch();
 
@@ -236,6 +238,20 @@ const Wallet = () => {
     const { accounts } = payload.params[0];
     dispatchWalletToken(setWalletToken(accounts));
     dispatchWalletconnected(setWalletConnected(true));
+    const web3 = new Web3(window.ethereum);
+    web3.eth.getBalance(accounts[0], async (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        await dispatchWalletBalance(
+          setWalletBalance(web3.utils.fromWei(result, "ether"))
+        );
+      }
+      console.log(
+        "wallet balance is ",
+        web3.utils.fromWei(result, "ether") + " ETH"
+      );
+    });
     router.push("/");
   };
   const getAccountAssets = async () => {

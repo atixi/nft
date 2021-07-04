@@ -40,6 +40,7 @@ import {
   getMetaToken,
   getMetaBalance,
   getWalletToken,
+  getWalletBalance,
   getMetaConnected,
   getWalletConnected,
   getIsDisconnectedFromServer,
@@ -57,8 +58,10 @@ function Header(props) {
 
   const accountTokens = useSelector(getAccountTokens);
   const metaToken = useSelector(getMetaToken);
-  const metaBlance = useSelector(getMetaBalance);
+  const metaBalance = useSelector(getMetaBalance);
   const walletToken = useSelector(getWalletToken);
+
+  const walletBalance = useSelector(getWalletBalance);
   const isMetaconnected = useSelector(getMetaConnected);
   const isWalletConnected = useSelector(getWalletConnected);
 
@@ -67,12 +70,13 @@ function Header(props) {
   const [menu, setMenu] = useState(false);
   const [accountAddress, setAccountAddress] = useState(accountList[0]);
   const [connected, setConnected] = useState(false);
-  useEffect(async () => {
+  useEffect(() => {
+    console.log("Metabalance is", metaBalance);
     isConnectedToAnyWallet();
     // this is just to test that we receive data from strapi
     // const data = await fetchUsers();
     // console.log("new data", data)
-  }, [isMetaconnected, isWalletConnected]);
+  }, [isMetaconnected, isWalletConnected, metaBalance]);
 
   const isConnectedToAnyWallet = async () => {
     if (isMetaconnected == false && isWalletConnected == false) {
@@ -96,8 +100,7 @@ function Header(props) {
     }
   };
   const displayMetaBalance = () => {
-    console.log("metabalance", metaBlance);
-    return metaBlance;
+    return metaBalance + " Eth";
   };
   const displayAddress = (token) => {
     const address = token[0];
@@ -312,8 +315,20 @@ function Header(props) {
             trigger={["hover"]}
           >
             <ConnectedButton className={`d-lg-block`}>
-              <BalanceLabel>{"0 eth"}</BalanceLabel>
-              <Avatar size={36} />
+              {walletBalance !== "" ? (
+                <>
+                  <BalanceLabel>{walletBalance + " Eth"}</BalanceLabel>
+                  <Avatar
+                    size={36}
+                    src={"/images/walletIcons/walletIcon.svg"}
+                  />{" "}
+                </>
+              ) : (
+                <>
+                  <BalanceLabel>{metaBalance + " Eth"}</BalanceLabel>
+                  <Avatar size={36} src={"/images/walletIcons/metaIcon.svg"} />
+                </>
+              )}
             </ConnectedButton>
           </Dropdown>
         ) : (

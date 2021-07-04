@@ -26,17 +26,17 @@ export const WrapperItemContainer = styled.div`
   &::-webkit-scrollbar {
     width: 10px;
     height: 10px;
-  };
+  }
   &::-webkit-scrollbar-track {
     border-radius: 4px;
-  };
+  }
   &::-webkit-scrollbar-thumb {
     border-radius: 4px;
     background-color: #fff;
-  };
+  }
   &::-webkit-scrollbar-thumb:hover {
     background-color: #ccc;
-  };
+  }
 
   ul {
     list-style: none;
@@ -50,9 +50,9 @@ export const WrapperItemContainer = styled.div`
         font-weight: 700;
         font-size: 20px;
         color: #000;
-      };
-    };
-  };
+      }
+    }
+  }
 `;
 export const HeaderContainer = styled.div`
   padding: 0px 30px;
@@ -73,7 +73,7 @@ export const HeaderNav = styled.nav`
   min-height: 0px;
   height: 74px;
   background-color: #ffffff;
-  font-family: 'Poppins', sans-serif !important;
+  font-family: "Poppins", sans-serif !important;
   display: flex;
   margin: auto;
   flex-direction: row;
@@ -100,13 +100,13 @@ export const HeaderNav = styled.nav`
       cursor: pointer;
       &:hover {
         color: #333;
-      };
+      }
       button {
         font-family: inherit;
         font-weight: 900;
         color: rgba(4, 4, 5, 0.5);
         font-size: 0.98rem;
-      };
+      }
       a {
         display: block;
         text-decoration: none;
@@ -116,10 +116,10 @@ export const HeaderNav = styled.nav`
         color: rgba(4, 4, 5, 0.5);
         &.active {
           color: #000;
-        };
-      };
-    };
-  };
+        }
+      }
+    }
+  }
 `;
 
 export const CreateButton = styled.button`
@@ -142,9 +142,9 @@ export const ConnectButton = styled.button`
   background-color: #fff;
   font-size: 0.98rem !important;
   padding: 13px 20px;
-  a{
+  a {
     color: black !important;
-  };
+  }
 `;
 export const ConnectedButton = styled.button`
   margin: 0px 5px;
@@ -156,18 +156,17 @@ export const ConnectedButton = styled.button`
   background-color: #fff;
   font-size: 0.98rem !important;
   padding-right: 0px;
-  a{
+  a {
     color: black !important;
-  };
+  }
 `;
 export const BalanceLabel = styled.div`
-    display: inline;
-    margin-left: 10px;
-    margin-top: 5px;
-    margin-right: 10px;
-    min-width: 146px;
-
-`
+  display: inline;
+  margin-left: 10px;
+  margin-top: 5px;
+  margin-right: 10px;
+  min-width: 146px;
+`;
 export const Button = styled.button`
   margin: 0px 5px;
   line-height: 12px;
@@ -183,7 +182,7 @@ export const Button = styled.button`
 
   &:hover {
     border: 1px solid #333;
-  };
+  }
 `;
 export const HeaderBottomMenu = styled.div`
   border-top: 1px solid #e5e5e4;
@@ -195,8 +194,8 @@ export const HeaderBottomMenu = styled.div`
     align-items: center;
     li {
       padding: 10px;
-    };
-  };
+    }
+  }
 `;
 export const SearchWrapper = styled.div`
   width: 100%;
@@ -214,10 +213,10 @@ export const SearchWrapper = styled.div`
     border: 1px solid #ccc;
     background-color: #fff;
     box-shadow: 0 0 0px 3px rgba(200, 200, 200, 0.3);
-  };
+  }
   &:hover {
     border: 1px solid #ccc;
-  };
+  }
   input {
     border: 0px;
     min-width: 180px;
@@ -227,8 +226,8 @@ export const SearchWrapper = styled.div`
     font-family: inherit;
     &:focus {
       outline: none !important;
-    };
-  };
+    }
+  }
 `;
 export const SocialLinkContainer = styled.div`
   min-width: 200px;
@@ -236,5 +235,5 @@ export const SocialLinkContainer = styled.div`
   justify-content: space-around;
   a {
     color: #888;
-  };
+  }
 `;
