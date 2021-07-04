@@ -64,7 +64,7 @@ export const getMetaToken = (state) => {
   return state.account.accountTokens.metaToken;
 };
 export const getMetaBalance = (state) => {
-  state.account.accountTokens.metaBalance;
+  return state.account.accountTokens.metaBalance;
 };
 export const getWalletToken = (state) => {
   return state.account.accountTokens.walletToken;

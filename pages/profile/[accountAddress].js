@@ -8,7 +8,6 @@ import {
   ProfileButton,
 } from "/Components/StyledComponents/talentPage-styledComponents";
 import Products from "/Components/products";
-import OpenSeaAPI from "/Utils/openseaApi";
 import {
   LoadingContainer,
   LoadMoreButton,
@@ -17,73 +16,40 @@ import {
 
 import { useRouter } from "next/router";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
-import { seller_assets } from "/Constants/mockApi/assets";
-import { topSellersAPI } from "../../Constants/mockApi/topSellerApi";
+import { topSellersAPI } from "/Constants/mockApi/topSellerApi";
 
 const { TabPane } = Tabs;
-function Profile({ assets, talent, profile_img_url }) {
+function Profile({
+  accountAddress,
+  assets,
+  talent,
+  profile_img_url,
+  created,
+  collectibles,
+}) {
   const router = useRouter();
-  const [collections, setCollections] = useState();
-  const [created, setCreated] = useState();
-  // const { talent } = router.query;
-  const { address } = router.query;
-  const { avatar } = router.query;
   const [isLoading, setIsLoading] = useState(true);
   const [addressToShow, setAddress] = useState(
-    address &&
-      address
+    accountAddress &&
+      accountAddress
         .toString()
-        .replace(address.toString().substring(10, address.length - 10), ".....")
+        .replace(
+          accountAddress.toString().substring(10, accountAddress.length - 10),
+          "....."
+        )
   );
-  const FetchCreatedAssets = async (e) => {
-    setIsLoading(true);
-    const createRequest = await OpenSeaAPI.getAssetsListByOwner(address);
-    if (createRequest.ok) {
-      const assets = await createRequest.data?.assets;
-      setCreated(assets);
-      setIsLoading(false);
-    } else {
-      setIsLoading(false);
-      alert(createRequest.problem);
-    }
-  };
-  const FetchCollectibleAssets = async (e) => {
-    setIsLoading(true);
-    const collectionRequest = await OpenSeaAPI.getCollections(address);
-    if (collectionRequest.ok) {
-      const cols = await collectionRequest.data;
-      setCollections(cols);
-      setIsLoading(false);
-    } else {
-      setIsLoading(false);
-      alert(collectionRequest.problem);
-    }
-  };
-  const loadTabData = async (e) => {
-    if (e === "1") {
-      loadAssets();
-    } else if (e === "2") {
-      loadCollections();
-    }
-  };
 
-  const loadCollections = () => {
-    const collections = assets.slice(assets.length / 2, assets.length);
-
-    setCollections(collections);
-  };
-  const loadAssets = () => {
-    const data = assets.slice(0, assets.length / 2);
-    setCreated(data);
-  };
   const query = useQueryParam();
   useEffect(() => {
     if (!query) {
       return;
     }
-    loadAssets();
-    loadCollections();
+    console.log("assetas of my is : ", assets);
+    console.log("talent of my is ", talent);
+    console.log("accoutn address is ", accountAddress);
     console.log("profile_img_url ", profile_img_url);
+    console.log("collectibles are", collectibles);
+    console.log("create item are", created);
   }, [query]);
   return (
     <>
@@ -118,7 +84,7 @@ function Profile({ assets, talent, profile_img_url }) {
             </BioDescription>
           </BiographyContainer>
         </ProfileContainer>
-        <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
+        <Tabs defaultActiveKey="1">
           <TabPane tab="Created" key="1">
             {false ? (
               <LoadingContainer>
@@ -137,7 +103,7 @@ function Profile({ assets, talent, profile_img_url }) {
           <TabPane tab="Collectibles" key="2">
             <>
               {" "}
-              <Products data={collections} />
+              <Products data={collectibles} />
               <LoadMoreButton block shape={"round"} size={"large"}>
                 {"Load More"}
               </LoadMoreButton>{" "}
@@ -151,12 +117,12 @@ function Profile({ assets, talent, profile_img_url }) {
 }
 
 export async function getStaticPaths() {
-  const talentResult = seller_assets;
-  const talents = Object.keys(talentResult);
-
-  const paths = talents.map((talent) => {
+  const talentResult = topSellersAPI;
+  const talentAddresses = [];
+  talentResult.map((talent) => talentAddresses.push(talent.accountAddress));
+  const paths = talentAddresses.map((address) => {
     return {
-      params: { talent: talent.toString() },
+      params: { accountAddress: address.toString() },
     };
   });
   return {
@@ -166,15 +132,24 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps = async (context) => {
-  const talent = context.params.talent;
-  const assets = seller_assets[talent];
-  // const profile_img_url = topSellersAPI.filter((top) => top.talent == talent)[0]
-  //   .profile_img_url;
+  const accountAddress = context.params.accountAddress;
+
+  const talentData = topSellersAPI.filter(
+    (item) => item.accountAddress == accountAddress
+  )[0];
+  const assets = talentData.assets;
+  const created = assets.slice(0, assets.length / 2);
+  const collectibles = assets.slice(assets.length / 2, assets.length);
+  const talent = talentData.talent;
+  const profile_img_url = talentData.profile_img_url;
   return {
     props: {
       assets: JSON.parse(JSON.stringify(assets)),
+      created: JSON.parse(JSON.stringify(created)),
+      collectibles: JSON.parse(JSON.stringify(collectibles)),
       talent: JSON.parse(JSON.stringify(talent)),
-      // profile_img_url: JSON.parse(JSON.stringify(profile_img_url)),
+      profile_img_url: JSON.parse(JSON.stringify(profile_img_url)),
+      accountAddress: JSON.parse(JSON.stringify(accountAddress)),
     },
   };
 };
