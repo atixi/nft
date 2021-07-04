@@ -19,14 +19,10 @@ import {
 
 const { TabPane } = Tabs;
 function CollectionDetails({ assets, banner_image_url }) {
-  const [collectibles, setCollectibles] = useState();
-  const [owned, setOwned] = useState();
   const [collections, setCollections] = useState();
   const [slug, setSlug] = useState();
-  const [banner, setBanner] = useState();
   const [created, setCreated] = useState();
   const [collectionName, setCollectionName] = useState();
-  const [isLoading, setIsLoading] = useState(true);
   const loadTabData = async (e) => {
     if (e === "1") {
       loadAssets(slug);
@@ -36,32 +32,20 @@ function CollectionDetails({ assets, banner_image_url }) {
   };
   const loadCollections = (slug) => {
     const data = clientCollections[slug];
-    console.log("assets in collection is : ", data);
     setCollections(data?.slice(1, data.length / 2));
   };
   const loadAssets = (slug) => {
     const data = clientCollections[slug];
-    console.log("assets in collection", data);
     setCreated(data?.slice(data.length / 2, data.length));
   };
   const query = useQueryParam();
   useEffect(() => {
-    if (!query) {
-      return;
-    } else {
-      setSlug(query.slug);
-      setBanner(query.banner_image_url);
-      loadAssets(query.slug);
-      loadCollections(query.slug);
-      setCollectionName(query.collection);
-    }
-
-    console.log("assetsa are ", assets);
-    console.log("banner_image_url are ", banner_image_url);
+    setSlug(query.slug);
+    loadAssets(query.slug);
+    loadCollections(query.slug);
+    setCollectionName(query.collection);
   }, [query]);
-  if (!slug) {
-    return <p>Loading....</p>;
-  }
+
   return (
     <>
       <MainWrapper>
