@@ -98,13 +98,7 @@ function Product(product, index) {
       </ProductCardHeader>
       <div className={`col-md-12 p-3`}>
         <Link
-          href={{
-            pathname: "/product-details",
-            query: {
-              ta: product.asset?.tokenAddress,
-              ti: product.asset?.tokenId,
-            },
-          }}  >
+          href={`/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}`}  >
           <a>
             {" "}
             <img
@@ -123,13 +117,7 @@ function Product(product, index) {
           </CountDown>
         </CountDownContainer>
         <Link
-          href={{
-            pathname: "/product-details",
-            query: {
-              ta: product.asset?.tokenAddress,
-              ti: product.asset?.tokenId,
-            },
-          }}  >
+          href={`/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}`}  >
         <a>
           <CardTitle>{product.asset?.name}</CardTitle>
         </a>

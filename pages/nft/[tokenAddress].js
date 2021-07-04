@@ -1,6 +1,7 @@
 import { Dropdown, Image, Menu, Statistic, Tabs, Avatar, Skeleton, Spin } from "antd";
 
 import Link from "next/link";
+import { useRouter } from 'next/router'
 import { useEffect, useState } from "react";
 import {
   Auction,
@@ -31,7 +32,7 @@ import {
   PriceInCryptoContainer,
   PriceInDollarContainer,
   Wrapper,
-} from "../Components/StyledComponents/productDetails-styledComponents";
+} from "../../Components/StyledComponents/productDetails-styledComponents";
 import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
@@ -53,6 +54,8 @@ const menu = (
   </DropdownMenu>
 );
 function ProductPage() {
+    const router = useRouter();
+    console.log(router.query)
   const queryParam = useQueryParam();
   const [asset, setAsset] = useState({});
   const [bids, setBids] = useState([]);
@@ -62,8 +65,8 @@ function ProductPage() {
     if (!queryParam) {
       return null;
     }
-    if (queryParam.ta != undefined && queryParam.ti != undefined) {
-      const data = await fetchNft(queryParam.ta,queryParam.ti);
+    if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
+      const data = await fetchNft(queryParam.tokenAddress,queryParam.tokenId);
       if(data.status == 200)
       {
         const nft = data.data;
@@ -73,8 +76,9 @@ function ProductPage() {
           owner: nft.owner,
           creator: nft?.creator,
           image: nft.imageUrl,
-          imagePreview: nft.imagePreviewUrl,
+          imagePreview: nft.imageUrlOriginal,
         });
+        console.log("data", data.data)
       setBids(nft?.orders);
       setLoading(false)
       }
@@ -169,14 +173,7 @@ function ProductPage() {
               <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
               <br />
               <Link
-                href={{
-                  pathname: "/profile/talent",
-                  query: {
-                    address: asset?.owner?.address,
-                    talent: checkName(asset?.owner?.user?.username),
-                    avatar: asset?.owner?.profile_img_url,
-                  },
-                }}
+                href={`/profile/${asset?.owner?.address}`}
                 passHref
               >
                 <a>
