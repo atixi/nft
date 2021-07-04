@@ -9,9 +9,7 @@ export const fetchNft = async (tokenAddress, tokenId) => {
         method: 'GET',
     }).then(res => res).catch(
         function (error) {
-          console.log('Show error notification!')
-        //   return Promise.reject(error)
-        return 0;
+            return "error";
         }
       )
 }

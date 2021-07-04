@@ -1,4 +1,4 @@
-import { Dropdown, Image, Menu, Statistic, Tabs, Avatar, Skeleton, Result, Button, Spin } from "antd";
+import { Dropdown, Image, Menu, Statistic, Tabs, Avatar, Result, Button, Spin } from "antd";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -35,6 +35,7 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchNft } from "/Utils/strapiApi";
+import { unixToHumanDate, checkName } from "/Utils/utils";
 const { TabPane } = Tabs;
 const { Countdown } = Statistic;
 const menu = (
@@ -79,12 +80,11 @@ function ProductPage() {
           imagePreview: nft.imageUrlOriginal,
         });
         console.log("data", data.data)
-      setBids(nft?.orders);
+      setBids(nft?.buyOrders);
       }
-      else 
+      else if(data=="error")
       {
         setNotFound(true)
-        console.log("error", data.status)
       }
     }
   }, [queryParam]);
@@ -112,7 +112,7 @@ function ProductPage() {
          title="Error!"
          subTitle="Please try again!"
          extra={[
-          <Link href={"/"}><a><Button key="buy">Back to home</Button></a></Link>
+          <Link href={"/"}><a><Button key="buy">{"Back to home"}</Button></a></Link>
          ]}
        /> :
         <Content className={`d-sm-flex`}>
@@ -265,7 +265,7 @@ function ProductPage() {
                               <span className={"bidedPriceText"}>
                                 <span className={"bidValue"}>{`${
                                   getAuctionPriceDetails(order).priceBase
-                                } wETH`}</span>
+                                } ${order?.paymentTokenContract?.symbol}`}</span>
                                 {" by "}
                                 <Link
                                   href={{
@@ -291,7 +291,7 @@ function ProductPage() {
                             </span>
                             <span className={"bidOwnerAndDateContainer"}>
                               <span className={"bidDate"}>
-                                {"6/2/2021, 11:50 PM"}
+                                {unixToHumanDate(order?.createdTime)}
                               </span>
                             </span>
                           </span>
@@ -331,7 +331,7 @@ function ProductPage() {
               </Tabs>
             </ItemDetails>
             <ItemFooter>
-              <BidCountdown>
+              {bids &&<BidCountdown>
                 <BidOwnerContainer className={"border-right pr-2 pl-2"}>
                   <BidOwner className={"float-left"}>
                     {CONSTANTS.highestBid}{" "}
@@ -402,7 +402,7 @@ function ProductPage() {
                 ) : (
                   ""
                 )}
-              </BidCountdown>
+              </BidCountdown>}
               <ButtonContainer>
                 <FooterButton
                   color={"#ffffff"}
@@ -423,9 +423,5 @@ function ProductPage() {
       </Wrapper> 
     </>
   );
-}
-function checkName(name) {
-  if (name != null && name != undefined && name != "NullAddress") return name;
-  else return "Anonymous";
 }
 export default ProductPage;
