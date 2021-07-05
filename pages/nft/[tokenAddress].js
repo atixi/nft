@@ -59,10 +59,7 @@ function ProductPage() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false)
   const [priceDetails, setPriceDetails] = useState(null);
-  useEffect(async () => {
-    if (!queryParam) {
-      return null;
-    }
+  const loadNft = async () => {
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchNft(queryParam.tokenAddress,queryParam.tokenId);
       if(data)
@@ -87,6 +84,13 @@ function ProductPage() {
         setNotFound(true)
       }
     }
+  }
+  useEffect( (key) => {
+    if (!queryParam) {
+      return null;
+    }
+    loadNft();
+   
   }, [queryParam]);
 
   const item = {
@@ -112,7 +116,7 @@ function ProductPage() {
          title="Error!"
          subTitle="Please try again!"
          extra={[
-          <Link href={"/"}><a><Button key="buy">{"Back to home"}</Button></a></Link>
+          <Link key={"goBack"} href={"/"}><a><Button key="buy">{"Back to home"}</Button></a></Link>
          ]}
        /> :
         <Content className={`d-sm-flex`}>
