@@ -1,5 +1,6 @@
 import { Tabs, Spin } from "antd";
 import React, { useEffect, useState } from "react";
+import { Skeleton, Space, Divider, Switch, Form, Radio } from "antd";
 import {
   ProfileContainer,
   ShareButton,
@@ -17,6 +18,7 @@ import {
   MainWrapper,
 } from "/Components/StyledComponents/globalStyledComponents";
 import axios from "axios";
+import CollectionLoader from "@/components/collectionLoader";
 const { TabPane } = Tabs;
 const api = axios.create({
   baseURL: "https://rim-entertainment.herokuapp.com",
@@ -27,6 +29,7 @@ const api = axios.create({
 });
 
 function CollectionDetails({ assets, banner_image_url }) {
+  const [isLoad, setLoad] = useState(false);
   const [collections, setCollections] = useState();
   const [collect, setCollect] = useState({
     collectionName: "",
@@ -58,6 +61,7 @@ function CollectionDetails({ assets, banner_image_url }) {
   useEffect(() => {
     api.get(`/collections/${query.slug}`).then((response) => {
       setCollect(response.data);
+      setLoad(true);
       console.log("from parents: ", response.data);
     });
 
@@ -69,32 +73,38 @@ function CollectionDetails({ assets, banner_image_url }) {
   return (
     <>
       <MainWrapper>
-        <ProfileContainer>
-          <img src={collect.collectionBanner.url} />
-          <BiographyContainer>
-            <div className={"avatar"}>
-              <img
-                alt="userAvatar"
-                src={collect.collectionImageURL.url}
-                loading="lazy"
-              />
-            </div>
-            <BioDescription>
-              <h3>
-                <strong>{collect.collectionName}</strong>
-              </h3>
-              <h6>
-                <strong>{"addressToShow"}</strong>
-              </h6>
-              <div className="mt-4">
-                <ProfileButton type="button">
-                  <ShareButton />
-                </ProfileButton>
-                <ProfileButton type="button">{"..."}</ProfileButton>
+        {isLoad === false ? <CollectionLoader /> : ""}
+        {isLoad ? (
+          <ProfileContainer>
+            <img src={collect.collectionBanner.url} />
+            <BiographyContainer>
+              <div className={"avatar"}>
+                <img
+                  alt="userAvatar"
+                  src={collect.collectionImageURL.url}
+                  loading="lazy"
+                />
               </div>
-            </BioDescription>
-          </BiographyContainer>
-        </ProfileContainer>
+              <BioDescription>
+                <h3>
+                  <strong>{collect.collectionName}</strong>
+                </h3>
+                <h6>
+                  <strong>{"addressToShow"}</strong>
+                </h6>
+                <div className="mt-4">
+                  <ProfileButton type="button">
+                    <ShareButton />
+                  </ProfileButton>
+                  <ProfileButton type="button">{"..."}</ProfileButton>
+                </div>
+              </BioDescription>
+            </BiographyContainer>
+          </ProfileContainer>
+        ) : (
+          ""
+        )}
+
         <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
           <TabPane tab="On Sale" key="1">
             <Products data={collect} />
