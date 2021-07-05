@@ -14,6 +14,7 @@ import {
 } from "./StyledComponents/liveAuctions-styledComponents";
 
 function Products(props) {
+  console.log("probs: ", props.data);
   const menu = (
     <Menu>
       <Menu.Item key="1">Purchase now</Menu.Item>
@@ -22,15 +23,12 @@ function Products(props) {
       <Menu.Item key="3">Share</Menu.Item>
     </Menu>
   );
-  const [products, setProducts] = useState([]);
-  useEffect(() => {
-    setProducts(props.data);
-  });
+
   return (
     <>
       <CardsContainer>
-        {products &&
-          products.map((n, index) =>
+        {props.data &&
+          props.data.nfts.map((n, index) =>
             n.name != null ? (
               <ProductCardContainer key={index} className={"p-1"}>
                 <ProductCard
@@ -44,7 +42,7 @@ function Products(props) {
                           <Avatar
                             icon={
                               <img
-                                src={n.owner.profile_img_url}
+                                src={props.data.talent.talentAvatar.url}
                                 width={12}
                                 height={12}
                               />
@@ -67,7 +65,7 @@ function Products(props) {
                         {" "}
                         <img
                           style={{ height: "250px", width: "auto" }}
-                          src={n.image_preview_url}
+                          src={n.previewImage.url}
                           className="w-100 img-fluid"
                         />
                       </a>

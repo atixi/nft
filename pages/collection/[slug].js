@@ -31,26 +31,19 @@ function CollectionDetails({ assets, banner_image_url }) {
   const [collect, setCollect] = useState({
     collectionName: "",
     collectionImageURL: {
-      formats: {
-        thumbnail: {
-          url: "",
-        },
-      },
+      url: "",
     },
     collectionBanner: {
-      formats: {
-        thumbnail: {
-          url: "",
-        },
-      },
+      url: "",
     },
+    nfts: [],
   });
   const [slug, setSlug] = useState();
   const [created, setCreated] = useState();
   const [collectionName, setCollectionName] = useState();
   const loadTabData = async (e) => {
     if (e === "1") {
-      loadAssets(slug);
+      //loadAssets(slug);
     } else if (e === "2") {
       loadCollections(slug);
     }
@@ -59,33 +52,30 @@ function CollectionDetails({ assets, banner_image_url }) {
     const data = clientCollections[slug];
     setCollections(data?.slice(1, data.length / 2));
   };
-  const loadAssets = (slug) => {
-    const data = clientCollections[slug];
-    setCreated(data?.slice(data.length / 2, data.length));
-  };
+
   const query = useQueryParam();
 
   useEffect(() => {
     api.get(`/collections/${query.slug}`).then((response) => {
       setCollect(response.data);
-      console.log("kasdfj", response.data);
+      console.log("from parents: ", response.data);
     });
+
     setSlug(query.slug);
-    loadAssets(query.slug);
     loadCollections(query.slug);
     setCollectionName(query.collection);
-  }, [query]);
+  }, []);
 
   return (
     <>
       <MainWrapper>
         <ProfileContainer>
-          <img src={collect.collectionBanner?.formats.thumbnail.url} />
+          <img src={collect.collectionBanner.url} />
           <BiographyContainer>
             <div className={"avatar"}>
               <img
                 alt="userAvatar"
-                src={collect.collectionImageURL?.formats.thumbnail.url}
+                src={collect.collectionImageURL.url}
                 loading="lazy"
               />
             </div>
@@ -107,7 +97,7 @@ function CollectionDetails({ assets, banner_image_url }) {
         </ProfileContainer>
         <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
           <TabPane tab="On Sale" key="1">
-            <Products data={created} />
+            <Products data={collect} />
             <LoadMoreButton block shape={"round"} size={"large"}>
               {"Load More"}
             </LoadMoreButton>
@@ -115,7 +105,7 @@ function CollectionDetails({ assets, banner_image_url }) {
           <TabPane tab="Owned" key="2">
             <>
               {" "}
-              <Products data={collections} />
+              {/* <Products data={collect} /> */}
               <LoadMoreButton block shape={"round"} size={"large"}>
                 {"Load More"}
               </LoadMoreButton>

@@ -53,7 +53,7 @@ export default function HotCollections() {
                   <a>
                     <img
                       style={{ width: "auto" }}
-                      src={item.collectionBanner.formats.thumbnail.url}
+                      src={item.collectionBanner.url}
                     />
                   </a>
                 </Link>
@@ -68,7 +68,7 @@ export default function HotCollections() {
                     <a>
                       <img
                         style={{ width: "auto" }}
-                        src={item.collectionImageURL.formats.thumbnail.url}
+                        src={item.collectionImageURL.url}
                       />
                     </a>
                   </Link>
