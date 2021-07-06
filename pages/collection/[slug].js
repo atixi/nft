@@ -1,6 +1,5 @@
 import { Tabs, Spin } from "antd";
 import React, { useEffect, useState } from "react";
-import { Skeleton, Space, Divider, Switch, Form, Radio } from "antd";
 import {
   ProfileContainer,
   ShareButton,
@@ -8,12 +7,10 @@ import {
   BioDescription,
   ProfileButton,
 } from "/Components/StyledComponents/talentPage-styledComponents";
-import Products from "/Components/products";
-import OpenSeaAPI from "/Utils/openseaApi";
-import { clientCollections } from "/Constants/mockApi/collectionApi";
+import Products from "/Components/nfts";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
+import OpenSeaAPI from "/Utils/openseaApi";
 import {
-  LoadingContainer,
   LoadMoreButton,
   MainWrapper,
 } from "/Components/StyledComponents/globalStyledComponents";
@@ -28,9 +25,8 @@ const api = axios.create({
   },
 });
 
-function CollectionDetails({ assets, banner_image_url }) {
+function CollectionDetails({ collections }) {
   const [isLoad, setLoad] = useState(false);
-  const [collections, setCollections] = useState();
   const [collect, setCollect] = useState({
     collectionName: "",
     collectionImageURL: {
@@ -41,33 +37,26 @@ function CollectionDetails({ assets, banner_image_url }) {
     },
     nfts: [],
   });
-  const [slug, setSlug] = useState();
-  const [created, setCreated] = useState();
-  const [collectionName, setCollectionName] = useState();
   const loadTabData = async (e) => {
     if (e === "1") {
       //loadAssets(slug);
     } else if (e === "2") {
-      loadCollections(slug);
+      //loadCollections(slug);
     }
   };
-  const loadCollections = (slug) => {
-    const data = clientCollections[slug];
-    setCollections(data?.slice(1, data.length / 2));
-  };
-
   const query = useQueryParam();
-
   useEffect(() => {
-    api.get(`/collections/${query.slug}`).then((response) => {
-      setCollect(response.data);
-      setLoad(true);
-      console.log("from parents: ", response.data);
-    });
-
-    setSlug(query.slug);
-    loadCollections(query.slug);
-    setCollectionName(query.collection);
+    if (!query) {
+      console.log("slug  query empty", query);
+      return;
+    } else {
+      console.log("slug", query.slug);
+      api.get(`/collections/${query.slug}`).then((response) => {
+        setCollect(response.data);
+        setLoad(true);
+        console.log("from parents: ", response.data);
+      });
+    }
   }, []);
 
   return (
@@ -115,7 +104,7 @@ function CollectionDetails({ assets, banner_image_url }) {
           <TabPane tab="Owned" key="2">
             <>
               {" "}
-              {/* <Products data={collect} /> */}
+              <Products data={collect} />
               <LoadMoreButton block shape={"round"} size={"large"}>
                 {"Load More"}
               </LoadMoreButton>
@@ -126,7 +115,38 @@ function CollectionDetails({ assets, banner_image_url }) {
     </>
   );
 }
+// export async function getStaticPaths() {
+//   // Call an external API endpoint to get collections
+//   const res = await api.get("/collections");
+//   console.log("static path: res:", res);
+//   const collections = await res;
+
+//   // Get the paths we want to pre-render based on collections
+//   const paths = collections.map((collection) => ({
+//     params: { slug: collection.slug },
+//   }));
+
+//   // We'll pre-render only these paths at build time.
+//   // { fallback: false } means other routes should 404.
+//   return { paths, fallback: false };
+// }
+
+// // This also gets called at build time
+// export async function getStaticProps({ params }) {
+//   // params contains the post `id`.
+//   // If the route is like /posts/1, then params.id is 1
+//   const res = await api.get(`/collections/${params.slug}`);
+//   const collection = await res;
+
+//   // Pass collection data to the page via props
+//   return { props: { collection } };
+// }
 export async function getStaticPaths() {
+  // const result = await OpenSeaAPI.getCollectionAssetsBySlug();
+  // const collections = await OpenSeaAPI.mapCollection(result);
+  // console.log("result by slug", result);
+  // console.log("collections by slug", collections);
+
   const slugs = [
     "reika-mandala-art",
     "atixi",

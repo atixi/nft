@@ -47,7 +47,8 @@ export default function HotCollections() {
               <CardImageContainer>
                 <Link
                   href={{
-                    pathname: `/collection/${item.slug}`,
+                    pathname: "/collection",
+                    query: { slug: item.slug },
                   }}
                 >
                   <a>
