@@ -25,7 +25,7 @@ const api = axios.create({
   },
 });
 
-function CollectionDetails({ collections }) {
+function CollectionDetails({ collection }) {
   const [isLoad, setLoad] = useState(false);
   const [collect, setCollect] = useState({
     collectionName: "",
@@ -44,18 +44,10 @@ function CollectionDetails({ collections }) {
       //loadCollections(slug);
     }
   };
-  const query = useQueryParam();
+
   useEffect(() => {
-    if (!query) {
-      return;
-    } else {
-      console.log("slug", query.slug);
-      api.get(`/collections/${query.slug}`).then((response) => {
-        setCollect(response.data);
-        setLoad(true);
-        console.log("from parents: ", response.data);
-      });
-    }
+    setCollect(collection);
+    setLoad(true);
   }, []);
 
   return (
@@ -114,78 +106,31 @@ function CollectionDetails({ collections }) {
     </>
   );
 }
-// export async function getStaticPaths() {
-//   // Call an external API endpoint to get collections
-//   const res = await api.get("/collections");
-//   console.log("static path: res:", res);
-//   const collections = await res;
 
-//   // Get the paths we want to pre-render based on collections
-//   const paths = collections.map((collection) => ({
-//     params: { slug: collection.slug },
-//   }));
+export const getStaticPaths = async () => {
+  const res = await fetch(
+    "https://rim-entertainment.herokuapp.com/collections"
+  );
+  const collections = await res.json();
+  console.log("collection from path", collections);
+  const paths = collections.map((collection) => ({
+    params: {
+      slug: collection.slug,
+    },
+  }));
 
-//   // We'll pre-render only these paths at build time.
-//   // { fallback: false } means other routes should 404.
-//   return { paths, fallback: false };
-// }
-
-// // This also gets called at build time
-// export async function getStaticProps({ params }) {
-//   // params contains the post `id`.
-//   // If the route is like /posts/1, then params.id is 1
-//   const res = await api.get(`/collections/${params.slug}`);
-//   const collection = await res;
-
-//   // Pass collection data to the page via props
-//   return { props: { collection } };
-// }
-export async function getStaticPaths() {
-  // const result = await OpenSeaAPI.getCollectionAssetsBySlug();
-  // const collections = await OpenSeaAPI.mapCollection(result);
-  // console.log("result by slug", result);
-  // console.log("collections by slug", collections);
-
-  const slugs = [
-    "reika-mandala-art",
-    "atixi",
-    "cosplay-made-in-japan",
-    "unofficial-bayc-collectibles",
-    "delorean-s-40th-anniversary-nft-collection",
-    "glewme-city-master-of-permits-uriel",
-    "plaguedoctor-1",
-    "builsontheblock",
-    "fnd",
-    "uniswap-v3-positions",
-    "penguin-dummy-club-1",
-    "iconpunks",
-    "airlord",
-    "monalisa-art",
-    "unique-one-v2",
-    "slumdoge-billionaires",
-  ];
-  const paths = slugs.map((slug) => {
-    return {
-      params: { slug: slug.toString() },
-    };
-  });
   return {
     paths,
     fallback: false,
   };
-}
+};
 
-export const getStaticProps = async (context) => {
-  const slug = context.params.slug;
-  const result = await OpenSeaAPI.getAssetsInCollection(slug);
-  const assets = result.data;
-  // const banner_image_url = assets[0].collection.banner_image_url;
-  return {
-    props: {
-      assets: JSON.parse(JSON.stringify(assets)),
-      // banner_image_url: JSON.parse(JSON.stringify(banner_image_url)),
-    },
-  };
+export const getStaticProps = async ({ params }) => {
+  const res = await fetch(
+    `https://rim-entertainment.herokuapp.com/collections/${params.slug}`
+  );
+  const collection = await res.json();
+  return { props: { collection } };
 };
 
 export default CollectionDetails;
