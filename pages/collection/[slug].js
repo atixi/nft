@@ -8,8 +8,6 @@ import {
   ProfileButton,
 } from "/Components/StyledComponents/talentPage-styledComponents";
 import Products from "/Components/nfts";
-import { useQueryParam } from "/Components/hooks/useQueryParam";
-import OpenSeaAPI from "/Utils/openseaApi";
 import {
   LoadMoreButton,
   MainWrapper,
@@ -17,13 +15,6 @@ import {
 import axios from "axios";
 import CollectionLoader from "@/components/collectionLoader";
 const { TabPane } = Tabs;
-const api = axios.create({
-  baseURL: "https://rim-entertainment.herokuapp.com",
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
-});
 
 function CollectionDetails({ collection }) {
   const [isLoad, setLoad] = useState(false);
@@ -108,11 +99,8 @@ function CollectionDetails({ collection }) {
 }
 
 export const getStaticPaths = async () => {
-  const res = await fetch(
-    "https://rim-entertainment.herokuapp.com/collections"
-  );
+  const res = await fetch(`${process.env.HEROKU_BASE_URL}/collections`);
   const collections = await res.json();
-  console.log("collection from path", collections);
   const paths = collections.map((collection) => ({
     params: {
       slug: collection.slug,
@@ -127,7 +115,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }) => {
   const res = await fetch(
-    `https://rim-entertainment.herokuapp.com/collections/${params.slug}`
+    `${process.env.HEROKU_BASE_URL}/collections/${params.slug}`
   );
   const collection = await res.json();
   return { props: { collection } };

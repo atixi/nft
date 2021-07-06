@@ -18,7 +18,7 @@ const breakPoints = [
   { width: 1200, itemsToShow: 5, itemsToScroll: 5 },
 ];
 const api = axios.create({
-  baseURL: "https://rim-entertainment.herokuapp.com",
+  baseURL: process.env.HEROKU_BASE_URL,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
@@ -30,7 +30,6 @@ export default function HotCollections() {
   useEffect(() => {
     api.get("/collections").then((response) => {
       setCollection(response.data);
-      // collections = response.data;
     });
   }, []);
   return (
