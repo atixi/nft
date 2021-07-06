@@ -47,7 +47,6 @@ function CollectionDetails({ collections }) {
   const query = useQueryParam();
   useEffect(() => {
     if (!query) {
-      console.log("slug  query empty", query);
       return;
     } else {
       console.log("slug", query.slug);
