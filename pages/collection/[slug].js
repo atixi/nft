@@ -26,7 +26,7 @@ function CollectionDetails({ collection }) {
     collectionBanner: {
       url: "",
     },
-    nfts: [],
+    assets: [],
   });
   const loadTabData = async (e) => {
     if (e === "1") {

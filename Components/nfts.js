@@ -28,7 +28,7 @@ function Products(props) {
     <>
       <CardsContainer>
         {props.data &&
-          props.data.nfts.map((n, index) =>
+          props.data.assets.map((n, index) =>
             n.name != null ? (
               <ProductCardContainer key={index} className={"p-1"}>
                 <ProductCard
@@ -72,7 +72,7 @@ function Products(props) {
                         {" "}
                         <img
                           style={{ height: "250px", width: "auto" }}
-                          src={n.previewImage.url}
+                          src={n.imageUrl}
                           className="w-100 img-fluid"
                         />
                       </a>
