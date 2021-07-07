@@ -226,16 +226,28 @@ function WalletInfoDropdown({ data }) {
           <a>{"My Items"}</a>
         </Link>
       </Menu.Item>
-      <Menu.Item key={"2"}>
+      {/* <Menu.Item key={"2"}>
         <Link href={"#"}>
           <a>{"Edit Profile"}</a>
         </Link>
-      </Menu.Item>
-      {/* <Menu.Item key={"3"}>
-        <Link href={"#"}>
-          <a>{"Manage Funds"}</a>
-        </Link>
       </Menu.Item> */}
+      <Menu.Item key={"3"}>
+        <Link
+          href={{
+            // pathname: "/profile/index",
+            pathname: `/account/${
+              metaToken[0] ? metaToken[0] : walletToken[0]
+            }`,
+            // query: {
+            //   address: seller.address,
+            //   talent: seller.talent,
+            //   avatar: seller.profile_img_url,
+            // },
+          }}
+        >
+          <a>{"My Account Setting"}</a>
+        </Link>
+      </Menu.Item>
       <Menu.Item key={"4"}>
         <MenuItem style={{ cursor: "pointer" }} onClick={disconnectWallet}>
           <label>{`Disconnect`}</label>

@@ -40,29 +40,9 @@ const getAllCollectionByOwners = async (assetOwners) => {
   return Promise.all(promises);
 };
 const getCollectionAssetsBySlug = async () => {
-  const slugs = [
-    "reika-mandala-art",
-    "atixi",
-    "cosplay-made-in-japan",
-    "unofficial-bayc-collectibles",
-    "delorean-s-40th-anniversary-nft-collection",
-    "glewme-city-master-of-permits-uriel",
-    "plaguedoctor-1",
-    "builsontheblock",
-    "fnd",
-    "uniswap-v3-positions",
-    "penguin-dummy-club-1",
-    "iconpunks",
-    "airlord",
-    "monalisa-art",
-    "unique-one-v2",
-    "slumdoge-billionaires",
-  ];
-  const promises = [];
-  for (let i = 0; i < slugs.length; i++) {
-    promises.push(getCollectionBySlug(slugs[i]));
-  }
-  return Promise.allSettled(promises);
+  return await seaport.api.getAssets({
+    collection: slug,
+  });
 };
 const mapCollection = (results) => {
   const collections = [];
