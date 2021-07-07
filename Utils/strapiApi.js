@@ -7,5 +7,9 @@ export const fetchUsers = async () => {
 export const fetchNft = async (tokenAddress, tokenId) => {
     return await request(`nfts/${tokenId}/${tokenAddress}`, {
         method: 'GET',
-    }).then(res => res)
+    }).then(res => res).catch(
+        function (error) {
+            return "error";
+        }
+      )
 }

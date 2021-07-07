@@ -1,5 +1,4 @@
-import { Dropdown, Image, Menu, Statistic, Tabs, Avatar, Skeleton } from "antd";
-import { useRouter } from "next/router";
+import { Dropdown, Image, Menu, Statistic, Tabs, Avatar, Result, Button, Spin } from "antd";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -31,13 +30,12 @@ import {
   PriceInCryptoContainer,
   PriceInDollarContainer,
   Wrapper,
-} from "../Components/StyledComponents/productDetails-styledComponents";
+} from "../../Components/StyledComponents/productDetails-styledComponents";
 import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
-import OpenSeaAPI from "/Utils/openseaApi";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchNft } from "/Utils/strapiApi";
-
+import { unixToHumanDate, checkName } from "/Utils/utils";
 const { TabPane } = Tabs;
 const { Countdown } = Statistic;
 const menu = (
@@ -56,55 +54,45 @@ const menu = (
 );
 function ProductPage() {
   const queryParam = useQueryParam();
-  const router = useRouter();
   const [asset, setAsset] = useState({});
-  const { ta } = router.query;
-  const { ti } = router.query;
   const [bids, setBids] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false)
   const [priceDetails, setPriceDetails] = useState(null);
-  useEffect(async () => {
-    //  const data = await fetchNft("0x06012c8cf97bead5deae237070f9587f8e7a266d","556324")
-    //   console.log("data from opensea", data.data)
+  const loadNft = async () => {
+    if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
+      const data = await fetchNft(queryParam.tokenAddress,queryParam.tokenId);
+      if(data)
+      setLoading(false);
+
+      if(data.status == 200)
+      {
+        const nft = data.data;
+        setAsset({
+          name: nft.name,
+          description: nft.description,
+          owner: nft.owner,
+          creator: nft?.creator,
+          image: nft.imageUrl,
+          imagePreview: nft.imageUrlOriginal,
+        });
+        console.log("data", data.data)
+      setBids(nft?.buyOrders);
+      }
+      else if(data=="error")
+      {
+        setNotFound(true)
+      }
+    }
+  }
+  useEffect( (key) => {
     if (!queryParam) {
       return null;
     }
-    if (queryParam.liveAuction != undefined) {
-      loadAsset(JSON.parse(queryParam.liveAuction));
-      // console.log("live", JSON.parse(queryParam.liveAuction));
-    } else if (queryParam.explore != undefined) {
-      loadAsset(JSON.parse(queryParam.explore));
-      // console.log("explor", JSON.parse(queryParam.explore));
-    }
+    loadNft();
+   
   }, [queryParam]);
-  // useEffect(() => {
-  //   ta && loadAsset(ta, ti);
-  // }, [ta]);
 
-  // const loadAsset = async (ta, ti) => {
-  //   let asset = await OpenSeaAPI.getAssetDetails(ta, ti);
-  //   setAsset(asset);
-  //   setBids(asset.asset.buyOrders);
-  // };
-  const loadAsset = async (asset) => {
-    if (asset.asset) {
-      setPriceDetails(getAuctionPriceDetails(asset));
-    }
-    setAsset(asset);
-    if (queryParam.liveAuction != undefined) {
-      console.log("this is auction", asset);
-      setBids(asset?.asset?.orders);
-    } else if (queryParam.explore != undefined) {
-      // console.log("this is explore", asset)
-      setAsset({
-        asset: {
-          owner: asset.owner,
-          imageUrl: asset.image_preview_url,
-          collection: asset.collection,
-        },
-      });
-      setBids(asset?.orders);
-    }
-  };
   const item = {
     image: "/images/p1.jpeg",
     name: "CoinBae #1",
@@ -121,14 +109,24 @@ function ProductPage() {
   return (
     <>
       <Wrapper>
+        {loading ? <Spin style={{marginTop: "200px"}} /> : 
+        notFound
+         ?  <Result
+         status="500"
+         title="Error!"
+         subTitle="Please try again!"
+         extra={[
+          <Link key={"goBack"} href={"/"}><a><Button key="buy">{"Back to home"}</Button></a></Link>
+         ]}
+       /> :
         <Content className={`d-sm-flex`}>
           <ItemImageContainer className=" text-center">
             {/* <img className={"itemImage"} src={asset.asset?.imageUrl} /> */}
             <ImageCon>
               <Image
-                src={`${asset.asset?.imageUrl}`}
+                src={`${asset?.image}`}
                 preview={{
-                  src: `${asset.asset?.imageUrl}`,
+                  src: `${asset?.imagePreview}`,
                 }}
               />
             </ImageCon>
@@ -136,7 +134,7 @@ function ProductPage() {
           <ItemInfo className={"float-none float-sm-left"}>
             <ItemDetails>
               <ItemDetailsHeader>
-                <ItemName>{asset.asset?.collection?.name}</ItemName>
+                <ItemName>{asset.name}</ItemName>
                 <ItemTopButtonContainer>
                   <button
                     style={{
@@ -184,29 +182,22 @@ function ProductPage() {
                 <button>{item.category}</button>
               </div>
               <ItemDescriptionText>
-                {asset.asset?.collection?.description}
+                {asset?.description}
               </ItemDescriptionText>
               <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
               <br />
               <Link
-                href={{
-                  pathname: "/profile/index",
-                  query: {
-                    address: asset.asset?.owner?.address,
-                    talent: checkName(asset.asset?.owner?.user?.username),
-                    avatar: asset.asset?.owner?.profile_img_url,
-                  },
-                }}
+                href={`/profile/${asset?.owner?.address}`}
                 passHref
               >
                 <a>
                   <AvatarContainer>
                     <Avatar
                       size={"small"}
-                      icon={<img src={asset.asset?.owner?.profile_img_url} />}
+                      icon={<img src={asset?.owner?.profile_img_url} />}
                     />
                     <span style={{ flex: "1" }}>
-                      {checkName(asset.asset?.owner?.user?.username)}
+                      {checkName(asset?.owner?.user?.username)}
                     </span>
                   </AvatarContainer>
                 </a>
@@ -217,11 +208,11 @@ function ProductPage() {
                   <br />
                   <Link
                     href={{
-                      pathname: "/profile/index",
+                      pathname: "/profile/talent",
                       query: {
-                        address: asset.asset?.owner?.address,
-                        talent: checkName(asset.asset?.owner?.user?.username),
-                        avatar: asset.asset?.owner?.profile_img_url,
+                        address: asset?.owner?.address,
+                        talent: checkName(asset?.owner?.user?.username),
+                        avatar: asset?.owner?.profile_img_url,
                       },
                     }}
                     passHref
@@ -231,12 +222,12 @@ function ProductPage() {
                         <Avatar
                           size={"small"}
                           icon={
-                            <img src={asset.asset?.owner?.profile_img_url} />
+                            <img src={asset?.owner?.profile_img_url} />
                           }
                         />
 
                         <span style={{ flex: "1" }}>
-                          {checkName(asset.asset?.owner?.user?.username)}
+                          {checkName(asset?.owner?.user?.username)}
                         </span>
                       </AvatarContainer>{" "}
                     </a>
@@ -250,7 +241,7 @@ function ProductPage() {
                           <span className="avatarContainer">
                             <Link
                               href={{
-                                pathname: "/profile/index",
+                                pathname: "/profile/talent",
                                 query: {
                                   address: order.makerAccount?.address,
                                   talent: checkName(
@@ -278,11 +269,11 @@ function ProductPage() {
                               <span className={"bidedPriceText"}>
                                 <span className={"bidValue"}>{`${
                                   getAuctionPriceDetails(order).priceBase
-                                } wETH`}</span>
+                                } ${order?.paymentTokenContract?.symbol}`}</span>
                                 {" by "}
                                 <Link
                                   href={{
-                                    pathname: "/profile/index",
+                                    pathname: "/profile/talent",
                                     query: {
                                       address: order.makerAccount?.address,
                                       talent: checkName(
@@ -304,7 +295,7 @@ function ProductPage() {
                             </span>
                             <span className={"bidOwnerAndDateContainer"}>
                               <span className={"bidDate"}>
-                                {"6/2/2021, 11:50 PM"}
+                                {unixToHumanDate(order?.createdTime)}
                               </span>
                             </span>
                           </span>
@@ -317,11 +308,11 @@ function ProductPage() {
                   <br />
                   <Link
                     href={{
-                      pathname: "/profile/index",
+                      pathname: "/profile/talent",
                       query: {
-                        address: asset.asset?.owner?.address,
-                        talent: checkName(asset.asset?.owner?.user?.username),
-                        avatar: asset.asset?.owner?.profile_img_url,
+                        address: asset?.owner?.address,
+                        talent: checkName(asset?.owner?.user?.username),
+                        avatar: asset?.owner?.profile_img_url,
                       },
                     }}
                     passHref
@@ -331,11 +322,11 @@ function ProductPage() {
                         <Avatar
                           size={"small"}
                           icon={
-                            <img src={asset.asset?.owner?.profile_img_url} />
+                            <img src={asset?.owner?.profile_img_url} />
                           }
                         />
                         <span style={{ flex: "1" }}>
-                          {checkName(asset.asset?.owner?.user?.username)}
+                          {checkName(asset?.owner?.user?.username)}
                         </span>
                       </AvatarContainer>
                     </a>
@@ -344,32 +335,32 @@ function ProductPage() {
               </Tabs>
             </ItemDetails>
             <ItemFooter>
-              <BidCountdown>
+              {bids &&<BidCountdown>
                 <BidOwnerContainer className={"border-right pr-2 pl-2"}>
                   <BidOwner className={"float-left"}>
                     {CONSTANTS.highestBid}{" "}
                     <Link
                       href={{
-                        pathname: "/profile/index",
+                        pathname: "/profile/talent",
                         query: {
-                          address: asset.asset?.owner?.address,
+                          address: asset?.owner?.address,
                           talent: checkName(asset.asset?.owner?.user?.username),
-                          avatar: asset.asset?.owner?.profile_img_url,
+                          avatar: asset?.owner?.profile_img_url,
                         },
                       }}
                       passHref
                     >
-                      <a>{checkName(asset.asset?.owner?.user?.username)}</a>
+                      <a>{checkName(asset?.owner?.user?.username)}</a>
                     </Link>
                   </BidOwner>
                   <BidPrice>
                     <Link
                       href={{
-                        pathname: "/profile/index",
+                        pathname: "/profile/talent",
                         query: {
-                          address: asset.asset?.owner?.address,
-                          talent: checkName(asset.asset?.owner?.user?.username),
-                          avatar: asset.asset?.owner?.profile_img_url,
+                          address: asset?.owner?.address,
+                          talent: checkName(asset?.owner?.user?.username),
+                          avatar: asset?.owner?.profile_img_url,
                         },
                       }}
                       passHref
@@ -379,7 +370,7 @@ function ProductPage() {
                           <Avatar
                             size={"large"}
                             icon={
-                              <img src={asset.asset?.owner?.profile_img_url} />
+                              <img src={asset?.owner?.profile_img_url} />
                             }
                           />
                         </BidOwnerProfile>
@@ -415,7 +406,7 @@ function ProductPage() {
                 ) : (
                   ""
                 )}
-              </BidCountdown>
+              </BidCountdown>}
               <ButtonContainer>
                 <FooterButton
                   color={"#ffffff"}
@@ -432,13 +423,9 @@ function ProductPage() {
               </ButtonContainer>
             </ItemFooter>
           </ItemInfo>
-        </Content>
-      </Wrapper>
+        </Content> }
+      </Wrapper> 
     </>
   );
-}
-function checkName(name) {
-  if (name != null && name != undefined && name != "NullAddress") return name;
-  else return "Anonymous";
 }
 export default ProductPage;

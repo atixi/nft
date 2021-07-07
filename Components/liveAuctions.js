@@ -97,22 +97,8 @@ function Product(product, index) {
         </ProductCardHeaderButton>
       </ProductCardHeader>
       <div className={`col-md-12 p-3`}>
-        {/* <Link
-          href={{
-            pathname: "/product-details",
-            query: {
-              ta: product.asset?.tokenAddress,
-              ti: product.asset?.tokenId,
-            },
-          }} */}
         <Link
-          href={{
-            pathname: "/product-details",
-            query: {
-              liveAuction: JSON.stringify(product),
-            },
-          }}
-        >
+          href={`/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}`}  >
           <a>
             {" "}
             <img
@@ -130,9 +116,12 @@ function Product(product, index) {
             {" left"} 🔥
           </CountDown>
         </CountDownContainer>
-        <a href={`/product-details`}>
+        <Link
+          href={`/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}`}  >
+        <a>
           <CardTitle>{product.asset?.name}</CardTitle>
         </a>
+        </Link>
         {/* <BidsStatus>{CONSTANTS.bidsStatus}</BidsStatus> */}
         <ProductDescriptionBottom>
           <ProductPrice>{price + " eth"}</ProductPrice>

@@ -62,14 +62,7 @@ function Products(props) {
                     </Dropdown>
                   </ProductCardHeader>
                   <div className={`col-md-12 p-1`}>
-                    <Link
-                      href={{
-                        pathname: "/product-details",
-                        query: {
-                          explore: JSON.stringify(n),
-                        },
-                      }}
-                    >
+                      <Link href={`/nft/${n?.asset_contract?.address}?tokenId=${n?.token_id}`}>
                       <a>
                         {" "}
                         <img
@@ -81,17 +74,7 @@ function Products(props) {
                     </Link>
                   </div>
                   <ProductDescription>
-                    {/* <Link
-                      href={`/product-details?ta=${n?.asset_contract.address}&ti=${n?.token_id}`}
-                    > */}
-                    <Link
-                      href={{
-                        pathname: "/product-details",
-                        query: {
-                          explore: JSON.stringify(n),
-                        },
-                      }}
-                    >
+                  <Link href={`/nft/${n?.asset_contract?.address}?tokenId=${n?.token_id}`}>
                       <a>
                         <CardTitle>{n?.name}</CardTitle>
                       </a>
