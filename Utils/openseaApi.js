@@ -116,7 +116,7 @@ const getTopSellers = () => {
     include_invalid: false,
     limit: 50,
   });
-};
+}; 
 const getCollections = () => {
   return seaport.api.getAssets({
     limit: 50,
@@ -161,13 +161,13 @@ async function getAssetDetails(tokenAddress, tokenId) {
 }
 async function getBundlesByOwner(owner, onSale = false) {
   return client.get(`bundles?owner=${owner}&on_sale=${onSale}&limit=50`);
-}
+} 
 async function getAssetsByOwner() {}
 const getAsset = (address, id) => {
   return seaport.api.getAsset({
     tokenAddress: address,
     tokenId: id,
-  });
+  });    
 };
 
 const getAssetBalance = (accountAddress, asset) => {
@@ -185,7 +185,7 @@ async function getAssetsByTokenIds(
   tokenIds.map((token_id) => {
     return (query += `token_ids=${token_id}&`);
   });
-  return await client.get(query);
+  return await client.get(query); 
 }
 // order direction could be 'desc', 'asc'
 // order by could be ['token_id', 'sale_date', 'sale_count', 'visitor_count', 'sale_price', 'total_price']

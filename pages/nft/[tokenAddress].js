@@ -34,7 +34,7 @@ import {
 import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
-import { fetchNft } from "/Utils/strapiApi";
+import { fetchOne } from "/Utils/strapiApi";
 import { unixToHumanDate, checkName, prevImage, findHighestBid, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 const { Countdown } = Statistic;
@@ -63,7 +63,7 @@ function ProductPage() {
   const [previewImage, setPreviewImage] = useState(null)
   const loadNft = async () => {
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
-      const data = await fetchNft(queryParam.tokenAddress,queryParam.tokenId);
+      const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
       if(data)
       setLoading(false);
 

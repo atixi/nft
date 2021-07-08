@@ -25,11 +25,12 @@ function Products(props) {
   const [products, setProducts] = useState([]);
   useEffect(() => {
     setProducts(props.data);
+    console.log("products", products)
   });
   return (
     <>
       <CardsContainer>
-        {products &&
+        {products.length >0 &&
           products.map((n, index) =>
             n.name != null ? (
               <ProductCardContainer key={index} className={"p-1"}>
@@ -74,7 +75,7 @@ function Products(props) {
                     </Link>
                   </div>
                   <ProductDescription>
-                  <Link href={`/nft/${n?.asset_contract?.address}?tokenId=${n?.token_id}`}>
+                  <Link href={`/nft/${n?.assetContract?.address}?tokenId=${n?.tokenId}`}>
                       <a>
                         <CardTitle>{n?.name}</CardTitle>
                       </a>
