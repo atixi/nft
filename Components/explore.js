@@ -66,7 +66,7 @@ function Explore({ data }) {
                   category.categoryName
                 }`}</li>
               ))}
-                <Dropdown
+              {/* <Dropdown
                   overlay={exploreMore}
                   placement="bottomCenter"
                   trigger={["click"]}
