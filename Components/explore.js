@@ -51,11 +51,9 @@ function Explore({ data }) {
     async function fetchingCats() {
       const data = await api.get("/categories");
       setCategories(await data.data);
-      console.log("kooskash", data.data);
     }
     fetchingCats();
   }, []);
-  console.log("kosi", categories);
   return (
     <>
       <div>
