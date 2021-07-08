@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Products from "/Components/products";
 import { Dropdown, Menu, Switch, Spin } from "antd";
 import EXPLORE_CONSTANTS from "/Constants/exploreConstants";
@@ -13,7 +13,7 @@ import {
   LoadingContainer,
   LoadMoreButton,
 } from "./StyledComponents/globalStyledComponents";
-
+import axios from "axios";
 // const menu = (
 //   <Menu>
 //     <Menu.ItemGroup title="Sort by">
@@ -30,14 +30,32 @@ import {
 //     </Menu.ItemGroup>
 //   </Menu>
 // );
+const api = axios.create({
+  baseURL: process.env.HEROKU_BASE_URL,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+});
 const exploreMore = (
   <Menu>
     <Menu.Item>{"item 1"}</Menu.Item>
     <Menu.Item>{"item 2"}</Menu.Item>
   </Menu>
 );
+
 function Explore({ data }) {
   const explores = data;
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    async function fetchingCats() {
+      const data = await api.get("/categories");
+      setCategories(await data.data);
+      console.log("kooskash", data.data);
+    }
+    fetchingCats();
+  }, []);
+  console.log("kosi", categories);
   return (
     <>
       <div>
@@ -45,7 +63,12 @@ function Explore({ data }) {
           <SectionHeading>{EXPLORE_CONSTANTS.explore}</SectionHeading>
           <CategoriesListScroll>
             <CategoriesList className={"m-2"}>
-              <li>{EXPLORE_CONSTANTS.all}</li>
+              {categories.map((category, v) => (
+                <li key={v}>{`${category.icon ? category.icon : ""} ${
+                  category.categoryName
+                }`}</li>
+              ))}
+              {/* <li>{EXPLORE_CONSTANTS.all}</li>
               <li>🌈 {EXPLORE_CONSTANTS.art}</li>
               <li>📸 {EXPLORE_CONSTANTS.photography}</li>
               <li>🕹 {EXPLORE_CONSTANTS.games}</li>
@@ -54,7 +77,7 @@ function Explore({ data }) {
               <li>🏷 {EXPLORE_CONSTANTS.domains}</li>
               <li>💰 {EXPLORE_CONSTANTS.defi}</li>
               <li>🤡 {EXPLORE_CONSTANTS.memes}</li>
-              <li>🤘 {EXPLORE_CONSTANTS.punks}</li>
+              <li>🤘 {EXPLORE_CONSTANTS.punks}</li> */}
               {/* <li>
                 <Dropdown
                   overlay={exploreMore}
