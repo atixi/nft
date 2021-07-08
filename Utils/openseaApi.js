@@ -44,6 +44,18 @@ const getCollectionAssetsBySlug = async () => {
     collection: slug,
   });
 };
+
+/**
+ * Will return all assets from all contracts in a collection which has successful sale
+ * @param collection_slug Case sensitive and must match the collection slug exactly.
+ */
+const getCollectionAssetsOnSale = (collection_slug) => {
+  return seaport.api.get(`/events`, {
+    collection_slug,
+    event_type: "successful",
+    limit: 50,
+  });
+};
 const mapCollection = (results) => {
   const collections = [];
   results.map((result) =>
@@ -266,6 +278,7 @@ export default {
   getAllCollectionByOwners,
   getCollectionBySlug,
   getCollectionAssetsBySlug,
+  getCollectionAssetsOnSale,
   mapCollection,
   getSingleAsset,
   getAssetDetails,
