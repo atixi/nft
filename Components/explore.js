@@ -66,17 +66,6 @@ function Explore({ data }) {
                   category.categoryName
                 }`}</li>
               ))}
-              {/* <li>{EXPLORE_CONSTANTS.all}</li>
-              <li>🌈 {EXPLORE_CONSTANTS.art}</li>
-              <li>📸 {EXPLORE_CONSTANTS.photography}</li>
-              <li>🕹 {EXPLORE_CONSTANTS.games}</li>
-              <li>👾 {EXPLORE_CONSTANTS.metaverses}</li>
-              <li>🎵 {EXPLORE_CONSTANTS.music}</li>
-              <li>🏷 {EXPLORE_CONSTANTS.domains}</li>
-              <li>💰 {EXPLORE_CONSTANTS.defi}</li>
-              <li>🤡 {EXPLORE_CONSTANTS.memes}</li>
-              <li>🤘 {EXPLORE_CONSTANTS.punks}</li> */}
-              {/* <li>
                 <Dropdown
                   overlay={exploreMore}
                   placement="bottomCenter"
