@@ -10,14 +10,29 @@ import OpenSeaAPI from "/Utils/openseaApi";
 import { useEffect, useState } from "react";
 import { topSellersAPI } from "/Constants/mockApi/topSellerApi";
 import { liveAuctionsAPI } from "/Constants/mockApi/liveAuctionApi";
-
 import { exploresAPI } from "/Constants/mockApi/exploreApi";
 
-function Home({ topSellers, liveAuctions, explores, assets }) {
+import axios from "axios";
+const api = axios.create({
+  baseURL: process.env.HEROKU_BASE_URL,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+});
+function Home({ liveAuctions, explores, assets }) {
+  const [topSellers, setTopSellers] = useState([]);
+  useEffect(() => {
+    async function fetchingTopSellers() {
+      const data = await api.get("/talents");
+      setTopSellers(await data.data);
+    }
+    fetchingTopSellers();
+  }, []);
   return (
     <MainWrapper>
       <Slide />
-      <TopSellers data={topSellersAPI} />
+      <TopSellers data={topSellers} />
       <LiveAuctions data={liveAuctionsAPI} />
       <HotCollections />
       <Explore data={exploresAPI} />

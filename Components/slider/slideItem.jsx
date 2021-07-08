@@ -9,7 +9,7 @@ export default function SlideItem(props) {
       <div>
         <SliderTitle>{props.item.categoryName}</SliderTitle>
         <SliderSubTitle>{props.item?.subtitle}</SliderSubTitle>
-        <img src={props.item.categoryImage} />
+        <img src={props.item.categoryImage?.url} />
       </div>
     </SliderItem>
   );
