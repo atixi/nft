@@ -63,12 +63,12 @@ function Products(props) {
                     </Dropdown>
                   </ProductCardHeader>
                   <div className={`col-md-12 p-1`}>
-                      <Link href={`/nft/${n?.asset_contract?.address}?tokenId=${n?.token_id}`}>
+                      <Link href={`/nft/${n?.assetContract?.address}?tokenId=${n?.tokenId}`}>
                       <a>
                         {" "}
                         <img
                           style={{ height: "250px", width: "auto" }}
-                          src={n.image_preview_url}
+                          src={n.imageUrl}
                           className="w-100 img-fluid"
                         />
                       </a>

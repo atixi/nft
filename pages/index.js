@@ -35,7 +35,7 @@ function Home() {
       <TopSellers data={topSellers} />
       <LiveAuctions data={liveAuctionsAPI} />
       <HotCollections />
-      <Explore />
+      <Explore/>
     </MainWrapper>
   );
 }

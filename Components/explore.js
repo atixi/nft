@@ -3,7 +3,6 @@ import Products from "/Components/products";
 import { Spin } from "antd";
 import EXPLORE_CONSTANTS from "/Constants/exploreConstants";
 import {
-  // FilterAndSort,
   CategoriesListContainer,
   CategoriesListScroll,
   CategoriesList,
@@ -26,6 +25,11 @@ const api = axios.create({
 function Explore() {
   const [categories, setCategories] = useState([]);
   const [explores, setExplores] = useState({});
+ 
+  const loadExplore = async () => {
+    const nfts = await fetch("nfts")
+    setExplores(nfts.data);
+  } 
   useEffect(() => {
     async function fetchingCats() {
       const data = await api.get("/categories");
@@ -34,11 +38,6 @@ function Explore() {
     fetchingCats();
     await loadExplore()
   }, []);
-  const loadExplore = async () => {
-    const nfts = await fetch("nfts")
-    setExplores(nfts.data);
-  } 
-  
   return (
     <>    
       <div>
