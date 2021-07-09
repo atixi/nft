@@ -4,7 +4,7 @@ import request from "./axios"
 //         method: 'GET',
 //     }).then(res => res)
 // }
-export const fetchNft = async (tokenAddress, tokenId) => {
+export const fetchOne = async (tokenAddress, tokenId) => {
     return await request(`nfts/${tokenId}/${tokenAddress}`, {
         method: 'GET',   
     }).then(res => res).catch(
