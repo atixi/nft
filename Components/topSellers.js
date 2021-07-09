@@ -12,72 +12,56 @@ import {
   SellerDetails,
 } from "./StyledComponents/topSeller-styledComponents";
 import Link from "next/link";
+import axios from "axios";
+const api = axios.create({
+  baseURL: process.env.HEROKU_BASE_URL,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+});
 function TopSellers({ data }) {
-  const [selectedSeller, setSelectedSeller] = useState([]);
   const topSellerDetails = async (top) => {
-    const address = top.address;
-    const talent = top.talent;
-    let created = [];
-    let collectibles = [];
-    const result = await OpenSeaAPI.getAssetsListByOwner(address);
-    if (result.ok) {
-      created = result.data?.assets;
-      collectibles = _.groupBy(created, "collection[name]");
-      console.log(created);
-      console.log(collectibles);
-      console.log(address);
-      console.log(talent);
-    }
-    setSelectedSeller({
-      talent,
-      address,
-      created,
-      collectibles,
-    });
+    // const result = await OpenSeaAPI.getAssetsListByOwner(address);
   };
 
-  const topSellers = data;
   return (
     <>
-      {topSellers && (
-        <>
-          <div className="pt-3">
-            <SectionHeading>{"Top Sellers in 1 Day"}</SectionHeading>
-          </div>
-          <TopSellerContainer>
-            {data &&
-              data.map((seller, index) => (
-                <Link
-                  key={seller.accountAddress}
-                  href={{
-                    pathname: `/profile/${seller.accountAddress}`,
-                  }}
+      <div className="pt-3">
+        <SectionHeading>{"Top Sellers in 1 Day"}</SectionHeading>
+      </div>
+      <TopSellerContainer>
+        {data &&
+          data.map((seller, index) => (
+            <Link
+              key={seller.userName}
+              href={{
+                pathname: `/profile/${seller.walletAddress}`,
+              }}
+            >
+              <a>
+                <TopSellerItem
+                  key={seller.name}
+                  onClick={() => topSellerDetails(seller)}
                 >
-                  <a>
-                    <TopSellerItem
-                      key={seller.name}
-                      onClick={() => topSellerDetails(seller)}
-                    >
-                      <ListCounter>{index + 1}</ListCounter>
-                      <AvatarContainer>
-                        <img src={seller.profile_img_url} />
-                      </AvatarContainer>
-                      <SellerDetails>
-                        <SellerName key={seller.talent + seller.talent}>
-                          {seller.talent}
-                        </SellerName>
-                        <SellerPrice>
-                          {/* {seller.stats?.average_price} */}
-                          {seller.number_of_assets + " assets"}
-                        </SellerPrice>
-                      </SellerDetails>
-                    </TopSellerItem>
-                  </a>
-                </Link>
-              ))}
-          </TopSellerContainer>
-        </>
-      )}
+                  <ListCounter>{index + 1}</ListCounter>
+                  <AvatarContainer>
+                    <img src={seller.talentAvatar.url} />
+                  </AvatarContainer>
+                  <SellerDetails>
+                    <SellerName key={seller.talentName + seller.talentName}>
+                      {seller.talentName}
+                    </SellerName>
+                    <SellerPrice>
+                      {/* {seller.stats?.average_price} */}
+                      {/* {seller.number_of_assets + " assets"} */}
+                    </SellerPrice>
+                  </SellerDetails>
+                </TopSellerItem>
+              </a>
+            </Link>
+          ))}
+      </TopSellerContainer>
     </>
   );
 }
