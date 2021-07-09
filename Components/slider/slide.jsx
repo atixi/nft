@@ -15,7 +15,6 @@ export default function Slide(props) {
     async function fetchingCats() {
       const data = await api.get("/categories");
       setCategories(await data.data);
-      console.log("koskash japan", data.data);
     }
     fetchingCats();
   }, []);
