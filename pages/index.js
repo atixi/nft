@@ -7,11 +7,7 @@ import Slide from "/Components/slider/slide";
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 import TopSellers from "/Components/topSellers";
 import OpenSeaAPI from "/Utils/openseaApi";
-import { useEffect, useState } from "react";
-import { topSellersAPI } from "/Constants/mockApi/topSellerApi";
 import { liveAuctionsAPI } from "/Constants/mockApi/liveAuctionApi";
-import { exploresAPI } from "/Constants/mockApi/exploreApi";
-
 import axios from "axios";
 const api = axios.create({
   baseURL: process.env.HEROKU_BASE_URL,
