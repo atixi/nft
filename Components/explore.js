@@ -13,7 +13,7 @@ import {
   LoadMoreButton,
 } from "./StyledComponents/globalStyledComponents";
 import { fetch } from "/Utils/strapiApi";
-
+import axios from "axios"
 const api = axios.create({
   baseURL: process.env.HEROKU_BASE_URL,
   headers: {
@@ -36,7 +36,7 @@ function Explore() {
       setCategories(await data.data);
     }
     fetchingCats();
-    await loadExplore()
+     loadExplore()
   }, []);
   return (
     <>    
