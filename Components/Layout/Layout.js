@@ -49,15 +49,8 @@ const Layout = ({ children }) => {
   useEffect(() => {
     subscribeMetamaskProvider();
     handleHeader();
-    getAssetsOnSale();
   });
 
-  const getAssetsOnSale = async () => {
-    const { asset_events: assets } = await openseaApi.getCollectionAssetsOnSale(
-      "cosplay-made-in-japan"
-    );
-    console.log("assets on sale", assets);
-  };
   const handleHeader = () => {
     if (router.pathname !== "/wallet") {
       setDisplayHeader(true);
