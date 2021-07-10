@@ -20,7 +20,6 @@ import {
   ProductCardHeaderOwners,
 } from "./StyledComponents/liveAuctions-styledComponents";
 import { SectionHeading } from "./StyledComponents/globalStyledComponents";
-import Products from "./products";
 
 const breakPoints = [
   { width: 1, itemsToShow: 1 },
