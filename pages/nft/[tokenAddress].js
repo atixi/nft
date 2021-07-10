@@ -65,7 +65,6 @@ function ProductPage() {
   const loadNft = async () => {
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
-      console.log("nfts", data)
       if(data)
       setLoading(false);
 
@@ -111,7 +110,6 @@ function ProductPage() {
        /> :
         <Content className={`d-sm-flex`}>
           <ItemImageContainer className=" text-center">
-            {/* <img className={"itemImage"} src={asset.asset?.imageUrl} /> */}
             <ImageCon>
               <Image
                 src={`${asset?.image}`}
