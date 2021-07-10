@@ -5,6 +5,18 @@ export function unixToHumanDate(date)
 {
   return moment.unix(date).format("DD-MM-YYYY HH:m:s");
 }
+export function unixToSeconds(date)
+{
+  // const data =moment.unix(date).format("DD-MM-YYYY HH:m:s");
+  const time = moment.duration(date).asSeconds()
+  // const now = moment(date - Date.now()).format("DD-MM-YYYY HH:m:s");
+  // console.log("time", now)
+
+  return (Date.now() - time * 1000);
+//   const data =moment().unix(date * 1000).valueOf();
+//   console.log("time1", date)
+//  return data * 1000;
+}
 export function checkName(name)
 {
     if (name != null && name != undefined && name != "NullAddress") return name;

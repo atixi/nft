@@ -35,7 +35,7 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne } from "/Utils/strapiApi";
-import { unixToHumanDate, checkName, prevImage, findHighestBid, convertToUsd} from "/Utils/utils";
+import { unixToHumanDate, unixToSeconds, checkName, prevImage, findHighestBid, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 const { Countdown } = Statistic;
 const menu = (
@@ -60,10 +60,12 @@ function ProductPage() {
   const [notFound, setNotFound] = useState(false)
   const [priceDetails, setPriceDetails] = useState(null);
   const [highestBid, setHighestBid] = useState(null)
-  const [previewImage, setPreviewImage] = useState(null)
+  const [previewImage, setPreviewImage] = useState(null);
+  const [sellOrders, setSellOrders] = useState(null)
   const loadNft = async () => {
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
+      console.log("nfts", data)
       if(data)
       setLoading(false);
 
@@ -77,9 +79,10 @@ function ProductPage() {
           creator: nft?.creator,
           image: nft.imageUrl,
         });
-        nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl))
-      setBids(nft?.orders);
-      nft?.orders && setHighestBid(findHighestBid(nft?.orders))
+      nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl))
+      setBids(nft?.buyOrders);
+      nft?.buyOrders && setHighestBid(findHighestBid(nft?.buyOrders));
+      setSellOrders(nft?.sellOrders);
       }
       else if(data=="error")
       {
@@ -170,13 +173,12 @@ function ProductPage() {
               </ItemDetailsHeader>
               <div>
                 <span className="text-gradient">
-                  {asset?.currentPrice &&
-                    getAuctionPriceDetails(asset).priceBase}
-                  {asset?.paymentTokenContract &&
-                    asset.paymentTokenContract.symbol}
+                  {sellOrders &&  getAuctionPriceDetails(sellOrders[0]).priceBase}
+                  {sellOrders && sellOrders[0].paymentTokenContract &&
+                    sellOrders[0].paymentTokenContract.symbol}
                 </span>
                 <span style={{ color: "#ccc" }}>
-                  1 of {bids ? bids.length : 1}
+                  {" 1 of "}{sellOrders ?  sellOrders.length : 1}
                 </span>
               </div>
               <div>
@@ -237,6 +239,76 @@ function ProductPage() {
                 <TabPane key="2" tab={<span>{CONSTANTS.bids}</span>}>
                   {bids &&
                     bids.map((order, i) => (
+                      <LastBidder key={i} id={order.owner?.address}>
+                        <div className={"content"}>
+                          <span className="avatarContainer">
+                            <Link
+                              href={{
+                                pathname: "/profile/talent",
+                                query: {
+                                  address: order.makerAccount?.address,
+                                  talent: checkName(
+                                    order.makerAccount?.user?.username
+                                  ),
+                                  avatar: order.makerAccount?.profile_img_url,
+                                },
+                              }}
+                              passHref
+                            >
+                              <a>
+                                <Avatar
+                                  size={"small"}
+                                  icon={
+                                    <img
+                                      src={order.makerAccount?.profile_img_url}
+                                    />
+                                  }
+                                />
+                              </a>
+                            </Link>
+                          </span>
+                          <span className={"bidInfo"}>
+                            <span className={"bidedPriceContainer"}>
+                              <span className={"bidedPriceText"}>
+                                <span className={"bidValue"}>{`${
+                                  getAuctionPriceDetails(order).priceBase
+                                } ${order?.paymentTokenContract?.symbol}`}</span>
+                                {" by "}
+                                <Link
+                                  href={{
+                                    pathname: "/profile/talent",
+                                    query: {
+                                      address: order.makerAccount?.address,
+                                      talent: checkName(
+                                        order.makerAccount?.user?.username
+                                      ),
+                                      avatar:
+                                        order.makerAccount?.profile_img_url,
+                                    },
+                                  }}
+                                  passHref
+                                >
+                                  <a className={"bidderLink"}>
+                                    {checkName(
+                                      order.makerAccount?.user?.username
+                                    )}
+                                  </a>
+                                </Link>
+                              </span>
+                            </span>
+                            <span className={"bidOwnerAndDateContainer"}>
+                              <span className={"bidDate"}>
+                                {unixToHumanDate(order?.createdTime)}
+                              </span>
+                            </span>
+                          </span>
+                        </div>
+                      </LastBidder>
+                    ))}
+                </TabPane>
+                <TabPane key="4" tab={<span>{"Listing"}</span>}>
+                  {sellOrders &&
+                    sellOrders.map((order, i) => (
                       <LastBidder key={i} id={order.owner?.address}>
                         <div className={"content"}>
                           <span className="avatarContainer">
@@ -391,13 +463,13 @@ function ProductPage() {
                     </BidPriceValue>
                   </BidPrice>
                 </BidOwnerContainer>
-                {asset?.saleKind && asset?.saleKind ? (
+                {highestBid?.expirationTime &&  (
                   <Auction>
                     <div className={"auctionDiv"}>
                       <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
                       <AuctionTimer>
                         <Countdown
-                          value={deadline}
+                          value={unixToSeconds(highestBid?.expirationTime)}
                           valueStyle={{
                             color: "red",
                             fontSize: "30px !important",
@@ -407,8 +479,6 @@ function ProductPage() {
                       </AuctionTimer>
                     </div>
                   </Auction>
-                ) : (
-                  ""
                 )}
               </BidCountdown>}
               <ButtonContainer>
@@ -418,12 +488,14 @@ function ProductPage() {
                 >
                   Buy
                 </FooterButton>
+                {highestBid ?
                 <FooterButton
                   color={"#0066ff"}
                   style={{ background: "#0066ff26" }}
                 >
                   Place a bid
-                </FooterButton>
+                </FooterButton> : ""
+}
               </ButtonContainer>
             </ItemFooter>
           </ItemInfo>
@@ -431,6 +503,6 @@ function ProductPage() {
       </Wrapper> 
     </>
   );
-}
+}    
 export default ProductPage;
         
