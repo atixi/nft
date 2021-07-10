@@ -35,7 +35,7 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne } from "/Utils/strapiApi";
-import { unixToHumanDate, unixToSeconds, checkName, prevImage, findHighestBid, convertToUsd} from "/Utils/utils";
+import { unixToHumanDate, unixToMilSeconds, checkName, prevImage, findHighestBid, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 const { Countdown } = Statistic;
 const menu = (
@@ -109,7 +109,6 @@ function ProductPage() {
     },
   };
 
-  const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;
   return (
     <>
       <Wrapper>
@@ -451,11 +450,9 @@ function ProductPage() {
                     </Link>
                     <BidPriceValue>
                       <PriceInCryptoContainer>
-                        {/* <span>{`0.02 eth`}</span> */}
                         <span className={"bidValue"}>{`${
                                   getAuctionPriceDetails(highestBid).priceBase
                                 } ${highestBid?.paymentTokenContract?.symbol}`}</span>
-                        {/* <span>{`${getAuctionPriceDetails(asset.asset?.orders[0]).priceBase} eth`}</span> */}
                       </PriceInCryptoContainer>
                       <PriceInDollarContainer>
                         <span>{`~$ ${convertToUsd(highestBid)}`}</span> 
@@ -469,11 +466,7 @@ function ProductPage() {
                       <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
                       <AuctionTimer>
                         <Countdown
-                          value={unixToSeconds(highestBid?.expirationTime)}
-                          valueStyle={{
-                            color: "red",
-                            fontSize: "30px !important",
-                          }}
+                          value={unixToMilSeconds(highestBid?.expirationTime)}
                           format={`D[d] HH[h] mm[m] ss[s]`}
                         />
                       </AuctionTimer>
@@ -482,20 +475,18 @@ function ProductPage() {
                 )}
               </BidCountdown>}
               <ButtonContainer>
-                <FooterButton
+                {sellOrders && <>
+                {sellOrders.sale_kind == "0" ? <FooterButton
                   color={"#ffffff"}
                   style={{ background: "#0066ff" }}
                 >
                   Buy
-                </FooterButton>
-                {highestBid ?
-                <FooterButton
+                </FooterButton> : <FooterButton
                   color={"#0066ff"}
                   style={{ background: "#0066ff26" }}
                 >
                   Place a bid
-                </FooterButton> : ""
-}
+                </FooterButton>} </>}
               </ButtonContainer>
             </ItemFooter>
           </ItemInfo>

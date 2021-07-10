@@ -1,21 +1,25 @@
 import moment from "moment";
 import { getAuctionPriceDetails } from "/Constants/constants";
+import { differenceInSeconds, intervalToDuration, secondsToMilliseconds } from 'date-fns';
+import fromUnix from "date-fns/fromUnixTime";
 
 export function unixToHumanDate(date)
 {
   return moment.unix(date).format("DD-MM-YYYY HH:m:s");
 }
-export function unixToSeconds(date)
+export function unixToMilSeconds(date)
 {
-  // const data =moment.unix(date).format("DD-MM-YYYY HH:m:s");
-  const time = moment.duration(date).asSeconds()
-  // const now = moment(date - Date.now()).format("DD-MM-YYYY HH:m:s");
-  // console.log("time", now)
 
-  return (Date.now() - time * 1000);
-//   const data =moment().unix(date * 1000).valueOf();
-//   console.log("time1", date)
-//  return data * 1000;
+  let duration = intervalToDuration({ start: 0,
+    end: differenceInSeconds(new Date(), fromUnix(date)) * 1000,
+  });
+  let seconds = 0;
+  seconds += duration.days * 24 * 60 * 60;
+  seconds += duration.hours * 60 * 60;
+  seconds += duration.minutes * 60;
+  seconds += duration.seconds;
+  return Date.now() + secondsToMilliseconds(seconds);
+ 
 }
 export function checkName(name)
 {
