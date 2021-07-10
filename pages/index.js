@@ -20,7 +20,7 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
-function Home({ liveAuctions, explores, assets }) {
+function Home() {
   const [topSellers, setTopSellers] = useState([]);
   useEffect(() => {
     async function fetchingTopSellers() {

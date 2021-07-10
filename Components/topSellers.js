@@ -13,13 +13,7 @@ import {
 } from "./StyledComponents/topSeller-styledComponents";
 import Link from "next/link";
 import axios from "axios";
-const api = axios.create({
-  baseURL: process.env.HEROKU_BASE_URL,
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
-});
+
 function TopSellers({ data }) {
   const topSellerDetails = async (top) => {
     // const result = await OpenSeaAPI.getAssetsListByOwner(address);
@@ -36,7 +30,7 @@ function TopSellers({ data }) {
             <Link
               key={seller.userName}
               href={{
-                pathname: `/profile/${seller.walletAddress}`,
+                pathname: `/profile/${seller.userName}`,
               }}
             >
               <a>
