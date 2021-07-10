@@ -96,19 +96,6 @@ function ProductPage() {
     }
     loadNft();
   }, [queryParam]);
-
-  const item = {
-    image: "/images/p1.jpeg",
-    name: "CoinBae #1",
-    favorite: 62,
-    category: "🌈 Art",
-    description: `There are only 3. 1 of them in Saltbae's collection, 2 of them are mine. If you buy it, you will have the PSD file. You can edit it as you wish and be the creator of the project. This rare work is a project I've been working on since...`,
-    owner: {
-      avatar: "/images/profpics/1.jpg",
-      name: "Saltbae Nusret",
-    },
-  };
-
   return (
     <>
       <Wrapper>
@@ -180,9 +167,9 @@ function ProductPage() {
                   {" 1 of "}{sellOrders ?  sellOrders.length : 1}
                 </span>
               </div>
-              <div>
+              {/* <div>
                 <button>{item.category}</button>
-              </div>
+              </div> */}
               <ItemDescriptionText>
                 {asset?.description}
               </ItemDescriptionText>
