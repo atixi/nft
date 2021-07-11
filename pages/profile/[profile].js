@@ -13,6 +13,7 @@ import {
   LoadMoreButton,
   MainWrapper,
 } from "/Components/StyledComponents/globalStyledComponents";
+import CollectionLoader from "@/components/collectionLoader";
 import { useRouter } from "next/router";
 import axios from "axios";
 
@@ -26,6 +27,7 @@ const api = axios.create({
 
 const { TabPane } = Tabs;
 function Profile() {
+  const [isLoad, setLoad] = useState(false);
   const [talent, setTalent] = useState({
     talentAvatar: {
       url: "/images/talentCover.png",
@@ -54,39 +56,44 @@ function Profile() {
           talent: { talentAvatar: { url: data.data.talentAvatar.url } },
           assets: sellOrders,
         });
+        setLoad(true);
       }
     })();
   }, [profile]);
   return (
     <>
       <MainWrapper>
-        <ProfileContainer>
-          <img src={talent.talentBanner?.url} />
-          <BiographyContainer>
-            <div className={"avatar"}>
-              <img
-                alt="userAvatar"
-                src={talent.talentAvatar?.url}
-                loading="lazy"
-              />
-            </div>
-            <BioDescription>
-              <h3>
-                <strong>{talent.talentName}</strong>
-              </h3>
-              <h6>
-                <strong>{`addressToShow`}</strong>
-              </h6>
-              <div className="mt-4">
-                <ProfileButton type="button">
-                  <ShareButton />
-                </ProfileButton>
-                <ProfileButton type="button">{"..."}</ProfileButton>
+        {isLoad === false ? <CollectionLoader /> : ""}
+        {isLoad ? (
+          <ProfileContainer>
+            <img src={talent.talentBanner?.url} />
+            <BiographyContainer>
+              <div className={"avatar"}>
+                <img
+                  alt="userAvatar"
+                  src={talent.talentAvatar?.url}
+                  loading="lazy"
+                />
               </div>
-            </BioDescription>
-          </BiographyContainer>
-        </ProfileContainer>
-
+              <BioDescription>
+                <h3>
+                  <strong>{talent.talentName}</strong>
+                </h3>
+                <h6>
+                  <strong>{`addressToShow`}</strong>
+                </h6>
+                <div className="mt-4">
+                  <ProfileButton type="button">
+                    <ShareButton />
+                  </ProfileButton>
+                  <ProfileButton type="button">{"..."}</ProfileButton>
+                </div>
+              </BioDescription>
+            </BiographyContainer>
+          </ProfileContainer>
+        ) : (
+          ""
+        )}
         <Tabs defaultActiveKey="1">
           <TabPane tab="On Sale" key="1">
             <>

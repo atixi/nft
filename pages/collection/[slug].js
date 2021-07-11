@@ -74,7 +74,6 @@ function CollectionDetails({ assets, banner_image_url }) {
       talent: { talentAvatar: { url: collection.talent.talentAvatar.url } },
       assets: sellOrders,
     });
-    console.log("kharkosh", onSales);
     setLoad(true);
   }, []);
 
