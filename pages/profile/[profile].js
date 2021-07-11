@@ -36,6 +36,9 @@ function Profile() {
     talentName: "",
     assets: [],
   });
+  const [onSales, setOnsales] = useState({
+    assets: [],
+  });
   const router = useRouter();
   const { profile } = router.query;
 
@@ -44,6 +47,13 @@ function Profile() {
       if (profile != undefined) {
         const data = await api.get(`/talents/${profile}`);
         setTalent(await data.data);
+        const sellOrders = await data.data.assets.filter(
+          (asset) => asset.sellOrders != null
+        );
+        setOnsales({
+          talent: { talentAvatar: { url: talent.talentAvatar.url } },
+          assets: sellOrders,
+        });
       }
     })();
   }, [profile]);
@@ -76,8 +86,26 @@ function Profile() {
             </BioDescription>
           </BiographyContainer>
         </ProfileContainer>
+
         <Tabs defaultActiveKey="1">
-          <TabPane tab="Created" key="1">
+          <TabPane tab="On Sale" key="1">
+            <>
+              <Products data={onSales} />
+              <LoadMoreButton block shape={"round"} size={"large"}>
+                {"Load More"}
+              </LoadMoreButton>{" "}
+            </>
+          </TabPane>
+
+          <TabPane tab="Owned" key="2">
+            <>
+              <Products data={onSales} />
+              <LoadMoreButton block shape={"round"} size={"large"}>
+                {"Load More"}
+              </LoadMoreButton>{" "}
+            </>
+          </TabPane>
+          <TabPane tab="Created" key="3">
             {false ? (
               <LoadingContainer>
                 <Spin />
@@ -91,15 +119,6 @@ function Profile() {
                 </LoadMoreButton> */}
               </>
             )}
-          </TabPane>
-          <TabPane tab="Collectibles" key="2">
-            <>
-              {" "}
-              {/* <Products data={`dffds`} /> */}
-              <LoadMoreButton block shape={"round"} size={"large"}>
-                {"Load More"}
-              </LoadMoreButton>{" "}
-            </>
           </TabPane>
         </Tabs>
       </MainWrapper>
