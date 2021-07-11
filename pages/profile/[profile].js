@@ -7,12 +7,13 @@ import {
   BioDescription,
   ProfileButton,
 } from "/Components/StyledComponents/talentPage-styledComponents";
-import Products from "/Components/products";
+import Products from "/Components/nfts";
 import {
   LoadingContainer,
   LoadMoreButton,
   MainWrapper,
 } from "/Components/StyledComponents/globalStyledComponents";
+import CollectionLoader from "@/components/collectionLoader";
 import { useRouter } from "next/router";
 import axios from "axios";
 
@@ -26,8 +27,7 @@ const api = axios.create({
 
 const { TabPane } = Tabs;
 function Profile() {
-  const router = useRouter();
-  const { profile } = router.query;
+  const [isLoad, setLoad] = useState(false);
   const [talent, setTalent] = useState({
     talentAvatar: {
       url: "/images/talentCover.png",
@@ -36,45 +36,83 @@ function Profile() {
       url: "",
     },
     talentName: "",
+    assets: [],
   });
+  const [onSales, setOnsales] = useState({
+    assets: [],
+  });
+  const router = useRouter();
+  const { profile } = router.query;
+
   useEffect(() => {
-    async function fetchingTalent() {
-      const data = await api.get(`/talents/${profile}`);
-      setTalent(await data.data);
-    }
-    fetchingTalent();
-  }, []);
+    (async function fetchingTalent() {
+      if (profile != undefined) {
+        const data = await api.get(`/talents/${profile}`);
+        setTalent(await data.data);
+        const sellOrders = await data.data.assets.filter(
+          (asset) => asset.sellOrders != null
+        );
+        setOnsales({
+          talent: { talentAvatar: { url: data.data.talentAvatar.url } },
+          assets: sellOrders,
+        });
+        setLoad(true);
+      }
+    })();
+  }, [profile]);
   return (
     <>
       <MainWrapper>
-        <ProfileContainer>
-          <img src={talent.talentBanner?.url} />
-          <BiographyContainer>
-            <div className={"avatar"}>
-              <img
-                alt="userAvatar"
-                src={talent.talentAvatar?.url}
-                loading="lazy"
-              />
-            </div>
-            <BioDescription>
-              <h3>
-                <strong>{talent.talentName}</strong>
-              </h3>
-              <h6>
-                <strong>{`addressToShow`}</strong>
-              </h6>
-              <div className="mt-4">
-                <ProfileButton type="button">
-                  <ShareButton />
-                </ProfileButton>
-                <ProfileButton type="button">{"..."}</ProfileButton>
+        {isLoad === false ? <CollectionLoader /> : ""}
+        {isLoad ? (
+          <ProfileContainer>
+            <img src={talent.talentBanner?.url} />
+            <BiographyContainer>
+              <div className={"avatar"}>
+                <img
+                  alt="userAvatar"
+                  src={talent.talentAvatar?.url}
+                  loading="lazy"
+                />
               </div>
-            </BioDescription>
-          </BiographyContainer>
-        </ProfileContainer>
+              <BioDescription>
+                <h3>
+                  <strong>{talent.talentName}</strong>
+                </h3>
+                <h6>
+                  <strong>{`addressToShow`}</strong>
+                </h6>
+                <div className="mt-4">
+                  <ProfileButton type="button">
+                    <ShareButton />
+                  </ProfileButton>
+                  <ProfileButton type="button">{"..."}</ProfileButton>
+                </div>
+              </BioDescription>
+            </BiographyContainer>
+          </ProfileContainer>
+        ) : (
+          ""
+        )}
         <Tabs defaultActiveKey="1">
-          <TabPane tab="Created" key="1">
+          <TabPane tab="On Sale" key="1">
+            <>
+              <Products data={onSales} />
+              <LoadMoreButton block shape={"round"} size={"large"}>
+                {"Load More"}
+              </LoadMoreButton>{" "}
+            </>
+          </TabPane>
+
+          <TabPane tab="Owned" key="2">
+            <>
+              <Products data={onSales} />
+              <LoadMoreButton block shape={"round"} size={"large"}>
+                {"Load More"}
+              </LoadMoreButton>{" "}
+            </>
+          </TabPane>
+          <TabPane tab="Created" key="3">
             {false ? (
               <LoadingContainer>
                 <Spin />
@@ -82,21 +120,12 @@ function Profile() {
             ) : (
               <>
                 {" "}
-                {/* <Products data={talent.created_at} /> */}
+                <Products data={talent} />
                 {/* <LoadMoreButton block shape={"round"} size={"large"}>
                   {"Load More"}
                 </LoadMoreButton> */}
               </>
             )}
-          </TabPane>
-          <TabPane tab="Collectibles" key="2">
-            <>
-              {" "}
-              {/* <Products data={`dffds`} /> */}
-              <LoadMoreButton block shape={"round"} size={"large"}>
-                {"Load More"}
-              </LoadMoreButton>{" "}
-            </>
           </TabPane>
         </Tabs>
       </MainWrapper>

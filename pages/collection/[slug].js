@@ -45,9 +45,9 @@ function CollectionDetails({ assets, banner_image_url }) {
       },
     },
   });
-  const [slug, setSlug] = useState();
-  const [created, setCreated] = useState();
-  const [collectionName, setCollectionName] = useState();
+  const [onSales, setOnsales] = useState({
+    assets: [],
+  });
   const loadTabData = async (e) => {
     if (e === "1") {
       loadAssets(slug);
@@ -66,15 +66,16 @@ function CollectionDetails({ assets, banner_image_url }) {
   const query = useQueryParam();
 
   useEffect(() => {
-    api.get(`/collections/${query.slug}`).then((response) => {
-      setCollect(response.data);
-      console.log("kasdfj", response.data);
+    setCollect(collection);
+    const sellOrders = collection.assets.filter(
+      (asset) => asset.sellOrders != null
+    );
+    setOnsales({
+      talent: { talentAvatar: { url: collection.talent.talentAvatar.url } },
+      assets: sellOrders,
     });
-    setSlug(query.slug);
-    loadAssets(query.slug);
-    loadCollections(query.slug);
-    setCollectionName(query.collection);
-  }, [query]);
+    setLoad(true);
+  }, []);
 
   return (
     <>
@@ -107,7 +108,7 @@ function CollectionDetails({ assets, banner_image_url }) {
         </ProfileContainer>
         <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
           <TabPane tab="On Sale" key="1">
-            <Products data={created} />
+            <Products data={onSales} />
             <LoadMoreButton block shape={"round"} size={"large"}>
               {"Load More"}
             </LoadMoreButton>
