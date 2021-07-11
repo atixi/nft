@@ -30,12 +30,13 @@ import {
   PriceInCryptoContainer,
   PriceInDollarContainer,
   Wrapper,
+  DetailTabDiv,
 } from "../../Components/StyledComponents/productDetails-styledComponents";
 import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne } from "/Utils/strapiApi";
-import { unixToHumanDate, unixToMilSeconds, checkName, prevImage, findHighestBid, convertToUsd} from "/Utils/utils";
+import { unixToHumanDate, displayAddress, unixToMilSeconds, checkName, prevImage, findHighestBid, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 const { Countdown } = Statistic;
 const menu = (
@@ -77,6 +78,8 @@ function ProductPage() {
           owner: nft.owner,
           creator: nft?.creator,
           image: nft.imageUrl,
+          contractAddress: nft?.assetContract?.address,
+          tokenId: nft.tokenId
         });
       nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl))
       setBids(nft?.buyOrders);
@@ -191,34 +194,16 @@ function ProductPage() {
               </Link>
               <Tabs defaultActiveKey="4">
                 <TabPane key="1" tab={<span>{CONSTANTS.details}</span>}>
-                  <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
-                  <br />
-                  <Link
-                    href={{
-                      pathname: "/profile/talent",
-                      query: {
-                        address: asset?.owner?.address,
-                        talent: checkName(asset?.owner?.user?.username),
-                        avatar: asset?.owner?.profile_img_url,
-                      },
-                    }}
-                    passHref
-                  >
-                    <a>
-                      <AvatarContainer>
-                        <Avatar
-                          size={"small"}
-                          icon={
-                            <img src={asset?.owner?.profile_img_url} />
-                          }
-                        />
-
-                        <span style={{ flex: "1" }}>
-                          {checkName(asset?.owner?.user?.username)}
-                        </span>
-                      </AvatarContainer>{" "}
-                    </a>
-                  </Link>
+                    <DetailTabDiv><span>{"Contract Address"}</span><span className="float-right">
+                      {asset?.contractAddress && displayAddress(asset?.contractAddress)}
+                      </span></DetailTabDiv>
+                    <DetailTabDiv><span>{"Token ID"}</span><span className="float-right">
+                    {asset?.tokenId && asset.tokenId.length > 15 ? displayAddress(asset?.tokenId) : asset?.tokenId}
+                      </span></DetailTabDiv>
+                    <DetailTabDiv><span>{"Blockchain"}</span><span className="float-right">
+                      {sellOrders &&
+                    sellOrders[0].paymentTokenContract.name}
+                      </span></DetailTabDiv>
                 </TabPane>
                 <TabPane key="2" tab={<span>{CONSTANTS.bids}</span>}>
                   {bids &&

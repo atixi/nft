@@ -8,7 +8,6 @@ export const Wrapper = styled.div`
         color: black !important;
     }
 `;
-
 export const Content = styled.div`
     flex:1;
     height: 100%;
@@ -437,4 +436,9 @@ export const BidOwnerProfile = styled.div`
     {
         display: none;
     };
+`;
+export const DetailTabDiv = styled.div`
+    color: #818182 !important;
+    padding: 0px 5px;
+    margin: 5px 0px;
 `
