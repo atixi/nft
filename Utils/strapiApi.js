@@ -1,3 +1,4 @@
+import axios from "axios";
 import request from "./axios";
 export const fetchOne = async (tokenAddress, tokenId) => {
   return await request(`nfts/${tokenId}/${tokenAddress}`, {
@@ -15,5 +16,16 @@ export const fetch = async (target) => {
     .then((res) => res)
     .catch(function (error) {
       return "error";
+    });
+};
+
+export const post = async (target, data) => {
+  return await request
+    .post(target, data)
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
     });
 };
