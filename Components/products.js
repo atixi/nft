@@ -25,7 +25,6 @@ function Products(props) {
   const [products, setProducts] = useState([]);
   useEffect(() => {
     setProducts(props.data);
-    console.log("products", products)
   });
   return (
     <>

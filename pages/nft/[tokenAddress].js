@@ -35,7 +35,7 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne } from "/Utils/strapiApi";
-import { unixToHumanDate, checkName, prevImage, findHighestBid, convertToUsd} from "/Utils/utils";
+import { unixToHumanDate, unixToMilSeconds, checkName, prevImage, findHighestBid, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 const { Countdown } = Statistic;
 const menu = (
@@ -60,7 +60,8 @@ function ProductPage() {
   const [notFound, setNotFound] = useState(false)
   const [priceDetails, setPriceDetails] = useState(null);
   const [highestBid, setHighestBid] = useState(null)
-  const [previewImage, setPreviewImage] = useState(null)
+  const [previewImage, setPreviewImage] = useState(null);
+  const [sellOrders, setSellOrders] = useState(null)
   const loadNft = async () => {
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
@@ -77,9 +78,10 @@ function ProductPage() {
           creator: nft?.creator,
           image: nft.imageUrl,
         });
-        nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl))
-      setBids(nft?.orders);
-      nft?.orders && setHighestBid(findHighestBid(nft?.orders))
+      nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl))
+      setBids(nft?.buyOrders);
+      nft?.buyOrders && setHighestBid(findHighestBid(nft?.buyOrders));
+      setSellOrders(nft?.sellOrders);
       }
       else if(data=="error")
       {
@@ -93,20 +95,6 @@ function ProductPage() {
     }
     loadNft();
   }, [queryParam]);
-
-  const item = {
-    image: "/images/p1.jpeg",
-    name: "CoinBae #1",
-    favorite: 62,
-    category: "🌈 Art",
-    description: `There are only 3. 1 of them in Saltbae's collection, 2 of them are mine. If you buy it, you will have the PSD file. You can edit it as you wish and be the creator of the project. This rare work is a project I've been working on since...`,
-    owner: {
-      avatar: "/images/profpics/1.jpg",
-      name: "Saltbae Nusret",
-    },
-  };
-
-  const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;
   return (
     <>
       <Wrapper>
@@ -122,7 +110,6 @@ function ProductPage() {
        /> :
         <Content className={`d-sm-flex`}>
           <ItemImageContainer className=" text-center">
-            {/* <img className={"itemImage"} src={asset.asset?.imageUrl} /> */}
             <ImageCon>
               <Image
                 src={`${asset?.image}`}
@@ -170,18 +157,17 @@ function ProductPage() {
               </ItemDetailsHeader>
               <div>
                 <span className="text-gradient">
-                  {asset?.currentPrice &&
-                    getAuctionPriceDetails(asset).priceBase}
-                  {asset?.paymentTokenContract &&
-                    asset.paymentTokenContract.symbol}
+                  {sellOrders &&  getAuctionPriceDetails(sellOrders[0]).priceBase}
+                  {sellOrders && sellOrders[0].paymentTokenContract &&
+                    sellOrders[0].paymentTokenContract.symbol}
                 </span>
                 <span style={{ color: "#ccc" }}>
-                  1 of {bids ? bids.length : 1}
+                  {" 1 of "}{sellOrders ?  sellOrders.length : 1}
                 </span>
               </div>
-              <div>
+              {/* <div>
                 <button>{item.category}</button>
-              </div>
+              </div> */}
               <ItemDescriptionText>
                 {asset?.description}
               </ItemDescriptionText>
@@ -237,6 +223,76 @@ function ProductPage() {
                 <TabPane key="2" tab={<span>{CONSTANTS.bids}</span>}>
                   {bids &&
                     bids.map((order, i) => (
+                      <LastBidder key={i} id={order.owner?.address}>
+                        <div className={"content"}>
+                          <span className="avatarContainer">
+                            <Link
+                              href={{
+                                pathname: "/profile/talent",
+                                query: {
+                                  address: order.makerAccount?.address,
+                                  talent: checkName(
+                                    order.makerAccount?.user?.username
+                                  ),
+                                  avatar: order.makerAccount?.profile_img_url,
+                                },
+                              }}
+                              passHref
+                            >
+                              <a>
+                                <Avatar
+                                  size={"small"}
+                                  icon={
+                                    <img
+                                      src={order.makerAccount?.profile_img_url}
+                                    />
+                                  }
+                                />
+                              </a>
+                            </Link>
+                          </span>
+                          <span className={"bidInfo"}>
+                            <span className={"bidedPriceContainer"}>
+                              <span className={"bidedPriceText"}>
+                                <span className={"bidValue"}>{`${
+                                  getAuctionPriceDetails(order).priceBase
+                                } ${order?.paymentTokenContract?.symbol}`}</span>
+                                {" by "}
+                                <Link
+                                  href={{
+                                    pathname: "/profile/talent",
+                                    query: {
+                                      address: order.makerAccount?.address,
+                                      talent: checkName(
+                                        order.makerAccount?.user?.username
+                                      ),
+                                      avatar:
+                                        order.makerAccount?.profile_img_url,
+                                    },
+                                  }}
+                                  passHref
+                                >
+                                  <a className={"bidderLink"}>
+                                    {checkName(
+                                      order.makerAccount?.user?.username
+                                    )}
+                                  </a>
+                                </Link>
+                              </span>
+                            </span>
+                            <span className={"bidOwnerAndDateContainer"}>
+                              <span className={"bidDate"}>
+                                {unixToHumanDate(order?.createdTime)}
+                              </span>
+                            </span>
+                          </span>
+                        </div>
+                      </LastBidder>
+                    ))}
+                </TabPane>
+                <TabPane key="4" tab={<span>{"Listing"}</span>}>
+                  {sellOrders &&
+                    sellOrders.map((order, i) => (
                       <LastBidder key={i} id={order.owner?.address}>
                         <div className={"content"}>
                           <span className="avatarContainer">
@@ -379,11 +435,9 @@ function ProductPage() {
                     </Link>
                     <BidPriceValue>
                       <PriceInCryptoContainer>
-                        {/* <span>{`0.02 eth`}</span> */}
                         <span className={"bidValue"}>{`${
                                   getAuctionPriceDetails(highestBid).priceBase
                                 } ${highestBid?.paymentTokenContract?.symbol}`}</span>
-                        {/* <span>{`${getAuctionPriceDetails(asset.asset?.orders[0]).priceBase} eth`}</span> */}
                       </PriceInCryptoContainer>
                       <PriceInDollarContainer>
                         <span>{`~$ ${convertToUsd(highestBid)}`}</span> 
@@ -391,39 +445,33 @@ function ProductPage() {
                     </BidPriceValue>
                   </BidPrice>
                 </BidOwnerContainer>
-                {asset?.saleKind && asset?.saleKind ? (
+                {highestBid?.expirationTime &&  (
                   <Auction>
                     <div className={"auctionDiv"}>
                       <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
                       <AuctionTimer>
                         <Countdown
-                          value={deadline}
-                          valueStyle={{
-                            color: "red",
-                            fontSize: "30px !important",
-                          }}
+                          value={unixToMilSeconds(highestBid?.expirationTime)}
                           format={`D[d] HH[h] mm[m] ss[s]`}
                         />
                       </AuctionTimer>
                     </div>
                   </Auction>
-                ) : (
-                  ""
                 )}
               </BidCountdown>}
               <ButtonContainer>
-                <FooterButton
+                {sellOrders && <>
+                {sellOrders.sale_kind == "0" ? <FooterButton
                   color={"#ffffff"}
                   style={{ background: "#0066ff" }}
                 >
                   Buy
-                </FooterButton>
-                <FooterButton
+                </FooterButton> : <FooterButton
                   color={"#0066ff"}
                   style={{ background: "#0066ff26" }}
                 >
                   Place a bid
-                </FooterButton>
+                </FooterButton>} </>}
               </ButtonContainer>
             </ItemFooter>
           </ItemInfo>
@@ -431,6 +479,6 @@ function ProductPage() {
       </Wrapper> 
     </>
   );
-}
+}    
 export default ProductPage;
         
