@@ -7,16 +7,13 @@ import {
   BioDescription,
   ProfileButton,
 } from "/Components/StyledComponents/talentPage-styledComponents";
-import Products from "/Components/products";
-import OpenSeaAPI from "/Utils/openseaApi";
-import { clientCollections } from "/Constants/mockApi/collectionApi";
-import { useQueryParam } from "/Components/hooks/useQueryParam";
+import Products from "/Components/nfts";
 import {
-  LoadingContainer,
   LoadMoreButton,
   MainWrapper,
 } from "/Components/StyledComponents/globalStyledComponents";
 import axios from "axios";
+import CollectionLoader from "@/components/collectionLoader";
 const { TabPane } = Tabs;
 const api = axios.create({
   baseURL: "https://rim-entertainment.herokuapp.com",
@@ -26,44 +23,28 @@ const api = axios.create({
   },
 });
 
-function CollectionDetails({ assets, banner_image_url }) {
-  const [collections, setCollections] = useState();
+function CollectionDetails({ collection }) {
+  const [isLoad, setLoad] = useState(false);
+  const [onSales, setOnsales] = useState({
+    assets: [],
+  });
   const [collect, setCollect] = useState({
     collectionName: "",
     collectionImageURL: {
-      formats: {
-        thumbnail: {
-          url: "",
-        },
-      },
+      url: "",
     },
     collectionBanner: {
-      formats: {
-        thumbnail: {
-          url: "",
-        },
-      },
+      url: "",
     },
-  });
-  const [onSales, setOnsales] = useState({
     assets: [],
   });
   const loadTabData = async (e) => {
     if (e === "1") {
-      loadAssets(slug);
+      //loadAssets(slug);
     } else if (e === "2") {
-      loadCollections(slug);
+      //loadCollections(slug);
     }
   };
-  const loadCollections = (slug) => {
-    const data = clientCollections[slug];
-    setCollections(data?.slice(1, data.length / 2));
-  };
-  const loadAssets = (slug) => {
-    const data = clientCollections[slug];
-    setCreated(data?.slice(data.length / 2, data.length));
-  };
-  const query = useQueryParam();
 
   useEffect(() => {
     setCollect(collection);
@@ -80,32 +61,38 @@ function CollectionDetails({ assets, banner_image_url }) {
   return (
     <>
       <MainWrapper>
-        <ProfileContainer>
-          <img src={collect.collectionBanner?.formats.thumbnail.url} />
-          <BiographyContainer>
-            <div className={"avatar"}>
-              <img
-                alt="userAvatar"
-                src={collect.collectionImageURL?.formats.thumbnail.url}
-                loading="lazy"
-              />
-            </div>
-            <BioDescription>
-              <h3>
-                <strong>{collect.collectionName}</strong>
-              </h3>
-              <h6>
-                <strong>{"addressToShow"}</strong>
-              </h6>
-              <div className="mt-4">
-                <ProfileButton type="button">
-                  <ShareButton />
-                </ProfileButton>
-                <ProfileButton type="button">{"..."}</ProfileButton>
+        {isLoad === false ? <CollectionLoader /> : ""}
+        {isLoad ? (
+          <ProfileContainer>
+            <img src={collect.collectionBanner.url} />
+            <BiographyContainer>
+              <div className={"avatar"}>
+                <img
+                  alt="userAvatar"
+                  src={collect.collectionImageURL.url}
+                  loading="lazy"
+                />
               </div>
-            </BioDescription>
-          </BiographyContainer>
-        </ProfileContainer>
+              <BioDescription>
+                <h3>
+                  <strong>{collect.collectionName}</strong>
+                </h3>
+                <h6>
+                  <strong>{"addressToShow"}</strong>
+                </h6>
+                <div className="mt-4">
+                  <ProfileButton type="button">
+                    <ShareButton />
+                  </ProfileButton>
+                  <ProfileButton type="button">{"..."}</ProfileButton>
+                </div>
+              </BioDescription>
+            </BiographyContainer>
+          </ProfileContainer>
+        ) : (
+          ""
+        )}
+
         <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
           <TabPane tab="On Sale" key="1">
             <Products data={onSales} />
@@ -116,7 +103,7 @@ function CollectionDetails({ assets, banner_image_url }) {
           <TabPane tab="Owned" key="2">
             <>
               {" "}
-              <Products data={collections} />
+              <Products data={collect} />
               <LoadMoreButton block shape={"round"} size={"large"}>
                 {"Load More"}
               </LoadMoreButton>
@@ -127,47 +114,31 @@ function CollectionDetails({ assets, banner_image_url }) {
     </>
   );
 }
-export async function getStaticPaths() {
-  const slugs = [
-    "reika-mandala-art",
-    "atixi",
-    "cosplay-made-in-japan",
-    "unofficial-bayc-collectibles",
-    "delorean-s-40th-anniversary-nft-collection",
-    "glewme-city-master-of-permits-uriel",
-    "plaguedoctor-1",
-    "builsontheblock",
-    "fnd",
-    "uniswap-v3-positions",
-    "penguin-dummy-club-1",
-    "iconpunks",
-    "airlord",
-    "monalisa-art",
-    "unique-one-v2",
-    "slumdoge-billionaires",
-  ];
-  const paths = slugs.map((slug) => {
-    return {
-      params: { slug: slug.toString() },
-    };
-  });
+
+export const getStaticPaths = async () => {
+  const res = await fetch(
+    "https://rim-entertainment.herokuapp.com/collections"
+  );
+  const collections = await res.json();
+  console.log("collection from path", collections);
+  const paths = collections.map((collection) => ({
+    params: {
+      slug: collection.slug,
+    },
+  }));
+
   return {
     paths,
     fallback: false,
   };
-}
+};
 
-export const getStaticProps = async (context) => {
-  const slug = context.params.slug;
-  const result = await OpenSeaAPI.getAssetsInCollection(slug);
-  const assets = result.data;
-  // const banner_image_url = assets[0].collection.banner_image_url;
-  return {
-    props: {
-      assets: JSON.parse(JSON.stringify(assets)),
-      // banner_image_url: JSON.parse(JSON.stringify(banner_image_url)),
-    },
-  };
+export const getStaticProps = async ({ params }) => {
+  const res = await fetch(
+    `https://rim-entertainment.herokuapp.com/collections/${params.slug}`
+  );
+  const collection = await res.json();
+  return { props: { collection } };
 };
 
 export default CollectionDetails;
