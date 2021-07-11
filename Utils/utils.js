@@ -50,3 +50,6 @@ export function findHighestBid(orders)
     });
     return bid;
   }
+export function displayAddress(address){
+  return address.toString().replace(address.toString().substring(10, address.length - 10), ".....");
+}
