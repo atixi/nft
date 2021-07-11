@@ -253,13 +253,6 @@ const getCollections = () => {
 async function getBundlesByOwner(owner, onSale = false) {
   return client.get(`bundles?owner=${owner}&on_sale=${onSale}&limit=50`);
 }
-async function getAssetsByOwner() {}
-const getAsset = (address, id) => {
-  return seaport.api.getAsset({
-    tokenAddress: address,
-    tokenId: id,
-  });
-};
 
 const getAssetBalance = (accountAddress, asset) => {
   return seaport.getAssetBalance({
@@ -361,6 +354,7 @@ export default {
   getAccount,
   getTalentAddresses,
   // asset functions
+  getAsset,
   getAssetsByOwner,
   getAssetsByOwners,
   getAssetOrders,
