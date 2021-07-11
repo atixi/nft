@@ -42,7 +42,11 @@ function Products(props) {
                           <Avatar
                             icon={
                               <img
-                                src={props.data.talent.talentAvatar.url}
+                                src={
+                                  props.data.talent
+                                    ? props.data.talent.talentAvatar.url
+                                    : props.data.talentAvatar.url
+                                }
                                 width={12}
                                 height={12}
                               />

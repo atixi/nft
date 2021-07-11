@@ -7,7 +7,7 @@ import {
   BioDescription,
   ProfileButton,
 } from "/Components/StyledComponents/talentPage-styledComponents";
-import Products from "/Components/products";
+import Products from "/Components/nfts";
 import {
   LoadingContainer,
   LoadMoreButton,
@@ -26,8 +26,6 @@ const api = axios.create({
 
 const { TabPane } = Tabs;
 function Profile() {
-  const router = useRouter();
-  const { profile } = router.query;
   const [talent, setTalent] = useState({
     talentAvatar: {
       url: "/images/talentCover.png",
@@ -36,14 +34,19 @@ function Profile() {
       url: "",
     },
     talentName: "",
+    assets: [],
   });
+  const router = useRouter();
+  const { profile } = router.query;
+
   useEffect(() => {
-    async function fetchingTalent() {
-      const data = await api.get(`/talents/${profile}`);
-      setTalent(await data.data);
-    }
-    fetchingTalent();
-  }, []);
+    (async function fetchingTalent() {
+      if (profile != undefined) {
+        const data = await api.get(`/talents/${profile}`);
+        setTalent(await data.data);
+      }
+    })();
+  }, [profile]);
   return (
     <>
       <MainWrapper>
@@ -82,7 +85,7 @@ function Profile() {
             ) : (
               <>
                 {" "}
-                {/* <Products data={talent.created_at} /> */}
+                <Products data={talent} />
                 {/* <LoadMoreButton block shape={"round"} size={"large"}>
                   {"Load More"}
                 </LoadMoreButton> */}
