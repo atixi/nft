@@ -51,7 +51,7 @@ function Profile() {
           (asset) => asset.sellOrders != null
         );
         setOnsales({
-          talent: { talentAvatar: { url: talent.talentAvatar.url } },
+          talent: { talentAvatar: { url: data.data.talentAvatar.url } },
           assets: sellOrders,
         });
       }
