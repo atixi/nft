@@ -315,7 +315,7 @@ function Header(props) {
             trigger={["hover"]}
           >
             <ConnectedButton className={`d-lg-block`}>
-              {walletBalance !== "" ? (
+              {walletBalance !== null ? (
                 <>
                   <BalanceLabel>{walletBalance + " Eth"}</BalanceLabel>
                   <Avatar

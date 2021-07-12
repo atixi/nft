@@ -12,20 +12,19 @@ export const fetchOne = async (tokenAddress, tokenId) => {
 export const fetch = async (target) => {
   return await request(target, {
     method: "GET",
-  })
-    .then((res) => res)
-    .catch(function (error) {
-      return "error";
-    });
+  });
+  // .then((res) => res)
+  // .catch(function (error) {
+  //   return "error";
+  // });
 };
 
 export const post = async (target, data) => {
-  return await request
-    .post(target, data)
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  return await request.post(target, data);
+  // .then(function (response) {
+  //   console.log(response);
+  // })
+  // .catch(function (error) {
+  //   console.log(error);
+  // });
 };
