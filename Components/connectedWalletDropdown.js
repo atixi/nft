@@ -169,7 +169,7 @@ function WalletInfoDropdown({ data }) {
             title={<ListTitle>{CONSTANTS.balance}</ListTitle>}
             description={
               <ListDescription>
-                {walletBalance !== ""
+                {walletBalance !== null
                   ? walletBalance + " ETH "
                   : metaBalance + " ETH"}
               </ListDescription>
@@ -200,7 +200,7 @@ function WalletInfoDropdown({ data }) {
             }
             description={
               <ListDescription>
-                {walletBalance !== ""
+                {walletBalance !== null
                   ? walletBalance + " WETH "
                   : metaBalance + " WETH"}
               </ListDescription>
@@ -212,7 +212,6 @@ function WalletInfoDropdown({ data }) {
       <Menu.Item key={"1"}>
         <Link
           href={{
-            // pathname: "/profile/index",
             pathname: `/profile/${
               metaToken[0] ? metaToken[0] : walletToken[0]
             }`,
@@ -227,15 +226,31 @@ function WalletInfoDropdown({ data }) {
         </Link>
       </Menu.Item>
       <Menu.Item key={"2"}>
-        <Link href={"#"}>
-          <a>{"Edit Profile"}</a>
+        <Link
+          href={{
+            pathname: `/create/erc721`,
+          }}
+        >
+          <a>{"Create Item"}</a>
         </Link>
       </Menu.Item>
-      {/* <Menu.Item key={"3"}>
-        <Link href={"#"}>
-          <a>{"Manage Funds"}</a>
+      <Menu.Item key={"3"}>
+        <Link
+          href={{
+            // pathname: "/profile/index",
+            pathname: `/account/${
+              metaToken[0] ? metaToken[0] : walletToken[0]
+            }`,
+            // query: {
+            //   address: seller.address,
+            //   talent: seller.talent,
+            //   avatar: seller.profile_img_url,
+            // },
+          }}
+        >
+          <a>{"My Account Setting"}</a>
         </Link>
-      </Menu.Item> */}
+      </Menu.Item>
       <Menu.Item key={"4"}>
         <MenuItem style={{ cursor: "pointer" }} onClick={disconnectWallet}>
           <label>{`Disconnect`}</label>

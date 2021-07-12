@@ -75,16 +75,16 @@ function Home() {
     }
   };
 
-  const loadExplores = async () => {
-    try {
-      const { data } = await OpenSeaAPI.getExplores();
-      const explores = data?.assets;
-      const exps = OpenSeaAPI.getExploresDetails(explores);
-      setExplores(exps);
-    } catch (e) {
-      HandleNotification("error", e.message, "Server Is Not Available");
-    }
-  };
+  // const loadExplores = async () => {
+  //   try {
+  //     const { data } = await OpenSeaAPI.getExplores();
+  //     const explores = data?.assets;
+  //     const exps = OpenSeaAPI.getExploresDetails(explores);
+  //     setExplores(exps);
+  //   } catch (e) {
+  //     HandleNotification("error", e.message, "Server Is Not Available");
+  //   }
+  // };
   return (
     <>
       <Head>

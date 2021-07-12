@@ -29,7 +29,7 @@ function Products(props) {
   return (
     <>
       <CardsContainer>
-        {products.length >0 &&
+        {products.length > 0 &&
           products.map((n, index) =>
             n.name != null ? (
               <ProductCardContainer key={index} className={"p-1"}>
@@ -62,7 +62,9 @@ function Products(props) {
                     </Dropdown>
                   </ProductCardHeader>
                   <div className={`col-md-12 p-1`}>
-                      <Link href={`/nft/${n?.assetContract?.address}?tokenId=${n?.tokenId}`}>
+                    <Link
+                      href={`/nft/${n?.assetContract?.address}?tokenId=${n?.tokenId}`}
+                    >
                       <a>
                         {" "}
                         <img
@@ -74,7 +76,9 @@ function Products(props) {
                     </Link>
                   </div>
                   <ProductDescription>
-                  <Link href={`/nft/${n?.assetContract?.address}?tokenId=${n?.tokenId}`}>
+                    <Link
+                      href={`/nft/${n?.assetContract?.address}?tokenId=${n?.tokenId}`}
+                    >
                       <a>
                         <CardTitle>{n?.name}</CardTitle>
                       </a>

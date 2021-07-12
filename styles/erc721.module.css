@@ -1,0 +1,141 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  -webkit-box-align: flex-start;
+  align-items: flex-start;
+  width: 90%;
+  margin: 0px auto;
+  padding: 10px 200px;
+}
+.subHeader {
+  font-weight: normal;
+}
+.fileTypes {
+  font-weight: normal;
+}
+.uploadForm {
+  display: flex;
+  flex-direction: column;
+}
+.nftFormContainer {
+  width: 90%;
+  margin: auto;
+  padding: 10px;
+}
+.uploadedFileContainer {
+  border-radius: 5px;
+  border: 3px dashed rgb(229, 232, 235);
+  margin-bottom: 20px;
+  cursor: pointer;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  max-width: 350px;
+  padding: 20px;
+  /* padding-bottom: 0px; */
+}
+.imageBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: -15px;
+}
+.changeUploadedImage {
+  margin-top: 5px;
+  font-weight: normal;
+  color: rgb(133, 133, 133);
+}
+.uploadedFileImage {
+  cursor: pointer;
+  width: 200px;
+  height: auto;
+}
+.uploadedFileButtonContainer {
+  /* background-color: red; */
+}
+.uploadedFileButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  width: 200px;
+  height: 200px;
+}
+.uploadIcon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 200px;
+  margin: auto;
+}
+.nftInputComponent {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  font-weight: normal;
+  margin-bottom: 40px;
+}
+.nftSubHeader {
+  font-size: large;
+}
+.nfgParagraph {
+  font-weight: normal;
+}
+.nftTooltip {
+  font-weight: normal;
+  margin: 0px 10px;
+}
+.nftInput {
+  font-weight: normal;
+  font-size: 20px;
+  height: 50px;
+  padding: 10px;
+}
+.collectionDropdown {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: inline-flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  border-radius: 5px;
+  -webkit-box-pack: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 20px;
+  /* background-color: rgb(32, 129, 226);
+  border: 1px solid rgb(32, 129, 226); */
+  color: rgb(255, 255, 255);
+}
+
+.createButton {
+  width: 162px;
+  max-width: 162px;
+  height: 40px;
+  display: inline-flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  border-radius: 5px;
+  -webkit-box-pack: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 20px;
+  background-color: rgb(32, 129, 226);
+  border: 1px solid rgb(32, 129, 226);
+  color: rgb(255, 255, 255);
+}

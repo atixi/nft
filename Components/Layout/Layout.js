@@ -21,6 +21,7 @@ import {
 import Web3 from "web3";
 import { OpenSeaPort, Network } from "opensea-js";
 import { seaportProvider } from "/Utils/openseaApi";
+import openseaApi from "Utils/openseaApi";
 
 // This example provider won't let you make transactions, only read-only calls:
 
@@ -49,6 +50,7 @@ const Layout = ({ children }) => {
     subscribeMetamaskProvider();
     handleHeader();
   });
+
   const handleHeader = () => {
     if (router.pathname !== "/wallet") {
       setDisplayHeader(true);
