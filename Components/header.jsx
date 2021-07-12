@@ -305,7 +305,7 @@ function Header(props) {
             overlay={
               <WalletInfoDropdown
                 data={
-                  walletToken != null
+                  walletToken != null && isWalletConnected == true
                     ? walletToken
                     : metaToken != null && metaToken
                 }
@@ -315,7 +315,7 @@ function Header(props) {
             trigger={["hover"]}
           >
             <ConnectedButton className={`d-lg-block`}>
-              {walletBalance !== null ? (
+              {walletBalance !== null && isWalletConnected == true ? (
                 <>
                   <BalanceLabel>{walletBalance + " Eth"}</BalanceLabel>
                   <Avatar
