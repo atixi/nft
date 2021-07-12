@@ -41,6 +41,9 @@ function Profile() {
   const [onSales, setOnsales] = useState({
     assets: [],
   });
+  const [owned, setOwned] = useState({
+    assets: [],
+  });
   const router = useRouter();
   const { profile } = router.query;
 
@@ -55,6 +58,13 @@ function Profile() {
         setOnsales({
           talent: { talentAvatar: { url: data.data.talentAvatar.url } },
           assets: sellOrders,
+        });
+        const owneds = await data.data.assets.filter(
+          (asset) => asset.owner.address === data.data.walletAddress
+        );
+        setOwned({
+          talent: { talentAvatar: { url: data.data.talentAvatar.url } },
+          assets: owneds,
         });
         setLoad(true);
       }
@@ -106,7 +116,7 @@ function Profile() {
 
           <TabPane tab="Owned" key="2">
             <>
-              <Products data={onSales} />
+              <Products data={owned} />
               <LoadMoreButton block shape={"round"} size={"large"}>
                 {"Load More"}
               </LoadMoreButton>{" "}
