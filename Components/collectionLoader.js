@@ -12,4 +12,5 @@ function CollectionLoader() {
     </>
   );
 }
+
 export default CollectionLoader;
