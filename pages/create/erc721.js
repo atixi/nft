@@ -163,8 +163,8 @@ const ERC721 = () => {
         <h1 className={styles.header}>Create new item</h1>
         <h4 className={styles.subHeader}>Image, Video, Audio, or 3D Model</h4>
         <p className={styles.fileTypes}>
-          File types supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG,
-          GLB, GLTF. Max size: 40 MB
+          {`File types supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG,
+          GLB, GLTF. Max size: 40 MB`}
         </p>
         <form className={styles.uploadForm} onSubmit={nftForm.handleSubmit}>
           <div className={styles.uploadedFileContainer}>
@@ -213,7 +213,9 @@ const ERC721 = () => {
           <div className={styles.nftInputComponent}>
             <h3 className={styles.nftSubHeader}>External Link</h3>
             <p className={styles.nfgParagraph}>
-              {"OpenSea will include a link to this URL on this item's detail page, so that users can click to learn more about it. You are welcome to link to your own webpage with more details."}
+              {
+                "OpenSea will include a link to this URL on this item's detail page, so that users can click to learn more about it. You are welcome to link to your own webpage with more details."
+              }
             </p>
             <input
               name="external_link"
@@ -227,7 +229,9 @@ const ERC721 = () => {
           <div className={styles.nftInputComponent}>
             <h3 className={styles.nftSubHeader}>Description</h3>
             <p className={styles.nfgParagraph}>
-              {"The description will be included on the item's detail page underneath its image. Markdown syntax is supported."}
+              {
+                "The description will be included on the item's detail page underneath its image. Markdown syntax is supported."
+              }
             </p>
             <input
               name="description"
@@ -241,7 +245,7 @@ const ERC721 = () => {
           <div className={styles.nftInputComponent}>
             <h3 className={styles.nftSubHeader}> Collection *</h3>
             <p className={styles.nfgParagraph}>
-              This is the collection where your item will appear. info
+              {`This is the collection where your item will appear`}
             </p>
             {collections && (
               <select
@@ -266,7 +270,7 @@ const ERC721 = () => {
           <div className={styles.nftInputComponent}>
             <h3 className={styles.nftSubHeader}> Categories *</h3>
             <p className={styles.nfgParagraph}>
-              This is the Category where your item will appear. info
+              {`This is the Category where your item will appear`}
             </p>
             {categories && (
               <select
