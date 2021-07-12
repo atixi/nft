@@ -194,9 +194,7 @@ const ERC721 = () => {
           <div className={styles.nftInputComponent}>
             <h3 className={styles.nftSubHeader}>External Link</h3>
             <p className={styles.nfgParagraph}>
-              OpenSea will include a link to this URL on this item's detail
-              page, so that users can click to learn more about it. You are
-              welcome to link to your own webpage with more details.
+              {"OpenSea will include a link to this URL on this item's detail page, so that users can click to learn more about it. You are welcome to link to your own webpage with more details."}
             </p>
             <input
               placeholder="https://yoursite.ion/item/123"
@@ -208,8 +206,7 @@ const ERC721 = () => {
           <div className={styles.nftInputComponent}>
             <h3 className={styles.nftSubHeader}>Description</h3>
             <p className={styles.nfgParagraph}>
-              The description will be included on the item's detail page
-              underneath its image. Markdown syntax is supported.
+              {"The description will be included on the item's detail page underneath its image. Markdown syntax is supported."}
             </p>
             <input
               placeholder="Provide a detailed description of your item"
