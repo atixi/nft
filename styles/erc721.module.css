@@ -139,3 +139,9 @@
   border: 1px solid rgb(32, 129, 226);
   color: rgb(255, 255, 255);
 }
+
+.nftFormErrors {
+  color: red;
+  font-weight: 400;
+  margin-bottom: 5px;
+}

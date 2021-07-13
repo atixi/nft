@@ -106,6 +106,8 @@ function WalletInfoDropdown({ data }) {
   const dispatchWalletConnected = useDispatch();
   const dispatchWalletToken = useDispatch();
   const dispatchWalletBalance = useDispatch();
+  const isWalletConnected = useSelector(getWalletConnected);
+  const isMetaConnected = useSelector(getMetaConnected);
   const metaBalance = useSelector(getMetaBalance);
   const walletBalance = useSelector(getWalletBalance);
   const metaToken = useSelector(getMetaToken);
@@ -169,7 +171,7 @@ function WalletInfoDropdown({ data }) {
             title={<ListTitle>{CONSTANTS.balance}</ListTitle>}
             description={
               <ListDescription>
-                {walletBalance !== null
+                {walletBalance !== null && isWalletConnected == true
                   ? walletBalance + " ETH "
                   : metaBalance + " ETH"}
               </ListDescription>
@@ -200,7 +202,7 @@ function WalletInfoDropdown({ data }) {
             }
             description={
               <ListDescription>
-                {walletBalance !== null
+                {walletBalance !== null && isWalletConnected == true
                   ? walletBalance + " WETH "
                   : metaBalance + " WETH"}
               </ListDescription>
