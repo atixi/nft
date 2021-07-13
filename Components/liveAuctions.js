@@ -20,6 +20,7 @@ import {
   ProductCardHeaderOwners,
 } from "./StyledComponents/liveAuctions-styledComponents";
 import { SectionHeading } from "./StyledComponents/globalStyledComponents";
+import { fetch } from "/Utils/strapiApi";
 
 const breakPoints = [
   { width: 1, itemsToShow: 1 },
@@ -33,6 +34,14 @@ const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;
 const { Countdown } = Statistic;
 function LiveAuctions({ data }) {
   const items = data;
+  const loadLiveAuction = async () =>
+  {
+    const nfts = await fetch("/nfts/auction"); 
+      console.log("live", nfts) 
+  }
+  useEffect(() => {
+    loadLiveAuction()
+  }, loadLiveAuction)
   return (
     <>
       <SectionHeading>{CONSTANTS.liveAuctions}</SectionHeading>
