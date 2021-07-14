@@ -24,6 +24,8 @@ const api = axios.create({
 });
 
 function CollectionDetails({ collection }) {
+  const [testData, setTestData] = useState({ id: 1, assets: [] });
+  const [loadMore, setLoadMore] = useState(0);
   const [isLoad, setLoad] = useState(false);
   const [onSales, setOnsales] = useState({
     assets: [],
@@ -45,7 +47,23 @@ function CollectionDetails({ collection }) {
       //loadCollections(slug);
     }
   };
-
+  async function LoadMoreAssets() {
+    const moreAssets = await api.get(
+      `/collections/${collection.slug}?offset=${loadMore}`
+    );
+    console.log("length of assets", moreAssets.data.assets.lenght);
+    console.log("comes from strapi", moreAssets.data.assets);
+    // setTestData({
+    //   id: 2,
+    //   assets: [...testData.assets, ...moreAssets.data.assets],
+    // });
+    setOnsales({
+      talent: { talentAvatar: { url: collection.talent.talentAvatar.url } },
+      assets: [...onSales.assets, ...moreAssets.data.assets],
+    });
+    console.log("appended", onSales);
+    setLoadMore(loadMore + 10);
+  }
   useEffect(() => {
     setCollect(collection);
     const sellOrders = collection.assets.filter(
@@ -55,6 +73,7 @@ function CollectionDetails({ collection }) {
       talent: { talentAvatar: { url: collection.talent.talentAvatar.url } },
       assets: sellOrders,
     });
+    console.log("onsales: =", onSales);
     setLoad(true);
   }, []);
 
@@ -96,16 +115,25 @@ function CollectionDetails({ collection }) {
         <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
           <TabPane tab="On Sale" key="1">
             <Products data={onSales} />
-            <LoadMoreButton block shape={"round"} size={"large"}>
-              {"Load More"}
+            <LoadMoreButton
+              block
+              shape={"round"}
+              size={"large"}
+              onClick={() => LoadMoreAssets()}
+            >
+              {`Load More ${loadMore}`}
             </LoadMoreButton>
           </TabPane>
           <TabPane tab="Owned" key="2">
             <>
-              {" "}
               <Products data={collect} />
-              <LoadMoreButton block shape={"round"} size={"large"}>
-                {"Load More"}
+              <LoadMoreButton
+                block
+                shape={"round"}
+                size={"large"}
+                onClick={() => setLoadMore(loadMore + 10)}
+              >
+                {`Load More ${loadMore}`}
               </LoadMoreButton>
             </>
           </TabPane>
