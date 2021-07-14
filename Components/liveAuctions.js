@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { PRODUCTS, getAuctionPriceDetails } from "/Constants/constants";
+import {getAuctionPriceDetails } from "/Constants/constants";
 import Carousel from "react-elastic-carousel";
 import { Menu, Dropdown, Avatar, Tooltip, Statistic } from "antd";
 import Link from "next/link";
@@ -32,8 +32,8 @@ const breakPoints = [
 const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;
 
 const { Countdown } = Statistic;
-function LiveAuctions({ data }) {
-  const items = data;
+function LiveAuctions() {
+
   const [auctions, setAuctions] = useState([]);
   const loadLiveAuction = async () =>
   {
@@ -46,7 +46,7 @@ function LiveAuctions({ data }) {
   }
   useEffect(() => {
     loadLiveAuction()
-  }, loadLiveAuction)
+  },[])
   return (
     auctions && <>
       <SectionHeading>{CONSTANTS.liveAuctions}</SectionHeading>

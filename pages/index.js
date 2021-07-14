@@ -8,7 +8,6 @@ import Slide from "/Components/slider/slide";
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 import TopSellers from "/Components/topSellers";
 import OpenSeaAPI from "/Utils/openseaApi";
-import { liveAuctionsAPI } from "/Constants/mockApi/liveAuctionApi";
 import axios from "axios";
 const api = axios.create({
   baseURL: process.env.HEROKU_BASE_URL,
@@ -30,7 +29,7 @@ function Home() {
     <MainWrapper>
       <Slide />
       <TopSellers data={topSellers} />
-      <LiveAuctions data={liveAuctionsAPI} />
+      <LiveAuctions/>
       <HotCollections />
       <Explore/>
     </MainWrapper>
