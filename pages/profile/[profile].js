@@ -47,10 +47,13 @@ function Profile() {
   const [loadMore, setLoadMore] = useState({
     onSalesOffset: 10,
     ownedOffset: 10,
+    createdOffset: 10,
     onSalesLoad: true,
     ownedLoad: true,
+    createdLoad: true,
     onsalesLoadMoreButtonLoading: false,
     ownedLoadMoreButtonLoading: false,
+    createdLoadMoreButtonLoading: false,
   });
   const router = useRouter();
   const { profile } = router.query;
@@ -75,6 +78,30 @@ function Profile() {
             ...loadMore,
             onSalesOffset: loadMore.onSalesOffset + 10,
             onsalesLoadMoreButtonLoading: false,
+          });
+        })();
+  }
+
+  async function LoadMoreCreated() {
+    setLoadMore({
+      ...loadMore,
+      createdLoadMoreButtonLoading: true,
+    });
+    const moreAssets = await api.get(
+      `/talents/${profile}?offset=${loadMore.createdOffset}`
+    );
+    const assetLength = await moreAssets.data.assets.length;
+    assetLength === 0
+      ? setLoadMore({ ...loadMore, createdLoad: false })
+      : (() => {
+          setTalent({
+            ...talent,
+            assets: [...talent.assets, ...moreAssets.data.assets],
+          });
+          setLoadMore({
+            ...loadMore,
+            createdOffset: loadMore.createdOffset + 10,
+            createdLoadMoreButtonLoading: false,
           });
         })();
   }
@@ -166,20 +193,25 @@ function Profile() {
               </LoadMoreButton>{" "}
             </>
           </TabPane>
+
           <TabPane tab="Created" key="3">
-            {false ? (
-              <LoadingContainer>
-                <Spin />
-              </LoadingContainer>
-            ) : (
-              <>
-                {" "}
-                <Products data={talent} />
-                {/* <LoadMoreButton block shape={"round"} size={"large"}>
-                  {"Load More"}
-                </LoadMoreButton> */}
-              </>
-            )}
+            <Products data={talent} />
+            {loadMore.createdLoad ? (
+              loadMore.createdLoadMoreButtonLoading ? (
+                <LoadMoreButton block shape={"round"} size={"large"}>
+                  <Spin></Spin>
+                </LoadMoreButton>
+              ) : (
+                <LoadMoreButton
+                  block
+                  shape={"round"}
+                  size={"large"}
+                  onClick={() => LoadMoreCreated()}
+                >
+                  Load More
+                </LoadMoreButton>
+              )
+            ) : null}
           </TabPane>
         </Tabs>
       </MainWrapper>
