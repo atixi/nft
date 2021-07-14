@@ -80,7 +80,8 @@ function ProductPage() {
           creator: nft?.creator,
           image: nft.imageUrl,
           contractAddress: nft?.assetContract?.address,
-          tokenId: nft.tokenId
+          tokenId: nft.tokenId,
+          collection: nft.collection
         });
       nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl))
       setBids(nft?.buyOrders);
@@ -126,7 +127,7 @@ function ProductPage() {
           <ItemInfo className={"float-none float-sm-left"}>
             <ItemDetails>
               <ItemDetailsHeader>
-                <ItemName>{asset.name}</ItemName>
+                <ItemName>{asset.name ? asset.name : asset.collection?.name}</ItemName>
                 <ItemTopButtonContainer>
                   <button
                     style={{

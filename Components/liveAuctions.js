@@ -133,7 +133,7 @@ function Product(product, index) {
         <Link
           href={`/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}`}  >
         <a>
-          <CardTitle>{product.asset?.name}</CardTitle>
+          <CardTitle>{product.asset?.name ? product.asset?.name : product.asset?.collection?.name}</CardTitle>
         </a>
         </Link>
         {/* <BidsStatus>{CONSTANTS.bidsStatus}</BidsStatus> */}
