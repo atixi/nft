@@ -432,13 +432,13 @@ function ProductPage() {
                     </BidPriceValue>
                   </BidPrice>
                 </BidOwnerContainer>}
-                {sellOrders[0] && sellOrders[0]?.expirationTime &&  (
+                {highestBid && highestBid?.expirationTime &&  (
                   <Auction>
                     <div className={"auctionDiv"}>
                       <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
                       <AuctionTimer>
                         <Countdown
-                          value={ unixToMilSeconds(sellOrders[0]?.expirationTime)}
+                          value={ unixToMilSeconds(highestBid?.expirationTime)}
                           format={`D[d] HH[h] mm[m] ss[s]`}
                         />
                       </AuctionTimer>
