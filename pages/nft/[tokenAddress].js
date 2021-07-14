@@ -66,7 +66,6 @@ function ProductPage() {
   const loadNft = async () => {
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
-      console.log(data)
       if(data)
       setLoading(false);
 

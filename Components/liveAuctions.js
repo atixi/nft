@@ -38,7 +38,6 @@ function LiveAuctions() {
   const loadLiveAuction = async () =>
   {
     const nfts = await fetch("/nfts/auction"); 
-      console.log("live", nfts)
     if(nfts.data)
     {
       setAuctions(nfts.data) 
@@ -80,7 +79,6 @@ function Product(product, index) {
       </Menu.Item>
     </Menu>
   );
-  console.log(product)
   return (
     <ProductCard key={index} className={`p-2 p-lg-1 mr-3`}>
       <ProductCardHeader className={`mt-3`}>
