@@ -161,13 +161,13 @@ function ProductPage() {
                 </ItemTopButtonContainer>
               </ItemDetailsHeader>
               <div>
-                <span className="text-gradient">
-                  {sellOrders &&  getAuctionPriceDetails(sellOrders[0]).priceBase}
-                  {sellOrders && sellOrders[0].paymentTokenContract &&
-                    sellOrders[0].paymentTokenContract.symbol}
+                <span className="text-gradient"> 
+                  {sellOrders && sellOrders.length>0 &&  getAuctionPriceDetails(sellOrders[0]).priceBase}
+                  {sellOrders && sellOrders.length>0 && sellOrders[0].paymentTokenContract &&
+                    sellOrders[0]?.paymentTokenContract.symbol}
                 </span>
                 <span style={{ color: "#ccc" }}>
-                  {" 1 of "}{sellOrders ?  sellOrders.length : 1}
+                  {sellOrders && sellOrders.length>0 && ` 1 of  ${sellOrders.length}`}
                 </span>
               </div>
               {/* <div>
@@ -204,7 +204,7 @@ function ProductPage() {
                       </span></DetailTabDiv>
                     <DetailTabDiv><span>{"Blockchain"}</span><span className="float-right">
                       {sellOrders &&
-                    sellOrders[0].paymentTokenContract.name}
+                    sellOrders[0]?.paymentTokenContract.name}
                       </span></DetailTabDiv>
                 </TabPane>
                 <TabPane key="2" tab={<span>{CONSTANTS.bids}</span>}>
