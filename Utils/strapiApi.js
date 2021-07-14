@@ -11,13 +11,14 @@ export const fetchOne = async (tokenAddress, tokenId) => {
 export const fetch = async (target) => {
   return await request(target, {
     method: "GET",
-  });
-  // .then((res) => res)
-  // .catch(function (error) {
-  //   return "error";
-  // });
-};
+  })
+  .then((res) => res)
+  .catch(function (error) {
+    return "error";
+  }); 
+};  
 
 export const post = async (url, data) => {
   return request.post(url, data);
 };
+      

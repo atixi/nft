@@ -79,7 +79,8 @@ function ProductPage() {
           creator: nft?.creator,
           image: nft.imageUrl,
           contractAddress: nft?.assetContract?.address,
-          tokenId: nft.tokenId
+          tokenId: nft.tokenId,
+          collection: nft.collection
         });
       nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl))
       setBids(nft?.buyOrders);
@@ -125,7 +126,7 @@ function ProductPage() {
           <ItemInfo className={"float-none float-sm-left"}>
             <ItemDetails>
               <ItemDetailsHeader>
-                <ItemName>{asset.name}</ItemName>
+                <ItemName>{asset.name ? asset.name : asset.collection?.name}</ItemName>
                 <ItemTopButtonContainer>
                   <button
                     style={{
@@ -159,13 +160,13 @@ function ProductPage() {
                 </ItemTopButtonContainer>
               </ItemDetailsHeader>
               <div>
-                <span className="text-gradient">
-                  {sellOrders &&  getAuctionPriceDetails(sellOrders[0]).priceBase}
-                  {sellOrders && sellOrders[0].paymentTokenContract &&
-                    sellOrders[0].paymentTokenContract.symbol}
+                <span className="text-gradient"> 
+                  {sellOrders && sellOrders.length>0 &&  getAuctionPriceDetails(sellOrders[0]).priceBase}
+                  {sellOrders && sellOrders.length>0 && sellOrders[0].paymentTokenContract &&
+                    sellOrders[0]?.paymentTokenContract.symbol}
                 </span>
                 <span style={{ color: "#ccc" }}>
-                  {" 1 of "}{sellOrders ?  sellOrders.length : 1}
+                  {sellOrders && sellOrders.length>0 && ` 1 of  ${sellOrders.length}`}
                 </span>
               </div>
               {/* <div>
@@ -202,7 +203,7 @@ function ProductPage() {
                       </span></DetailTabDiv>
                     <DetailTabDiv><span>{"Blockchain"}</span><span className="float-right">
                       {sellOrders &&
-                    sellOrders[0].paymentTokenContract.name}
+                    sellOrders[0]?.paymentTokenContract.name}
                       </span></DetailTabDiv>
                 </TabPane>
                 <TabPane key="2" tab={<span>{CONSTANTS.bids}</span>}>
@@ -377,8 +378,8 @@ function ProductPage() {
               </Tabs>
             </ItemDetails>
             <ItemFooter>
-              {highestBid &&<BidCountdown>
-                <BidOwnerContainer className={"border-right pr-2 pl-2"}>
+              {sellOrders &&<BidCountdown>
+                {highestBid && <BidOwnerContainer className={"border-right pr-2 pl-2"}>
                   <BidOwner className={"float-left"}>
                     {CONSTANTS.highestBid}{" "}
                     <Link
@@ -429,14 +430,14 @@ function ProductPage() {
                       </PriceInDollarContainer>
                     </BidPriceValue>
                   </BidPrice>
-                </BidOwnerContainer>
-                {highestBid?.expirationTime &&  (
+                </BidOwnerContainer>}
+                {highestBid && highestBid?.expirationTime &&  (
                   <Auction>
                     <div className={"auctionDiv"}>
                       <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
                       <AuctionTimer>
                         <Countdown
-                          value={unixToMilSeconds(highestBid?.expirationTime)}
+                          value={ unixToMilSeconds(highestBid?.expirationTime)}
                           format={`D[d] HH[h] mm[m] ss[s]`}
                         />
                       </AuctionTimer>
