@@ -166,21 +166,23 @@ function Profile() {
           <TabPane tab="On Sale" key="1">
             <>
               <Products data={onSales} />
-              {loadMore.onSalesLoad ? (
-                loadMore.onsalesLoadMoreButtonLoading ? (
-                  <LoadMoreButton block shape={"round"} size={"large"}>
-                    <Spin></Spin>
-                  </LoadMoreButton>
-                ) : (
-                  <LoadMoreButton
-                    block
-                    shape={"round"}
-                    size={"large"}
-                    onClick={() => LoadMoreOnsales()}
-                  >
-                    Load More
-                  </LoadMoreButton>
-                )
+              {isLoad ? (
+                loadMore.onSalesLoad ? (
+                  loadMore.onsalesLoadMoreButtonLoading ? (
+                    <LoadMoreButton block shape={"round"} size={"large"}>
+                      <Spin></Spin>
+                    </LoadMoreButton>
+                  ) : (
+                    <LoadMoreButton
+                      block
+                      shape={"round"}
+                      size={"large"}
+                      onClick={() => LoadMoreOnsales()}
+                    >
+                      Load More
+                    </LoadMoreButton>
+                  )
+                ) : null
               ) : null}
             </>
           </TabPane>
@@ -196,21 +198,23 @@ function Profile() {
 
           <TabPane tab="Created" key="3">
             <Products data={talent} />
-            {loadMore.createdLoad ? (
-              loadMore.createdLoadMoreButtonLoading ? (
-                <LoadMoreButton block shape={"round"} size={"large"}>
-                  <Spin></Spin>
-                </LoadMoreButton>
-              ) : (
-                <LoadMoreButton
-                  block
-                  shape={"round"}
-                  size={"large"}
-                  onClick={() => LoadMoreCreated()}
-                >
-                  Load More
-                </LoadMoreButton>
-              )
+            {isLoad ? (
+              loadMore.createdLoad ? (
+                loadMore.createdLoadMoreButtonLoading ? (
+                  <LoadMoreButton block shape={"round"} size={"large"}>
+                    <Spin></Spin>
+                  </LoadMoreButton>
+                ) : (
+                  <LoadMoreButton
+                    block
+                    shape={"round"}
+                    size={"large"}
+                    onClick={() => LoadMoreCreated()}
+                  >
+                    Load More
+                  </LoadMoreButton>
+                )
+              ) : null
             ) : null}
           </TabPane>
         </Tabs>
