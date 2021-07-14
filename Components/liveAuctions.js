@@ -21,7 +21,7 @@ import {
 } from "./StyledComponents/liveAuctions-styledComponents";
 import { SectionHeading } from "./StyledComponents/globalStyledComponents";
 import { fetch } from "/Utils/strapiApi";
-
+import {unixToMilSeconds, checkName} from "/Utils/utils"
 const breakPoints = [
   { width: 1, itemsToShow: 1 },
   { width: 550, itemsToShow: 2, itemsToScroll: 2 },
@@ -34,23 +34,28 @@ const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;
 const { Countdown } = Statistic;
 function LiveAuctions({ data }) {
   const items = data;
+  const [auctions, setAuctions] = useState([]);
   const loadLiveAuction = async () =>
   {
     const nfts = await fetch("/nfts/auction"); 
-      console.log("live", nfts) 
+      console.log("live", nfts)
+    if(nfts.data)
+    {
+      setAuctions(nfts.data) 
+    }
   }
   useEffect(() => {
     loadLiveAuction()
   }, loadLiveAuction)
   return (
-    <>
+    auctions && <>
       <SectionHeading>{CONSTANTS.liveAuctions}</SectionHeading>
       <Carousel
         breakPoints={breakPoints}
         pagination={false}
         transitionMs={1000}
       >
-        {items && items.map((product, index) => Product(product, index))}
+        {auctions && auctions.map((product, index) => product.expirationTime && product.expirationTime !==  "0" && Product(product, index))}
       </Carousel>
     </>
   );
@@ -75,12 +80,13 @@ function Product(product, index) {
       </Menu.Item>
     </Menu>
   );
+  console.log(product)
   return (
     <ProductCard key={index} className={`p-2 p-lg-1 mr-3`}>
       <ProductCardHeader className={`mt-3`}>
         <ProductCardHeaderOwners>
           <Avatar.Group>
-            <Tooltip title={"Owner"} placement="top">
+            <Tooltip title={`Owner: ${checkName(product?.asset.owner?.user?.username)}`} placement="top">
               <Avatar
                 key={product.asset?.owner.address}
                 icon={
@@ -88,7 +94,7 @@ function Product(product, index) {
                 }
               />
             </Tooltip>
-            <Tooltip title={"Maker"} placement="top">
+            <Tooltip title={`Maker: ${checkName(product?.makerAccount.user?.username)}`} placement="top">
               <Avatar
                 key={product?.makerAccount.address}
                 icon={
@@ -120,7 +126,7 @@ function Product(product, index) {
       <ProductDescription>
         <CountDownContainer>
           <CountDown>
-            <Countdown value={deadline} format={`D[d] HH[h] mm[m] ss[s]`} />
+            <Countdown value={product?.expirationTime >0  && unixToMilSeconds(product?.expirationTime)} format={`D[d] HH[h] mm[m] ss[s]`} />
             {" left"} 🔥
           </CountDown>
         </CountDownContainer>

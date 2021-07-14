@@ -66,6 +66,7 @@ function ProductPage() {
   const loadNft = async () => {
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
+      console.log(data)
       if(data)
       setLoading(false);
 
@@ -377,8 +378,8 @@ function ProductPage() {
               </Tabs>
             </ItemDetails>
             <ItemFooter>
-              {highestBid &&<BidCountdown>
-                <BidOwnerContainer className={"border-right pr-2 pl-2"}>
+              {sellOrders &&<BidCountdown>
+                {highestBid && <BidOwnerContainer className={"border-right pr-2 pl-2"}>
                   <BidOwner className={"float-left"}>
                     {CONSTANTS.highestBid}{" "}
                     <Link
@@ -429,14 +430,14 @@ function ProductPage() {
                       </PriceInDollarContainer>
                     </BidPriceValue>
                   </BidPrice>
-                </BidOwnerContainer>
-                {highestBid?.expirationTime &&  (
+                </BidOwnerContainer>}
+                {sellOrders[0] && sellOrders[0]?.expirationTime &&  (
                   <Auction>
                     <div className={"auctionDiv"}>
                       <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
                       <AuctionTimer>
                         <Countdown
-                          value={unixToMilSeconds(highestBid?.expirationTime)}
+                          value={ unixToMilSeconds(sellOrders[0]?.expirationTime)}
                           format={`D[d] HH[h] mm[m] ss[s]`}
                         />
                       </AuctionTimer>
