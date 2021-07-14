@@ -44,9 +44,40 @@ function Profile() {
   const [owned, setOwned] = useState({
     assets: [],
   });
+  const [loadMore, setLoadMore] = useState({
+    onSalesOffset: 10,
+    ownedOffset: 10,
+    onSalesLoad: true,
+    ownedLoad: true,
+    onsalesLoadMoreButtonLoading: false,
+    ownedLoadMoreButtonLoading: false,
+  });
   const router = useRouter();
   const { profile } = router.query;
 
+  async function LoadMoreOnsales() {
+    setLoadMore({
+      ...loadMore,
+      onsalesLoadMoreButtonLoading: true,
+    });
+    const moreAssets = await api.get(
+      `/talents/${profile}?offset=${loadMore.onSalesOffset}`
+    );
+    const assetLength = await moreAssets.data.assets.length;
+    assetLength === 0
+      ? setLoadMore({ ...loadMore, onSalesLoad: false })
+      : (() => {
+          setOnsales({
+            ...onSales,
+            assets: [...onSales.assets, ...moreAssets.data.assets],
+          });
+          setLoadMore({
+            ...loadMore,
+            onSalesOffset: loadMore.onSalesOffset + 10,
+            onsalesLoadMoreButtonLoading: false,
+          });
+        })();
+  }
   useEffect(() => {
     (async function fetchingTalent() {
       if (profile != undefined) {
@@ -108,9 +139,22 @@ function Profile() {
           <TabPane tab="On Sale" key="1">
             <>
               <Products data={onSales} />
-              <LoadMoreButton block shape={"round"} size={"large"}>
-                {"Load More"}
-              </LoadMoreButton>{" "}
+              {loadMore.onSalesLoad ? (
+                loadMore.onsalesLoadMoreButtonLoading ? (
+                  <LoadMoreButton block shape={"round"} size={"large"}>
+                    <Spin></Spin>
+                  </LoadMoreButton>
+                ) : (
+                  <LoadMoreButton
+                    block
+                    shape={"round"}
+                    size={"large"}
+                    onClick={() => LoadMoreOnsales()}
+                  >
+                    Load More
+                  </LoadMoreButton>
+                )
+              ) : null}
             </>
           </TabPane>
 
