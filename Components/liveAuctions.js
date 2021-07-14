@@ -138,7 +138,7 @@ function Product(product, index) {
         </Link>
         {/* <BidsStatus>{CONSTANTS.bidsStatus}</BidsStatus> */}
         <ProductDescriptionBottom>
-          <ProductPrice>{price + " eth"}</ProductPrice>
+          <ProductPrice>{`${price} ${product.paymentTokenContract.symbol}`}</ProductPrice>
           {/* <ProductList>
             {" " + "1" + " of " + "2"}
           </ProductList> */}
