@@ -18,6 +18,7 @@ import {
   CountDown,
   ProductCardHeaderButton,
   ProductCardHeaderOwners,
+  CardImage
 } from "./StyledComponents/liveAuctions-styledComponents";
 import { SectionHeading } from "./StyledComponents/globalStyledComponents";
 import { fetch } from "/Utils/strapiApi";
@@ -108,19 +109,19 @@ function Product(product, index) {
           </Dropdown>
         </ProductCardHeaderButton>
       </ProductCardHeader>
-      <div className={`col-md-12 p-3`}>
+      <CardImage className={`p-3`}>
         <Link
           href={`/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}`}  >
           <a>
             {" "}
             <img
               src={product.asset?.imageUrl}
-              style={{ height: "250px", width: "auto" }}
-              className="w-100 rounded"
+              style={{ width: "auto" }}
+              className="rounded"
             />
           </a>
         </Link>
-      </div>
+      </CardImage>
       <ProductDescription>
         <CountDownContainer>
           <CountDown>
