@@ -116,7 +116,6 @@ function Product(product, index) {
             {" "}
             <img
               src={product.asset?.imageUrl}
-              style={{ width: "auto" }}
               className="rounded"
             />
           </a>

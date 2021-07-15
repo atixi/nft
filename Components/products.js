@@ -69,9 +69,8 @@ function Products(props) {
                       <a>
                         {" "}
                         <Image
-                          style={{ height: "auto", borderRadius: "5px" }}
                           src={n.imageUrl}
-                          className="img-fluid"
+                          className="rounded"
                           preview={false}
                         />
                       </a>
