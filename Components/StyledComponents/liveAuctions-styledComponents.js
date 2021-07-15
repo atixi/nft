@@ -69,6 +69,12 @@ min-height: 400px !important
 // margin-right: 15px;
 padding: 5px;
 `;
+export const CardImage = styled.div`
+display: flex !important;
+align-items: center !important;
+justify-content: center !important;
+height: 250px !important;
+`;
 export const ProductCardHeaderOwners = styled.div`
     flex: 1;
     float: left;
