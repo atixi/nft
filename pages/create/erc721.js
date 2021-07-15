@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styles from "/styles/erc721.module.css";
-import qs from "qs";
 import axios from "axios";
-import { Menu, Dropdown, Button, Input, Tooltip, Select } from "antd";
+import { Input, Tooltip, Select, Progress, Button } from "antd";
 import { fetch, post } from "/Utils/strapiApi";
-import { useFormik } from "formik";
+import { useFormik, File } from "formik";
 import * as Yup from "yup";
 import { localCols, localCategories } from "/Constants/constants";
+import ReactPlayer from "react-player";
 
 const pinataApiKey = "de68bc3ddb8bf7a53749";
 const pinataSecretApiKey =
@@ -14,17 +14,14 @@ const pinataSecretApiKey =
 const pinataJwt =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI1YzEwN2JkMC1kMjA5LTRlOGYtYWM2MS0zYzliZjM1ZjFjODQiLCJlbWFpbCI6Im1wYXJzYUBnYXRld2F5aWN0cy5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJpZCI6Ik5ZQzEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlfSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiZGU2OGJjM2RkYjhiZjdhNTM3NDkiLCJzY29wZWRLZXlTZWNyZXQiOiI0N2VhMTAxYTgwNzE1ZTAyMzY4OGFmNzU5ZDI3Zjg0ZDhiNWVjYTQzYjk0NjEyY2I5MDU3MzVlYjM5OGZlZDU1IiwiaWF0IjoxNjI2MDkxNDM5fQ.dQcFRAwxieC16TSZMJElj6_4kskljJpR_WdkqppFWQw";
 
-const { option } = Select;
-
 const ERC721 = () => {
   const [collections, setCollections] = useState(localCols);
+  const [isFileValid, setIsFileValid] = useState(true);
   const [categories, setCategories] = useState(localCategories);
-  const [selectedCollection, setSelectedCollection] = useState(null);
-  const [selectedCategories, setSelectedCategories] = useState(null);
   const [uploadFileUrl, setUploadFileUrl] = useState(null);
   const [file, setFile] = useState(null);
-  // const [isValid, setIsValid] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [uploadPrecentage, setUploadPrecentage] = useState(0);
 
   const nftForm = useFormik({
     initialValues: {
@@ -32,22 +29,26 @@ const ERC721 = () => {
       tokenAddress: "",
       name: "",
       collections: 1,
-      categories: 1,
+      categories: [],
       talent: "",
       description: "",
       external_link: "",
+      file: "",
     },
     validationSchema: Yup.object({
       tokenId: Yup.string(),
       tokenAddress: Yup.string(),
-      name: Yup.string().required(),
-      // collections: Yup.number(),
+      name: Yup.string().required().label("Name"),
+      collections: Yup.number().required(),
+      categories: Yup.array().required(),
       talent: Yup.string(),
       description: Yup.string(),
-      external_link: Yup.string(),
+      external_link: Yup.string().url().label("Website"),
+      file: Yup.mixed().required(),
     }),
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: (values) => {
       console.log("subimting");
+      alert(JSON.stringify(values));
       saveNft(values);
     },
   });
@@ -62,6 +63,13 @@ const ERC721 = () => {
 
     const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
     const pinataResult = await axios.post(url, pinataData, {
+      onUploadProgress: function (progressEvent) {
+        const precentage = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        setUploadPrecentage(precentage);
+        console.log("completed: ", uploadPrecentage);
+      },
       maxContentLength: "Infinity",
       headers: {
         "Content-Type": `multipart/form-data; boundary=${pinataData._boundary}`,
@@ -91,25 +99,31 @@ const ERC721 = () => {
           description: values.description,
           name: values.name,
           description: values.description,
-          image: image_url,
-          preview_image_url: preview_image_url,
+          // image: image_url,
+          // preview_image_url: preview_image_url,
         },
       };
 
       console.log("nft data is ", nftData);
+      const formData = new FormData();
+      formData.append("files.previewImage", file);
+      formData.append("data", JSON.stringify(nftData));
       const nftResponse = await post(
         `https://rim-entertainment.herokuapp.com/nfts`,
-        nftData,
+        formData,
         {
+          onUploadProgress: (progressEvent) =>
+            console.log("progress from strapi", progressEvent),
           headers: {
-            "Content-Type": "application/json",
+            // "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         }
       );
       console.log("nftResponse is ", nftResponse);
       setLoading(false);
       nftForm.resetForm();
-      // setIsValid(true);
+      setIsValid(true);
     }
   };
   const hiddenFileInput = React.useRef(null);
@@ -121,18 +135,9 @@ const ERC721 = () => {
 
   const openFileUpload = (event) => {
     event.preventDefault();
-    console.log("file upload click");
     hiddenFileInput.current.click();
   };
 
-  const handleCategoriesChange = (value) => {
-    const cats = categories.filter((item) => item.id == value)[0];
-    setSelectedCategories(cats);
-  };
-  const handleCollectionChange = (value) => {
-    const col = collections.filter((item) => item.slug == value)[0];
-    setSelectedCollection(col);
-  };
   // const loadCollections = async () => {
   //   const result = await fetch("collections");
   //   const data = await result.data;
@@ -141,22 +146,42 @@ const ERC721 = () => {
   //     setCollections(data);
   //   }
   // };
-  const loadCategories = async () => {
-    const categoriesData = await fetch("/categories");
-    const cats = await categoriesData.data;
-    console.log("categories", cats);
-    setCategories(cats);
-  };
+  // const loadCategories = async () => {
+  //   const categoriesData = await fetch("/categories");
+  //   const cats = await categoriesData.data;
+  //   console.log("categories", cats);
+  //   setCategories(cats);
+  // };
   const handleFileUpload = (event) => {
     event.preventDefault();
-    console.log("hadnel file uplodafsdlkjasl");
     var file = event.target.files[0];
+    console.log("file.size / 1024 / 1024) ", file.size / 1024 / 1024);
     if (file) {
-      // setIsValid(true);
-      setFile(file);
-      setUploadFileUrl(URL.createObjectURL(event.target.files[0]));
+      if (file.size / 1024 / 1024 < 40) {
+        setIsFileValid(true);
+        setFile(file);
+        setUploadFileUrl(URL.createObjectURL(event.target.files[0]));
+        nftForm.setFieldValue("file", file);
+      } else {
+        setIsFileValid(false);
+        setUploadFileUrl(null);
+      }
     }
   };
+
+  function checkFileType(files) {
+    let valid = true;
+    if (files) {
+      (files) => {
+        if (
+          !["application/pdf", "image/jpeg", "image/png"].includes(file.type)
+        ) {
+          valid = false;
+        }
+      };
+    }
+    return valid;
+  }
   return (
     <div className={styles.container}>
       <div className={styles.nftFormContainer}>
@@ -170,12 +195,30 @@ const ERC721 = () => {
           <div className={styles.uploadedFileContainer}>
             {uploadFileUrl ? (
               <div className={styles.imageBox}>
-                <img
-                  src={uploadFileUrl}
-                  className={"img-fluid"}
+                {file.type.toString().includes("image") ? (
+                  <img
+                    src={uploadFileUrl}
+                    className={"img-fluid"}
+                    onClick={openFileUpload}
+                  />
+                ) : (
+                  <div className={styles.videoBox}>
+                    <ReactPlayer
+                      width={"100%"}
+                      height={"100%"}
+                      url={uploadFileUrl}
+                      controls
+                      playing={false}
+                    />
+                  </div>
+                )}
+                <label
+                  className={styles.changeUploadedImage}
+                  style={{ cursor: "pointer" }}
                   onClick={openFileUpload}
-                />
-                <label className={styles.changeUploadedImage}>Change</label>
+                >
+                  Change
+                </label>
               </div>
             ) : (
               <div className={styles.uploadedFileButtonContainer}>
@@ -187,7 +230,14 @@ const ERC721 = () => {
                 </div>
               </div>
             )}
+            {nftForm.touched.file && nftForm.errors.file ? (
+              <div className={styles.nftFormErrors}>{nftForm.errors.file}</div>
+            ) : null}
+            {!isFileValid && (
+              <div className={styles.nftFormErrors}>{"file is big"}</div>
+            )}
             <input
+              accept="*"
               name="file"
               id="file"
               type="file"
@@ -195,6 +245,8 @@ const ERC721 = () => {
               ref={hiddenFileInput}
               style={{ display: "none" }}
             />
+
+            <Progress percent={uploadPrecentage} />
           </div>
           <div className={styles.nftInputComponent}>
             <h3 className={styles.nftSubHeader}>Name *</h3>
@@ -217,6 +269,11 @@ const ERC721 = () => {
                 "OpenSea will include a link to this URL on this item's detail page, so that users can click to learn more about it. You are welcome to link to your own webpage with more details."
               }
             </p>
+            {nftForm.touched.external_link && nftForm.errors.external_link ? (
+              <div className={styles.nftFormErrors}>
+                {nftForm.errors.external_link}
+              </div>
+            ) : null}
             <input
               name="external_link"
               id="external_link"
@@ -233,13 +290,14 @@ const ERC721 = () => {
                 "The description will be included on the item's detail page underneath its image. Markdown syntax is supported."
               }
             </p>
-            <input
+            <Input.TextArea
               name="description"
               id="description"
               placeholder="Provide a detailed description of your item"
               className={styles.nftInput}
               value={nftForm.values.description}
               onChange={nftForm.handleChange}
+              rows={4}
             />
           </div>
           <div className={styles.nftInputComponent}>
@@ -248,23 +306,22 @@ const ERC721 = () => {
               {`This is the collection where your item will appear`}
             </p>
             {collections && (
-              <select
-                style={{ width: `100%`, height: `40px` }}
-                name="collections"
-                id="collections"
-                value={nftForm.values.collections}
-                onChange={nftForm.handleChange}
+              <Select
+                style={{ width: "100%" }}
+                placeholder="Please select"
+                defaultValue={collections[0].id}
+                onChange={(value) => (nftForm.categories = value)}
               >
                 {collections.map((item) => (
-                  <option
+                  <Select.Option
                     value={item.id}
                     key={item.id}
                     style={{ height: 50, padding: 10 }}
                   >
                     {item.collectionName}
-                  </option>
+                  </Select.Option>
                 ))}
-              </select>
+              </Select>
             )}
           </div>
           <div className={styles.nftInputComponent}>
@@ -272,28 +329,38 @@ const ERC721 = () => {
             <p className={styles.nfgParagraph}>
               {`This is the Category where your item will appear`}
             </p>
-            {categories && (
-              <select
-                style={{ width: `100%`, height: `40px` }}
-                name="categories"
+            {nftForm.touched.categories && nftForm.errors.categories ? (
+              <div className={styles.nftFormErrors}>
+                {nftForm.errors.categories}
+              </div>
+            ) : null}
+            {
+              <Select
                 id="categories"
-                value={nftForm.values.categories}
-                onChange={nftForm.handleChange}
+                name="categories"
+                mode="multiple"
+                style={{ width: "100%" }}
+                placeholder="Please select"
+                // value={nftForm.values.categories}
+                defaultValue={categories[0].id}
+                onChange={(value) => (nftForm.values.categories = value)}
               >
                 {categories.map((item) => (
-                  <option
+                  <Select.Option
                     value={item.id}
                     key={item.id}
                     style={{ height: 50, padding: 10 }}
                   >
                     {item.categoryName}
-                  </option>
+                  </Select.Option>
                 ))}
-              </select>
-            )}
+              </Select>
+            }
           </div>
-          <button
-            disabled={!nftForm.isValid || isLoading == true}
+          <Button
+            onClick={nftForm.submitForm}
+            // loading={isLoading}
+            // disabled={!nftForm.isValid || isLoading == true || !isFileValid}
             type="submit"
             className={styles.createButton}
             style={
@@ -307,7 +374,7 @@ const ERC721 = () => {
             }
           >
             Create
-          </button>
+          </Button>
         </form>
       </div>
     </div>
