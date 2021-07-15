@@ -24,10 +24,6 @@ const api = axios.create({
 });
 
 function CollectionDetails({ collection }) {
-  const [isLoad, setLoad] = useState(false);
-  const [onSales, setOnsales] = useState({
-    assets: [],
-  });
   const [collect, setCollect] = useState({
     collectionName: "",
     collectionImageURL: {
@@ -38,6 +34,21 @@ function CollectionDetails({ collection }) {
     },
     assets: [],
   });
+  const [loadMore, setLoadMore] = useState({
+    onSales: 10,
+    owned: 10,
+  });
+  const [isLoad, setLoad] = useState(false);
+  const [loadMoreButton, setLoadMoreButton] = useState({
+    onSalesLoad: true,
+    ownedLoad: true,
+    onsalesLoadMoreButtonLoading: false,
+    ownedLoadMoreButtonLoading: false,
+  });
+  const [onSales, setOnsales] = useState({
+    assets: [],
+  });
+
   const loadTabData = async (e) => {
     if (e === "1") {
       //loadAssets(slug);
@@ -45,7 +56,57 @@ function CollectionDetails({ collection }) {
       //loadCollections(slug);
     }
   };
-
+  async function LoadMoreOnsales() {
+    setLoadMoreButton({
+      ...loadMoreButton,
+      onsalesLoadMoreButtonLoading: true,
+    });
+    const moreAssets = await api.get(
+      `/collections/${collection.slug}?offset=${loadMore.onSales}`
+    );
+    const assetLength = await moreAssets.data.assets.length;
+    assetLength === 0
+      ? setLoadMoreButton({ ...loadMoreButton, onSalesLoad: false })
+      : (() => {
+          setOnsales({
+            talent: {
+              talentAvatar: { url: collection.talent.talentAvatar.url },
+            },
+            assets: [...onSales.assets, ...moreAssets.data.assets],
+          });
+          setLoadMore({
+            ...loadMore,
+            onSales: loadMore.onSales + 10,
+          });
+          setLoadMoreButton({
+            ...loadMoreButton,
+            onsalesLoadMoreButtonLoading: false,
+          });
+        })();
+  }
+  async function LoadMoreOwned() {
+    setLoadMoreButton({ ...loadMoreButton, ownedLoadMoreButtonLoading: true });
+    const moreAssets = await api.get(
+      `/collections/${collection.slug}?offset=${loadMore.owned}`
+    );
+    const assetLength = await moreAssets.data.assets.length;
+    assetLength === 0
+      ? setLoadMoreButton({ ...loadMoreButton, ownedLoad: false })
+      : (() => {
+          setCollect({
+            ...collect,
+            assets: [...collect.assets, ...moreAssets.data.assets],
+          });
+          setLoadMore({
+            ...loadMore,
+            owned: loadMore.owned + 10,
+          });
+          setLoadMoreButton({
+            ...loadMoreButton,
+            ownedLoadMoreButtonLoading: false,
+          });
+        })();
+  }
   useEffect(() => {
     setCollect(collection);
     const sellOrders = collection.assets.filter(
@@ -55,6 +116,7 @@ function CollectionDetails({ collection }) {
       talent: { talentAvatar: { url: collection.talent.talentAvatar.url } },
       assets: sellOrders,
     });
+    console.log("onsales: =", onSales);
     setLoad(true);
   }, []);
 
@@ -96,18 +158,41 @@ function CollectionDetails({ collection }) {
         <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
           <TabPane tab="On Sale" key="1">
             <Products data={onSales} />
-            <LoadMoreButton block shape={"round"} size={"large"}>
-              {"Load More"}
-            </LoadMoreButton>
+            {loadMoreButton.onSalesLoad ? (
+              loadMoreButton.onsalesLoadMoreButtonLoading ? (
+                <LoadMoreButton block shape={"round"} size={"large"}>
+                  <Spin></Spin>
+                </LoadMoreButton>
+              ) : (
+                <LoadMoreButton
+                  block
+                  shape={"round"}
+                  size={"large"}
+                  onClick={() => LoadMoreOnsales()}
+                >
+                  Load More
+                </LoadMoreButton>
+              )
+            ) : null}
           </TabPane>
           <TabPane tab="Owned" key="2">
-            <>
-              {" "}
-              <Products data={collect} />
-              <LoadMoreButton block shape={"round"} size={"large"}>
-                {"Load More"}
-              </LoadMoreButton>
-            </>
+            <Products data={collect} />
+            {loadMoreButton.ownedLoad ? (
+              loadMoreButton.ownedLoadMoreButtonLoading ? (
+                <LoadMoreButton block shape={"round"} size={"large"}>
+                  <Spin></Spin>
+                </LoadMoreButton>
+              ) : (
+                <LoadMoreButton
+                  block
+                  shape={"round"}
+                  size={"large"}
+                  onClick={() => LoadMoreOwned()}
+                >
+                  Load More
+                </LoadMoreButton>
+              )
+            ) : null}
           </TabPane>
         </Tabs>
       </MainWrapper>
