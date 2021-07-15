@@ -437,6 +437,24 @@ export const BidOwnerProfile = styled.div`
         display: none;
     };
 `;
+export const SaleEnd = styled.div`
+    width: 100%;
+    height: 30px;
+   
+    display: flex;
+    align-items: center !important;
+    padding-left: 10px;
+    // justify-content: center;
+
+    margin: 0px 5px;
+    line-height: 12px;
+    font-weight: 600;
+
+    border-top: 1px solid rgba(4, 4, 5, 0.1);
+    background-color: #fff;
+    font-size: 0.98rem !important;
+    height: 40px;
+`
 export const DetailTabDiv = styled.div`
     color: #818182 !important;
     padding: 0px 5px;
