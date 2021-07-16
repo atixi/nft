@@ -3,9 +3,13 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import { differenceInSeconds, intervalToDuration, secondsToMilliseconds } from 'date-fns';
 import fromUnix from "date-fns/fromUnixTime";
 
-export function unixToHumanDate(date)
+export function unixToHumanDate(date, saleEndDate)
 {
-  return moment.unix(date).format("DD-MM-YYYY HH:m:s");
+  if(saleEndDate)
+  {
+  return moment.unix(date).format("LLLL");
+  }
+  return moment.unix(date).format("DD-MM-YYYY HH:m:s A");
 }
 export function unixToMilSeconds(date)
 {

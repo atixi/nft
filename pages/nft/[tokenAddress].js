@@ -31,6 +31,7 @@ import {
   PriceInDollarContainer,
   Wrapper,
   DetailTabDiv,
+  SaleEnd
 } from "../../Components/StyledComponents/productDetails-styledComponents";
 import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
@@ -38,6 +39,8 @@ import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne } from "/Utils/strapiApi";
 import { unixToHumanDate, displayAddress, unixToMilSeconds, checkName, prevImage, findHighestBid, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
+import{FieldTimeOutlined} from "@ant-design/icons"
+
 const { Countdown } = Statistic;
 const menu = (
   <DropdownMenu className={"mt-3"}>
@@ -175,6 +178,9 @@ function ProductPage() {
               <ItemDescriptionText>
                 {asset?.description}
               </ItemDescriptionText>
+              {sellOrders && sellOrders.length>0 && sellOrders[0].expirationTime !== "0" && <SaleEnd>
+              <FieldTimeOutlined style={{marginRight: "5px"}} />{`Sale ends on ${unixToHumanDate(sellOrders[0].expirationTime, true)}`}
+                </SaleEnd>}
               <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
               <br />
               <Link
