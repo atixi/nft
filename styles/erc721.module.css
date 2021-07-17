@@ -124,6 +124,12 @@
   color: rgb(255, 255, 255);
 }
 
+.createButtonContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
 .createButton {
   width: 162px;
   max-width: 162px;
@@ -144,6 +150,7 @@
 }
 
 .nftFormErrors {
+  margin-top: 15px;
   color: red;
   font-weight: 400;
   margin-bottom: 5px;
