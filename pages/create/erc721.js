@@ -48,9 +48,6 @@ const ERC721 = () => {
     isSizeValid: false,
     isOnSubmit: false,
   });
-
-  console.log("aaaaaaaa234566", isFileValid);
-
   const [uploadFileUrl, setUploadFileUrl] = useState("");
   const [file, setFile] = useState();
   const [isLoading, setLoading] = useState(false);
@@ -268,9 +265,6 @@ const ERC721 = () => {
           initialValues={{ file: "" }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
-          initialValues={{
-            remember: true,
-          }}
         >
           <div className={styles.uploadedFileContainer}>
             {uploadFileUrl ? (
@@ -317,11 +311,7 @@ const ERC721 = () => {
             {isFileValid.isInputTouched && isFileValid.isSizeValid == false && (
               <div className={styles.nftFormErrors}>File Size is too large</div>
             )}
-            <Form.Item
-              name="file"
-              rules={[{ required: true }]}
-              style={{ display: "none" }}
-            >
+            <Form.Item rules={[{ required: true }]} style={{ display: "none" }}>
               <input
                 rules={[{ required: true }]}
                 type="file"
@@ -339,7 +329,12 @@ const ERC721 = () => {
                 { required: true, message: "Please input your Asset Name!" },
               ]}
             >
-              <Input />
+              <Input
+                name="name"
+                id="name"
+                placeholder="Asset Name"
+                className={styles.nftInput}
+              />
             </Form.Item>
           </div>
           <div className={styles.nftInputComponent}>

@@ -19,7 +19,7 @@ function AccountSetting({ accountAddress }) {
         .toString()
         .replace(address.toString().substring(10, address.length - 10), ".....")
     );
-  });
+  }, []);
 
   return (
     <div className={"container"}>
