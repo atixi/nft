@@ -49,6 +49,7 @@ function TopSellers({ data }) {
                     <SellerPrice>
                       {/* {seller.stats?.average_price} */}
                       {/* {seller.number_of_assets + " assets"} */}
+                      {`${seller.assets.length} assets`}
                     </SellerPrice>
                   </SellerDetails>
                 </TopSellerItem>
