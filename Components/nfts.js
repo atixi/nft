@@ -1,4 +1,4 @@
-import { Menu, Dropdown, Avatar, Tooltip } from "antd";
+import { Menu, Dropdown, Avatar, Tooltip, Image } from "antd";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import {
@@ -11,10 +11,10 @@ import {
   ProductDescription,
   CardsContainer,
   ProductCardContainer,
+  CardImage,
 } from "./StyledComponents/liveAuctions-styledComponents";
 
 function Products(props) {
-  console.log("probs: ", props.data);
   const menu = (
     <Menu>
       <Menu.Item key="1">Purchase now</Menu.Item>
@@ -63,25 +63,21 @@ function Products(props) {
                       <Button>...</Button>
                     </Dropdown>
                   </ProductCardHeader>
-                  <div className={`col-md-12 p-1`}>
+
+                  <CardImage className={`p-1 text-center`}>
                     <Link
-                      href={{
-                        pathname: "/product-details",
-                        query: {
-                          explore: JSON.stringify(n),
-                        },
-                      }}
+                      href={`/nft/${n?.assetContract?.address}?tokenId=${n?.tokenId}`}
                     >
                       <a>
                         {" "}
-                        <img
-                          style={{ height: "250px", width: "auto" }}
+                        <Image
                           src={n.imageUrl}
-                          className="w-100 img-fluid"
+                          className="rounded"
+                          preview={false}
                         />
                       </a>
                     </Link>
-                  </div>
+                  </CardImage>
                   <ProductDescription>
                     {/* <Link
                       href={`/product-details?ta=${n?.asset_contract.address}&ti=${n?.token_id}`}
