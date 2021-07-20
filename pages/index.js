@@ -1,6 +1,6 @@
 import Head from "next/head";
 import openseaApi from "../Utils/openseaApi";
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import Explore from "/Components/explore";
 import HotCollections from "/Components/HotCollections";
 import LiveAuctions from "/Components/liveAuctions";
@@ -29,9 +29,9 @@ function Home() {
     <MainWrapper>
       <Slide />
       <TopSellers data={topSellers} />
-      <LiveAuctions/>
+      <LiveAuctions />
       <HotCollections />
-      <Explore/>
+      <Explore />
     </MainWrapper>
   );
 }

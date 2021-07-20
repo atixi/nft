@@ -1,12 +1,5 @@
 import { Tabs, Spin } from "antd";
 import React, { useEffect, useState } from "react";
-import {
-  ProfileContainer,
-  ShareButton,
-  BiographyContainer,
-  BioDescription,
-  ProfileButton,
-} from "/Components/StyledComponents/talentPage-styledComponents";
 import Products from "/Components/nfts";
 import {
   LoadMoreButton,
@@ -14,17 +7,19 @@ import {
 } from "/Components/StyledComponents/globalStyledComponents";
 import axios from "axios";
 import CollectionLoader from "@/components/collectionLoader";
+import Collections from "@/components/collections";
 import { useRouter } from "next/router";
+import TopSellers from "/Components/topSellers";
 const { TabPane } = Tabs;
 const api = axios.create({
-  baseURL: "https://rim-entertainment.herokuapp.com",
+  baseURL: process.env.HEROKU_BASE_URL,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
   },
 });
 
-function CollectionDetails({ collection }) {
+function CollectionDetails() {
   const router = useRouter();
   const { query } = router.query;
   const [isLoad, setLoad] = useState(false);
@@ -46,10 +41,22 @@ function CollectionDetails({ collection }) {
       //loadCollections(slug);
     }
   };
-
+  const [data, setData] = useState({
+    talents: [],
+    assets: [],
+    collections: [],
+  });
   useEffect(() => {
-    // setLoad(true);
-  }, []);
+    if (query != undefined) {
+      async function fetchingData() {
+        const data = await api.get(`/talents/search/${query}`);
+        setData(await data.data);
+
+        setLoad(true);
+      }
+      fetchingData();
+    }
+  }, [query]);
 
   return (
     <>
@@ -57,7 +64,7 @@ function CollectionDetails({ collection }) {
         <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
           <TabPane tab="Items" key="1">
             {isLoad === false ? <CollectionLoader /> : ""}
-            {/* <Products data={onSales} /> */}
+            <Products data={data} />
             {isLoad ? (
               loadMore.itemsLoad ? (
                 loadMore.itemsLoadMoreButtonLoading ? (
@@ -79,6 +86,7 @@ function CollectionDetails({ collection }) {
           </TabPane>
           <TabPane tab="Collections" key="2">
             {/* <Products data={collect} /> */}
+            <Collections data={data.collections} />
             {isLoad ? (
               loadMore.collectionsLoad ? (
                 loadMore.collectionsLoadMoreButtonLoading ? (
@@ -99,7 +107,7 @@ function CollectionDetails({ collection }) {
             ) : null}
           </TabPane>
           <TabPane tab="Talents" key="3">
-            {/* <Products data={collect} /> */}
+            <TopSellers data={data.talents} />
             {isLoad ? (
               loadMore.talentsLoad ? (
                 loadMore.talentsLoadMoreButtonLoading ? (

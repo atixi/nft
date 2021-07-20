@@ -1,6 +1,6 @@
 import { Menu, Dropdown, Avatar, Tooltip, Image } from "antd";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Button,
   CardTitle,
@@ -44,8 +44,8 @@ function Products(props) {
                               <img
                                 src={
                                   props.data.talent
-                                    ? props.data.talent.talentAvatar.url
-                                    : props.data.talentAvatar.url
+                                    ? props.data.talent.talentAvatar?.url
+                                    : props.data.talentAvatar?.url
                                 }
                                 width={12}
                                 height={12}
@@ -69,7 +69,6 @@ function Products(props) {
                       href={`/nft/${n?.assetContract?.address}?tokenId=${n?.tokenId}`}
                     >
                       <a>
-                        {" "}
                         <Image
                           src={n.imageUrl}
                           className="rounded"
