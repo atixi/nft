@@ -203,7 +203,7 @@ function Header(props) {
             <input
               type="text"
               style={{ flex: 1, width: "auto" }}
-              placeholder="Search by creator, collectible or collection"
+              placeholder="Search by creator, collections or NFT"
             />
           </SearchWrapper>
         </HeaderContainer>

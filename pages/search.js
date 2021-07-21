@@ -1,0 +1,87 @@
+import { Tabs, Spin } from "antd";
+import React, { useEffect, useState } from "react";
+import Products from "/Components/nfts";
+import {
+  LoadMoreButton,
+  MainWrapper,
+} from "/Components/StyledComponents/globalStyledComponents";
+import axios from "axios";
+import CollectionLoader from "@/components/collectionLoader";
+import Collections from "@/components/collections";
+import { useRouter } from "next/router";
+import TopSellers from "/Components/topSellers";
+const { TabPane } = Tabs;
+const api = axios.create({
+  baseURL: process.env.HEROKU_BASE_URL,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+});
+
+function CollectionDetails() {
+  const router = useRouter();
+  const { query } = router.query;
+  const [isLoad, setLoad] = useState(false);
+  const [loadMore, setLoadMore] = useState({
+    itemsOffset: 10,
+    collectionsOffset: 10,
+    talentsOffset: 10,
+    itemsLoad: true,
+    collectionsLoad: true,
+    talentsLoad: true,
+    itemsMoreButtonLoading: false,
+    collectionsLoadMoreButtonLoading: false,
+    talentsLoadMoreButtonLoading: false,
+  });
+  const loadTabData = async (e) => {
+    if (e === "1") {
+      //loadAssets(slug);
+    } else if (e === "2") {
+      //loadCollections(slug);
+    }
+  };
+  const [data, setData] = useState({
+    talents: [],
+    assets: [],
+    collections: [],
+  });
+  useEffect(() => {
+    if (query != undefined) {
+      async function fetchingData() {
+        const data = await api.get(`/talents/search/${query}`);
+        setData(await data.data);
+        setLoad(true);
+        console.log("koskash", await data.data);
+      }
+      fetchingData();
+    }
+  }, [query]);
+
+  return (
+    <>
+      <MainWrapper>
+        <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
+          <TabPane tab="Items" key="1">
+            <Products data={data} />
+            {isLoad === false ? <CollectionLoader /> : ""}
+
+            <LoadMoreButton
+              block
+              shape={"round"}
+              size={"large"}
+            ></LoadMoreButton>
+          </TabPane>
+          <TabPane tab="Collections" key="2">
+            <Collections data={data} />
+          </TabPane>
+          <TabPane tab="Talents" key="3">
+            <TopSellers data={data.talents} />
+          </TabPane>
+        </Tabs>
+      </MainWrapper>
+    </>
+  );
+}
+
+export default CollectionDetails;

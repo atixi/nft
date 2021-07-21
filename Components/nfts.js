@@ -1,6 +1,6 @@
 import { Menu, Dropdown, Avatar, Tooltip, Image } from "antd";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Button,
   CardTitle,
@@ -11,6 +11,7 @@ import {
   ProductDescription,
   CardsContainer,
   ProductCardContainer,
+  NFTImage,
   CardImage,
 } from "./StyledComponents/liveAuctions-styledComponents";
 
@@ -44,11 +45,14 @@ function Products(props) {
                               <img
                                 src={
                                   props.data.talent
-                                    ? props.data.talent.talentAvatar.url
-                                    : props.data.talentAvatar.url
+                                    ? props.data.talent.talentAvatar?.url
+                                      ? props.data.talentAvatar?.url
+                                      : ""
+                                    : n.talent.talentAvatar?.url
                                 }
                                 width={12}
                                 height={12}
+                                alt={n.talentName}
                               />
                             }
                           />
@@ -66,15 +70,21 @@ function Products(props) {
 
                   <CardImage className={`p-1 text-center`}>
                     <Link
-                      href={`/nft/${n?.assetContract?.address}?tokenId=${n?.tokenId}`}
+                      href={`/nft/${
+                        n?.assetContract?.address
+                          ? n?.assetContract?.address
+                          : n.tokenAddress
+                      }?tokenId=${n?.tokenId}`}
                     >
                       <a>
-                        {" "}
-                        <Image
-                          src={n.imageUrl}
-                          className="rounded"
-                          preview={false}
-                        />
+                        <NFTImage>
+                          <Image
+                            src={n.imageUrl ? n.imageUrl : n.previewImage?.url}
+                            className="rounded"
+                            preview={false}
+                            alt=""
+                          />
+                        </NFTImage>
                       </a>
                     </Link>
                   </CardImage>
