@@ -51,8 +51,8 @@ function CollectionDetails() {
       async function fetchingData() {
         const data = await api.get(`/talents/search/${query}`);
         setData(await data.data);
-
         setLoad(true);
+        console.log("koskash", await data.data);
       }
       fetchingData();
     }
@@ -65,67 +65,13 @@ function CollectionDetails() {
           <TabPane tab="Items" key="1">
             {isLoad === false ? <CollectionLoader /> : ""}
             <Products data={data} />
-            {isLoad ? (
-              loadMore.itemsLoad ? (
-                loadMore.itemsLoadMoreButtonLoading ? (
-                  <LoadMoreButton block shape={"round"} size={"large"}>
-                    <Spin></Spin>
-                  </LoadMoreButton>
-                ) : (
-                  <LoadMoreButton
-                    block
-                    shape={"round"}
-                    size={"large"}
-                    onClick={() => LoadMoreOnsales()}
-                  >
-                    Load More
-                  </LoadMoreButton>
-                )
-              ) : null
-            ) : null}
           </TabPane>
           <TabPane tab="Collections" key="2">
             {/* <Products data={collect} /> */}
-            <Collections data={data.collections} />
-            {isLoad ? (
-              loadMore.collectionsLoad ? (
-                loadMore.collectionsLoadMoreButtonLoading ? (
-                  <LoadMoreButton block shape={"round"} size={"large"}>
-                    <Spin></Spin>
-                  </LoadMoreButton>
-                ) : (
-                  <LoadMoreButton
-                    block
-                    shape={"round"}
-                    size={"large"}
-                    onClick={() => LoadMoreOnsales()}
-                  >
-                    Load More
-                  </LoadMoreButton>
-                )
-              ) : null
-            ) : null}
+            <Collections data={data} />
           </TabPane>
           <TabPane tab="Talents" key="3">
             <TopSellers data={data.talents} />
-            {isLoad ? (
-              loadMore.talentsLoad ? (
-                loadMore.talentsLoadMoreButtonLoading ? (
-                  <LoadMoreButton block shape={"round"} size={"large"}>
-                    <Spin></Spin>
-                  </LoadMoreButton>
-                ) : (
-                  <LoadMoreButton
-                    block
-                    shape={"round"}
-                    size={"large"}
-                    onClick={() => LoadMoreOnsales()}
-                  >
-                    Load More
-                  </LoadMoreButton>
-                )
-              ) : null
-            ) : null}
           </TabPane>
         </Tabs>
       </MainWrapper>
