@@ -57,3 +57,12 @@ export function findHighestBid(orders)
 export function displayAddress(address){
   return address.toString().replace(address.toString().substring(10, address.length - 10), ".....");
 }
+export function detectVideo(url)
+{
+  const formats = ['mp4', 'mkv', 'mov', 'wmv', 'avi', 'flv', 'webm'];
+  const format = url.split('.').pop()
+  if(formats.includes(format))
+  return true
+  else 
+  return false
+}

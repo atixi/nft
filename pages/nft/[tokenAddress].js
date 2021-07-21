@@ -37,7 +37,7 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne } from "/Utils/strapiApi";
-import { unixToHumanDate, displayAddress, unixToMilSeconds, checkName, prevImage, findHighestBid, convertToUsd} from "/Utils/utils";
+import { unixToHumanDate, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestBid, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 import{FieldTimeOutlined} from "@ant-design/icons"
 
@@ -66,6 +66,7 @@ function ProductPage() {
   const [highestBid, setHighestBid] = useState(null)
   const [previewImage, setPreviewImage] = useState(null);
   const [sellOrders, setSellOrders] = useState(null)
+  const [isVideo, setIsVideo] = useState(false)
   const loadNft = async () => {
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
@@ -85,6 +86,7 @@ function ProductPage() {
           tokenId: nft.tokenId,
           collection: nft.collection
         });
+      setIsVideo(detectVideo(nft.imageUrl))
       nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl))
       setBids(nft?.buyOrders);
       nft?.buyOrders && setHighestBid(findHighestBid(nft?.buyOrders));
@@ -118,12 +120,13 @@ function ProductPage() {
         <Content className={`d-sm-flex`}>
           <ItemImageContainer className=" text-center">
             <ImageCon>
+            {isVideo ? "Yes" :
               <Image
                 src={`${asset?.image}`}
                 preview={{
                   src: `${previewImage}`,
                 }}
-              />
+              />} 
             </ImageCon>
           </ItemImageContainer>
           <ItemInfo className={"float-none float-sm-left"}>
