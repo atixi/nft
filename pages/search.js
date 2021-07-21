@@ -46,6 +46,7 @@ function CollectionDetails() {
     assets: [],
     collections: [],
   });
+  let title;
   useEffect(() => {
     if (query != undefined) {
       async function fetchingData() {
