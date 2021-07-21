@@ -70,6 +70,17 @@ function Header(props) {
   const [menu, setMenu] = useState(false);
   const [accountAddress, setAccountAddress] = useState(accountList[0]);
   const [connected, setConnected] = useState(false);
+
+  function handleLiveSearch(e) {
+    console.log("Live Search Handled", e.target.value);
+  }
+  function handleSearch(e) {
+    console.log("search handled", e.target.value);
+    if (e.charCode === 13) {
+      setSearch(false);
+      router.push(`search?query=${e.target.value}`);
+    }
+  }
   useEffect(() => {
     console.log("Metabalance is", metaBalance);
     isConnectedToAnyWallet();
@@ -204,6 +215,8 @@ function Header(props) {
               type="text"
               style={{ flex: 1, width: "auto" }}
               placeholder="Search by creator, collections or NFT"
+              onChange={(e) => handleLiveSearch(e)}
+              onKeyPress={(e) => handleSearch(e)}
             />
           </SearchWrapper>
         </HeaderContainer>

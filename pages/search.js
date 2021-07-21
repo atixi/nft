@@ -53,7 +53,6 @@ function CollectionDetails() {
         const data = await api.get(`/talents/search/${query}`);
         setData(await data.data);
         setLoad(true);
-        console.log("koskash", await data.data);
       }
       fetchingData();
     }
