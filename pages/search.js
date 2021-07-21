@@ -63,11 +63,16 @@ function CollectionDetails() {
       <MainWrapper>
         <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
           <TabPane tab="Items" key="1">
-            {isLoad === false ? <CollectionLoader /> : ""}
             <Products data={data} />
+            {isLoad === false ? <CollectionLoader /> : ""}
+
+            <LoadMoreButton
+              block
+              shape={"round"}
+              size={"large"}
+            ></LoadMoreButton>
           </TabPane>
           <TabPane tab="Collections" key="2">
-            {/* <Products data={collect} /> */}
             <Collections data={data} />
           </TabPane>
           <TabPane tab="Talents" key="3">
