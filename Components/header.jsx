@@ -47,6 +47,7 @@ import {
 } from "/store/action/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import axios from "axios";
 function Header(props) {
   const router = useRouter();
 
@@ -70,9 +71,18 @@ function Header(props) {
   const [menu, setMenu] = useState(false);
   const [accountAddress, setAccountAddress] = useState(accountList[0]);
   const [connected, setConnected] = useState(false);
-
+  const [data, setData] = useState({
+    talents: [],
+    assets: [],
+    collections: [],
+  });
   function handleLiveSearch(e) {
-    console.log("Live Search Handled", e.target.value);
+    async function fetchingData() {
+      const data = await api.get(`/talents/search/${e.target.value}`);
+      setData(await data.data);
+      console.log("coskash", await data.data);
+    }
+    fetchingData();
   }
   function handleSearch(e) {
     console.log("search handled", e.target.value);
@@ -81,6 +91,14 @@ function Header(props) {
       router.push(`search?query=${e.target.value}`);
     }
   }
+
+  const api = axios.create({
+    baseURL: process.env.HEROKU_BASE_URL,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  });
   useEffect(() => {
     console.log("Metabalance is", metaBalance);
     isConnectedToAnyWallet();
@@ -223,6 +241,78 @@ function Header(props) {
         <SearchContainer>
           <br />
           <center>{CONSTANTS.searchBy}</center>
+          <div className="p-4">
+            <h5>
+              <strong>Assets</strong>
+            </h5>
+            {data.assets.map((n, i) => {
+              return (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  <Image
+                    src={n.previewImage.url}
+                    width={60}
+                    height={60}
+                    alt={n.name}
+                  />
+                  <div className="ml-2">
+                    <h5>{n.name}</h5>
+                    <p>bonjogh bonjogh</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="p-4">
+            <h5>
+              <strong>Collections</strong>
+            </h5>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                justifyContent: "flex-start",
+              }}
+            >
+              <Image src="/images/7.gif" width={60} height={60} />
+              <div className="ml-2">
+                <h5>title of the tokh tokh</h5>
+                <p>bonjogh bonjogh</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-4">
+            <h5>
+              <strong>Talents</strong>
+            </h5>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                justifyContent: "flex-start",
+              }}
+            >
+              <Image src="/images/7.gif" width={60} height={60} />
+              <div className="ml-2">
+                <h5>title of the tokh tokh</h5>
+                <p>bonjogh bonjogh</p>
+              </div>
+            </div>
+          </div>
         </SearchContainer>
       </Wrapper>
     );
