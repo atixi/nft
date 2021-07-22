@@ -46,13 +46,13 @@ function CollectionDetails() {
     assets: [],
     collections: [],
   });
+  let title;
   useEffect(() => {
     if (query != undefined) {
       async function fetchingData() {
         const data = await api.get(`/talents/search/${query}`);
         setData(await data.data);
         setLoad(true);
-        console.log("koskash", await data.data);
       }
       fetchingData();
     }

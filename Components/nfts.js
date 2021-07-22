@@ -48,7 +48,7 @@ function Products(props) {
                                     ? props.data.talent.talentAvatar?.url
                                       ? props.data.talentAvatar?.url
                                       : ""
-                                    : n.talent.talentAvatar?.url
+                                    : n.talent?.talentAvatar?.url
                                 }
                                 width={12}
                                 height={12}

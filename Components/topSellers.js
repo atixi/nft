@@ -22,7 +22,11 @@ function TopSellers({ data }) {
   return (
     <>
       <div className="pt-3">
-        <SectionHeading>{"Top Sellers in 1 Day"}</SectionHeading>
+        {data[0]?.assets?.length ? (
+          <SectionHeading>{"Top Sellers in 1 Day"}</SectionHeading>
+        ) : (
+          ""
+        )}
       </div>
       <TopSellerContainer>
         {data &&
@@ -49,7 +53,11 @@ function TopSellers({ data }) {
                     <SellerPrice>
                       {/* {seller.stats?.average_price} */}
                       {/* {seller.number_of_assets + " assets"} */}
-                      {`${seller?.assets?.length} assets`}
+                      {`${
+                        seller?.assets?.length
+                          ? seller?.assets?.length + "assets"
+                          : ""
+                      } `}
                     </SellerPrice>
                   </SellerDetails>
                 </TopSellerItem>

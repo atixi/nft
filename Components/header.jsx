@@ -47,6 +47,7 @@ import {
 } from "/store/action/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import axios from "axios";
 function Header(props) {
   const router = useRouter();
 
@@ -70,6 +71,34 @@ function Header(props) {
   const [menu, setMenu] = useState(false);
   const [accountAddress, setAccountAddress] = useState(accountList[0]);
   const [connected, setConnected] = useState(false);
+  const [data, setData] = useState({
+    talents: [],
+    assets: [],
+    collections: [],
+  });
+  function handleLiveSearch(e) {
+    async function fetchingData() {
+      const data = await api.get(`/talents/search/${e.target.value}`);
+      setData(await data.data);
+      console.log("coskash", await data.data);
+    }
+    fetchingData();
+  }
+  function handleSearch(e) {
+    console.log("search handled", e.target.value);
+    if (e.charCode === 13) {
+      setSearch(false);
+      router.push(`search?query=${e.target.value}`);
+    }
+  }
+
+  const api = axios.create({
+    baseURL: process.env.HEROKU_BASE_URL,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  });
   useEffect(() => {
     console.log("Metabalance is", metaBalance);
     isConnectedToAnyWallet();
@@ -204,12 +233,113 @@ function Header(props) {
               type="text"
               style={{ flex: 1, width: "auto" }}
               placeholder="Search by creator, collections or NFT"
+              onChange={(e) => handleLiveSearch(e)}
+              onKeyPress={(e) => handleSearch(e)}
             />
           </SearchWrapper>
         </HeaderContainer>
         <SearchContainer>
           <br />
           <center>{CONSTANTS.searchBy}</center>
+          <div className="p-4">
+            <h5>
+              <strong>Assets</strong>
+            </h5>
+            {data.assets.map((n, i) => {
+              return (
+                <Link
+                  key={i}
+                  href={`/nft/${n.tokenAddress}?tokenId=${n?.tokenId}`}
+                  passHref
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    <Image
+                      src={n.previewImage.url}
+                      width={60}
+                      height={60}
+                      alt={n.name}
+                    />
+                    <div className="ml-2">
+                      <h5>{n.name}</h5>
+                      <p>bonjogh bonjogh</p>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+
+          <div className="p-4">
+            <h5>
+              <strong>Collections</strong>
+            </h5>
+            {data.collections.map((n, i) => {
+              return (
+                <Link key={i} href={`/collection/${n.slug}`} passHref>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    <Image
+                      src={n.collectionImageURL.url}
+                      width={60}
+                      height={60}
+                      alt={n.collectionName}
+                    />
+                    <div className="ml-2">
+                      <h5>{n.collectionName}</h5>
+                      <p>bonjogh bonjogh</p>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+
+          <div className="p-4">
+            <h5>
+              <strong>Talents</strong>
+            </h5>
+            {data.talents.map((n, i) => {
+              return (
+                <Link key={i} href={`/profile/${n.userName}`} passHref>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    <Image
+                      src={n.talentAvatar.url}
+                      width={60}
+                      height={60}
+                      alt={n.talentName}
+                    />
+                    <div className="ml-2">
+                      <h5>{n.talentName}</h5>
+                      <p>bonjogh bonjogh</p>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </SearchContainer>
       </Wrapper>
     );
