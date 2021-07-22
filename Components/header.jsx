@@ -247,27 +247,32 @@ function Header(props) {
             </h5>
             {data.assets.map((n, i) => {
               return (
-                <div
+                <Link
                   key={i}
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                  }}
+                  href={`/nft/${n.tokenAddress}?tokenId=${n?.tokenId}`}
+                  passHref
                 >
-                  <Image
-                    src={n.previewImage.url}
-                    width={60}
-                    height={60}
-                    alt={n.name}
-                  />
-                  <div className="ml-2">
-                    <h5>{n.name}</h5>
-                    <p>bonjogh bonjogh</p>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    <Image
+                      src={n.previewImage.url}
+                      width={60}
+                      height={60}
+                      alt={n.name}
+                    />
+                    <div className="ml-2">
+                      <h5>{n.name}</h5>
+                      <p>bonjogh bonjogh</p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>
@@ -276,42 +281,64 @@ function Header(props) {
             <h5>
               <strong>Collections</strong>
             </h5>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                justifyContent: "flex-start",
-              }}
-            >
-              <Image src="/images/7.gif" width={60} height={60} />
-              <div className="ml-2">
-                <h5>title of the tokh tokh</h5>
-                <p>bonjogh bonjogh</p>
-              </div>
-            </div>
+            {data.collections.map((n, i) => {
+              return (
+                <Link key={i} href={`/collection/${n.slug}`} passHref>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    <Image
+                      src={n.collectionImageURL.url}
+                      width={60}
+                      height={60}
+                      alt={n.collectionName}
+                    />
+                    <div className="ml-2">
+                      <h5>{n.collectionName}</h5>
+                      <p>bonjogh bonjogh</p>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
 
           <div className="p-4">
             <h5>
               <strong>Talents</strong>
             </h5>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                justifyContent: "flex-start",
-              }}
-            >
-              <Image src="/images/7.gif" width={60} height={60} />
-              <div className="ml-2">
-                <h5>title of the tokh tokh</h5>
-                <p>bonjogh bonjogh</p>
-              </div>
-            </div>
+            {data.talents.map((n, i) => {
+              return (
+                <Link key={i} href={`/profile/${n.userName}`} passHref>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    <Image
+                      src={n.talentAvatar.url}
+                      width={60}
+                      height={60}
+                      alt={n.talentName}
+                    />
+                    <div className="ml-2">
+                      <h5>{n.talentName}</h5>
+                      <p>bonjogh bonjogh</p>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </SearchContainer>
       </Wrapper>
