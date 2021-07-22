@@ -40,7 +40,7 @@ import { fetchOne } from "/Utils/strapiApi";
 import { unixToHumanDate, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestBid, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 import{FieldTimeOutlined} from "@ant-design/icons"
-
+import ReactPlayer from 'react-player'
 const { Countdown } = Statistic;
 const menu = (
   <DropdownMenu className={"mt-3"}>
@@ -70,6 +70,7 @@ function ProductPage() {
   const loadNft = async () => {
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
+      console.log(data)
       if(data)
       setLoading(false);
 
@@ -120,7 +121,7 @@ function ProductPage() {
         <Content className={`d-sm-flex`}>
           <ItemImageContainer className=" text-center">
             <ImageCon>
-            {isVideo ? "Yes" :
+            {isVideo ? <ReactPlayer url={asset?.image} playing={true} width={"auto"} loop={true} controls={true} /> :
               <Image
                 src={`${asset?.image}`}
                 preview={{
