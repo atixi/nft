@@ -85,7 +85,8 @@ function ProductPage() {
           image: nft.imageUrl,
           contractAddress: nft?.assetContract?.address,
           tokenId: nft.tokenId,
-          collection: nft.collection
+          collection: nft.collection,
+          isPresale: nft.isPresale
         });
       setIsVideo(detectVideo(nft.imageUrl))
       nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl))
@@ -100,6 +101,7 @@ function ProductPage() {
     }
   }
   useEffect(() => {
+    console.log("sell orders", sellOrders)
     if (!queryParam) {
       return null;
     }
@@ -441,13 +443,13 @@ function ProductPage() {
                     </BidPriceValue>
                   </BidPrice>
                 </BidOwnerContainer>}
-                {highestOffer && highestOffer?.expirationTime &&  (
+                {sellOrders && sellOrders?.expirationTime &&  (
                   <Auction>
                     <div className={"auctionDiv"}>
                       <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
                       <AuctionTimer>
                         <Countdown
-                          value={ unixToMilSeconds(highestOffer?.expirationTime)}
+                          value={ unixToMilSeconds(sellOrders?.expirationTime)}
                           format={`D[d] HH[h] mm[m] ss[s]`}
                         />
                       </AuctionTimer>
@@ -456,18 +458,19 @@ function ProductPage() {
                 )}
               </BidCountdown>}
               <ButtonContainer>
-                {sellOrders && <>
-                {sellOrders.sale_kind == "0" ? <FooterButton
+                {asset.isPresale == true && 
+                <FooterButton
                   color={"#ffffff"}
                   style={{ background: "#0066ff" }}
                 >
                   Buy
-                </FooterButton> : <FooterButton
+                </FooterButton>}
+                <FooterButton
                   color={"#0066ff"}
                   style={{ background: "#0066ff26" }}
                 >
                   Make Offer
-                </FooterButton>} </>}
+                </FooterButton>
               </ButtonContainer>
             </ItemFooter>
           </ItemInfo>
