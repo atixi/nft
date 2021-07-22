@@ -37,16 +37,16 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne } from "/Utils/strapiApi";
-import { unixToHumanDate, displayAddress, unixToMilSeconds, checkName, prevImage, findHighestBid, convertToUsd} from "/Utils/utils";
+import { unixToHumanDate, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestOffer, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 import{FieldTimeOutlined} from "@ant-design/icons"
-
+import ReactPlayer from 'react-player'
 const { Countdown } = Statistic;
 const menu = (
   <DropdownMenu className={"mt-3"}>
     <Menu.Item>
       <ItemLink>
-        <span>{"New bid"}</span>
+        <span>{"New Offer"}</span>
       </ItemLink>
     </Menu.Item>
     <Menu.Item>
@@ -59,16 +59,18 @@ const menu = (
 function ProductPage() {
   const queryParam = useQueryParam();
   const [asset, setAsset] = useState({});
-  const [bids, setBids] = useState([]);
+  const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false)
   const [priceDetails, setPriceDetails] = useState(null);
-  const [highestBid, setHighestBid] = useState(null)
+  const [highestOffer, setHighestOffer] = useState(null)
   const [previewImage, setPreviewImage] = useState(null);
   const [sellOrders, setSellOrders] = useState(null)
+  const [isVideo, setIsVideo] = useState(false)
   const loadNft = async () => {
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
+      console.log(data)
       if(data)
       setLoading(false);
 
@@ -83,11 +85,13 @@ function ProductPage() {
           image: nft.imageUrl,
           contractAddress: nft?.assetContract?.address,
           tokenId: nft.tokenId,
-          collection: nft.collection
+          collection: nft.collection,
+          isPresale: nft.isPresale
         });
+      setIsVideo(detectVideo(nft.imageUrl))
       nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl))
-      setBids(nft?.buyOrders);
-      nft?.buyOrders && setHighestBid(findHighestBid(nft?.buyOrders));
+      setOffers(nft?.buyOrders);
+      nft?.buyOrders && setHighestOffer(findHighestOffer(nft?.buyOrders));
       setSellOrders(nft?.sellOrders);
       }
       else if(data=="error")
@@ -97,6 +101,7 @@ function ProductPage() {
     }
   }
   useEffect(() => {
+    console.log("sell orders", sellOrders)
     if (!queryParam) {
       return null;
     }
@@ -118,12 +123,13 @@ function ProductPage() {
         <Content className={`d-sm-flex`}>
           <ItemImageContainer className=" text-center">
             <ImageCon>
+            {isVideo ? <ReactPlayer url={asset?.image} playing={true} width={"auto"} loop={true} controls={true} /> :
               <Image
                 src={`${asset?.image}`}
                 preview={{
                   src: `${previewImage}`,
                 }}
-              />
+              />} 
             </ImageCon>
           </ItemImageContainer>
           <ItemInfo className={"float-none float-sm-left"}>
@@ -212,9 +218,9 @@ function ProductPage() {
                     sellOrders[0]?.paymentTokenContract.name}
                       </span></DetailTabDiv>
                 </TabPane>
-                <TabPane key="2" tab={<span>{CONSTANTS.bids}</span>}>
-                  {bids &&
-                    bids.map((order, i) => (
+                <TabPane key="2" tab={<span>{CONSTANTS.offers}</span>}>
+                  {offers &&
+                    offers.map((order, i) => (
                       <LastBidder key={i} id={order.owner?.address}>
                         <div className={"content"}>
                           <span className="avatarContainer">
@@ -385,21 +391,21 @@ function ProductPage() {
             </ItemDetails>
             <ItemFooter>
               {sellOrders &&<BidCountdown>
-                {highestBid && <BidOwnerContainer className={"border-right pr-2 pl-2"}>
+                {highestOffer && <BidOwnerContainer className={"border-right pr-2 pl-2"}>
                   <BidOwner className={"float-left"}>
-                    {CONSTANTS.highestBid}{" "}
+                    {CONSTANTS.highestOffer}{" "}
                     <Link
                       href={{
                         pathname: "/profile/talent",
                         query: {
-                          address: highestBid?.makerAccount?.address,
-                          talent: checkName(highestBid?.makerAccount?.user?.username),
-                          avatar: highestBid?.makerAccount?.profile_img_url,
+                          address: highestOffer?.makerAccount?.address,
+                          talent: checkName(highestOffer?.makerAccount?.user?.username),
+                          avatar: highestOffer?.makerAccount?.profile_img_url,
                         },
                       }}
                       passHref
                     >
-                      <a>{checkName(highestBid?.makerAccount?.user?.username)}</a>
+                      <a>{checkName(highestOffer?.makerAccount?.user?.username)}</a>
                     </Link>
                   </BidOwner>
                   <BidPrice>
@@ -407,9 +413,9 @@ function ProductPage() {
                       href={{
                         pathname: "/profile/talent",
                         query: {
-                          address: highestBid?.makerAccount?.address,
-                          talent: checkName(highestBid?.makerAccount?.user?.username),
-                          avatar: highestBid?.makerAccount?.profile_img_url,
+                          address: highestOffer?.makerAccount?.address,
+                          talent: checkName(highestOffer?.makerAccount?.user?.username),
+                          avatar: highestOffer?.makerAccount?.profile_img_url,
                         },
                       }}
                       passHref
@@ -419,7 +425,7 @@ function ProductPage() {
                           <Avatar
                             size={"large"}
                             icon={
-                              <img src={highestBid?.makerAccount?.profile_img_url} />
+                              <img src={highestOffer?.makerAccount?.profile_img_url} />
                             }
                           />
                         </BidOwnerProfile>
@@ -428,22 +434,22 @@ function ProductPage() {
                     <BidPriceValue>
                       <PriceInCryptoContainer>
                         <span className={"bidValue"}>{`${
-                                  getAuctionPriceDetails(highestBid).priceBase
-                                } ${highestBid?.paymentTokenContract?.symbol}`}</span>
+                                  getAuctionPriceDetails(highestOffer).priceBase
+                                } ${highestOffer?.paymentTokenContract?.symbol}`}</span>
                       </PriceInCryptoContainer>
                       <PriceInDollarContainer>
-                        <span>{`~$ ${convertToUsd(highestBid)}`}</span> 
+                        <span>{`~$ ${convertToUsd(highestOffer)}`}</span> 
                       </PriceInDollarContainer>
                     </BidPriceValue>
                   </BidPrice>
                 </BidOwnerContainer>}
-                {highestBid && highestBid?.expirationTime &&  (
+                {sellOrders && sellOrders?.expirationTime &&  (
                   <Auction>
                     <div className={"auctionDiv"}>
                       <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
                       <AuctionTimer>
                         <Countdown
-                          value={ unixToMilSeconds(highestBid?.expirationTime)}
+                          value={ unixToMilSeconds(sellOrders?.expirationTime)}
                           format={`D[d] HH[h] mm[m] ss[s]`}
                         />
                       </AuctionTimer>
@@ -452,18 +458,19 @@ function ProductPage() {
                 )}
               </BidCountdown>}
               <ButtonContainer>
-                {sellOrders && <>
-                {sellOrders.sale_kind == "0" ? <FooterButton
+                {asset.isPresale == true && 
+                <FooterButton
                   color={"#ffffff"}
                   style={{ background: "#0066ff" }}
                 >
                   Buy
-                </FooterButton> : <FooterButton
+                </FooterButton>}
+                <FooterButton
                   color={"#0066ff"}
                   style={{ background: "#0066ff26" }}
                 >
-                  Place a bid
-                </FooterButton>} </>}
+                  Make Offer
+                </FooterButton>
               </ButtonContainer>
             </ItemFooter>
           </ItemInfo>

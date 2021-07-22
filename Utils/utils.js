@@ -34,26 +34,35 @@ export function prevImage(url)
 {
   return url.replace(url.substring(url.length - 3), "0");
 }
-export function convertToUsd(bid)
+export function convertToUsd(offer)
 {
   let usd = null
-  usd = (parseFloat(getAuctionPriceDetails(bid).priceBase ) * parseFloat(bid?.paymentTokenContract.usdPrice)) / (parseFloat(bid?.paymentTokenContract.ethPrice));
+  usd = (parseFloat(getAuctionPriceDetails(offer).priceBase ) * parseFloat(offer?.paymentTokenContract.usdPrice)) / (parseFloat(offer?.paymentTokenContract.ethPrice));
   return parseInt(usd);
 }
-export function findHighestBid(orders)
+export function findHighestOffer(orders)
   {
-    let bid = null;
+    let offer = null;
     let max = null;
      orders.length >0 & orders.map((order) => {
        let price = parseFloat(getAuctionPriceDetails(order).priceBase)
       if(max < price)
       {
-        bid = order;
+        offer = order;
         max = price
       }
     });
-    return bid;
+    return offer;
   }
 export function displayAddress(address){
   return address.toString().replace(address.toString().substring(10, address.length - 10), ".....");
+}
+export function detectVideo(url)
+{
+  const formats = ['mp4', 'mkv', 'mov', 'wmv', 'avi', 'flv', 'webm'];
+  const format = url.split('.').pop()
+  if(formats.includes(format))
+  return true
+  else 
+  return false
 }
