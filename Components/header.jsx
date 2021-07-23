@@ -43,14 +43,12 @@ import {
   getWalletBalance,
   getMetaConnected,
   getWalletConnected,
-  getIsDisconnectedFromServer,
 } from "/store/action/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import axios from "axios";
 function Header(props) {
   const router = useRouter();
-
   const dispatchAccountTokens = useDispatch();
   const dispatchMetaToken = useDispatch();
   const dispatchWalletToken = useDispatch();
@@ -254,7 +252,9 @@ function Header(props) {
         </HeaderContainer>
         <SearchContainer>
           <br />
-          <center>{CONSTANTS.searchBy}</center>
+          <center>
+            {CONSTANTS.searchResult} &quot;{submit}&quot;
+          </center>
           <div className="p-4">
             {data.assets?.length !== 0 ? (
               <h5>
@@ -277,6 +277,7 @@ function Header(props) {
                       justifyContent: "flex-start",
                       alignItems: "center",
                       justifyContent: "flex-start",
+                      marginBottom: "3px",
                     }}
                   >
                     <Image
@@ -287,7 +288,6 @@ function Header(props) {
                     />
                     <div className="ml-2">
                       <h5>{n.name}</h5>
-                      <p>bonjogh bonjogh</p>
                     </div>
                   </div>
                 </Link>
@@ -323,7 +323,6 @@ function Header(props) {
                     />
                     <div className="ml-2">
                       <h5>{n.collectionName}</h5>
-                      <p>bonjogh bonjogh</p>
                     </div>
                   </div>
                 </Link>
@@ -359,7 +358,6 @@ function Header(props) {
                     />
                     <div className="ml-2">
                       <h5>{n.talentName}</h5>
-                      <p>bonjogh bonjogh</p>
                     </div>
                   </div>
                 </Link>
