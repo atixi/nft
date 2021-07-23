@@ -24,13 +24,13 @@ function CollectionDetails() {
   const { query } = router.query;
   const [isLoad, setLoad] = useState(false);
   const [loadMore, setLoadMore] = useState({
-    itemsOffset: 10,
+    assetsOffset: 10,
     collectionsOffset: 10,
     talentsOffset: 10,
-    itemsLoad: true,
+    assetsLoad: true,
     collectionsLoad: true,
     talentsLoad: true,
-    itemsMoreButtonLoading: false,
+    assetsMoreButtonLoading: false,
     collectionsLoadMoreButtonLoading: false,
     talentsLoadMoreButtonLoading: false,
   });
@@ -46,7 +46,6 @@ function CollectionDetails() {
     assets: [],
     collections: [],
   });
-  let title;
   useEffect(() => {
     if (query != undefined) {
       async function fetchingData() {
@@ -61,11 +60,11 @@ function CollectionDetails() {
   return (
     <>
       <MainWrapper>
+        <h4 className="mt-3">Search Result for &quot;{query}&quot;</h4>
         <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
-          <TabPane tab="Items" key="1">
+          <TabPane tab="Assets" key="1">
             <Products data={data} />
             {isLoad === false ? <CollectionLoader /> : ""}
-
             <LoadMoreButton
               block
               shape={"round"}

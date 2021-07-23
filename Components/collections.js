@@ -12,9 +12,8 @@ import {
 } from "./StyledComponents/hotCollections-styledComponents";
 
 export default function Collections({ data }) {
-  console.log("from child", data);
   return (
-    <div className={"mt-5"}>
+    <div className={"mt-1"}>
       {data.collections &&
         data.collections.map((item, index) => (
           <div key={index} className="col-md-3 mb-4 float-left">
@@ -27,7 +26,7 @@ export default function Collections({ data }) {
                 >
                   <a>
                     <img
-                      style={{ width: "auto" }}
+                      style={{ width: "100%" }}
                       src={item.collectionBanner.url}
                     />
                   </a>
