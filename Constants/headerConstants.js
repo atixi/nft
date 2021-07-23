@@ -6,6 +6,7 @@ const CONSTANTS = {
   create: "Create",
   wallet: "wallet",
   searchBy: "Search by creator, collections or NFT",
+  searchResult: "Search Result for",
   english: "English",
 };
 
