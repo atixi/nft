@@ -39,15 +39,14 @@ function Explore() {
   const { cat } = router.query;
   useEffect(() => {
     async function fetchingCats() {
-      const data = await api.get("/categories");
+      const data = await api.get("/categories?_sort=id:ASC");
       setCategories(await data.data);
     }
     fetchingCats();
 
     if (cat != undefined) {
       async function fetchingData() {
-        const data = await api.get(`/categories?slug_eq=${cat}`);
-        // const resJson = JSON.stringify(await data.data)
+        const data = await api.get(`/categories?_sort=id:ASC&slug_eq=${cat}`);
         setExplores({ assets: await data.data[0].nfts });
         console.log("kosskaasshh", await data.data[0].nfts);
       }
@@ -65,9 +64,9 @@ function Explore() {
             <CategoriesList className={"m-2"}>
               {categories.map((category, v) => (
                 <Link key={v} href={`/?cat=${category.slug}`} passHref>
-                  <li>{`${category.icon ? category.icon : ""} ${
-                    category.categoryName
-                  }`}</li>
+                  <li className={cat == category.slug ? "active" : ""}>{`${
+                    category.icon ? category.icon : ""
+                  } ${category.categoryName}`}</li>
                 </Link>
               ))}
             </CategoriesList>
