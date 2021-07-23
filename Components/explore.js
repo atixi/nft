@@ -64,9 +64,9 @@ function Explore() {
             <CategoriesList className={"m-2"}>
               {categories.map((category, v) => (
                 <Link key={v} href={`/?cat=${category.slug}`} passHref>
-                  <li>{`${category.icon ? category.icon : ""} ${
-                    category.categoryName
-                  }`}</li>
+                  <li className={cat == category.slug ? "active" : ""}>{`${
+                    category.icon ? category.icon : ""
+                  } ${category.categoryName}`}</li>
                 </Link>
               ))}
             </CategoriesList>
