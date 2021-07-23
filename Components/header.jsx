@@ -256,9 +256,13 @@ function Header(props) {
           <br />
           <center>{CONSTANTS.searchBy}</center>
           <div className="p-4">
-            <h5>
-              <strong>Assets</strong>
-            </h5>
+            {data.assets?.length !== 0 ? (
+              <h5>
+                <strong>Assets</strong>
+              </h5>
+            ) : (
+              ""
+            )}
             {data.assets.map((n, i) => {
               return (
                 <Link
@@ -292,9 +296,13 @@ function Header(props) {
           </div>
 
           <div className="p-4">
-            <h5>
-              <strong>Collections</strong>
-            </h5>
+            {data.assets?.length !== 0 ? (
+              <h5>
+                <strong>Collections</strong>
+              </h5>
+            ) : (
+              ""
+            )}
             {data.collections.map((n, i) => {
               return (
                 <Link key={i} href={`/collection/${n.slug}`} passHref>
@@ -324,9 +332,13 @@ function Header(props) {
           </div>
 
           <div className="p-4">
-            <h5>
-              <strong>Talents</strong>
-            </h5>
+            {data.assets?.length !== 0 ? (
+              <h5>
+                <strong>Talents</strong>
+              </h5>
+            ) : (
+              ""
+            )}
             {data.talents.map((n, i) => {
               return (
                 <Link key={i} href={`/profile/${n.userName}`} passHref>
