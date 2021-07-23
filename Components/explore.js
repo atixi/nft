@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from "react";
-import Products from "/Components/products";
+import React, { useState, useEffect } from "react";
+import Products from "/Components/nfts";
+import Link from "next/link";
 import { Spin } from "antd";
 import EXPLORE_CONSTANTS from "/Constants/exploreConstants";
 import {
@@ -12,8 +13,8 @@ import {
   LoadingContainer,
   LoadMoreButton,
 } from "./StyledComponents/globalStyledComponents";
-import { fetch } from "/Utils/strapiApi";
-import axios from "axios"
+import { useRouter } from "next/router";
+import axios from "axios";
 const api = axios.create({
   baseURL: process.env.HEROKU_BASE_URL,
   headers: {
@@ -24,39 +25,57 @@ const api = axios.create({
 
 function Explore() {
   const [categories, setCategories] = useState([]);
-  const [explores, setExplores] = useState({});
- 
+  const [explores, setExplores] = useState({ assets: [] });
+  const [explorPagination, setExplorPagination] = useState({
+    limit: 0,
+    offset: 0,
+  });
   const loadExplore = async () => {
-    const nfts = await fetch("nfts")
-    setExplores(nfts.data);
-  } 
+    const nfts = await api.get("/nfts/nfts");
+    setExplores({ assets: await nfts.data });
+    console.log("cooos", await nfts.data);
+  };
+  const router = useRouter();
+  const { cat } = router.query;
   useEffect(() => {
     async function fetchingCats() {
       const data = await api.get("/categories");
       setCategories(await data.data);
     }
     fetchingCats();
-     loadExplore()
-  }, []);
+
+    if (cat != undefined) {
+      async function fetchingData() {
+        const data = await api.get(`/categories?slug_eq=${cat}`);
+        // const resJson = JSON.stringify(await data.data)
+        setExplores({ assets: await data.data[0].nfts });
+        console.log("kosskaasshh", await data.data[0].nfts);
+      }
+      fetchingData();
+    } else {
+      loadExplore();
+    }
+  }, [cat]);
   return (
-    <>    
+    <>
       <div>
         <CategoriesListContainer>
           <SectionHeading>{EXPLORE_CONSTANTS.explore}</SectionHeading>
           <CategoriesListScroll>
             <CategoriesList className={"m-2"}>
               {categories.map((category, v) => (
-                <li key={v}>{`${category.icon ? category.icon : ""} ${
-                  category.categoryName
-                }`}</li>
+                <Link key={v} href={`/?cat=${category.slug}`} passHref>
+                  <li>{`${category.icon ? category.icon : ""} ${
+                    category.categoryName
+                  }`}</li>
+                </Link>
               ))}
             </CategoriesList>
           </CategoriesListScroll>
-    
         </CategoriesListContainer>
         {explores ? (
           <>
-            {explores && <Products data={explores} /> }
+            {explores && <Products data={explores} />}
             {/* <LoadMoreButton block shape={"round"} size={"large"}>
               {"Load More"}
             </LoadMoreButton> */}

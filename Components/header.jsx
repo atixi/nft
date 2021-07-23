@@ -313,6 +313,7 @@ function Header(props) {
                       justifyContent: "flex-start",
                       alignItems: "center",
                       justifyContent: "flex-start",
+                      marginBottom: "3px",
                     }}
                   >
                     <Image
@@ -348,6 +349,7 @@ function Header(props) {
                       justifyContent: "flex-start",
                       alignItems: "center",
                       justifyContent: "flex-start",
+                      marginBottom: "3px",
                     }}
                   >
                     <Image
