@@ -76,7 +76,13 @@ function Header(props) {
     assets: [],
     collections: [],
   });
+  const [submit, setSubmit] = useState();
+  function submitClick() {
+    router.push(`search?query=${submit}`);
+    setSearch(false);
+  }
   function handleLiveSearch(e) {
+    setSubmit(e.target.value);
     async function fetchingData() {
       const data = await api.get(`/talents/search/${e.target.value}`);
       setData(await data.data);
@@ -228,7 +234,15 @@ function Header(props) {
             <CloseOutlined />
           </Button>
           <SearchWrapper style={{ flex: 1 }}>
-            <SearchOutlined style={{ marginRight: "10px", color: "inherit" }} />
+            <SearchOutlined
+              onClick={(e) => {
+                submitClick();
+              }}
+              style={{
+                marginRight: "10px",
+                color: "inherit",
+              }}
+            />
             <input
               type="text"
               style={{ flex: 1, width: "auto" }}

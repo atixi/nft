@@ -169,16 +169,15 @@ export const BalanceLabel = styled.div`
 `;
 export const Button = styled.button`
   margin: 0px 5px;
-  line-height: 12px;
+  line-height: 7px;
   font-weight: 600;
   padding: 12px 12px;
   border-radius: 25px;
   border: 1px solid rgba(4, 4, 5, 0.1);
   background-color: #fff;
   font-size: 0.98rem !important;
-  width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: 25px;
 
   &:hover {
     border: 1px solid #333;

@@ -1,25 +1,32 @@
 import { SearchWrapper } from "./StyledComponents/header-styledComponents";
 import { SearchOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 export default function Search(props) {
+  const [submit, setSubmit] = useState();
   const router = useRouter();
   function handleLiveSearch(e) {
-    console.log("Live Search Handled", e.target.value);
+    setSubmit(e.target.value);
+  }
+  function submitClick() {
+    router.push(`search?query=${submit}`);
   }
   function handleSearch(e) {
-    console.log("search handled", e.target.value);
     if (e.charCode === 13) {
       router.push(`search?query=${e.target.value}`);
     }
   }
-  const [search, setSearch] = useState();
 
   useEffect(() => {}, []);
   return (
     <SearchWrapper>
-      <SearchOutlined style={{ marginRight: "10px", color: "inherit" }} />
+      <SearchOutlined
+        onClick={(e) => {
+          submitClick();
+        }}
+        style={{ marginRight: "10px", color: "inherit" }}
+      />
       <input
         placeholder="Search by creator, collections or NFT"
         onChange={(e) => handleLiveSearch(e)}
