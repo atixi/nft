@@ -2,7 +2,17 @@ import moment from "moment";
 import { getAuctionPriceDetails } from "/Constants/constants";
 import { differenceInSeconds, intervalToDuration, secondsToMilliseconds } from 'date-fns';
 import fromUnix from "date-fns/fromUnixTime";
+import * as Web3 from "web3";
+import { OpenSeaPort, Network } from "opensea-js";
 
+export const seaportProvider = new Web3.providers.HttpProvider(
+  "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
+  // 'https://rinkeby-api.opensea.io/api/v1/'
+);
+const seaport = new OpenSeaPort(seaportProvider, {
+  networkName: Network.Rinkeby,
+  apiKey: "c2dde5d7c0a0465a8e994f711a3a3c31",
+});
 export function unixToHumanDate(date, saleEndDate)
 {
   if(saleEndDate)
@@ -65,4 +75,9 @@ export function detectVideo(url)
   return true
   else 
   return false
+}
+export function makeOffer(offerData, asset)
+{
+
+  return offerData;
 }

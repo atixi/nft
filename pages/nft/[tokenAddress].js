@@ -86,6 +86,7 @@ function ProductPage() {
           image: nft.imageUrl,
           contractAddress: nft?.assetContract?.address,
           tokenId: nft.tokenId,
+          tokenAddress: nft.tokenAddress,
           collection: nft.collection,
           isPresale: nft.isPresale
         });
@@ -466,7 +467,7 @@ function ProductPage() {
                 >
                   Buy
                 </FooterButton>}
-                <MakeOfferModal />
+                <MakeOfferModal asset={asset} />
               </ButtonContainer>
             </ItemFooter>
           </ItemInfo>
