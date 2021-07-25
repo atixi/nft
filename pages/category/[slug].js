@@ -79,7 +79,7 @@ function Profile() {
     setData({
       ...fetchedData.data.categories[0],
       assets: [...fetchedData.data.categories[0].nfts],
-    });s
+    });
     setLoad(true);
   }
   useEffect(() => {

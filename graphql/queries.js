@@ -14,6 +14,8 @@ export const GET_SINGLE_CATEGORY = gql`
       }
       nfts {
         name
+        tokenId
+        tokenAddress
         previewImage {
           url
         }
