@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.21",
     "@binance-chain/bsc-connector": "^1.0.0",
     "@metamask/detect-provider": "^1.2.0",
     "@reduxjs/toolkit": "^1.6.0",
@@ -30,6 +31,7 @@
     "file-upload-with-preview": "^4.1.0",
     "formik": "^2.2.9",
     "fortmatic": "^2.2.1",
+    "graphql": "^15.5.1",
     "interweave": "^12.7.2",
     "lodash": "^4.17.21",
     "logger": "^0.0.1",
