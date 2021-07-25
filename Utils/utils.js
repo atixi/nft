@@ -9,10 +9,61 @@ export const seaportProvider = new Web3.providers.HttpProvider(
   "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
   // 'https://rinkeby-api.opensea.io/api/v1/'
 );
-const seaport = new OpenSeaPort(seaportProvider, {
+const HDWalletProvider = require("@truffle/hdwallet-provider");
+const mnemonicPhrase = "decrease lucky scare inherit trick soap snack smooth actress theory quote comic"
+
+const RINKEBY_NODE_URL = `https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31`;
+const provider = new  HDWalletProvider(mnemonicPhrase, RINKEBY_NODE_URL);
+const web3 = new Web3(provider);
+web3.setProvider(provider)
+const seaport = new OpenSeaPort(provider, {
   networkName: Network.Rinkeby,
   apiKey: "c2dde5d7c0a0465a8e994f711a3a3c31",
 });
+export async function makeOffer(offerData, asset, tokenAddresses)
+{
+  const {tokenId, tokenAddress} = asset;
+  const accountAddress = tokenAddresses.metaToken[0].toString();
+  const schemaName = "ERC721"
+  console.log("my wallet", accountAddress)
+  const offer = await seaport.createBuyOrder({
+    asset: {
+      tokenId,
+      tokenAddress,
+      schemaName // WyvernSchemaName. If omitted, defaults to 'ERC721'. Other options include 'ERC20' and 'ERC1155'
+    },
+    accountAddress,
+    // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
+    startAmount: offerData.price.amount,
+  })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export function unixToHumanDate(date, saleEndDate)
 {
   if(saleEndDate)
@@ -75,9 +126,4 @@ export function detectVideo(url)
   return true
   else 
   return false
-}
-export function makeOffer(offerData, asset)
-{
-
-  return offerData;
 }

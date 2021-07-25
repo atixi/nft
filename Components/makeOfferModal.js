@@ -8,8 +8,7 @@ const { Option } = Select;
 
 function MakeOfferModal({asset})
 {
-const tokens = useSelector(getAccountTokens)
-console.log(tokens)
+const tokenAddresses = useSelector(getAccountTokens)
   console.log("asset in modal", asset)
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [timeInput, setTime] = useState(true)
@@ -23,7 +22,7 @@ console.log(tokens)
   
       const onFinish = values => {
         console.log('Received values of form: ', values);
-        console.log("make offer", makeOffer(values, asset))
+        console.log("make offer", makeOffer(values, asset, tokenAddresses))
       };
       
       const handleTimeChange = (e) => {
