@@ -86,9 +86,7 @@ function Profile() {
     const data = await gqlClient.query({
       query: GET_SINGLE_CATEGORY,
       variables: {
-        where: {
-          categories: { slug: slug },
-        },
+        slug: slug,
       },
     });
     setTalent(await data.data);
