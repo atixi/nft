@@ -29,20 +29,7 @@ import { gqlClient } from "/lib/graphql-client";
 const { TabPane } = Tabs;
 function Profile() {
   const [isLoad, setLoad] = useState(false);
-  const [talent, setTalent] = useState({
-    talentAvatar: {
-      url: "/images/talentCover.png",
-    },
-    talentBanner: {
-      url: "",
-    },
-    talentName: "",
-    assets: [],
-  });
-  const [onSales, setOnsales] = useState({
-    assets: [],
-  });
-  const [owned, setOwned] = useState({
+  const [data, setData] = useState({
     assets: [],
   });
   const [loadMore, setLoadMore] = useState({
@@ -89,21 +76,16 @@ function Profile() {
         slug: slug,
       },
     });
-    setTalent(await data.data);
-    const sellOrders = await data.data.assets.filter(
-      (asset) => asset.sellOrders != null
-    );
-    setOnsales({
-      talent: { talentAvatar: { url: data.data.talentAvatar.url } },
-      assets: sellOrders,
+    setData({
+      ...data.data.categories[0],
+      assets: [...data.data.categories[0].nfts],
     });
+    setLoad(true);
   }
   useEffect(() => {
     (async function fetchingTalent() {
       if (slug != undefined) {
         fetCategories(slug);
-
-        setLoad(true);
       }
     })();
   }, [slug]);
@@ -114,28 +96,19 @@ function Profile() {
         {isLoad === false ? <CollectionLoader /> : ""}
         {isLoad ? (
           <ProfileContainer>
-            <img src={talent.talentBanner?.url} />
+            <img src={data.categoryBanner?.url} />
             <BiographyContainer>
               <div className={"avatar"}>
                 <img
                   alt="userAvatar"
-                  src={talent.talentAvatar?.url}
+                  src={data.categoryImage?.url}
                   loading="lazy"
                 />
               </div>
               <BioDescription>
                 <h3>
-                  <strong>{talent.talentName}</strong>
+                  <strong>Category ({data.categoryName})</strong>
                 </h3>
-                <h6>
-                  <strong>{`addressToShow`}</strong>
-                </h6>
-                <div className="mt-4">
-                  <ProfileButton type="button">
-                    <ShareButton />
-                  </ProfileButton>
-                  <ProfileButton type="button">{"..."}</ProfileButton>
-                </div>
               </BioDescription>
             </BiographyContainer>
           </ProfileContainer>
@@ -145,7 +118,7 @@ function Profile() {
         <Tabs defaultActiveKey="1">
           <TabPane tab="Assets" key="1">
             <>
-              <Products data={onSales} />
+              <Products data={data} />
               {isLoad ? (
                 loadMore.onSalesLoad ? (
                   loadMore.onsalesLoadMoreButtonLoading ? (
