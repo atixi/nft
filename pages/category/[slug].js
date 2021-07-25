@@ -70,16 +70,16 @@ function Profile() {
         })();
   }
   async function fetCategories(slug) {
-    const data = await gqlClient.query({
+    const fetchedData = await gqlClient.query({
       query: GET_SINGLE_CATEGORY,
       variables: {
         slug: slug,
       },
     });
     setData({
-      ...data.data.categories[0],
-      assets: [...data.data.categories[0].nfts],
-    });
+      ...fetchedData.data.categories[0],
+      assets: [...fetchedData.data.categories[0].nfts],
+    });s
     setLoad(true);
   }
   useEffect(() => {

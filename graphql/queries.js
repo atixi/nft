@@ -12,9 +12,11 @@ export const GET_SINGLE_CATEGORY = gql`
       categoryBanner {
         url
       }
-
       nfts {
         name
+        previewImage {
+          url
+        }
         talent {
           talentName
           talentAvatar {
