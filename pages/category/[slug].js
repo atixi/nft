@@ -24,7 +24,8 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
-
+import { GET_SINGLE_CATEGORY } from "/graphql/queries";
+import { gqlClient } from "/lib/graphql-client";
 const { TabPane } = Tabs;
 function Profile() {
   const [isLoad, setLoad] = useState(false);
@@ -81,19 +82,29 @@ function Profile() {
           });
         })();
   }
-
+  async function fetCategories(slug) {
+    const data = await gqlClient.query({
+      query: GET_SINGLE_CATEGORY,
+      variables: {
+        where: {
+          categories: { slug: slug },
+        },
+      },
+    });
+    setTalent(await data.data);
+    const sellOrders = await data.data.assets.filter(
+      (asset) => asset.sellOrders != null
+    );
+    setOnsales({
+      talent: { talentAvatar: { url: data.data.talentAvatar.url } },
+      assets: sellOrders,
+    });
+  }
   useEffect(() => {
     (async function fetchingTalent() {
       if (slug != undefined) {
-        const data = await api.get(`/categories/${slug}`);
-        setTalent(await data.data);
-        const sellOrders = await data.data.assets.filter(
-          (asset) => asset.sellOrders != null
-        );
-        setOnsales({
-          talent: { talentAvatar: { url: data.data.talentAvatar.url } },
-          assets: sellOrders,
-        });
+        fetCategories(slug);
+
         setLoad(true);
       }
     })();
