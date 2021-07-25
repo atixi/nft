@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const GET_SINGLE_CATEGORY = gql`
-  query getCategories($slug: JSON) {
-    categories(where: $slug) {
+  query getCategories($slug: JSON!) {
+    categories(where: { slug: $slug }) {
       categoryName
       slug
       icon
@@ -12,9 +12,11 @@ export const GET_SINGLE_CATEGORY = gql`
       categoryBanner {
         url
       }
-
       nfts {
         name
+        previewImage {
+          url
+        }
         talent {
           talentName
           talentAvatar {
