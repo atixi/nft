@@ -39,6 +39,7 @@ function Explore() {
   async function LoadMoreData(slug) {
     setLoadMore({
       ...loadMore,
+      dataStart: loadMore.dataStart + loadMore.countBy,
       dataLoadMoreButtonLoading: true,
     });
     const fetchedData = await gqlClient.query({
@@ -62,15 +63,10 @@ function Explore() {
           });
           setLoadMore({
             ...loadMore,
-            dataStart: loadMore.dataStart + loadMore.countBy,
             dataLoadMoreButtonLoading: false,
           });
         })();
   }
-  const loadExplore = async (slug) => {
-    const nfts = await api.get("/nfts/nfts");
-    setExplores({ assets: await nfts.data });
-  };
 
   const router = useRouter();
   const { cat } = router.query;
@@ -86,10 +82,6 @@ function Explore() {
     setExplores({
       ...fetchedData.data.categories[0],
       assets: [...fetchedData.data.categories[0].nfts],
-    });
-    setLoadMore({
-      ...loadMore,
-      dataStart: loadMore.dataStart + loadMore.countBy,
     });
     setLoad(true);
   }
