@@ -14,6 +14,8 @@ import {
   LoadMoreButton,
 } from "./StyledComponents/globalStyledComponents";
 import { useRouter } from "next/router";
+import { GET_SINGLE_CATEGORY } from "/graphql/queries";
+import { gqlClient } from "/lib/graphql-client";
 import axios from "axios";
 const api = axios.create({
   baseURL: process.env.HEROKU_BASE_URL,
@@ -24,19 +26,73 @@ const api = axios.create({
 });
 
 function Explore() {
+  const [isLoad, setLoad] = useState(false);
   const [categories, setCategories] = useState([]);
   const [explores, setExplores] = useState({ assets: [] });
-  const [explorPagination, setExplorPagination] = useState({
-    limit: 0,
-    offset: 0,
+  const [loadMore, setLoadMore] = useState({
+    dataLimit: 2,
+    dataStart: 0,
+    countBy: 2,
+    dataLoad: true,
+    dataLoadMoreButtonLoading: false,
   });
-  const loadExplore = async () => {
+  async function LoadMoreData(slug) {
+    setLoadMore({
+      ...loadMore,
+      dataLoadMoreButtonLoading: true,
+    });
+    const fetchedData = await gqlClient.query({
+      query: GET_SINGLE_CATEGORY,
+      variables: {
+        slug: slug,
+        limit: loadMore.dataLimit,
+        start: loadMore.dataStart,
+      },
+    });
+    const assetLength = fetchedData.data.categories[0].nfts.length;
+    assetLength === 0
+      ? setLoadMore({ ...loadMore, dataLoad: false })
+      : (() => {
+          setExplores({
+            ...explores,
+            assets: [
+              ...explores.assets,
+              ...fetchedData.data.categories[0].nfts,
+            ],
+          });
+          setLoadMore({
+            ...loadMore,
+            dataStart: loadMore.dataStart + loadMore.countBy,
+            dataLoadMoreButtonLoading: false,
+          });
+        })();
+  }
+  const loadExplore = async (slug) => {
     const nfts = await api.get("/nfts/nfts");
     setExplores({ assets: await nfts.data });
-    console.log("cooos", await nfts.data);
   };
+
   const router = useRouter();
   const { cat } = router.query;
+  async function fetchingData(slug) {
+    const fetchedData = await gqlClient.query({
+      query: GET_SINGLE_CATEGORY,
+      variables: {
+        slug: slug,
+        limit: loadMore.dataLimit,
+        start: loadMore.dataStart,
+      },
+    });
+    setExplores({
+      ...fetchedData.data.categories[0],
+      assets: [...fetchedData.data.categories[0].nfts],
+    });
+    setLoadMore({
+      ...loadMore,
+      dataStart: loadMore.dataStart + loadMore.countBy,
+    });
+    setLoad(true);
+  }
   useEffect(() => {
     async function fetchingCats() {
       const data = await api.get("/categories?_sort=id:ASC");
@@ -45,14 +101,9 @@ function Explore() {
     fetchingCats();
 
     if (cat != undefined) {
-      async function fetchingData() {
-        const data = await api.get(`/categories?_sort=id:ASC&slug_eq=${cat}`);
-        setExplores({ assets: await data.data[0].nfts });
-        console.log("kosskaasshh", await data.data[0].nfts);
-      }
-      fetchingData();
+      fetchingData(cat);
     } else {
-      loadExplore();
+      fetchingData("all");
     }
   }, [cat]);
   return (
@@ -75,9 +126,24 @@ function Explore() {
         {explores ? (
           <>
             {explores && <Products data={explores} />}
-            {/* <LoadMoreButton block shape={"round"} size={"large"}>
-              {"Load More"}
-            </LoadMoreButton> */}
+            {isLoad ? (
+              loadMore.dataLoad ? (
+                loadMore.dataLoadMoreButtonLoading ? (
+                  <LoadMoreButton block shape={"round"} size={"large"}>
+                    <Spin></Spin>
+                  </LoadMoreButton>
+                ) : (
+                  <LoadMoreButton
+                    block
+                    shape={"round"}
+                    size={"large"}
+                    onClick={() => LoadMoreData(cat ? cat : "all")}
+                  >
+                    Load More
+                  </LoadMoreButton>
+                )
+              ) : null
+            ) : null}
           </>
         ) : (
           <LoadingContainer>
