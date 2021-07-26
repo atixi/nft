@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 import {Modal, Form, Input, Select, Row, Col, message, Tooltip, DatePicker, TimePicker, Button, Space, Typography} from "antd"
 import {FooterButton} from "./StyledComponents/productDetails-styledComponents";
 import {makeOffer} from "Utils/utils";
@@ -10,7 +10,6 @@ function MakeOfferModal({asset, loadAgain})
 {
 const isWalletConnected = useSelector(getWalletConnected)
 const isMetaConnected = useSelector(getMetaConnected)
-
 const tokenAddresses = useSelector(getAccountTokens)
 let address;
   if(isWalletConnected)
@@ -23,12 +22,15 @@ let address;
   }
   console.log("asset in modal", asset)
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [notConnected, setNotConnected] = useState(false);
     const [timeInput, setTime] = useState(true)
     const showModal = () => {
-      setIsModalVisible(true);
+      (isWalletConnected || isMetaConnected) ?  
+      setIsModalVisible(true) : setNotConnected(true)
     };
     const handleCancel = () => {
       setIsModalVisible(false);
+      setNotConnected(false)
     };
 
     const [error, setError] = useState()
@@ -69,7 +71,7 @@ let address;
             onClick={showModal} >
             Make Offer
         </FooterButton>
-        <Modal title="Make an Offer" visible={isModalVisible} onCancel={handleCancel}
+     <Modal title="Make an Offer" visible={isModalVisible} onCancel={handleCancel}
             footer={[
             <Button key="back" onClick={handleCancel}>
                 Cancel
@@ -153,6 +155,7 @@ let address;
                 <Form.Item>{error}</Form.Item>
           </Form>
         </Modal>
+         <Modal title="not connected" visible={notConnected} onCancel={handleCancel}></Modal>
     </>
 }
 
