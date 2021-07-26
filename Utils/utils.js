@@ -20,14 +20,17 @@ const seaport = new OpenSeaPort(provider, {
   networkName: Network.Rinkeby,
   apiKey: "c2dde5d7c0a0465a8e994f711a3a3c31",
 });
-export async function makeOffer(offerData, asset, tokenAddresses)
+export function makeOffer(offerData, asset, accountAddress)
 {
   const {tokenId, tokenAddress} = asset;
-  const accountAddress = tokenAddresses.metaToken[0].toString();
-  const schemaName = "ERC721"
+
+  // console.log("token", tokenAddresses)
+  // const accountAddress = tokenAddresses.metaToken[0].toString();
+  const schemaName = "ERC721";
+  let err = false
   console.log("my wallet", accountAddress)
-  try{
-  const offer = await seaport.createBuyOrder({
+
+  return seaport.createBuyOrder({
     asset: {
       tokenId,
       tokenAddress,
@@ -37,11 +40,7 @@ export async function makeOffer(offerData, asset, tokenAddresses)
     // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
     startAmount: offerData.price.amount,
   })
-  }
-  catch(e)
-  {
-    console.log("catch", e)
-  }
+
 }
 
 

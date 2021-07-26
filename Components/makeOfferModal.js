@@ -1,14 +1,26 @@
 import React, {useState} from "react"
-import {Modal, Form, Input, Select, Row, Col, Tooltip, DatePicker, TimePicker, Button, Space, Typography} from "antd"
+import {Modal, Form, Input, Select, Row, Col, message, Tooltip, DatePicker, TimePicker, Button, Space, Typography} from "antd"
 import {FooterButton} from "./StyledComponents/productDetails-styledComponents";
 import {makeOffer} from "Utils/utils";
 import { useDispatch, useSelector } from "react-redux";
-import { getAccountTokens } from "store/action/accountSlice";
+import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
 const { Option } = Select;
 
-function MakeOfferModal({asset})
+function MakeOfferModal({asset, loadAgain})
 {
+const isWalletConnected = useSelector(getWalletConnected)
+const isMetaConnected = useSelector(getMetaConnected)
+
 const tokenAddresses = useSelector(getAccountTokens)
+let address;
+  if(isWalletConnected)
+  {
+    address = tokenAddresses.walletToken[0].toString();
+  }
+  else if(isMetaConnected)
+  {
+    address = tokenAddresses.metaToken[0].toString();
+  }
   console.log("asset in modal", asset)
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [timeInput, setTime] = useState(true)
@@ -19,10 +31,20 @@ const tokenAddresses = useSelector(getAccountTokens)
       setIsModalVisible(false);
     };
 
-  
-      const onFinish = values => {
+    const [error, setError] = useState()
+      const onFinish = async values => {
         console.log('Received values of form: ', values);
-        console.log("make offer", makeOffer(values, asset, tokenAddresses))
+        try {
+          let offer = await makeOffer(values, asset, address)
+     
+          setIsModalVisible(false)
+          loadAgain(true)
+          message.success('Offer is saved');
+        }
+        catch(e)
+        {
+          console.log(e)
+        }
       };
       
       const handleTimeChange = (e) => {
@@ -128,6 +150,7 @@ const tokenAddresses = useSelector(getAccountTokens)
                 </Form.Item> */}
                 </Input.Group>
                 </Form.Item>
+                <Form.Item>{error}</Form.Item>
           </Form>
         </Modal>
     </>

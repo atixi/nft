@@ -68,12 +68,20 @@ function ProductPage() {
   const [previewImage, setPreviewImage] = useState(null);
   const [sellOrders, setSellOrders] = useState(null)
   const [isVideo, setIsVideo] = useState(false)
+  const [refresh, setRefresh] = useState(true)
+
+    const loadAgain = () =>{
+      setLoading(true)
+      loadNft()
+    }
     const loadNft = async () => {
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
       console.log(data)
       if(data)
-      setLoading(false);
+        {
+          setLoading(false)
+        }
 
       if(data.status == 200)
       {
@@ -107,7 +115,8 @@ function ProductPage() {
     if (!queryParam) {
       return null;
     }
-    loadNft();
+
+    refresh && loadNft();
   }, [queryParam]);
   return (
     <>
@@ -467,7 +476,7 @@ function ProductPage() {
                 >
                   Buy
                 </FooterButton>}
-                <MakeOfferModal asset={asset} />
+                <MakeOfferModal asset={asset} loadAgain={loadAgain} />
               </ButtonContainer>
             </ItemFooter>
           </ItemInfo>
