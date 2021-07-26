@@ -39,7 +39,6 @@ function Explore() {
   async function LoadMoreData(slug) {
     setLoadMore({
       ...loadMore,
-      dataStart: loadMore.dataStart + loadMore.countBy,
       dataLoadMoreButtonLoading: true,
     });
     const fetchedData = await gqlClient.query({
@@ -63,6 +62,7 @@ function Explore() {
           });
           setLoadMore({
             ...loadMore,
+            dataStart: loadMore.dataStart + loadMore.countBy,
             dataLoadMoreButtonLoading: false,
           });
         })();
@@ -76,12 +76,17 @@ function Explore() {
       variables: {
         slug: slug,
         limit: loadMore.dataLimit,
-        start: loadMore.dataStart,
+        start: 0,
       },
     });
     setExplores({
       ...fetchedData.data.categories[0],
       assets: [...fetchedData.data.categories[0].nfts],
+    });
+    setLoadMore({
+      ...loadMore,
+      dataStart: loadMore.countBy,
+      dataLoad: true,
     });
     setLoad(true);
   }
