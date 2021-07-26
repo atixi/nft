@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 export const GET_SINGLE_CATEGORY = gql`
-  query getCategories($slug: JSON!) {
+  query getCategories($slug: JSON!, $limit: Int, $start: Int) {
     categories(where: { slug: $slug }) {
       categoryName
       slug
@@ -12,7 +12,7 @@ export const GET_SINGLE_CATEGORY = gql`
       categoryBanner {
         url
       }
-      nfts {
+      nfts(limit: $limit, start: $start) {
         name
         tokenId
         tokenAddress

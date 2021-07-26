@@ -33,59 +33,66 @@ function Profile() {
     assets: [],
   });
   const [loadMore, setLoadMore] = useState({
-    onSalesOffset: 10,
-    ownedOffset: 10,
-    createdOffset: 10,
-    onSalesLoad: true,
-    ownedLoad: true,
-    createdLoad: true,
-    onsalesLoadMoreButtonLoading: false,
-    ownedLoadMoreButtonLoading: false,
-    createdLoadMoreButtonLoading: false,
+    dataLimit: 2,
+    dataStart: 0,
+    countBy: 2,
+    dataLoad: true,
+    dataLoadMoreButtonLoading: false,
   });
   const router = useRouter();
   const { slug } = router.query;
 
-  async function LoadMoreOnsales() {
-    setLoadMore({
-      ...loadMore,
-      onsalesLoadMoreButtonLoading: true,
-    });
-    const moreAssets = await api.get(
-      `/talents/${slug}?offset=${loadMore.onSalesOffset}`
-    );
-    const assetLength = await moreAssets.data.assets.length;
-    assetLength === 0
-      ? setLoadMore({ ...loadMore, onSalesLoad: false })
-      : (() => {
-          setOnsales({
-            ...onSales,
-            assets: [...onSales.assets, ...moreAssets.data.assets],
-          });
-          setLoadMore({
-            ...loadMore,
-            onSalesOffset: loadMore.onSalesOffset + 10,
-            onsalesLoadMoreButtonLoading: false,
-          });
-        })();
-  }
-  async function fetCategories(slug) {
+  async function fetchCategories(slug) {
     const fetchedData = await gqlClient.query({
       query: GET_SINGLE_CATEGORY,
       variables: {
         slug: slug,
+        limit: loadMore.dataLimit,
+        start: loadMore.dataStart,
       },
     });
     setData({
       ...fetchedData.data.categories[0],
       assets: [...fetchedData.data.categories[0].nfts],
     });
+    setLoadMore({
+      ...loadMore,
+      dataStart: loadMore.dataStart + loadMore.countBy,
+    });
     setLoad(true);
+  }
+  async function LoadMoreData(slug) {
+    setLoadMore({
+      ...loadMore,
+      dataLoadMoreButtonLoading: true,
+    });
+    const fetchedData = await gqlClient.query({
+      query: GET_SINGLE_CATEGORY,
+      variables: {
+        slug: slug,
+        limit: loadMore.dataLimit,
+        start: loadMore.dataStart,
+      },
+    });
+    const assetLength = fetchedData.data.categories[0].nfts.length;
+    assetLength === 0
+      ? setLoadMore({ ...loadMore, dataLoad: false })
+      : (() => {
+          setData({
+            ...data,
+            assets: [...data.assets, ...fetchedData.data.categories[0].nfts],
+          });
+          setLoadMore({
+            ...loadMore,
+            dataStart: loadMore.dataStart + loadMore.countBy,
+            dataLoadMoreButtonLoading: false,
+          });
+        })();
   }
   useEffect(() => {
     (async function fetchingTalent() {
       if (slug != undefined) {
-        fetCategories(slug);
+        fetchCategories(slug);
       }
     })();
   }, [slug]);
@@ -120,8 +127,8 @@ function Profile() {
             <>
               <Products data={data} />
               {isLoad ? (
-                loadMore.onSalesLoad ? (
-                  loadMore.onsalesLoadMoreButtonLoading ? (
+                loadMore.dataLoad ? (
+                  loadMore.dataLoadMoreButtonLoading ? (
                     <LoadMoreButton block shape={"round"} size={"large"}>
                       <Spin></Spin>
                     </LoadMoreButton>
@@ -130,7 +137,7 @@ function Profile() {
                       block
                       shape={"round"}
                       size={"large"}
-                      onClick={() => LoadMoreOnsales()}
+                      onClick={() => LoadMoreData(slug)}
                     >
                       Load More
                     </LoadMoreButton>
