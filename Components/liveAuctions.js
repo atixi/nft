@@ -85,7 +85,7 @@ function Product(product, index) {
       <ProductCardHeader className={`mt-3`}>
         <ProductCardHeaderOwners>
           <Avatar.Group>
-            <Tooltip title={`Owner: ${checkName(product?.asset.owner?.user?.username)}`} placement="top">
+            <Tooltip title={`Owner: ${checkName(product?.asset?.owner?.user?.username)}`} placement="top">
               <Avatar
                 key={product.asset?.owner.address}
                 icon={

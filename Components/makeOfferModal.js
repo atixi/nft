@@ -3,7 +3,7 @@ import {Modal, Form, Input, Select, Row, Col, Tooltip, DatePicker, TimePicker, B
 import {FooterButton} from "./StyledComponents/productDetails-styledComponents";
 import {makeOffer} from "Utils/utils";
 import { useDispatch, useSelector } from "react-redux";
-import { getAccountTokens, getMetaToken } from "store/action/accountSlice";
+import { getAccountTokens } from "store/action/accountSlice";
 const { Option } = Select;
 
 function MakeOfferModal({asset})

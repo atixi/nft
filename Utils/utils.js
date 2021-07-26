@@ -26,6 +26,7 @@ export async function makeOffer(offerData, asset, tokenAddresses)
   const accountAddress = tokenAddresses.metaToken[0].toString();
   const schemaName = "ERC721"
   console.log("my wallet", accountAddress)
+  try{
   const offer = await seaport.createBuyOrder({
     asset: {
       tokenId,
@@ -36,6 +37,11 @@ export async function makeOffer(offerData, asset, tokenAddresses)
     // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
     startAmount: offerData.price.amount,
   })
+  }
+  catch(e)
+  {
+    console.log("catch", e)
+  }
 }
 
 
