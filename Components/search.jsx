@@ -14,7 +14,7 @@ export default function Search(props) {
   }
   function handleSearch(e) {
     if (e.charCode === 13) {
-      router.push(`search?query=${e.target.value}`);
+      router.push(`/search?query=${e.target.value}`);
     }
   }
 
