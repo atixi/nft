@@ -1,11 +1,32 @@
 import React, {useState, useEffect} from "react"
 import {Modal, Form, Input, Select, Row, Col, message, Tooltip, DatePicker, TimePicker, Button, Space, Typography} from "antd"
-import {FooterButton} from "./StyledComponents/productDetails-styledComponents";
+import {FooterButton, ButtonContainer} from "./StyledComponents/productDetails-styledComponents";
 import {makeOffer} from "Utils/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
 const { Option } = Select;
-
+import Link from "next/link"
+import styled from "styled-components"
+const ConnectButton = styled.button`
+margin: auto;
+width: 200px;
+line-height: 12px;
+font-weight: 600;
+border-radius: 25px;
+border: 1px solid rgba(4, 4, 5, 0.1);
+background-color: ${(props) => props.background} !important;
+color: ${(props) => props.color} !important;
+margin-bottom: ${(props) => props.marginBottom ? props.marginBottom : ""};
+font-size: 0.98rem !important;
+padding: 13px 20px;
+`;
+const ModalContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const ModalTextContainer = styled.p`
+  text-align: center;
+`
 function MakeOfferModal({asset, loadAgain})
 {
 const isWalletConnected = useSelector(getWalletConnected)
@@ -155,7 +176,13 @@ let address;
                 <Form.Item>{error}</Form.Item>
           </Form>
         </Modal>
-         <Modal title="not connected" visible={notConnected} onCancel={handleCancel}></Modal>
+         <Modal title={<strong>{"You are not connect to any wallet!"}</strong>} footer={false} visible={notConnected} onCancel={handleCancel}>
+           <ModalContainer>
+             <ModalTextContainer>{"You need to connect your Ethereum wallet to sign messages and send transactions to Ethereum blockchain"}</ModalTextContainer>
+           <Link style={{textAlign: "center"}} href="/wallet" passHref><a><ConnectButton color={"white"} background={"#0066ff"} marginBottom={"15px"} > Connect Wallet </ConnectButton></a></Link>
+           {/* <ConnectButton color={"black"} background={"white"} > Create Wallet </ConnectButton> */}
+           </ModalContainer>
+         </Modal>
     </>
 }
 
