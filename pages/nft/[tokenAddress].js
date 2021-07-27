@@ -1,4 +1,4 @@
-import { Dropdown, Image, Menu, Statistic, Tabs, Avatar, Result, Button, Spin } from "antd";
+import { Dropdown, Image, Menu, Modal, Statistic, Tabs, Avatar, Result, Button, Spin } from "antd";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -40,7 +40,8 @@ import { fetchOne } from "/Utils/strapiApi";
 import { unixToHumanDate, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestOffer, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 import{FieldTimeOutlined} from "@ant-design/icons"
-import ReactPlayer from 'react-player'
+import ReactPlayer from 'react-player';
+import MakeOfferModal from "/Components/makeOfferModal"
 const { Countdown } = Statistic;
 const menu = (
   <DropdownMenu className={"mt-3"}>
@@ -67,12 +68,20 @@ function ProductPage() {
   const [previewImage, setPreviewImage] = useState(null);
   const [sellOrders, setSellOrders] = useState(null)
   const [isVideo, setIsVideo] = useState(false)
-  const loadNft = async () => {
+  const [refresh, setRefresh] = useState(true)
+
+    const loadAgain = () =>{
+      setLoading(true)
+      loadNft()
+    }
+    const loadNft = async () => {
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
       console.log(data)
       if(data)
-      setLoading(false);
+        {
+          setLoading(false)
+        }
 
       if(data.status == 200)
       {
@@ -85,6 +94,7 @@ function ProductPage() {
           image: nft.imageUrl,
           contractAddress: nft?.assetContract?.address,
           tokenId: nft.tokenId,
+          tokenAddress: nft.tokenAddress,
           collection: nft.collection,
           isPresale: nft.isPresale
         });
@@ -105,7 +115,8 @@ function ProductPage() {
     if (!queryParam) {
       return null;
     }
-    loadNft();
+
+    refresh && loadNft();
   }, [queryParam]);
   return (
     <>
@@ -465,12 +476,7 @@ function ProductPage() {
                 >
                   Buy
                 </FooterButton>}
-                <FooterButton
-                  color={"#0066ff"}
-                  style={{ background: "#0066ff26" }}
-                >
-                  Make Offer
-                </FooterButton>
+                <MakeOfferModal asset={asset} loadAgain={loadAgain} />
               </ButtonContainer>
             </ItemFooter>
           </ItemInfo>
@@ -478,6 +484,7 @@ function ProductPage() {
       </Wrapper> 
     </>
   );
-}    
+} 
+
 export default ProductPage;
         

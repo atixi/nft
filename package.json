@@ -12,6 +12,7 @@
     "@binance-chain/bsc-connector": "^1.0.0",
     "@metamask/detect-provider": "^1.2.0",
     "@reduxjs/toolkit": "^1.6.0",
+    "@truffle/hdwallet-provider": "^1.4.2",
     "@walletconnect/qrcode-modal": "^1.4.1",
     "@web3-react/core": "^6.1.9",
     "@web3-react/fortmatic-connector": "^6.1.6",

@@ -18,7 +18,7 @@ const accountSlice = createSlice({
   },
   reducers: {
     setAccountTokens: (state, action) => {
-      state.accountTokens.walletToken = action.payload;
+      state.accountTokens = action.payload;
     },
     setMetaToken: (state, action) => {
       state.accountTokens.metaToken = action.payload;
@@ -57,7 +57,7 @@ export const {
   setWalletConnected,
 } = accountSlice.actions;
 export const getAccountTokens = (state) => {
-  return state.account.accountToken;
+  return state.account.accountTokens;
 };
 
 export const getMetaToken = (state) => {
