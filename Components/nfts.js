@@ -61,7 +61,26 @@ function Products(props) {
                     </div>
                     <Dropdown
                       trigger={["click"]}
-                      overlay={menu}
+                      overlay={
+                        <Menu>
+                          <Menu.Item key={n.tokenId}>
+                            <Link
+                              href={`/nft/${n.tokenAddress}?tokenId=${n?.tokenId}`}
+                            >
+                              Buy/Bid
+                            </Link>
+                          </Menu.Item>
+                          <Menu.Item key={n.tokenAddress}>
+                            <Link
+                              href={`https://opensea.io/assets/${n.tokenAddress}/${n?.tokenId}`}
+                              passHref
+                            >
+                              <a target="_blank">View on OpenSea</a>
+                            </Link>
+                          </Menu.Item>
+                          <Menu.Item key="3">Share</Menu.Item>
+                        </Menu>
+                      }
                       placement="bottomRight"
                     >
                       <Button>...</Button>
