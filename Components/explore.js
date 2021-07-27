@@ -70,6 +70,7 @@ function Explore() {
 
   const router = useRouter();
   const { cat } = router.query;
+
   async function fetchingData(slug) {
     const fetchedData = await gqlClient.query({
       query: GET_SINGLE_CATEGORY,

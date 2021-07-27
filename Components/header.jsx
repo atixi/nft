@@ -76,7 +76,7 @@ function Header(props) {
   });
   const [submit, setSubmit] = useState();
   function submitClick() {
-    router.push(`search?query=${submit}`);
+    router.push(`/search?query=${submit}`);
     setSearch(false);
   }
   function handleLiveSearch(e) {
