@@ -23,6 +23,7 @@ padding: 13px 20px;
 const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
+  text-align: center;
 `;
 const ModalTextContainer = styled.p`
   text-align: center;
@@ -86,7 +87,7 @@ let address;
         ],
       };
     return <>
-        <FooterButton
+        <FooterButton 
             color={"#0066ff"}
             style={{ background: "#0066ff26" }}
             onClick={showModal} >
