@@ -4,7 +4,7 @@ import { differenceInSeconds, intervalToDuration, secondsToMilliseconds } from '
 import fromUnix from "date-fns/fromUnixTime";
 import * as Web3 from "web3";
 import { OpenSeaPort, Network } from "opensea-js";
-
+import { OrderSide } from 'opensea-js/lib/types'
 export const seaportProvider = new Web3.providers.HttpProvider(
   "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
   // 'https://rinkeby-api.opensea.io/api/v1/'
@@ -23,13 +23,8 @@ const seaport = new OpenSeaPort(provider, {
 export function makeOffer(offerData, asset, accountAddress)
 {
   const {tokenId, tokenAddress} = asset;
-
-  // console.log("token", tokenAddresses)
-  // const accountAddress = tokenAddresses.metaToken[0].toString();
   const schemaName = "ERC721";
   let err = false
-  console.log("my wallet", accountAddress)
-
   return seaport.createBuyOrder({
     asset: {
       tokenId,
@@ -40,12 +35,17 @@ export function makeOffer(offerData, asset, accountAddress)
     // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
     startAmount: offerData.price.amount,
   })
-
 }
-
-
-
-
+export async function buyOrder(asset, accountAddress)
+{
+  const order = await seaport.api.getOrder({ 
+    side: OrderSide.Sell,
+    asset_contract_address: asset.tokenAddress,
+    token_id: asset.tokenId,
+   })
+  const transactionHash = await seaport.fulfillOrder({ order, accountAddress })
+  return transactionHash;
+}
 
 
 

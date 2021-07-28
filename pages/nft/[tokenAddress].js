@@ -37,11 +37,14 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne } from "/Utils/strapiApi";
-import { unixToHumanDate, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestOffer, convertToUsd} from "/Utils/utils";
+import { unixToHumanDate, buyOrder, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestOffer, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 import{FieldTimeOutlined} from "@ant-design/icons"
 import ReactPlayer from 'react-player';
 import MakeOfferModal from "/Components/makeOfferModal"
+import BuyNftModal from "/Components/buyNftModal"
+
+
 const { Countdown } = Statistic;
 const menu = (
   <DropdownMenu className={"mt-3"}>
@@ -469,13 +472,8 @@ function ProductPage() {
                 )}
               </BidCountdown>}
               <ButtonContainer>
-                {asset.isPresale == true && 
-                <FooterButton
-                  color={"#ffffff"}
-                  style={{ background: "#0066ff" }}
-                >
-                  Buy
-                </FooterButton>}
+                {/* {asset.isPresale == true &&  */}
+                <BuyNftModal asset={asset} loadAgain={loadAgain} />
                 <MakeOfferModal asset={asset} loadAgain={loadAgain} />
               </ButtonContainer>
             </ItemFooter>
