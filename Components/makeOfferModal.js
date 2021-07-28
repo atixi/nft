@@ -33,7 +33,7 @@ function MakeOfferModal({asset, loadAgain})
 const isWalletConnected = useSelector(getWalletConnected)
 const isMetaConnected = useSelector(getMetaConnected)
 const tokenAddresses = useSelector(getAccountTokens)
-let address;
+let address=null;
   if(isWalletConnected)
   {
     address = tokenAddresses.walletToken[0].toString();
@@ -59,7 +59,7 @@ let address;
       const onFinish = async values => {
         console.log('Received values of form: ', values);
         try {
-          let offer = await makeOffer(values, asset, address)
+          let offer = await makeOffer(values, asset, address && address)
      
           setIsModalVisible(false)
           loadAgain(true)
@@ -90,6 +90,7 @@ let address;
         <FooterButton 
             color={"#0066ff"}
             style={{ background: "#0066ff26" }}
+            disabled={address && address == asset?.owner?.address ? true : false}
             onClick={showModal} >
             Make Offer
         </FooterButton>
