@@ -46,6 +46,7 @@ let address=null;
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [notConnected, setNotConnected] = useState(false);
     const [timeInput, setTime] = useState(true)
+    const [responseMessage, setResponseMessage] = useState([""])
     const showModal = () => {
       (isWalletConnected || isMetaConnected) ?  
       setIsModalVisible(true) : setNotConnected(true)
@@ -67,7 +68,7 @@ let address=null;
         }
         catch(e)
         {
-          console.log(e)
+          setResponseMessage(e.toString())
         }
       };
       
@@ -175,7 +176,7 @@ let address=null;
                 </Form.Item> */}
                 </Input.Group>
                 </Form.Item>
-                <Form.Item>{error}</Form.Item>
+                <Form.Item><span style={{color: "red"}}>{responseMessage}</span></Form.Item>
           </Form>
         </Modal>
          <Modal title={<strong>{"You are not connect to any wallet!"}</strong>} footer={false} visible={notConnected} onCancel={handleCancel}>
