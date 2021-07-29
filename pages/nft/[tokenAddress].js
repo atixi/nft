@@ -99,7 +99,9 @@ function ProductPage() {
           tokenId: nft.tokenId,
           tokenAddress: nft.tokenAddress,
           collection: nft.collection,
-          isPresale: nft.isPresale
+          isPresale: nft.isPresale,
+          thumbnail: nft.imageUrlThumbnail,
+          sellOrder: nft.sellOrder
         });
       setIsVideo(detectVideo(nft.imageUrl))
       nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl))
@@ -473,7 +475,7 @@ function ProductPage() {
               </BidCountdown>}
               <ButtonContainer>
                 {/* {asset.isPresale == true &&  */}
-                <BuyNftModal asset={asset} loadAgain={loadAgain} />
+                {asset?.sellOrder != null && <BuyNftModal asset={asset} loadAgain={loadAgain} /> }
                 <MakeOfferModal asset={asset} loadAgain={loadAgain} />
               </ButtonContainer>
             </ItemFooter>

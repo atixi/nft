@@ -13,21 +13,21 @@ const HDWalletProvider = require("@truffle/hdwallet-provider");
 const mnemonicPhrase = "decrease lucky scare inherit trick soap snack smooth actress theory quote comic"
 
 const RINKEBY_NODE_URL = `https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31`;
-const provider = new  HDWalletProvider(mnemonicPhrase, RINKEBY_NODE_URL);
+const provider = new HDWalletProvider(mnemonicPhrase, RINKEBY_NODE_URL);
 const web3 = new Web3(provider);
 web3.setProvider(provider)
 const seaport = new OpenSeaPort(provider, {
   networkName: Network.Rinkeby,
   apiKey: "c2dde5d7c0a0465a8e994f711a3a3c31",
 });
-export function makeOffer(offerData, asset, accountAddress)
+export async function makeOffer(offerData, asset, accountAddress)
 {
   const {tokenId, tokenAddress} = asset;
   const schemaName = "ERC721";
-  let err = false
-  return seaport.createBuyOrder({
+  let err = false 
+  return await seaport.createBuyOrder({
     asset: {
-      tokenId,
+      tokenId, 
       tokenAddress,
       schemaName // WyvernSchemaName. If omitted, defaults to 'ERC721'. Other options include 'ERC20' and 'ERC1155'
     },

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import {Modal, Form, Input, Select, Row, Col, message, Tooltip, DatePicker, TimePicker, Button, Space, Typography} from "antd"
+import {Modal, Form,Select, List, Avatar, message, Tooltip, DatePicker, TimePicker, Button, Space, Typography} from "antd"
 import {FooterButton, ButtonContainer} from "./StyledComponents/productDetails-styledComponents";
 import {makeOffer, buyOrder} from "Utils/utils";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/ac
 const { Option } = Select;
 import Link from "next/link"
 import styled from "styled-components"
+import { getAuctionPriceDetails } from "/Constants/constants";
 const ConnectButton = styled.button`
 margin: auto;
 width: 200px;
@@ -56,7 +57,6 @@ let address=null;
       setNotConnected(false)
     };
 
-    const [error, setError] = useState()
       const onFinish = async values => {
         console.log('Received values of form: ', values);
         try {
@@ -87,33 +87,49 @@ let address=null;
           },
         ],
       };
+      const data = [
+        {
+          title: 'Ant Design Title 1',
+        }
+      ];
     return <>
-        {/* <FooterButton 
-            color={"#0066ff"}
-            style={{ background: "#0066ff26" }}
-            disabled={address && address == asset?.owner?.address ? true : false}
-            >
-            Make Offer
-        </FooterButton> */}
         <FooterButton
-                  color={"#ffffff"}
-                  style={{ background: "#0066ff" }}
-                  onClick={showModal} 
+                color={"#ffffff"}
+                style={{ background: "#0066ff" }}
+                onClick={showModal} 
+                // disabled={address && address == asset?.owner?.address ? true : false}
                   >
                   Buy
                 </FooterButton>
-     <Modal title="Make an Offer" visible={isModalVisible} onCancel={handleCancel}
+        <Modal title="Make an Offer" visible={isModalVisible} onCancel={handleCancel}
             footer={[
             <Button key="back" onClick={handleCancel}>
                 Cancel
             </Button>,
             <Button key="submit" form={"makeOffer"} htmlType={"submit"} type="primary">
-                Submit
+                Buy
             </Button>,
             
             ]}>
                 <Form name="complex-form" id={"makeOffer"} onFinish={onFinish} labelCol={{ span: 24 }} wrapperCol={{ span: 24 }}>
-
+                <List
+                    itemLayout="horizontal"
+                    dataSource={data}
+                    renderItem={item => (
+                    <List.Item>
+                        <List.Item.Meta
+                        avatar={<Avatar shape={'square'} src={asset.thumbnail} size={64}/>}
+                        title={<Link href={`/collection/${asset?.collection?.slug}`}><a>{asset?.collection.name}</a></Link>}
+                        description={asset.name}
+                        />
+                        <div>
+                          {
+                             `${getAuctionPriceDetails(asset.sellOrder && asset.sellOrder).priceBase} ${asset.sellOrder.paymentTokenContract.symbol}`
+                          }
+                        </div>
+                    </List.Item>
+                    )}
+                />
                 <Form.Item><span style={{color: "red"}}>{responseMessage}</span></Form.Item>
           </Form>
         </Modal>
