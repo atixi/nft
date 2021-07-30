@@ -41,24 +41,16 @@ function Explore() {
       ...loadMore,
       dataLoadMoreButtonLoading: true,
     });
-    const fetchedData = await gqlClient.query({
-      query: GET_SINGLE_CATEGORY,
-      variables: {
-        slug: slug,
-        limit: loadMore.dataLimit,
-        start: loadMore.dataStart,
-      },
-    });
-    const assetLength = fetchedData.data.categories[0].nfts.length;
+    const fetchedData = await api.get(
+      `/categories/${slug}?limit=${loadMore.dataLimit}&offset=${loadMore.dataStart}`
+    );
+    const assetLength = fetchedData.data.assets.length;
     assetLength === 0
       ? setLoadMore({ ...loadMore, dataLoad: false })
       : (() => {
           setExplores({
             ...explores,
-            assets: [
-              ...explores.assets,
-              ...fetchedData.data.categories[0].nfts,
-            ],
+            assets: [...explores.assets, ...fetchedData.data.assets],
           });
           setLoadMore({
             ...loadMore,
@@ -72,17 +64,11 @@ function Explore() {
   const { cat } = router.query;
 
   async function fetchingData(slug) {
-    const fetchedData = await gqlClient.query({
-      query: GET_SINGLE_CATEGORY,
-      variables: {
-        slug: slug,
-        limit: loadMore.dataLimit,
-        start: 0,
-      },
-    });
+    const fetchedData = await api.get(
+      `/categories/${slug}?limit=${loadMore.dataLimit}&offset=0`
+    );
     setExplores({
-      ...fetchedData.data.categories[0],
-      assets: [...fetchedData.data.categories[0].nfts],
+      ...fetchedData.data,
     });
     setLoadMore({
       ...loadMore,
