@@ -14,8 +14,6 @@ import {
   LoadMoreButton,
 } from "./StyledComponents/globalStyledComponents";
 import { useRouter } from "next/router";
-import { GET_SINGLE_CATEGORY } from "/graphql/queries";
-import { gqlClient } from "/lib/graphql-client";
 import axios from "axios";
 const api = axios.create({
   baseURL: process.env.HEROKU_BASE_URL,
