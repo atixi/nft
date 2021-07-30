@@ -43,17 +43,11 @@ function Profile() {
   const { slug } = router.query;
 
   async function fetchCategories(slug) {
-    const fetchedData = await gqlClient.query({
-      query: GET_SINGLE_CATEGORY,
-      variables: {
-        slug: slug,
-        limit: loadMore.dataLimit,
-        start: loadMore.dataStart,
-      },
-    });
+    const fetchedData = await api.get(
+      `/categories/${slug}?limit=${loadMore.dataLimit}&offset=${loadMore.dataStart}`
+    );
     setData({
-      ...fetchedData.data.categories[0],
-      assets: [...fetchedData.data.categories[0].nfts],
+      ...fetchedData.data,
     });
     setLoadMore({
       ...loadMore,
@@ -66,21 +60,16 @@ function Profile() {
       ...loadMore,
       dataLoadMoreButtonLoading: true,
     });
-    const fetchedData = await gqlClient.query({
-      query: GET_SINGLE_CATEGORY,
-      variables: {
-        slug: slug,
-        limit: loadMore.dataLimit,
-        start: loadMore.dataStart,
-      },
-    });
-    const assetLength = fetchedData.data.categories[0].nfts.length;
+    const fetchedData = await api.get(
+      `/categories/${slug}?limit=${loadMore.dataLimit}&offset=${loadMore.dataStart}`
+    );
+    const assetLength = fetchedData.data.assets.length;
     assetLength === 0
       ? setLoadMore({ ...loadMore, dataLoad: false })
       : (() => {
           setData({
             ...data,
-            assets: [...data.assets, ...fetchedData.data.categories[0].nfts],
+            assets: [...data.assets, ...fetchedData.data.assets],
           });
           setLoadMore({
             ...loadMore,
