@@ -24,8 +24,7 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
-import { GET_SINGLE_CATEGORY } from "/graphql/queries";
-import { gqlClient } from "/lib/graphql-client";
+
 const { TabPane } = Tabs;
 function Profile() {
   const [isLoad, setLoad] = useState(false);
