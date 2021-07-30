@@ -2,7 +2,7 @@ module.exports = {
   webpack5: true,
   mocha: {
     enableTimeouts: false,
-    before_timeout: 220000
+    before_timeout: 320000
   },
   images: {
     domains: ["res.cloudinary.com"],
