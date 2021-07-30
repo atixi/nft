@@ -42,7 +42,6 @@ let address=null;
   {
     address = tokenAddresses.metaToken[0].toString();
   }
-  console.log("asset in modal", asset)
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [notConnected, setNotConnected] = useState(false);
     const [timeInput, setTime] = useState(true)
@@ -58,7 +57,6 @@ let address=null;
 
     const [error, setError] = useState()
       const onFinish = async values => {
-        console.log('Received values of form: ', values);
         try {
           let offer = await makeOffer(values, asset, address && address)
      
@@ -73,7 +71,6 @@ let address=null;
       };
       
       const handleTimeChange = (e) => {
-          console.log(e)
           if(e == 'custom')
             setTime(false)
           else

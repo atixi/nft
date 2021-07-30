@@ -42,8 +42,8 @@ export async function buyOrder(asset, accountAddress)
     side: OrderSide.Sell,
     asset_contract_address: asset.tokenAddress,
     token_id: asset.tokenId,
-   }).catch(()=> {console.log("error getting order ")})
-  const transactionHash = await seaport.fulfillOrder({ order, accountAddress }).catch(() => {console.log("error buying")})
+   }).catch(()=> { return "Error getting order"})
+  const transactionHash = await seaport.fulfillOrder({ order, accountAddress }).catch(() => {return "Error on buying the token"})
   return transactionHash;
 }
 

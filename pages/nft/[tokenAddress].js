@@ -116,7 +116,6 @@ function ProductPage() {
     }
   }
   useEffect(() => {
-    console.log("sell orders", sellOrders)
     if (!queryParam) {
       return null;
     }
