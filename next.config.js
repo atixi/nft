@@ -1,5 +1,9 @@
 module.exports = {
   webpack5: true,
+  mocha: {
+    enableTimeouts: false,
+    before_timeout: 220000
+  },
   images: {
     domains: ["res.cloudinary.com"],
   },
@@ -7,6 +11,6 @@ module.exports = {
     HEROKU_BASE_URL: process.env.HEROKU_BASE_URL,
     RINKEBY_API_KEY: process.env.RINKEBY_API_KEY,
     RINKEBY_NODE_URL: process.env.RINKEBY_NODE_URL
-
   },
+  
 };
