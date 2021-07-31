@@ -44,7 +44,6 @@ const ModalTextContainer = styled.p`
 `
 function MakeOfferModal({asset, loadAgain})
 {
-  console.log("the asset", asset)
 const isWalletConnected = useSelector(getWalletConnected)
 const isMetaConnected = useSelector(getMetaConnected)
 const tokenAddresses = useSelector(getAccountTokens)
@@ -133,10 +132,8 @@ function showInfo(asset)
       title: 'Ant Design Title 1',
     }
   ];
-  console.log("show", asset)
   function onChange(e) {
     setStep(true)
-    console.log(`checked = ${e.target.checked}`);
   }
   return <> <List
                     itemLayout="horizontal"

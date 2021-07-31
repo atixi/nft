@@ -135,7 +135,6 @@ function showInfo(asset)
       title: 'Information of Token',
     }
   ];
-  console.log("show", asset)
   function onChange(e) {
     setStep(false)
   }
