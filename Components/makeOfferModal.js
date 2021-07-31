@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react"
 import {Modal, Form, Input, List, Select, Checkbox, Avatar, message, DatePicker, TimePicker, Button} from "antd"
 import {FooterButton, AvatarContainer} from "./StyledComponents/productDetails-styledComponents";
-import {makeOffer, checkName} from "Utils/utils";
+import {makeOffer, checkName, myBalance} from "Utils/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
 import { getAuctionPriceDetails } from "/Constants/constants";
@@ -186,9 +186,9 @@ function showInfo(asset)
                     <List.Item extra={asset?.numOfSales}>
                       {<span>{"Number of sale"}</span>}
                     </List.Item>
-                    <List.Item extra={asset?.numOfSales}>
+                    {/* <List.Item extra={asset?.numOfSales}>
                       {<span>{"Your balance"}</span>}
-                    </List.Item>
+                    </List.Item> */}
                     <List.Item>
                     <Checkbox onChange={onChange}>Accept the terms and policy</Checkbox>
                     </List.Item>

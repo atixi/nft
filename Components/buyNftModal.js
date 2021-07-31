@@ -187,9 +187,9 @@ function showInfo(asset)
                     <List.Item extra={asset?.numOfSales}>
                       {<span>{"Number of sale"}</span>}
                     </List.Item>
-                    <List.Item extra={asset?.numOfSales}>
+                    {/* <List.Item extra={asset?.numOfSales}>
                       {<span>{"Your balance"}</span>}
-                    </List.Item>
+                    </List.Item> */}
                     <List.Item>
                     <Checkbox onChange={onChange}>Accept the terms and policy</Checkbox>
                     </List.Item>
