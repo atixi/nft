@@ -98,7 +98,7 @@ let address=null;
                   >
                   Buy
                 </FooterButton>
-        <Modal title="Make an Offer" visible={isModalVisible} onCancel={handleCancel}
+        <Modal title="Buy this token " visible={isModalVisible} onCancel={handleCancel}
             footer={[
             <Button key="back" onClick={handleCancel}>
                 Cancel

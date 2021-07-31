@@ -11,9 +11,16 @@ export const seaportProvider = new Web3.providers.HttpProvider(
 );
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const mnemonicPhrase = "decrease lucky scare inherit trick soap snack smooth actress theory quote comic"
-
+const pollingInterval = 200000;
 const RINKEBY_NODE_URL = `https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31`;
-const provider = new HDWalletProvider(mnemonicPhrase, RINKEBY_NODE_URL);
+// const provider = new HDWalletProvider(mnemonicPhrase, RINKEBY_NODE_URL, pollingInterval);
+const provider = new HDWalletProvider({
+  mnemonic: {
+    phrase: mnemonicPhrase
+  },
+  providerOrUrl: RINKEBY_NODE_URL,
+  pollingInterval: 200000
+});
 const web3 = new Web3(provider);
 web3.setProvider(provider)
 const seaport = new OpenSeaPort(provider, {

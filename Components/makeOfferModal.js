@@ -98,7 +98,7 @@ let address=null;
                 Cancel
             </Button>,
             <Button key="submit" form={"makeOffer"} htmlType={"submit"} type="primary">
-                Submit
+                Send Offer
             </Button>,
             
             ]}>
