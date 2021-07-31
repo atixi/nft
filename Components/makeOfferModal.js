@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from "react"
-import {Modal, Form, Input, Select, Row, Col, message, Tooltip, DatePicker, TimePicker, Button, Space, Typography} from "antd"
-import {FooterButton, ButtonContainer} from "./StyledComponents/productDetails-styledComponents";
+import {Modal, Form, Input, List, Select, Avatar, message, DatePicker, TimePicker, Button} from "antd"
+import {FooterButton} from "./StyledComponents/productDetails-styledComponents";
 import {makeOffer} from "Utils/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
+import { getAuctionPriceDetails } from "/Constants/constants";
 const { Option } = Select;
 import Link from "next/link"
 import styled from "styled-components"
@@ -23,16 +24,18 @@ padding: 13px 20px;
 const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
+  text-align: center;
 `;
 const ModalTextContainer = styled.p`
   text-align: center;
 `
 function MakeOfferModal({asset, loadAgain})
 {
+  console.log("the asset", asset)
 const isWalletConnected = useSelector(getWalletConnected)
 const isMetaConnected = useSelector(getMetaConnected)
 const tokenAddresses = useSelector(getAccountTokens)
-let address;
+let address=null;
   if(isWalletConnected)
   {
     address = tokenAddresses.walletToken[0].toString();
@@ -41,10 +44,11 @@ let address;
   {
     address = tokenAddresses.metaToken[0].toString();
   }
-  console.log("asset in modal", asset)
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [notConnected, setNotConnected] = useState(false);
     const [timeInput, setTime] = useState(true)
+    const [responseMessage, setResponseMessage] = useState([""])
+    const [step, setStep] = useState(false)
     const showModal = () => {
       (isWalletConnected || isMetaConnected) ?  
       setIsModalVisible(true) : setNotConnected(true)
@@ -56,9 +60,8 @@ let address;
 
     const [error, setError] = useState()
       const onFinish = async values => {
-        console.log('Received values of form: ', values);
         try {
-          let offer = await makeOffer(values, asset, address)
+          let offer = await makeOffer(values, asset, address && address)
      
           setIsModalVisible(false)
           loadAgain(true)
@@ -66,12 +69,11 @@ let address;
         }
         catch(e)
         {
-          console.log(e)
+          setResponseMessage(e.toString())
         }
       };
       
       const handleTimeChange = (e) => {
-          console.log(e)
           if(e == 'custom')
             setTime(false)
           else
@@ -86,9 +88,10 @@ let address;
         ],
       };
     return <>
-        <FooterButton
+        <FooterButton 
             color={"#0066ff"}
             style={{ background: "#0066ff26" }}
+            disabled={address && address == asset?.owner?.address ? true : false}
             onClick={showModal} >
             Make Offer
         </FooterButton>
@@ -98,11 +101,55 @@ let address;
                 Cancel
             </Button>,
             <Button key="submit" form={"makeOffer"} htmlType={"submit"} type="primary">
-                Submit
+                Send Offer
             </Button>,
             
             ]}>
-                <Form name="complex-form" id={"makeOffer"} onFinish={onFinish} labelCol={{ span: 24 }} wrapperCol={{ span: 24 }}>
+                {step ? offer() : showInfo(asset)}
+        </Modal>
+         <Modal title={<strong>{"You are not connect to any wallet!"}</strong>} footer={false} visible={notConnected} onCancel={handleCancel}>
+           <ModalContainer>
+             <ModalTextContainer>{"You need to connect your Ethereum wallet to sign messages and send transactions to Ethereum blockchain"}</ModalTextContainer>
+           <Link style={{textAlign: "center"}} href="/wallet" passHref><a><ConnectButton color={"white"} background={"#0066ff"} marginBottom={"15px"} > Connect Wallet </ConnectButton></a></Link>
+           {/* <ConnectButton color={"black"} background={"white"} > Create Wallet </ConnectButton> */}
+           </ModalContainer>
+         </Modal>
+    </>
+
+function showInfo(asset)
+{
+  const data = [
+    {
+      title: 'Ant Design Title 1',
+    }
+  ];
+  console.log("show", asset)
+  return  <List
+                    itemLayout="horizontal"
+                    dataSource={data}
+                    
+                >
+                  <List.Item.Meta
+                        avatar={<Avatar shape={'square'} src={asset.thumbnail} size={64}/>}
+                        title={asset.name}
+                        >
+                        <div>
+                          {
+                            asset.sellOrder != null && `${getAuctionPriceDetails(asset.sellOrder).priceBase} ${asset.sellOrder.paymentTokenContract.symbol}`
+                          }
+                        </div>
+                    </List.Item.Meta>
+                  <List.Item extra={asset.owner?.user}>
+                      {<span>{"Owner"}</span>}
+                    </List.Item>
+                    <List.Item >
+                      {<span>{"Number of sale"}</span>}
+                    </List.Item>
+                </List>
+}
+function offer()
+{
+  return <Form name="complex-form" id={"makeOffer"} onFinish={onFinish} labelCol={{ span: 24 }} wrapperCol={{ span: 24 }}>
                 <Form.Item label="Price">
                 <Input.Group compact>
                     <Form.Item
@@ -173,17 +220,8 @@ let address;
                 </Form.Item> */}
                 </Input.Group>
                 </Form.Item>
-                <Form.Item>{error}</Form.Item>
+                <Form.Item><span style={{color: "red"}}>{responseMessage}</span></Form.Item>
           </Form>
-        </Modal>
-         <Modal title={<strong>{"You are not connect to any wallet!"}</strong>} footer={false} visible={notConnected} onCancel={handleCancel}>
-           <ModalContainer>
-             <ModalTextContainer>{"You need to connect your Ethereum wallet to sign messages and send transactions to Ethereum blockchain"}</ModalTextContainer>
-           <Link style={{textAlign: "center"}} href="/wallet" passHref><a><ConnectButton color={"white"} background={"#0066ff"} marginBottom={"15px"} > Connect Wallet </ConnectButton></a></Link>
-           {/* <ConnectButton color={"black"} background={"white"} > Create Wallet </ConnectButton> */}
-           </ModalContainer>
-         </Modal>
-    </>
 }
-
+}
 export default MakeOfferModal;

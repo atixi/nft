@@ -37,11 +37,14 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne } from "/Utils/strapiApi";
-import { unixToHumanDate, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestOffer, convertToUsd} from "/Utils/utils";
+import { unixToHumanDate, buyOrder, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestOffer, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 import{FieldTimeOutlined} from "@ant-design/icons"
 import ReactPlayer from 'react-player';
 import MakeOfferModal from "/Components/makeOfferModal"
+import BuyNftModal from "/Components/buyNftModal"
+
+
 const { Countdown } = Statistic;
 const menu = (
   <DropdownMenu className={"mt-3"}>
@@ -96,7 +99,10 @@ function ProductPage() {
           tokenId: nft.tokenId,
           tokenAddress: nft.tokenAddress,
           collection: nft.collection,
-          isPresale: nft.isPresale
+          isPresale: nft.isPresale,
+          thumbnail: nft.imageUrlThumbnail,
+          sellOrder: nft.sellOrder,
+          numOfSales: nft.numSales
         });
       setIsVideo(detectVideo(nft.imageUrl))
       nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl))
@@ -111,7 +117,6 @@ function ProductPage() {
     }
   }
   useEffect(() => {
-    console.log("sell orders", sellOrders)
     if (!queryParam) {
       return null;
     }
@@ -469,13 +474,8 @@ function ProductPage() {
                 )}
               </BidCountdown>}
               <ButtonContainer>
-                {asset.isPresale == true && 
-                <FooterButton
-                  color={"#ffffff"}
-                  style={{ background: "#0066ff" }}
-                >
-                  Buy
-                </FooterButton>}
+                {/* {asset.isPresale == true &&  */}
+                {asset?.sellOrder != null && <BuyNftModal asset={asset} loadAgain={loadAgain} /> }
                 <MakeOfferModal asset={asset} loadAgain={loadAgain} />
               </ButtonContainer>
             </ItemFooter>

@@ -4,35 +4,37 @@ import { differenceInSeconds, intervalToDuration, secondsToMilliseconds } from '
 import fromUnix from "date-fns/fromUnixTime";
 import * as Web3 from "web3";
 import { OpenSeaPort, Network } from "opensea-js";
-
+import { OrderSide } from 'opensea-js/lib/types'
 export const seaportProvider = new Web3.providers.HttpProvider(
   "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
   // 'https://rinkeby-api.opensea.io/api/v1/'
 );
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const mnemonicPhrase = "decrease lucky scare inherit trick soap snack smooth actress theory quote comic"
-
+const pollingInterval = 500000;
 const RINKEBY_NODE_URL = `https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31`;
-const provider = new  HDWalletProvider(mnemonicPhrase, RINKEBY_NODE_URL);
+// const provider = new HDWalletProvider(mnemonicPhrase, RINKEBY_NODE_URL, pollingInterval);
+const provider = new HDWalletProvider({
+  mnemonic: {
+    phrase: mnemonicPhrase
+  },
+  providerOrUrl: RINKEBY_NODE_URL,
+  pollingInterval: 200000
+});
 const web3 = new Web3(provider);
 web3.setProvider(provider)
 const seaport = new OpenSeaPort(provider, {
   networkName: Network.Rinkeby,
   apiKey: "c2dde5d7c0a0465a8e994f711a3a3c31",
 });
-export function makeOffer(offerData, asset, accountAddress)
+export async function makeOffer(offerData, asset, accountAddress)
 {
   const {tokenId, tokenAddress} = asset;
-
-  // console.log("token", tokenAddresses)
-  // const accountAddress = tokenAddresses.metaToken[0].toString();
   const schemaName = "ERC721";
-  let err = false
-  console.log("my wallet", accountAddress)
-
-  return seaport.createBuyOrder({
+  let err = false 
+  return await seaport.createBuyOrder({
     asset: {
-      tokenId,
+      tokenId, 
       tokenAddress,
       schemaName // WyvernSchemaName. If omitted, defaults to 'ERC721'. Other options include 'ERC20' and 'ERC1155'
     },
@@ -40,12 +42,17 @@ export function makeOffer(offerData, asset, accountAddress)
     // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
     startAmount: offerData.price.amount,
   })
-
 }
-
-
-
-
+export async function buyOrder(asset, accountAddress)
+{
+  const order = await seaport.api.getOrder({ 
+    side: OrderSide.Sell,
+    asset_contract_address: asset.tokenAddress,
+    token_id: asset.tokenId,
+   }).catch(()=> { return "Error getting order"})
+  const transactionHash = await seaport.fulfillOrder({ order, accountAddress }).catch(() => {return "Error on buying the token"})
+  return transactionHash;
+}
 
 
 
