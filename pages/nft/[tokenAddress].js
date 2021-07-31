@@ -101,7 +101,8 @@ function ProductPage() {
           collection: nft.collection,
           isPresale: nft.isPresale,
           thumbnail: nft.imageUrlThumbnail,
-          sellOrder: nft.sellOrder
+          sellOrder: nft.sellOrder,
+          numOfSales: nft.numSales
         });
       setIsVideo(detectVideo(nft.imageUrl))
       nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl))
