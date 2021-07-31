@@ -7,7 +7,20 @@ import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/ac
 import { getAuctionPriceDetails } from "/Constants/constants";
 const { Option } = Select;
 import Link from "next/link"
-import styled from "styled-components"
+import styled from "styled-components";
+const SubmitButton = styled(Button)`
+margin: auto;
+width: 200px;
+line-height: 12px;
+font-weight: 600;
+border-radius: 25px;
+border: 1px solid rgba(4, 4, 5, 0.1);
+background-color: ${(props) => props.background} !important;
+color: ${(props) => props.color} !important;
+margin-bottom: ${(props) => props.marginBottom ? props.marginBottom : ""};
+font-size: 0.98rem !important;
+padding: 13px 20px;
+`
 const ConnectButton = styled.button`
 margin: auto;
 width: 200px;
@@ -49,11 +62,13 @@ let address=null;
     const [timeInput, setTime] = useState(true)
     const [responseMessage, setResponseMessage] = useState([""])
     const [step, setStep] = useState(false)
+    const [makingOffer, setMakingOffer] = useState(false)
     const showModal = () => {
       (isWalletConnected || isMetaConnected) ?  
       setIsModalVisible(true) : setNotConnected(true)
     };
     const handleCancel = () => {
+      setMakingOffer(false)
       setStep(false)
       setIsModalVisible(false);
       setNotConnected(false)
@@ -62,6 +77,7 @@ let address=null;
     const [error, setError] = useState()
       const onFinish = async values => {
         try {
+          setMakingOffer(true)
           let offer = await makeOffer(values, asset, address && address)
      
           setIsModalVisible(false)
@@ -70,6 +86,7 @@ let address=null;
         }
         catch(e)
         {
+          setMakingOffer(false)
           setResponseMessage(e.toString())
         }
       };
@@ -249,7 +266,14 @@ function offer()
                 <Form.Item><span style={{color: "red"}}>{responseMessage}</span></Form.Item> 
                 <div style={{textAlign: "center"}}>
            <ConnectButton color={"black"} style={{margin: "5px"}} onClick={handleCancel} background={"white"} marginBottom={"15px"} > Cancel </ConnectButton>
-           <ConnectButton type={"submit"} color={"white"} background={"#0066ff"} marginBottom={"15px"} > Send Offer </ConnectButton>
+           {/* <ConnectButton type={"submit"} color={"white"} background={"#0066ff"} marginBottom={"15px"} > Send Offer </ConnectButton> */}
+
+                {/* <Button key="back" onClick={handleCancel}>
+                Cancel
+              </Button> */}
+              <SubmitButton key="submit" size={"large"} loading={makingOffer} color={"white"} marginBottom={"15px"} background={"#0066ff"} form={"makeOffer"} htmlType={"submit"} type="primary">
+                  Send Offer
+              </SubmitButton> 
                 </div>
           </Form>
 }
