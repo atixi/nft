@@ -1,13 +1,26 @@
 import React, {useState, useEffect} from "react"
-import {Modal, Form, Input, List, Select, Avatar, message, DatePicker, TimePicker, Button} from "antd"
-import {FooterButton} from "./StyledComponents/productDetails-styledComponents";
-import {makeOffer} from "Utils/utils";
+import {Modal, Form, Input, List, Select, Checkbox, Avatar, message, DatePicker, TimePicker, Button} from "antd"
+import {FooterButton, AvatarContainer} from "./StyledComponents/productDetails-styledComponents";
+import {makeOffer, checkName, myBalance} from "Utils/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
 import { getAuctionPriceDetails } from "/Constants/constants";
 const { Option } = Select;
 import Link from "next/link"
-import styled from "styled-components"
+import styled from "styled-components";
+const SubmitButton = styled(Button)`
+margin: auto;
+width: 200px;
+line-height: 12px;
+font-weight: 600;
+border-radius: 25px;
+border: 1px solid rgba(4, 4, 5, 0.1);
+background-color: ${(props) => props.background} !important;
+color: ${(props) => props.color} !important;
+margin-bottom: ${(props) => props.marginBottom ? props.marginBottom : ""};
+font-size: 0.98rem !important;
+padding: 13px 20px;
+`
 const ConnectButton = styled.button`
 margin: auto;
 width: 200px;
@@ -31,7 +44,6 @@ const ModalTextContainer = styled.p`
 `
 function MakeOfferModal({asset, loadAgain})
 {
-  console.log("the asset", asset)
 const isWalletConnected = useSelector(getWalletConnected)
 const isMetaConnected = useSelector(getMetaConnected)
 const tokenAddresses = useSelector(getAccountTokens)
@@ -49,11 +61,14 @@ let address=null;
     const [timeInput, setTime] = useState(true)
     const [responseMessage, setResponseMessage] = useState([""])
     const [step, setStep] = useState(false)
+    const [makingOffer, setMakingOffer] = useState(false)
     const showModal = () => {
       (isWalletConnected || isMetaConnected) ?  
       setIsModalVisible(true) : setNotConnected(true)
     };
     const handleCancel = () => {
+      setMakingOffer(false)
+      setStep(false)
       setIsModalVisible(false);
       setNotConnected(false)
     };
@@ -61,6 +76,7 @@ let address=null;
     const [error, setError] = useState()
       const onFinish = async values => {
         try {
+          setMakingOffer(true)
           let offer = await makeOffer(values, asset, address && address)
      
           setIsModalVisible(false)
@@ -69,6 +85,7 @@ let address=null;
         }
         catch(e)
         {
+          setMakingOffer(false)
           setResponseMessage(e.toString())
         }
       };
@@ -96,15 +113,7 @@ let address=null;
             Make Offer
         </FooterButton>
      <Modal title="Make an Offer" visible={isModalVisible} onCancel={handleCancel}
-            footer={[
-            <Button key="back" onClick={handleCancel}>
-                Cancel
-            </Button>,
-            <Button key="submit" form={"makeOffer"} htmlType={"submit"} type="primary">
-                Send Offer
-            </Button>,
-            
-            ]}>
+            footer={false}>
                 {step ? offer() : showInfo(asset)}
         </Modal>
          <Modal title={<strong>{"You are not connect to any wallet!"}</strong>} footer={false} visible={notConnected} onCancel={handleCancel}>
@@ -123,15 +132,17 @@ function showInfo(asset)
       title: 'Ant Design Title 1',
     }
   ];
-  console.log("show", asset)
-  return  <List
+  function onChange(e) {
+    setStep(true)
+  }
+  return <> <List
                     itemLayout="horizontal"
                     dataSource={data}
-                    
                 >
                   <List.Item.Meta
                         avatar={<Avatar shape={'square'} src={asset.thumbnail} size={64}/>}
-                        title={asset.name}
+                        title={<strong>{asset.name}</strong>}
+                        description={asset.collection?.name}
                         >
                         <div>
                           {
@@ -139,13 +150,47 @@ function showInfo(asset)
                           }
                         </div>
                     </List.Item.Meta>
-                  <List.Item extra={asset.owner?.user}>
+                  <List.Item extra={
+                    // checkName(asset.owner?.user)
+                    <Link
+                    href={{
+                      pathname: "/profile/talent",
+                      query: {
+                        address: asset?.owner?.address,
+                        talent: checkName(asset?.owner?.user?.username),
+                        avatar: asset?.owner?.profile_img_url,
+                      },
+                    }}
+                    passHref
+                  >
+                    <a>
+                      <AvatarContainer>
+                        <Avatar
+                          size={"small"}
+                          icon={
+                            <img src={asset?.owner?.profile_img_url} />
+                          }
+                        />
+                        <span style={{ flex: "1" }}>
+                          {checkName(asset?.owner?.user?.username)}
+                        </span>
+                      </AvatarContainer>
+                    </a>
+                  </Link>
+                    }>
                       {<span>{"Owner"}</span>}
                     </List.Item>
-                    <List.Item >
+                    <List.Item extra={asset?.numOfSales}>
                       {<span>{"Number of sale"}</span>}
                     </List.Item>
+                    {/* <List.Item extra={asset?.numOfSales}>
+                      {<span>{"Your balance"}</span>}
+                    </List.Item> */}
+                    <List.Item>
+                    <Checkbox onChange={onChange}>Accept the terms and policy</Checkbox>
+                    </List.Item>
                 </List>
+                </>
 }
 function offer()
 {
@@ -212,15 +257,21 @@ function offer()
                             
                       }
                     
-                    {/* <Form.Item
-                        name={['time', 'streett']}
-                        noStyle
-                        rules={[{ required: true, message: 'Street is required' }]}>
-                        <Input prefix="$" style={{ width: '25%' }}  size={"large"} placeholder="Input street" />
-                </Form.Item> */}
+                    
                 </Input.Group>
                 </Form.Item>
-                <Form.Item><span style={{color: "red"}}>{responseMessage}</span></Form.Item>
+                <Form.Item><span style={{color: "red"}}>{responseMessage}</span></Form.Item> 
+                <div style={{textAlign: "center"}}>
+           <ConnectButton color={"black"} style={{margin: "5px"}} onClick={handleCancel} background={"white"} marginBottom={"15px"} > Cancel </ConnectButton>
+           {/* <ConnectButton type={"submit"} color={"white"} background={"#0066ff"} marginBottom={"15px"} > Send Offer </ConnectButton> */}
+
+                {/* <Button key="back" onClick={handleCancel}>
+                Cancel
+              </Button> */}
+              <SubmitButton key="submit" size={"large"} loading={makingOffer} color={"white"} marginBottom={"15px"} background={"#0066ff"} form={"makeOffer"} htmlType={"submit"} type="primary">
+                  Send Offer
+              </SubmitButton> 
+                </div>
           </Form>
 }
 }

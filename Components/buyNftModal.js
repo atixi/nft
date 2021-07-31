@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from "react"
-import {Modal, Form,Select, List, Avatar, message, Tooltip, DatePicker, TimePicker, Button, Space, Typography} from "antd"
-import {FooterButton, ButtonContainer} from "./StyledComponents/productDetails-styledComponents";
-import {makeOffer, buyOrder} from "Utils/utils";
+import {Modal, Form, List, Avatar, Checkbox, message, Button} from "antd"
+import {FooterButton, AvatarContainer} from "./StyledComponents/productDetails-styledComponents";
+import {buyOrder, checkName} from "Utils/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
-const { Option } = Select;
 import Link from "next/link"
 import styled from "styled-components"
 import { getAuctionPriceDetails } from "/Constants/constants";
@@ -29,11 +28,26 @@ const ModalContainer = styled.div`
 const ModalTextContainer = styled.p`
   text-align: center;
 `
+const SubmitButton = styled(Button)`
+margin: auto;
+width: 200px;
+line-height: 12px;
+font-weight: 600;
+border-radius: 25px;
+border: 1px solid rgba(4, 4, 5, 0.1);
+background-color: ${(props) => props.background} !important;
+color: ${(props) => props.color} !important;
+margin-bottom: ${(props) => props.marginBottom ? props.marginBottom : ""};
+font-size: 0.98rem !important;
+padding: 13px 20px;
+`
 function BuyNftModal({asset, ad, loadAgain})
 {
 const isWalletConnected = useSelector(getWalletConnected)
 const isMetaConnected = useSelector(getMetaConnected)
 const tokenAddresses = useSelector(getAccountTokens)
+const [step, setStep] = useState(true)
+const [buying, setBuying] = useState(false)
 let address=null;
   if(isWalletConnected)
   {
@@ -52,20 +66,23 @@ let address=null;
       setIsModalVisible(true) : setNotConnected(true)
     };
     const handleCancel = () => {
+      setStep(true)
       setIsModalVisible(false);
       setNotConnected(false)
     };
 
       const onFinish = async values => {
         try {
+          setBuying(true)
           let buy = await buyOrder(asset, address && address)
      
           setIsModalVisible(false)
           loadAgain(true)
-          message.success('Offer is saved');
+          message.success('You bought this token');
         }
         catch(e)
         {
+          setBuying(false)
           setResponseMessage(e.toString())
         }
       };
@@ -99,36 +116,8 @@ let address=null;
                   Buy
                 </FooterButton>
         <Modal title="Buy this token " visible={isModalVisible} onCancel={handleCancel}
-            footer={[
-            <Button key="back" onClick={handleCancel}>
-                Cancel
-            </Button>,
-            <Button key="submit" form={"makeOffer"} htmlType={"submit"} type="primary">
-                Buy
-            </Button>,
-            
-            ]}>
-                <Form name="complex-form" id={"makeOffer"} onFinish={onFinish} labelCol={{ span: 24 }} wrapperCol={{ span: 24 }}>
-                <List
-                    itemLayout="horizontal"
-                    dataSource={data}
-                    renderItem={item => (
-                    <List.Item>
-                        <List.Item.Meta
-                        avatar={<Avatar shape={'square'} src={asset.thumbnail} size={64}/>}
-                        title={<Link href={`/collection/${asset?.collection?.slug}`}><a>{asset?.collection.name}</a></Link>}
-                        description={asset.name}
-                        />
-                        <div>
-                          {
-                             `${getAuctionPriceDetails(asset.sellOrder && asset.sellOrder).priceBase} ${asset.sellOrder.paymentTokenContract.symbol}`
-                          }
-                        </div>
-                    </List.Item>
-                    )}
-                />
-                <Form.Item><span style={{color: "red"}}>{responseMessage}</span></Form.Item>
-          </Form>
+            footer={false}>
+              {step ? showInfo(asset) : buy()}
         </Modal>
          <Modal title={<strong>{"You are not connect to any wallet!"}</strong>} footer={false} visible={notConnected} onCancel={handleCancel}>
            <ModalContainer>
@@ -138,6 +127,105 @@ let address=null;
            </ModalContainer>
          </Modal>
     </>
+
+function showInfo(asset)
+{
+  const data = [
+    {
+      title: 'Information of Token',
+    }
+  ];
+  function onChange(e) {
+    setStep(false)
+  }
+  return <> <List
+                    itemLayout="horizontal"
+                    dataSource={data}
+                >
+                  <List.Item.Meta
+                        avatar={<Avatar shape={'square'} src={asset.thumbnail} size={64}/>}
+                        title={<strong>{asset.name}</strong>}
+                        description={asset.collection?.name}
+                        >
+                        <div>
+                          {
+                            asset.sellOrder != null && `${getAuctionPriceDetails(asset.sellOrder).priceBase} ${asset.sellOrder.paymentTokenContract.symbol}`
+                          }
+                        </div>
+                    </List.Item.Meta>
+                  <List.Item extra={
+                    // checkName(asset.owner?.user)
+                    <Link
+                    href={{
+                      pathname: "/profile/talent",
+                      query: {
+                        address: asset?.owner?.address,
+                        talent: checkName(asset?.owner?.user?.username),
+                        avatar: asset?.owner?.profile_img_url,
+                      },
+                    }}
+                    passHref
+                  >
+                    <a>
+                      <AvatarContainer>
+                        <Avatar
+                          size={"small"}
+                          icon={
+                            <img src={asset?.owner?.profile_img_url} />
+                          }
+                        />
+                        <span style={{ flex: "1" }}>
+                          {checkName(asset?.owner?.user?.username)}
+                        </span>
+                      </AvatarContainer>
+                    </a>
+                  </Link>
+                    }>
+                      {<span>{"Owner"}</span>}
+                    </List.Item>
+                    <List.Item extra={asset?.numOfSales}>
+                      {<span>{"Number of sale"}</span>}
+                    </List.Item>
+                    {/* <List.Item extra={asset?.numOfSales}>
+                      {<span>{"Your balance"}</span>}
+                    </List.Item> */}
+                    <List.Item>
+                    <Checkbox onChange={onChange}>Accept the terms and policy</Checkbox>
+                    </List.Item>
+                </List>
+                </>
+}
+function buy()
+{
+  return <>   <Form name="complex-form" id={"makeOffer"} onFinish={onFinish} labelCol={{ span: 24 }} wrapperCol={{ span: 24 }}>
+  <List
+      itemLayout="horizontal"
+      dataSource={data}
+      renderItem={item => (
+      <List.Item>
+          <List.Item.Meta
+          avatar={<Avatar shape={'square'} src={asset.thumbnail} size={64}/>}
+          title={<Link href={`/collection/${asset?.collection?.slug}`}><a>{asset?.collection.name}</a></Link>}
+          description={asset.name}
+          />
+          <div>
+            {
+              asset.sellOrder &&  `${getAuctionPriceDetails(asset.sellOrder).priceBase} ${asset.sellOrder.paymentTokenContract.symbol}`
+            }
+          </div>
+      </List.Item>
+      )}
+  />
+  <Form.Item><span style={{color: "red"}}>{responseMessage}</span></Form.Item>
+      <div style={{textAlign: "center"}}>
+           <ConnectButton color={"black"} style={{margin: "5px"}} type={"button"} onClick={handleCancel} background={"white"} marginBottom={"15px"} > Cancel </ConnectButton>
+              <SubmitButton key="submit" size={"large"} loading={buying} color={"white"} marginBottom={"15px"} background={"#0066ff"} form={"makeOffer"} htmlType={"submit"} type="primary">
+                  Buy
+              </SubmitButton> 
+                </div>
+</Form>
+  </>
+}
 }
 
 export default BuyNftModal;

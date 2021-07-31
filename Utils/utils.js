@@ -4,7 +4,9 @@ import { differenceInSeconds, intervalToDuration, secondsToMilliseconds } from '
 import fromUnix from "date-fns/fromUnixTime";
 import * as Web3 from "web3";
 import { OpenSeaPort, Network } from "opensea-js";
-import { OrderSide } from 'opensea-js/lib/types'
+import { OrderSide } from 'opensea-js/lib/types';
+import { useSelector } from "react-redux";
+import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
 export const seaportProvider = new Web3.providers.HttpProvider(
   "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
   // 'https://rinkeby-api.opensea.io/api/v1/'
@@ -75,7 +77,22 @@ export async function buyOrder(asset, accountAddress)
 
 
 
-
+export function myBalance()
+{
+  
+  const isWalletConnected = useSelector(getWalletConnected)
+const isMetaConnected = useSelector(getMetaConnected)
+const tokenAddresses = useSelector(getAccountTokens)
+  if(isWalletConnected)
+  {
+    return tokenAddresses.walletBalance;
+  }
+  else if(isMetaConnected)
+  {
+    return tokenAddresses.metaBalance;
+  }
+  return null
+}
 export function unixToHumanDate(date, saleEndDate)
 {
   if(saleEndDate)
