@@ -123,7 +123,11 @@ function Products(props) {
                         <CardTitle>{n?.name}</CardTitle>
                       </a>
                     </Link>
-                    <ProductPrice>{n.currentPrice}</ProductPrice>
+                    <ProductPrice>
+                      {n.currentPrice
+                        ? n.currentPrice
+                        : n.sellOrders[0]?.currentPrice}
+                    </ProductPrice>
                     <ProductList>
                       {/* {" " + n.currentQTY + " of " + n.totalQTY} */}
                     </ProductList>
