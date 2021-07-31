@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react"
-import {Modal, Form, Input, List, Select, Avatar, message, DatePicker, TimePicker, Button} from "antd"
-import {FooterButton} from "./StyledComponents/productDetails-styledComponents";
-import {makeOffer} from "Utils/utils";
+import {Modal, Form, Input, List, Select, Checkbox, Avatar, message, DatePicker, TimePicker, Button} from "antd"
+import {FooterButton, AvatarContainer} from "./StyledComponents/productDetails-styledComponents";
+import {makeOffer, checkName} from "Utils/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
 import { getAuctionPriceDetails } from "/Constants/constants";
@@ -54,6 +54,7 @@ let address=null;
       setIsModalVisible(true) : setNotConnected(true)
     };
     const handleCancel = () => {
+      setStep(false)
       setIsModalVisible(false);
       setNotConnected(false)
     };
@@ -96,15 +97,7 @@ let address=null;
             Make Offer
         </FooterButton>
      <Modal title="Make an Offer" visible={isModalVisible} onCancel={handleCancel}
-            footer={[
-            <Button key="back" onClick={handleCancel}>
-                Cancel
-            </Button>,
-            <Button key="submit" form={"makeOffer"} htmlType={"submit"} type="primary">
-                Send Offer
-            </Button>,
-            
-            ]}>
+            footer={false}>
                 {step ? offer() : showInfo(asset)}
         </Modal>
          <Modal title={<strong>{"You are not connect to any wallet!"}</strong>} footer={false} visible={notConnected} onCancel={handleCancel}>
@@ -124,14 +117,18 @@ function showInfo(asset)
     }
   ];
   console.log("show", asset)
-  return  <List
+  function onChange(e) {
+    setStep(true)
+    console.log(`checked = ${e.target.checked}`);
+  }
+  return <> <List
                     itemLayout="horizontal"
                     dataSource={data}
-                    
                 >
                   <List.Item.Meta
                         avatar={<Avatar shape={'square'} src={asset.thumbnail} size={64}/>}
-                        title={asset.name}
+                        title={<strong>{asset.name}</strong>}
+                        description={asset.collection?.name}
                         >
                         <div>
                           {
@@ -139,13 +136,47 @@ function showInfo(asset)
                           }
                         </div>
                     </List.Item.Meta>
-                  <List.Item extra={asset.owner?.user}>
+                  <List.Item extra={
+                    // checkName(asset.owner?.user)
+                    <Link
+                    href={{
+                      pathname: "/profile/talent",
+                      query: {
+                        address: asset?.owner?.address,
+                        talent: checkName(asset?.owner?.user?.username),
+                        avatar: asset?.owner?.profile_img_url,
+                      },
+                    }}
+                    passHref
+                  >
+                    <a>
+                      <AvatarContainer>
+                        <Avatar
+                          size={"small"}
+                          icon={
+                            <img src={asset?.owner?.profile_img_url} />
+                          }
+                        />
+                        <span style={{ flex: "1" }}>
+                          {checkName(asset?.owner?.user?.username)}
+                        </span>
+                      </AvatarContainer>
+                    </a>
+                  </Link>
+                    }>
                       {<span>{"Owner"}</span>}
                     </List.Item>
-                    <List.Item >
+                    <List.Item extra={asset?.numOfSales}>
                       {<span>{"Number of sale"}</span>}
                     </List.Item>
+                    <List.Item extra={asset?.numOfSales}>
+                      {<span>{"Your balance"}</span>}
+                    </List.Item>
+                    <List.Item>
+                    <Checkbox onChange={onChange}>Accept the terms and policy</Checkbox>
+                    </List.Item>
                 </List>
+                </>
 }
 function offer()
 {
@@ -212,15 +243,14 @@ function offer()
                             
                       }
                     
-                    {/* <Form.Item
-                        name={['time', 'streett']}
-                        noStyle
-                        rules={[{ required: true, message: 'Street is required' }]}>
-                        <Input prefix="$" style={{ width: '25%' }}  size={"large"} placeholder="Input street" />
-                </Form.Item> */}
+                    
                 </Input.Group>
                 </Form.Item>
-                <Form.Item><span style={{color: "red"}}>{responseMessage}</span></Form.Item>
+                <Form.Item><span style={{color: "red"}}>{responseMessage}</span></Form.Item> 
+                <div style={{textAlign: "center"}}>
+           <ConnectButton color={"black"} style={{margin: "5px"}} onClick={handleCancel} background={"white"} marginBottom={"15px"} > Cancel </ConnectButton>
+           <ConnectButton type={"submit"} color={"white"} background={"#0066ff"} marginBottom={"15px"} > Send Offer </ConnectButton>
+                </div>
           </Form>
 }
 }
