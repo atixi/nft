@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from "react"
-import {Modal, Form,Select, List, Avatar, message, Tooltip, DatePicker, TimePicker, Button, Space, Typography} from "antd"
-import {FooterButton, ButtonContainer} from "./StyledComponents/productDetails-styledComponents";
-import {makeOffer, buyOrder} from "Utils/utils";
+import {Modal, Form, List, Avatar, message, Button} from "antd"
+import {FooterButton} from "./StyledComponents/productDetails-styledComponents";
+import {buyOrder} from "Utils/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
-const { Option } = Select;
 import Link from "next/link"
 import styled from "styled-components"
 import { getAuctionPriceDetails } from "/Constants/constants";
