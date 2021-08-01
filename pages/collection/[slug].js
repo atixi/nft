@@ -33,6 +33,7 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from "next-share";
+import { displayAddress } from "/Utils/utils";
 function CollectionDetails({ collection }) {
   const [collect, setCollect] = useState({
     collectionName: "",
@@ -150,7 +151,9 @@ function CollectionDetails({ collection }) {
                   <strong>{collect.collectionName}</strong>
                 </h3>
                 <h6>
-                  <strong>{collection.talent.walletAddress}</strong>
+                  <strong>
+                    {displayAddress(collection.talent.walletAddress)}
+                  </strong>
                 </h6>
                 <div className="mt-4">
                   <ProfileButton type="button">

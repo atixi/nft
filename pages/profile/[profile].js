@@ -32,6 +32,7 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from "next-share";
+import { displayAddress } from "/Utils/utils";
 const api = axios.create({
   baseURL: process.env.HEROKU_BASE_URL,
   headers: {
@@ -163,7 +164,7 @@ function Profile() {
                   <strong>{talent.talentName}</strong>
                 </h3>
                 <h6>
-                  <strong>{talent.walletAddress}</strong>
+                  <strong>{displayAddress(talent.walletAddress)}</strong>
                 </h6>
                 <div className="mt-4">
                   <ProfileButton type="button">
