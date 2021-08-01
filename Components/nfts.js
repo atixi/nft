@@ -46,9 +46,11 @@ function Products(props) {
                                 src={
                                   props.data.talent
                                     ? props.data.talent.talentAvatar?.url
-                                      ? props.data.talentAvatar?.url
-                                      : ""
+                                    : props.data.talentAvatar?.url
+                                    ? props.data.talentAvatar?.url
                                     : n.talent?.talentAvatar?.url
+                                    ? n.talent?.talentAvatar?.url
+                                    : n.owner?.profile_img_url
                                 }
                                 width={12}
                                 height={12}
