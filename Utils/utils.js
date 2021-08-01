@@ -77,22 +77,7 @@ export async function buyOrder(asset, accountAddress)
 
 
 
-export function myBalance()
-{
-  
-  const isWalletConnected = useSelector(getWalletConnected)
-const isMetaConnected = useSelector(getMetaConnected)
-const tokenAddresses = useSelector(getAccountTokens)
-  if(isWalletConnected)
-  {
-    return tokenAddresses.walletBalance;
-  }
-  else if(isMetaConnected)
-  {
-    return tokenAddresses.metaBalance;
-  }
-  return null
-}
+
 export function unixToHumanDate(date, saleEndDate)
 {
   if(saleEndDate)

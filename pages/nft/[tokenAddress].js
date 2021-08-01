@@ -43,7 +43,8 @@ import{FieldTimeOutlined} from "@ant-design/icons"
 import ReactPlayer from 'react-player';
 import MakeOfferModal from "/Components/makeOfferModal"
 import BuyNftModal from "/Components/buyNftModal"
-
+import { useSelector } from "react-redux";
+import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
 
 const { Countdown } = Statistic;
 const menu = (
@@ -72,6 +73,12 @@ function ProductPage() {
   const [sellOrders, setSellOrders] = useState(null)
   const [isVideo, setIsVideo] = useState(false)
   const [refresh, setRefresh] = useState(true)
+
+  const isWalletConnected = useSelector(getWalletConnected)
+  const isMetaConnected = useSelector(getMetaConnected)
+  const tokenAddresses = useSelector(getAccountTokens)
+  const [address, setAddress] = useState(null)
+  const [balance, setBalance] = useState(null)
 
     const loadAgain = () =>{
       setLoading(true)
@@ -120,7 +127,17 @@ function ProductPage() {
     if (!queryParam) {
       return null;
     }
-
+    if(isWalletConnected)
+  {
+    setAddress(tokenAddresses.walletToken);
+    setBalance(tokenAddresses.walletBalance);
+  }
+  else if(isMetaConnected)
+  {
+    setAddress(tokenAddresses.metaToken);
+    setBalance(tokenAddresses.metaBalance);
+  }
+ 
     refresh && loadNft();
   }, [queryParam]);
   return (
@@ -298,7 +315,12 @@ function ProductPage() {
                               <span className={"bidDate"}>
                                 {unixToHumanDate(order?.createdTime)}
                               </span>
+                              <span>
+                              {order.makerAccount.address == address ? 
+                              <Button shape="round" size="small">{"Cancel"}</Button> : ""}
                             </span>
+                            </span>
+                            
                           </span>
                         </div>
                       </LastBidder>

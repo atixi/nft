@@ -41,7 +41,7 @@ margin-bottom: ${(props) => props.marginBottom ? props.marginBottom : ""};
 font-size: 0.98rem !important;
 padding: 13px 20px;
 `
-function BuyNftModal({asset, ad, loadAgain})
+function BuyNftModal({asset, loadAgain})
 {
 const isWalletConnected = useSelector(getWalletConnected)
 const isMetaConnected = useSelector(getMetaConnected)
