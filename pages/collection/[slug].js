@@ -150,7 +150,7 @@ function CollectionDetails({ collection }) {
                   <strong>{collect.collectionName}</strong>
                 </h3>
                 <h6>
-                  <strong>{`"addressToShow"`}</strong>
+                  <strong>{collection.talent.walletAddress}</strong>
                 </h6>
                 <div className="mt-4">
                   <ProfileButton type="button">
