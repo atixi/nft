@@ -87,7 +87,6 @@ function ProductPage() {
     const loadNft = async () => {
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
-      console.log(data)
       if(data)
         {
           setLoading(false)
@@ -124,7 +123,6 @@ function ProductPage() {
     }
   }
 async function cancelOffer(order, address){
-    console.log("order in function", order)
       const cancel = await cancelThisOffer(order, address);
       if(cancel == undefined)
       {
@@ -514,8 +512,7 @@ async function cancelOffer(order, address){
                 )}
               </BidCountdown>}
               <ButtonContainer>
-                {/* {asset.isPresale == true &&  */}
-                {asset?.sellOrder != null && <BuyNftModal asset={asset} loadAgain={loadAgain} /> }
+                {asset?.sellOrder != null && !asset?.sellOrder?.waitingForBestCounterOrder && <BuyNftModal asset={asset} loadAgain={loadAgain} /> }
                 <MakeOfferModal asset={asset} loadAgain={loadAgain} />
               </ButtonContainer>
             </ItemFooter>
