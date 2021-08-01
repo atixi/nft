@@ -102,12 +102,12 @@ function BuyNftModal({asset, loadAgain})
       useEffect(() => {
         if(isWalletConnected)
       {
-        setAddress(tokenAddresses.walletToken);
+        setAddress(tokenAddresses.walletToken[0].toString());
         setBalance(tokenAddresses.walletBalance);
       }
       else if(isMetaConnected)
       {
-        setAddress(tokenAddresses.metaToken);
+        setAddress(tokenAddresses.metaToken[0].toString());
         setBalance(tokenAddresses.metaBalance);
       }
       }, [asset]);
