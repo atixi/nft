@@ -47,15 +47,9 @@ function MakeOfferModal({asset, loadAgain})
 const isWalletConnected = useSelector(getWalletConnected)
 const isMetaConnected = useSelector(getMetaConnected)
 const tokenAddresses = useSelector(getAccountTokens)
-let address=null;
-  if(isWalletConnected)
-  {
-    address = tokenAddresses.walletToken[0].toString();
-  }
-  else if(isMetaConnected)
-  {
-    address = tokenAddresses.metaToken[0].toString();
-  }
+const [address, setAddress] = useState(null)
+const [balance, setBalance] = useState(null)
+
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [notConnected, setNotConnected] = useState(false);
     const [timeInput, setTime] = useState(true)
@@ -104,6 +98,18 @@ let address=null;
           },
         ],
       };
+      useEffect(() => {
+        if(isWalletConnected)
+      {
+        setAddress(tokenAddresses.walletToken);
+        setBalance(tokenAddresses.walletBalance);
+      }
+      else if(isMetaConnected)
+      {
+        setAddress(tokenAddresses.metaToken);
+        setBalance(tokenAddresses.metaBalance);
+      }
+      }, [asset]);
     return <>
         <FooterButton 
             color={"#0066ff"}
@@ -183,9 +189,9 @@ function showInfo(asset)
                     <List.Item extra={asset?.numOfSales}>
                       {<span>{"Number of sale"}</span>}
                     </List.Item>
-                    {/* <List.Item extra={asset?.numOfSales}>
+                    <List.Item extra={`${parseFloat(balance).toFixed(4)} ETH`}>
                       {<span>{"Your balance"}</span>}
-                    </List.Item> */}
+                    </List.Item>
                     <List.Item>
                     <Checkbox onChange={onChange}>Accept the terms and policy</Checkbox>
                     </List.Item>
