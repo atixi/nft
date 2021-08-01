@@ -37,7 +37,7 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne } from "/Utils/strapiApi";
-import { unixToHumanDate, buyOrder, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestOffer, convertToUsd} from "/Utils/utils";
+import { unixToHumanDate, buyOrder, cancelThisOffer, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestOffer, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 import{FieldTimeOutlined} from "@ant-design/icons"
 import ReactPlayer from 'react-player';
@@ -123,6 +123,15 @@ function ProductPage() {
       }
     }
   }
+async function cancelOffer(order, address){
+    console.log("order in function", order)
+      const cancel = await cancelThisOffer(order, address);
+      console.log("conceled?", cancel)
+      return 3;
+  }
+  // function cancelOffer(){
+  //   return 3;
+  // }
   useEffect(() => {
     if (!queryParam) {
       return null;
@@ -140,6 +149,8 @@ function ProductPage() {
  
     refresh && loadNft();
   }, [queryParam]);
+
+
   return (
     <>
       <Wrapper>
@@ -317,7 +328,7 @@ function ProductPage() {
                               </span>
                               <span>
                               {order.makerAccount.address == address ? 
-                              <Button shape="round" size="small">{"Cancel"}</Button> : ""}
+                              <Button onClick={() => cancelOffer(order, address)} shape="round" size="small">{"Cancel"}</Button> : ""}
                             </span>
                             </span>
                             

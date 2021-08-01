@@ -3,10 +3,13 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import { differenceInSeconds, intervalToDuration, secondsToMilliseconds } from 'date-fns';
 import fromUnix from "date-fns/fromUnixTime";
 import * as Web3 from "web3";
-import { OpenSeaPort, Network } from "opensea-js";
+import { OpenSeaPort, Network, EventType } from "opensea-js";
+// import { , ActionTypes, OpenSeaPort } from 'opensea-js';
+
 import { OrderSide } from 'opensea-js/lib/types';
 import { useSelector } from "react-redux";
 import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
+import {handleSeaportEvents} from "/store/index"
 export const seaportProvider = new Web3.providers.HttpProvider(
   "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
   // 'https://rinkeby-api.opensea.io/api/v1/'
@@ -55,7 +58,38 @@ export async function buyOrder(asset, accountAddress)
   const transactionHash = await seaport.fulfillOrder({ order, accountAddress }).catch(() => {return "Error on buying the token"})
   return transactionHash;
 }
+export async function cancelThisOffer(order, address)
+{
+  // return 35;
+  // console.log(accountAddress)
+  let accountAddress = address[0]
+  console.log("util", order)
+  // const event = await handleSeaportEvents
+  // event.dispatch(EventType.CancelOrder, { order, accountAddress })
+  return await seaport._dispatch(EventType.CancelOrder, { order, accountAddress })
 
+  const gasPrice = await seaport._computeGasPrice()
+  const transactionHash = await seaport._wyvernProtocol.wyvernExchange.cancelOrder_.sendTransactionAsync(
+    [order.exchange, order.maker, order.taker, order.feeRecipient, order.target, order.staticTarget, order.paymentToken],
+    [order.makerRelayerFee, order.takerRelayerFee, order.makerProtocolFee, order.takerProtocolFee, order.basePrice, order.extra, order.listingTime, order.expirationTime, order.salt],
+    order.feeMethod,
+    order.side,
+    order.saleKind,
+    order.howToCall,
+    order.calldata,
+    order.replacementPattern,
+    order.staticExtradata,
+    order.v || 0,
+    order.r || NULL_BLOCK_HASH,
+    order.s || NULL_BLOCK_HASH,
+    { from: accountAddress, gasPrice })
+
+  return await seaport._confirmTransaction(transactionHash.toString(), EventType.CancelOrder, "Cancelling order", async () => {
+    const isOpen = await seaport._validateOrder(order)
+    return !isOpen
+  })
+  
+}
 
 
 
