@@ -58,15 +58,10 @@ export async function buyOrder(asset, accountAddress)
   const transactionHash = await seaport.fulfillOrder({ order, accountAddress }).catch(() => {return "Error on buying the token"})
   return transactionHash;
 }
-export async function cancelThisOffer(order, address)
+export async function cancelThisOffer(order, accountAddress)
 {
-  // return 35;
-  // console.log(accountAddress)
-  let accountAddress = address[0]
-  console.log("util", order)
-  // const event = await handleSeaportEvents
-  // event.dispatch(EventType.CancelOrder, { order, accountAddress })
-  return await seaport._dispatch(EventType.CancelOrder, { order, accountAddress })
+
+  await seaport._dispatch(EventType.CancelOrder, { order, accountAddress })
 
   const gasPrice = await seaport._computeGasPrice()
   const transactionHash = await seaport._wyvernProtocol.wyvernExchange.cancelOrder_.sendTransactionAsync(
@@ -84,7 +79,7 @@ export async function cancelThisOffer(order, address)
     order.s || NULL_BLOCK_HASH,
     { from: accountAddress, gasPrice })
 
-  return await seaport._confirmTransaction(transactionHash.toString(), EventType.CancelOrder, "Cancelling order", async () => {
+   await seaport._confirmTransaction(transactionHash.toString(), EventType.CancelOrder, "Cancelling order", async () => {
     const isOpen = await seaport._validateOrder(order)
     return !isOpen
   })
