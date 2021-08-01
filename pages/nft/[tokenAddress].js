@@ -1,4 +1,4 @@
-import { Dropdown, Image, Menu, Modal, Statistic, Tabs, Avatar, Result, Button, Spin } from "antd";
+import { Dropdown, Image, Menu, message, Statistic, Tabs, Avatar, Result, Button, Spin } from "antd";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -37,13 +37,14 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne } from "/Utils/strapiApi";
-import { unixToHumanDate, buyOrder, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestOffer, convertToUsd} from "/Utils/utils";
+import { unixToHumanDate, buyOrder, cancelThisOffer, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestOffer, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 import{FieldTimeOutlined} from "@ant-design/icons"
 import ReactPlayer from 'react-player';
 import MakeOfferModal from "/Components/makeOfferModal"
 import BuyNftModal from "/Components/buyNftModal"
-
+import { useSelector } from "react-redux";
+import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
 
 const { Countdown } = Statistic;
 const menu = (
@@ -73,6 +74,12 @@ function ProductPage() {
   const [isVideo, setIsVideo] = useState(false)
   const [refresh, setRefresh] = useState(true)
 
+  const isWalletConnected = useSelector(getWalletConnected)
+  const isMetaConnected = useSelector(getMetaConnected)
+  const tokenAddresses = useSelector(getAccountTokens)
+  const [address, setAddress] = useState(null)
+  const [balance, setBalance] = useState(null)
+
     const loadAgain = () =>{
       setLoading(true)
       loadNft()
@@ -80,7 +87,6 @@ function ProductPage() {
     const loadNft = async () => {
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
-      console.log(data)
       if(data)
         {
           setLoading(false)
@@ -116,13 +122,40 @@ function ProductPage() {
       }
     }
   }
+async function cancelOffer(order, address){
+      const cancel = await cancelThisOffer(order, address);
+      if(cancel == undefined)
+      {
+        message.success("Offer Canceled");
+        loadAgain()
+      }
+      else
+      {
+        message.error("Offer not canceled");
+      }
+  }
+  // function cancelOffer(){
+  //   return 3;
+  // }
   useEffect(() => {
     if (!queryParam) {
       return null;
     }
-
+    if(isWalletConnected)
+  {
+    setAddress(tokenAddresses.walletToken[0]);
+    setBalance(tokenAddresses.walletBalance);
+  }
+  else if(isMetaConnected)
+  {
+    setAddress(tokenAddresses.metaToken[0]);
+    setBalance(tokenAddresses.metaBalance);
+  }
+ 
     refresh && loadNft();
   }, [queryParam]);
+
+
   return (
     <>
       <Wrapper>
@@ -298,7 +331,12 @@ function ProductPage() {
                               <span className={"bidDate"}>
                                 {unixToHumanDate(order?.createdTime)}
                               </span>
+                              <span>
+                              {order.makerAccount.address == address ? 
+                              <Button onClick={() => cancelOffer(order, address)} shape="round" size="small">{"Cancel"}</Button> : ""}
                             </span>
+                            </span>
+                            
                           </span>
                         </div>
                       </LastBidder>
@@ -474,8 +512,7 @@ function ProductPage() {
                 )}
               </BidCountdown>}
               <ButtonContainer>
-                {/* {asset.isPresale == true &&  */}
-                {asset?.sellOrder != null && <BuyNftModal asset={asset} loadAgain={loadAgain} /> }
+                {asset?.sellOrder != null && !asset?.sellOrder?.waitingForBestCounterOrder && <BuyNftModal asset={asset} loadAgain={loadAgain} /> }
                 <MakeOfferModal asset={asset} loadAgain={loadAgain} />
               </ButtonContainer>
             </ItemFooter>

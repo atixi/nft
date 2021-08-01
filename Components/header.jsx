@@ -473,7 +473,7 @@ function Header(props) {
             <ConnectedButton className={`d-lg-block`}>
               {walletBalance !== null && isWalletConnected == true ? (
                 <>
-                  <BalanceLabel>{walletBalance + " Eth"}</BalanceLabel>
+                  <BalanceLabel>{parseFloat(walletBalance).toFixed(4) + " Eth"}</BalanceLabel>
                   <Avatar
                     size={36}
                     src={"/images/walletIcons/walletIcon.svg"}
@@ -481,7 +481,7 @@ function Header(props) {
                 </>
               ) : (
                 <>
-                  <BalanceLabel>{metaBalance + " Eth"}</BalanceLabel>
+                  <BalanceLabel>{parseFloat(metaBalance).toFixed(4) + " Eth"}</BalanceLabel>
                   <Avatar size={36} src={"/images/walletIcons/metaIcon.svg"} />
                 </>
               )}
