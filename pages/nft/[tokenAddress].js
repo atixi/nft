@@ -1,4 +1,4 @@
-import { Dropdown, Image, Menu, Modal, Statistic, Tabs, Avatar, Result, Button, Spin } from "antd";
+import { Dropdown, Image, Menu, message, Statistic, Tabs, Avatar, Result, Button, Spin } from "antd";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -126,8 +126,15 @@ function ProductPage() {
 async function cancelOffer(order, address){
     console.log("order in function", order)
       const cancel = await cancelThisOffer(order, address);
-      console.log("conceled?", cancel)
-      return 3;
+      if(cancel == undefined)
+      {
+        message.success("Offer Canceled");
+        loadAgain()
+      }
+      else
+      {
+        message.error("Offer not canceled");
+      }
   }
   // function cancelOffer(){
   //   return 3;

@@ -4,12 +4,8 @@ import { differenceInSeconds, intervalToDuration, secondsToMilliseconds } from '
 import fromUnix from "date-fns/fromUnixTime";
 import * as Web3 from "web3";
 import { OpenSeaPort, Network, EventType } from "opensea-js";
-// import { , ActionTypes, OpenSeaPort } from 'opensea-js';
-
 import { OrderSide } from 'opensea-js/lib/types';
-import { useSelector } from "react-redux";
-import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
-import {handleSeaportEvents} from "/store/index"
+
 export const seaportProvider = new Web3.providers.HttpProvider(
   "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
   // 'https://rinkeby-api.opensea.io/api/v1/'

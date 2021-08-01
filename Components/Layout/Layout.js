@@ -22,7 +22,6 @@ import Web3 from "web3";
 import { OpenSeaPort, Network } from "opensea-js";
 import { seaportProvider } from "/Utils/openseaApi";
 import openseaApi from "Utils/openseaApi";
-// import handleSeaportEvents from "/store/index"
 
 // This example provider won't let you make transactions, only read-only calls:
 
@@ -48,7 +47,6 @@ const Layout = ({ children }) => {
   const router = useRouter();
   const [displayHeader, setDisplayHeader] = useState(true);
   useEffect(() => {
-    // openseaEvents();
     subscribeMetamaskProvider();
     handleHeader();
   });
@@ -102,12 +100,6 @@ const Layout = ({ children }) => {
       }
     }
   };
-  // const openseaEvents = async () =>{
-  //   const data = await handleSeaportEvents
-  //     console.log(data.dispatch)
-  //   return data;
-  // }
-  
   return (
     <>
       <Head>
