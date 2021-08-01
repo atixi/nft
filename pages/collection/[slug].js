@@ -1,4 +1,4 @@
-import { Tabs, Spin } from "antd";
+import { Tabs, Spin, Dropdown } from "antd";
 import React, { useEffect, useState } from "react";
 import {
   ProfileContainer,
@@ -6,6 +6,7 @@ import {
   BiographyContainer,
   BioDescription,
   ProfileButton,
+  ShareProfile,
 } from "/Components/StyledComponents/talentPage-styledComponents";
 import Products from "/Components/nfts";
 import {
@@ -22,7 +23,17 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
-
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterShareButton,
+  TwitterIcon,
+  TelegramShareButton,
+  TelegramIcon,
+  WhatsappShareButton,
+  WhatsappIcon,
+} from "next-share";
+import { displayAddress } from "/Utils/utils";
 function CollectionDetails({ collection }) {
   const [collect, setCollect] = useState({
     collectionName: "",
@@ -140,11 +151,59 @@ function CollectionDetails({ collection }) {
                   <strong>{collect.collectionName}</strong>
                 </h3>
                 <h6>
-                  <strong>{"addressToShow"}</strong>
+                  <strong>
+                    {displayAddress(collection.talent.walletAddress)}
+                  </strong>
                 </h6>
                 <div className="mt-4">
                   <ProfileButton type="button">
-                    <ShareButton />
+                    <Dropdown
+                      trigger={["click"]}
+                      overlay={
+                        <ShareProfile>
+                          <h5>Share on social medias</h5>
+                          <div>
+                            <div>
+                              <FacebookShareButton
+                                url={`${process.env.BASE_URL}/collection/${collection.slug}`}
+                                quote={`${collection.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
+                                hashtag={"#rimentertainment"}
+                              >
+                                <FacebookIcon size={32} round />
+                              </FacebookShareButton>
+                            </div>
+                            <div>
+                              <TwitterShareButton
+                                url={`${process.env.BASE_URL}/collection/${collection.slug}`}
+                                title={`${collection.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
+                              >
+                                <TwitterIcon size={32} round />
+                              </TwitterShareButton>
+                            </div>
+                            <div>
+                              <TelegramShareButton
+                                url={`${process.env.BASE_URL}/collection/${collection.slug}`}
+                                title={`${collection.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
+                              >
+                                <TelegramIcon size={32} round />
+                              </TelegramShareButton>
+                            </div>
+                            <div>
+                              <WhatsappShareButton
+                                url={`${process.env.BASE_URL}/collection/${collection.slug}`}
+                                title={`${collection.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
+                                separator=":: "
+                              >
+                                <WhatsappIcon size={32} round />
+                              </WhatsappShareButton>
+                            </div>
+                          </div>
+                        </ShareProfile>
+                      }
+                      placement="bottomRight"
+                    >
+                      <ShareButton />
+                    </Dropdown>
                   </ProfileButton>
                   <ProfileButton type="button">{"..."}</ProfileButton>
                 </div>
