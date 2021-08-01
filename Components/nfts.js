@@ -124,9 +124,12 @@ function Products(props) {
                       </a>
                     </Link>
                     <ProductPrice>
-                      {n.currentPrice
+                      <br />
+                      {(n.currentPrice
                         ? n.currentPrice
-                        : n.sellOrders[0]?.currentPrice}
+                        : n.sellOrders[0]?.currentPrice) /
+                        10000000000000000000}{" "}
+                      Eth
                     </ProductPrice>
                     <ProductList>
                       {/* {" " + n.currentQTY + " of " + n.totalQTY} */}
