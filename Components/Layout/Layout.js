@@ -47,10 +47,11 @@ const Layout = ({ children }) => {
   const router = useRouter();
   const [displayHeader, setDisplayHeader] = useState(true);
   const [network, setNetwork] = useState(null)
-  const providers = {"0x4": "Rinkeby Network", "0x1": "Ethereum Main Network (Mainnet)"}
+  const providers = {"0x4": "Rinkeby Network", "0x1": "Ethereum Main Network (Mainnet)", "0x4": "Rinkeby Test Network",
+  "0x3": "Ropsten Test Network", "0x5": "Goerli Test Network", "0x2a": "Kovan Test Network"}
 
   useEffect(() => {
-    detectNetwork()
+    // detectNetwork()
     subscribeMetamaskProvider();
     handleHeader();
   });
