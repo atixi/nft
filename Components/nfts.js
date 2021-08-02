@@ -130,7 +130,7 @@ function Products(props) {
                       {(n.currentPrice
                         ? n.currentPrice
                         : n.sellOrders[0]?.currentPrice) /
-                        10000000000000000000}{" "}
+                        1000000000000000000}{" "}
                       Eth
                     </ProductPrice>
                     <ProductList>
