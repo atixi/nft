@@ -87,6 +87,7 @@ function ProductPage() {
     const loadNft = async () => {
     if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
+      console.log(data)
       if(data)
         {
           setLoading(false)
@@ -141,7 +142,7 @@ async function cancelOffer(order, address){
     if (!queryParam) {
       return null;
     }
-    if(isWalletConnected)
+    if(isWalletConnected) 
   {
     setAddress(tokenAddresses.walletToken[0]);
     setBalance(tokenAddresses.walletBalance);
@@ -497,13 +498,13 @@ async function cancelOffer(order, address){
                     </BidPriceValue>
                   </BidPrice>
                 </BidOwnerContainer>}
-                {sellOrders && sellOrders?.expirationTime &&  (
+                {asset?.sellOrder && asset?.sellOrder?.expirationTime != "0" &&  (
                   <Auction>
                     <div className={"auctionDiv"}>
                       <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
                       <AuctionTimer>
                         <Countdown
-                          value={ unixToMilSeconds(sellOrders?.expirationTime)}
+                          value={ unixToMilSeconds(asset?.sellOrder?.expirationTime)}
                           format={`D[d] HH[h] mm[m] ss[s]`}
                         />
                       </AuctionTimer>
@@ -512,8 +513,17 @@ async function cancelOffer(order, address){
                 )}
               </BidCountdown>}
               <ButtonContainer>
-                {asset?.sellOrder != null && !asset?.sellOrder?.waitingForBestCounterOrder && <BuyNftModal asset={asset} loadAgain={loadAgain} /> }
-                <MakeOfferModal asset={asset} loadAgain={loadAgain} />
+                {address && asset?.owner?.address == address ? 
+                <Link href="#" passHref><a style={{display: "flex", flex:"1"}}><FooterButton
+                color={"white"}
+                style={{ background: "#0066ff" }}
+                  >
+                  {"Sell"}
+                </FooterButton></a></Link>
+
+                : <>
+                  {asset?.sellOrder != null && !asset?.sellOrder?.waitingForBestCounterOrder && <BuyNftModal asset={asset} loadAgain={loadAgain} />}     
+                  <MakeOfferModal asset={asset} loadAgain={loadAgain} /></>}
               </ButtonContainer>
             </ItemFooter>
           </ItemInfo>

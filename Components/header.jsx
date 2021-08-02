@@ -11,7 +11,6 @@ import {
   CloseOutlined,
 } from "@ant-design/icons";
 
-import { accountList } from "../Constants/constants";
 import CONSTANTS from "../Constants/headerConstants";
 import {
   Wrapper,
@@ -67,7 +66,6 @@ function Header(props) {
   const [profileDetails, setProfileDetails] = useState(null);
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
-  const [accountAddress, setAccountAddress] = useState(accountList[0]);
   const [connected, setConnected] = useState(false);
   const [data, setData] = useState({
     talents: [],
