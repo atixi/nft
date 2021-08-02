@@ -15,15 +15,7 @@ import {
 } from "/Components/StyledComponents/globalStyledComponents";
 import CollectionLoader from "@/components/collectionLoader";
 import { useRouter } from "next/router";
-import axios from "axios";
-
-const api = axios.create({
-  baseURL: process.env.HEROKU_BASE_URL,
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
-});
+import api from "/Components/axiosRequest";
 
 const { TabPane } = Tabs;
 function Profile() {

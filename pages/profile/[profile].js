@@ -20,8 +20,6 @@ import {
 } from "/Components/StyledComponents/globalStyledComponents";
 import CollectionLoader from "@/components/collectionLoader";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import axios from "axios";
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -33,13 +31,7 @@ import {
   WhatsappIcon,
 } from "next-share";
 import { displayAddress } from "/Utils/utils";
-const api = axios.create({
-  baseURL: process.env.HEROKU_BASE_URL,
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
-});
+import api from "/Components/axiosRequest";
 
 const { TabPane } = Tabs;
 function Profile() {

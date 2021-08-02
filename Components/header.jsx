@@ -45,7 +45,7 @@ import {
 } from "/store/action/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import axios from "axios";
+import api from "/Components/axiosRequest";
 function Header(props) {
   const router = useRouter();
   const dispatchAccountTokens = useDispatch();
@@ -94,13 +94,6 @@ function Header(props) {
     }
   }
 
-  const api = axios.create({
-    baseURL: process.env.HEROKU_BASE_URL,
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  });
   useEffect(() => {
     console.log("Metabalance is", metaBalance);
     isConnectedToAnyWallet();
@@ -471,7 +464,9 @@ function Header(props) {
             <ConnectedButton className={`d-lg-block`}>
               {walletBalance !== null && isWalletConnected == true ? (
                 <>
-                  <BalanceLabel>{parseFloat(walletBalance).toFixed(4) + " Eth"}</BalanceLabel>
+                  <BalanceLabel>
+                    {parseFloat(walletBalance).toFixed(4) + " Eth"}
+                  </BalanceLabel>
                   <Avatar
                     size={36}
                     src={"/images/walletIcons/walletIcon.svg"}
@@ -479,7 +474,9 @@ function Header(props) {
                 </>
               ) : (
                 <>
-                  <BalanceLabel>{parseFloat(metaBalance).toFixed(4) + " Eth"}</BalanceLabel>
+                  <BalanceLabel>
+                    {parseFloat(metaBalance).toFixed(4) + " Eth"}
+                  </BalanceLabel>
                   <Avatar size={36} src={"/images/walletIcons/metaIcon.svg"} />
                 </>
               )}

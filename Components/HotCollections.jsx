@@ -10,6 +10,7 @@ import {
   CardDescription,
   CardImageContainer,
 } from "./StyledComponents/hotCollections-styledComponents";
+import api from "/Components/axiosRequest";
 const breakPoints = [
   { width: 1, itemsToShow: 1 },
   { width: 550, itemsToShow: 2, itemsToScroll: 2 },
@@ -17,13 +18,7 @@ const breakPoints = [
   { width: 1024, itemsToShow: 4, itemsToScroll: 4 },
   { width: 1200, itemsToShow: 5, itemsToScroll: 5 },
 ];
-const api = axios.create({
-  baseURL: process.env.HEROKU_BASE_URL,
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
-});
+
 export default function HotCollections() {
   const [collections, setCollection] = useState([]);
 

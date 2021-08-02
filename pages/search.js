@@ -1,23 +1,16 @@
-import { Tabs, Spin } from "antd";
+import { Tabs } from "antd";
 import React, { useEffect, useState } from "react";
 import Products from "/Components/nfts";
 import {
   LoadMoreButton,
   MainWrapper,
 } from "/Components/StyledComponents/globalStyledComponents";
-import axios from "axios";
 import CollectionLoader from "@/components/collectionLoader";
 import Collections from "@/components/collections";
 import { useRouter } from "next/router";
 import TopSellers from "/Components/topSellers";
 const { TabPane } = Tabs;
-const api = axios.create({
-  baseURL: process.env.HEROKU_BASE_URL,
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
-});
+import api from "/Components/axiosRequest";
 
 function CollectionDetails() {
   const router = useRouter();
