@@ -6,14 +6,8 @@ import LiveAuctions from "/Components/liveAuctions";
 import Slide from "/Components/slider/slide";
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 import TopSellers from "/Components/topSellers";
-import axios from "axios";
-const api = axios.create({
-  baseURL: process.env.HEROKU_BASE_URL,
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
-});
+import api from "/Components/axiosRequest";
+
 function Home() {
   const [topSellers, setTopSellers] = useState([]);
   useEffect(() => {

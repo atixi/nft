@@ -14,14 +14,7 @@ import {
   LoadMoreButton,
 } from "./StyledComponents/globalStyledComponents";
 import { useRouter } from "next/router";
-import axios from "axios";
-const api = axios.create({
-  baseURL: process.env.HEROKU_BASE_URL,
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
-});
+import api from "/Components/axiosRequest";
 
 function Explore() {
   const [isLoad, setLoad] = useState(false);

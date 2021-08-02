@@ -13,16 +13,8 @@ import {
   LoadMoreButton,
   MainWrapper,
 } from "/Components/StyledComponents/globalStyledComponents";
-import axios from "axios";
 import CollectionLoader from "@/components/collectionLoader";
 const { TabPane } = Tabs;
-const api = axios.create({
-  baseURL: "https://rim-entertainment.herokuapp.com",
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
-});
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -34,6 +26,7 @@ import {
   WhatsappIcon,
 } from "next-share";
 import { displayAddress } from "/Utils/utils";
+import api from "/Components/axiosRequest";
 function CollectionDetails({ collection }) {
   const [collect, setCollect] = useState({
     collectionName: "",
