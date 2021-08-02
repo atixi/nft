@@ -22,7 +22,7 @@ import Web3 from "web3";
 import { OpenSeaPort, Network } from "opensea-js";
 import { seaportProvider } from "/Utils/openseaApi";
 import openseaApi from "Utils/openseaApi";
-
+import {Modal} from "antd"
 // This example provider won't let you make transactions, only read-only calls:
 
 const seaport = new OpenSeaPort(seaportProvider, {
@@ -43,10 +43,14 @@ const Layout = ({ children }) => {
   const walletToken = useSelector(getWalletToken);
   const isMetaconnected = useSelector(getMetaConnected);
   const isWalletConnected = useSelector(getWalletConnected);
-
+  const [isWrongNet, setIsWrongNet] = useState(false)
   const router = useRouter();
   const [displayHeader, setDisplayHeader] = useState(true);
+  const [network, setNetwork] = useState(null)
+  const providers = {"0x4": "Rinkeby Network", "0x1": "Ethereum Main Network (Mainnet)"}
+
   useEffect(() => {
+    detectNetwork()
     subscribeMetamaskProvider();
     handleHeader();
   });
@@ -111,9 +115,26 @@ const Layout = ({ children }) => {
       {!displayHeader && <div style={{ marginBottom: "-90px" }}></div>}
       {displayHeader && <Header />}
       {children}
+      {isWrongNet ? DisplayWrongNetModal() : ""}
       <Footer />
     </>
   );
+  async function detectNetwork()
+  {
+    let provider = await detectEthereumProvider();
+    if(provider.chainId != "0x1")
+    {
+      setIsWrongNet(true)
+      setNetwork(provider.chainId)
+    }
+  }
+  function DisplayWrongNetModal(){    
+    let  message = "You are connected to "+providers[network]+".\n Please change to "+providers["0x1"]+" and reload the page"
+
+    return <Modal title={<strong>{"Wrong Network!"}</strong>} footer={false} visible={true}>
+    {message }
+  </Modal>
+  }
 };
 
 export default Layout;

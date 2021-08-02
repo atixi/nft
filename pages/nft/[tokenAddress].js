@@ -142,7 +142,7 @@ async function cancelOffer(order, address){
     if (!queryParam) {
       return null;
     }
-    if(isWalletConnected)
+    if(isWalletConnected) 
   {
     setAddress(tokenAddresses.walletToken[0]);
     setBalance(tokenAddresses.walletBalance);
@@ -514,7 +514,7 @@ async function cancelOffer(order, address){
               </BidCountdown>}
               <ButtonContainer>
                 {address && asset?.owner?.address == address ? 
-                <Link href="#" style={{display: "flex", flex:"1"}} passHref><a><FooterButton
+                <Link href="#" passHref><a style={{display: "flex", flex:"1"}}><FooterButton
                 color={"white"}
                 style={{ background: "#0066ff" }}
                   >
