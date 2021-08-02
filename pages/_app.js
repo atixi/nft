@@ -19,7 +19,6 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family:Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
   }body {
   padding-top: 74px;
 }
