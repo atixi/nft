@@ -13,7 +13,7 @@ export default function Slide(props) {
   const [categories, setCategories] = useState([]);
   useEffect(() => {
     async function fetchingCats() {
-      const data = await api.get("/categories");
+      const data = await api.get("/categories?_sort=id:ASC");
       setCategories(await data.data);
     }
     fetchingCats();
