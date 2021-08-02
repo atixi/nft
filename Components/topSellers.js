@@ -34,7 +34,7 @@ function TopSellers({ data }) {
             <Link
               key={seller.userName}
               href={{
-                pathname: `/profile/${seller.userName}`,
+                pathname: `/profile/${seller.walletAddress}`,
               }}
             >
               <a>
