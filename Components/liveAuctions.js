@@ -112,7 +112,7 @@ function Product(product, index) {
       </ProductCardHeader>
       <CardImage className={`p-3`}>
         <Link
-          href={product?.asset ? `/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}` : `/nft/${product?.assetBundle?.slug}bundle=true`}  >
+          href={product?.asset ? `/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}` : `/nft/${product?.assetBundle?.maker?.address}?bundle=1`}  >
           <a>
             {" "}
             <img
@@ -130,7 +130,7 @@ function Product(product, index) {
           </CountDown>
         </CountDownContainer>
         <Link
-          href={product?.asset ? `/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}` : `/nft/${product?.assetBundle?.slug}bundle=true`}  >
+          href={product?.asset ? `/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}` : `/nft/${product?.assetBundle?.maker?.address}?bundle=1`}  >
         <a>
           <CardTitle>{product?.asset ? (product.asset?.name ? product.asset?.name : product.asset?.collection?.name) : product?.assetBundle?.name}</CardTitle>
         </a>

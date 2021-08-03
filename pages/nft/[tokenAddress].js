@@ -85,7 +85,13 @@ function ProductPage() {
       loadNft()
     }
     const loadNft = async () => {
-    if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
+      console.log("loading")
+      if(queryParam.bundle && queryParam.bundle == "1")
+      {
+        console.log(queryParam.tokenAddress)
+        console.log("this is bundle")
+      }
+    else if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
       console.log(data)
       if(data)
@@ -140,6 +146,7 @@ async function cancelOffer(order, address){
   // }
   useEffect(() => {
     if (!queryParam) {
+      console.log(queryParam)
       return null;
     }
     if(isWalletConnected) 
