@@ -36,7 +36,7 @@ import {
 import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
-import { fetchOne } from "/Utils/strapiApi";
+import { fetchOne, fetchBundle } from "/Utils/strapiApi";
 import { unixToHumanDate, buyOrder, cancelThisOffer, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestOffer, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 import{FieldTimeOutlined} from "@ant-design/icons"
@@ -90,6 +90,8 @@ function ProductPage() {
       {
         console.log(queryParam.tokenAddress)
         console.log("this is bundle")
+        const bundle = await fetchBundle(queryParam.tokenAddress)
+        console.log(bundle)
       }
     else if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
