@@ -79,6 +79,7 @@ function ProductPage() {
   const tokenAddresses = useSelector(getAccountTokens)
   const [address, setAddress] = useState(null)
   const [balance, setBalance] = useState(null)
+  const [imageList, setImageList] = useState(null)
 
     const loadAgain = () =>{
       setLoading(true)
@@ -99,6 +100,12 @@ function ProductPage() {
           {
             const nft = bundle.data;
             const owner= nft?.assetBundle?.maker;
+            let imgUrl=[nft.assetBundle.assets];
+            nft.assetBundle.assets.map((asset, index) => {
+              imgUrl[index] = asset.imageUrl;
+            })
+            setImageList(imgUrl)
+            console.log(imageList)
             setAsset({
               name: nft?.assetBundle.name,
               description: nft?.assetBundle.description,
