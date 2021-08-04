@@ -86,11 +86,11 @@ function ProductPage() {
     }
     const loadNft = async () => {
       console.log("loading")
-      if(queryParam.bundle && queryParam.bundle == "1")
+      if(queryParam.slug)
       {
         console.log(queryParam.tokenAddress)
         console.log("this is bundle")
-        const bundle = await fetchBundle(queryParam.tokenAddress)
+        const bundle = await fetchBundle(queryParam.tokenAddress, queryParam.slug)
         console.log(bundle)
       }
     else if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
