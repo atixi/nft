@@ -82,6 +82,7 @@ function ProductPage() {
   const [balance, setBalance] = useState(null)
   const [imageList, setImageList] = useState(null)
   const [isBundle, setIsBundle] = useState(false)
+  const [mainImage, setMainImage] = useState(null)
     const loadAgain = () =>{
       setLoading(true)
       loadNft()
@@ -125,11 +126,12 @@ function ProductPage() {
             });
           setIsVideo(detectVideo(nft.assetBundle?.assets[0].imageUrl))
           nft.assetBundle?.assets[0].imageUrl && setPreviewImage(prevImage(nft.assetBundle?.assets[0].imageUrl))
+          setMainImage(nft.assetBundle?.assets[0].imageUrl)
           setOffers(nft?.buyOrders);
           nft?.buyOrders && setHighestOffer(findHighestOffer(nft?.buyOrders));
           setSellOrders(nft?.sellOrders);
           }
-          else if(data=="error")
+          else if(bundle=="error")
           {
             setNotFound(true)
           }
@@ -161,6 +163,7 @@ function ProductPage() {
           numOfSales: nft.numSales
         });
       setIsVideo(detectVideo(nft.imageUrl))
+      setMainImage(nft.imageUrl)
       nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl))
       setOffers(nft?.buyOrders);
       nft?.buyOrders && setHighestOffer(findHighestOffer(nft?.buyOrders));
@@ -210,6 +213,11 @@ async function cancelOffer(order, address){
   {
     console.log(url)
     setIsVideo(detectVideo(url))
+    if(!isVideo)
+    {
+      setMainImage(url)
+      setPreviewImage(url)
+    }
 
   }
 
@@ -231,7 +239,7 @@ async function cancelOffer(order, address){
             <ImageCon>
             {isVideo ? <ReactPlayer url={asset?.image} playing={true} width={"auto"} loop={true} controls={true} /> :
               <Image
-                src={`${asset?.image}`}
+                src={mainImage}
                 preview={{
                   src: `${previewImage}`,
                 }}
