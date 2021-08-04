@@ -88,10 +88,42 @@ function ProductPage() {
       console.log("loading")
       if(queryParam.slug)
       {
-        console.log(queryParam.tokenAddress)
-        console.log("this is bundle")
         const bundle = await fetchBundle(queryParam.tokenAddress, queryParam.slug)
         console.log(bundle)
+            if(bundle)
+            {
+              setLoading(false)
+            }
+
+          if(bundle.status == 200)
+          {
+            const nft = bundle.data;
+            const owner= nft?.assetBundle?.maker;
+            setAsset({
+              name: nft?.assetBundle.name,
+              description: nft?.assetBundle.description,
+              owner: owner,
+              creator: owner, // this part needs to be changed
+              image: nft.assetBundle?.assets[0].imageUrl,
+              contractAddress: nft?.assetBundle?.assetContract?.address,
+              tokenId: nft?.tokenId,
+              tokenAddress: nft?.tokenAddress,
+              collection: nft?.collection,
+              isPresale: nft?.isPresale,
+              thumbnail: nft.assetBundle?.assets[0].imageUrlThumbnail,
+              sellOrder: nft,
+              numOfSales: nft?.numSales
+            });
+          setIsVideo(detectVideo(nft.assetBundle?.assets[0].imageUrl))
+          nft.assetBundle?.assets[0].imageUrl && setPreviewImage(prevImage(nft.assetBundle?.assets[0].imageUrl))
+          setOffers(nft?.buyOrders);
+          nft?.buyOrders && setHighestOffer(findHighestOffer(nft?.buyOrders));
+          setSellOrders(nft?.sellOrders);
+          }
+          else if(data=="error")
+          {
+            setNotFound(true)
+          }
       }
     else if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
