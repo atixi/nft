@@ -84,6 +84,7 @@ function ProductPage() {
   const [isBundle, setIsBundle] = useState(false)
   const [mainImage, setMainImage] = useState(null)
   const [assets, setAssets] = useState(null)
+  const [order, setOrder] = useState(null)
     const loadAgain = () =>{
       setLoading(true)
       loadNft()
@@ -102,6 +103,7 @@ function ProductPage() {
 
           if(bundle.status == 200)
           {
+            setOrder(bundle.data)
             const nft = bundle.data;
             setAssets(nft.assetBundle.assets)
             const owner= nft?.assetBundle?.maker;
@@ -113,6 +115,7 @@ function ProductPage() {
             console.log(imageList)
             setAsset({
               name: nft?.assetBundle.name,
+              slug: nft?.assetBundle.slug,
               description: nft?.assetBundle.description,
               owner: owner,
               creator: owner, // this part needs to be changed
@@ -593,7 +596,7 @@ async function cancelOffer(order, address){
                 </FooterButton></a></Link>
 
                 : <>
-                  {asset?.sellOrder != null && !asset?.sellOrder?.waitingForBestCounterOrder && <BuyNftModal asset={asset} loadAgain={loadAgain} />}     
+                  {asset?.sellOrder != null && !asset?.sellOrder?.waitingForBestCounterOrder && <BuyNftModal asset={asset} isBundle={isBundle} loadAgain={loadAgain} />}     
                   <MakeOfferModal asset={asset} assets={assets} isBundle={isBundle} loadAgain={loadAgain} /></>}
               </ButtonContainer>
             </ItemFooter>
