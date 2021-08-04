@@ -12,8 +12,10 @@ import {
   BioDescription,
   ProfileButton,
   ShareProfile,
+  EditProfile,
 } from "/Components/StyledComponents/talentPage-styledComponents";
 import Products from "/Components/nfts";
+import Link from "next/link";
 import {
   LoadMoreButton,
   MainWrapper,
@@ -209,6 +211,9 @@ function Profile() {
                     </Dropdown>
                   </ProfileButton>
                   <ProfileButton type="button">{"..."}</ProfileButton>
+                  <EditProfile>
+                    <Link href="/settings">{"Edit Profile"}</Link>
+                  </EditProfile>
                 </div>
               </BioDescription>
             </BiographyContainer>

@@ -8,7 +8,7 @@ export const FOOTER = {
   policyLink: "www.facebook.com",
 };
 export const FOOTER_WEBSITE_LINKS = {
-  websiteTitle: "Rarible",
+  websiteTitle: "Rim Entertainment",
   websiteLinks: [
     { websiteLinkTitle: "Explore", link: "www.facebook.com" },
     { websiteLinkTitle: "How it works", link: "www.facebook.com" },
