@@ -42,8 +42,9 @@ const ModalContainer = styled.div`
 const ModalTextContainer = styled.p`
   text-align: center;
 `
-function MakeOfferModal({asset, loadAgain})
+function MakeOfferModal({asset, assets, isBundle, loadAgain})
 {
+  console.log("assets", assets)
 const isWalletConnected = useSelector(getWalletConnected)
 const isMetaConnected = useSelector(getMetaConnected)
 const tokenAddresses = useSelector(getAccountTokens)
@@ -71,7 +72,7 @@ const [balance, setBalance] = useState(null)
       const onFinish = async values => {
         try {
           setMakingOffer(true)
-          let offer = await makeOffer(values, asset, address && address)
+          let offer = await makeOffer(values, asset, isBundle, assets, address && address)
      
           setIsModalVisible(false)
           loadAgain(true)
@@ -109,7 +110,7 @@ const [balance, setBalance] = useState(null)
         setAddress(tokenAddresses.metaToken[0].toString());
         setBalance(tokenAddresses.metaBalance);
       }
-      }, [asset]);
+      }, [asset, assets]);
     return <>
         <FooterButton 
             color={"#0066ff"}
@@ -226,12 +227,13 @@ function offer()
                 </Input.Group>
                 </Form.Item>
                 {/* dds */}
+                {isBundle &&
                 <Form.Item label="Offer Expiration">
                 <Input.Group compact>
                     <Form.Item
                     name={['dateTime', 'days']}
                     noStyle
-                    rules={[{ required: true, message: 'Number of days is required' }]}
+                    rules={[{ message: 'Number of days is required' }]}
                 >
                         <Select type={"object"} placeholder={"Days"} size={"large"} onChange={handleTimeChange} style={{width: "25%"}}>
                             <Option value="1">1 Day</Option>
@@ -245,14 +247,14 @@ function offer()
                     <Form.Item
                     name={['dateTime', 'time']}
                     noStyle
-                    rules={[{ required: true, message: 'Time is required' }]}>
+                    rules={[{ message: 'Time is required' }]}>
                         <TimePicker type={"object"} {...config} style={{ width: '75%' }}  size="large" />
                     </Form.Item>
                     :
                     <Form.Item
                     name={['dateTime', 'date']}
                     noStyle
-                    rules={[{ required: true, message: 'Date is required' }]}>
+                    rules={[{ message: 'Date is required' }]}>
                         <DatePicker showTime format="YYYY-MM-DD HH:mm:ss"
                         {...config}
                         style={{ width: '75%' }} 
@@ -262,10 +264,8 @@ function offer()
                       </Form.Item>
                             
                       }
-                    
-                    
                 </Input.Group>
-                </Form.Item>
+                </Form.Item> }
                 <Form.Item><span style={{color: "red"}}>{responseMessage}</span></Form.Item> 
                 <div style={{textAlign: "center"}}>
            <ConnectButton color={"black"} style={{margin: "5px"}} onClick={handleCancel} background={"white"} marginBottom={"15px"} > Cancel </ConnectButton>

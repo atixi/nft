@@ -83,6 +83,7 @@ function ProductPage() {
   const [imageList, setImageList] = useState(null)
   const [isBundle, setIsBundle] = useState(false)
   const [mainImage, setMainImage] = useState(null)
+  const [assets, setAssets] = useState(null)
     const loadAgain = () =>{
       setLoading(true)
       loadNft()
@@ -102,6 +103,7 @@ function ProductPage() {
           if(bundle.status == 200)
           {
             const nft = bundle.data;
+            setAssets(nft.assetBundle.assets)
             const owner= nft?.assetBundle?.maker;
             let imgUrl=[nft.assetBundle.assets];
             nft.assetBundle.assets.map((asset, index) => {
@@ -592,7 +594,7 @@ async function cancelOffer(order, address){
 
                 : <>
                   {asset?.sellOrder != null && !asset?.sellOrder?.waitingForBestCounterOrder && <BuyNftModal asset={asset} loadAgain={loadAgain} />}     
-                  <MakeOfferModal asset={asset} loadAgain={loadAgain} /></>}
+                  <MakeOfferModal asset={asset} assets={assets} isBundle={isBundle} loadAgain={loadAgain} /></>}
               </ButtonContainer>
             </ItemFooter>
           </ItemInfo>

@@ -28,21 +28,34 @@ const seaport = new OpenSeaPort(provider, {
   networkName: Network.Rinkeby,
   apiKey: "c2dde5d7c0a0465a8e994f711a3a3c31",
 });
-export async function makeOffer(offerData, asset, accountAddress)
+export async function makeOffer(offerData, asset, isBundle, assets, accountAddress)
 {
   const {tokenId, tokenAddress} = asset;
   const schemaName = "ERC721";
   let err = false 
-  return await seaport.createBuyOrder({
-    asset: {
-      tokenId, 
-      tokenAddress,
-      schemaName // WyvernSchemaName. If omitted, defaults to 'ERC721'. Other options include 'ERC20' and 'ERC1155'
-    },
-    accountAddress,
-    // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
-    startAmount: offerData.price.amount,
-  })
+  if(isBundle)
+  {
+    return await seaport.createBundleBuyOrder({
+      assets,
+      accountAddress,
+      startAmount: offerData.price.amount,
+      // Optional expiration time for the order, in Unix time (seconds):
+      expirationTime: Math.round(Date.now() / 1000 + 60 * 60 * 24) // One day from now
+    })
+  }
+  else
+  {
+    return await seaport.createBuyOrder({
+      asset: {
+        tokenId, 
+        tokenAddress,
+        schemaName // WyvernSchemaName. If omitted, defaults to 'ERC721'. Other options include 'ERC20' and 'ERC1155'
+      },
+      accountAddress,
+      // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
+      startAmount: offerData.price.amount,
+    })
+  }
 }
 export async function buyOrder(asset, accountAddress)
 {
