@@ -35,12 +35,25 @@ export async function makeOffer(offerData, asset, isBundle, assets, accountAddre
   let err = false 
   if(isBundle)
   {
+          var expirationTime = null;
+          if(offerData.dateTime.days == "custom")
+          {
+            var date = new Date(offerData.dateTime.date);
+            expirationTime = date.getTime() / 1000;
+          }
+          else
+          {
+            let time = moment(offerData.dateTime.time).format("HH:mm:ss")
+            let timeInSeconds = moment(t, 'HH:mm:ss:').diff(moment().startOf('day'), 'seconds');
+            expirationTime = Math.round(Date.now() / 1000 + (offerData.dateTime.days *24*60*60 + timme))
+          }
+        console.log("ex", parseInt(expirationTime))
     return await seaport.createBundleBuyOrder({
       assets,
       accountAddress,
       startAmount: offerData.price.amount,
       // Optional expiration time for the order, in Unix time (seconds):
-      expirationTime: Math.round(Date.now() / 1000 + 60 * 60 * 24) // One day from now
+      expirationTime: parseInt(expirationTime),
     })
   }
   else

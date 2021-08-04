@@ -7,6 +7,7 @@ import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/ac
 import { getAuctionPriceDetails } from "/Constants/constants";
 const { Option } = Select;
 import Link from "next/link"
+import moment from "moment";
 import styled from "styled-components";
 const SubmitButton = styled(Button)`
 margin: auto;
@@ -70,6 +71,7 @@ const [balance, setBalance] = useState(null)
 
     const [error, setError] = useState()
       const onFinish = async values => {
+        console.log(values)
         try {
           setMakingOffer(true)
           let offer = await makeOffer(values, asset, isBundle, assets, address && address)
@@ -233,7 +235,7 @@ function offer()
                     <Form.Item
                     name={['dateTime', 'days']}
                     noStyle
-                    rules={[{ message: 'Number of days is required' }]}
+                    rules={[{ required: true, message: 'Number of days is required' }]}
                 >
                         <Select type={"object"} placeholder={"Days"} size={"large"} onChange={handleTimeChange} style={{width: "25%"}}>
                             <Option value="1">1 Day</Option>
@@ -247,15 +249,15 @@ function offer()
                     <Form.Item
                     name={['dateTime', 'time']}
                     noStyle
-                    rules={[{ message: 'Time is required' }]}>
-                        <TimePicker type={"object"} {...config} style={{ width: '75%' }}  size="large" />
+                    rules={[{ required: true, message: 'Time is required' }]}>
+                        <TimePicker type={"object"} allowClear={false} {...config} style={{ width: '75%' }}  size="large" />
                     </Form.Item>
                     :
                     <Form.Item
                     name={['dateTime', 'date']}
                     noStyle
-                    rules={[{ message: 'Date is required' }]}>
-                        <DatePicker showTime format="YYYY-MM-DD HH:mm:ss"
+                    rules={[{ required: true, message: 'Date is required' }]}>
+                        <DatePicker showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss"
                         {...config}
                         style={{ width: '75%' }} 
                         size={"large"}
