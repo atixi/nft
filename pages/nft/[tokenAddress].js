@@ -31,7 +31,8 @@ import {
   PriceInDollarContainer,
   Wrapper,
   DetailTabDiv,
-  SaleEnd
+  SaleEnd,
+  ImageListContainer
 } from "../../Components/StyledComponents/productDetails-styledComponents";
 import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
@@ -80,7 +81,7 @@ function ProductPage() {
   const [address, setAddress] = useState(null)
   const [balance, setBalance] = useState(null)
   const [imageList, setImageList] = useState(null)
-
+  const [isBundle, setIsBundle] = useState(false)
     const loadAgain = () =>{
       setLoading(true)
       loadNft()
@@ -89,6 +90,7 @@ function ProductPage() {
       console.log("loading")
       if(queryParam.slug)
       {
+        setIsBundle(true)
         const bundle = await fetchBundle(queryParam.tokenAddress, queryParam.slug)
         console.log(bundle)
             if(bundle)
@@ -102,7 +104,7 @@ function ProductPage() {
             const owner= nft?.assetBundle?.maker;
             let imgUrl=[nft.assetBundle.assets];
             nft.assetBundle.assets.map((asset, index) => {
-              imgUrl[index] = asset.imageUrl;
+              imgUrl[index] = {"thumbnail": asset.imageUrlThumbnail, "imageUrl": asset.imageUrl};
             })
             setImageList(imgUrl)
             console.log(imageList)
@@ -204,6 +206,12 @@ async function cancelOffer(order, address){
     refresh && loadNft();
   }, [queryParam]);
 
+  function changeImage(url)
+  {
+    console.log(url)
+    setIsVideo(detectVideo(url))
+
+  }
 
   return (
     <>
@@ -228,7 +236,12 @@ async function cancelOffer(order, address){
                   src: `${previewImage}`,
                 }}
               />} 
-            </ImageCon>
+            </ImageCon> <br/>
+            <ImageListContainer>
+              {imageList && imageList.map((image) => {
+              return <div><img src={image.thumbnail} onClick={() => changeImage(image.imageUrl)} /></div>
+              })}
+            </ImageListContainer>
           </ItemImageContainer>
           <ItemInfo className={"float-none float-sm-left"}>
             <ItemDetails>
