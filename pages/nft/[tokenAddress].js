@@ -291,12 +291,12 @@ async function cancelOffer(order, address){
               </ItemDetailsHeader>
               <div>
                 <span className="text-gradient"> 
-                  {sellOrders && sellOrders.length>0 &&  getAuctionPriceDetails(sellOrders[0]).priceBase}
-                  {sellOrders && sellOrders.length>0 && sellOrders[0].paymentTokenContract &&
-                    sellOrders[0]?.paymentTokenContract.symbol}
+                  {asset?.sellOrder &&  getAuctionPriceDetails(asset?.sellOrder).priceBase}
+                  {asset?.sellOrder && asset?.sellOrder.paymentTokenContract &&
+                    asset?.sellOrder?.paymentTokenContract.symbol}
                 </span>
                 <span style={{ color: "#ccc" }}>
-                  {sellOrders && sellOrders.length>0 && ` 1 of  ${sellOrders.length}`}
+                  {/* {isBundle && ` 1 of  ${assets.length()}`} */}
                 </span>
               </div>
               {/* <div>
