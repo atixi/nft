@@ -51,7 +51,17 @@ function Profile() {
             <h5>Edit Profile</h5>
             <div>You can set prefered display name, username and...</div>
             <Form form={form} onFinish={onFinish} layout="vertical">
-              <Form.Item label="Name" required name="talentName">
+              <Form.Item
+                label="Name"
+                required
+                name="talentName"
+                rules={[
+                  {
+                    required: true,
+                    message: "talent name is required",
+                  },
+                ]}
+              >
                 <Input placeholder="write your name" />
               </Form.Item>
               <Form.Item label="Bio" name="bio">
