@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import { Dropdown, Input, Form, Row, Col, List, Tabs, Avatar, Result, Button, Spin } from "antd";
+import { Switch, Input, Form, Row, Col, List, Tabs, Avatar, Result, Button, Spin } from "antd";
 import Link from "next/link";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne, fetchBundle } from "/Utils/strapiApi";
@@ -59,6 +59,10 @@ function SellNft()
           title: 'Nft info',
         }
       ];
+      function handleIncludeEndPrice()
+      {
+
+      }
     useEffect(() => {
         if (!queryParam) {
             return null;
@@ -128,7 +132,11 @@ function SellNft()
                                    
                                    </div>
                                 </List.Item.Meta>
-                            </List.Item>                   
+                            </List.Item>
+                            <List.Item>
+                                <List.Item.Meta title={"Include Ending Price"} description={"incode enddddd"} 
+                                extra={<Switch defaultChecked onChange={handleIncludeEndPrice} />}/>
+                            </List.Item>                
                         </List>
                         </TabPane>
                         <TabPane tab={<CustomTapBarElement>
