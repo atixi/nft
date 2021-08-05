@@ -130,9 +130,12 @@ function Profile() {
           });
         })();
   }
-  accountTokens.metaToken[0] === profile
-    ? setEditProfile(true)
-    : setEditProfile(false);
+  function editProfileButton() {
+    accountTokens.metaToken[0] === profile
+      ? setEditProfile(true)
+      : setEditProfile(false);
+  }
+
   useEffect(() => {
     (async function fetchingTalent() {
       if (profile != undefined) {
@@ -153,6 +156,7 @@ function Profile() {
           assets: owneds,
         });
         setLoad(true);
+        editProfileButton();
       }
     })();
   }, [profile]);
