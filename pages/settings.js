@@ -38,11 +38,22 @@ function Profile() {
   const accountTokens = useSelector(getAccountTokens);
   console.log("accountCos", accountTokens);
   const onFinish = async (values) => {
+    console.log("values come from form", values);
     const data = { talentName: values.talentName, bio: values.bio };
     const formData = new FormData();
     formData.append("data", JSON.stringify(data));
-    formData.append("files.talentAvatar", values.talentAvatar[0].originFileObj);
-    formData.append("files.talentBanner", values.talentBanner[0].originFileObj);
+    values.talentAvatar
+      ? formData.append(
+          "files.talentAvatar",
+          values.talentAvatar[0].originFileObj
+        )
+      : "";
+    values.talentBanner
+      ? formData.append(
+          "files.talentBanner",
+          values.talentBanner[0].originFileObj
+        )
+      : "";
     const req = await api.put(`/talents/${`1`}`, formData);
   };
 
