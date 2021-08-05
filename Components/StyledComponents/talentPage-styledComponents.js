@@ -83,6 +83,21 @@ export const ProfileButton = styled.button`
   background-color: transparent;
   transform-origin: center center;
 `;
+export const EditProfile = styled.button`
+  height: 40px;
+  width: 100px;
+  margin: 5px;
+  border: 1px solid rgb(239, 239, 239);
+  -webkit-box-align: center;
+  align-items: center;
+  cursor: pointer;
+  -webkit-box-pack: center;
+  transition: all 0.12s ease-in-out 0s;
+  border-radius: 40px;
+  background-color: transparent;
+  transform-origin: center center;
+  font-size: 10px !important;
+`;
 export const ShareButton = styled(UploadOutlined)`
   font-size: 30px;
 `;
