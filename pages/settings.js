@@ -7,6 +7,20 @@ import { ProfileContainer } from "/Components/StyledComponents/talentPage-styled
 import api from "/Components/axiosRequest";
 import { Form, Input, Button, Radio, Upload, Col, Row } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import {
+  setAccountTokens,
+  setMetaToken,
+  setWalletToken,
+  setWalletBalance,
+  setMetaConnected,
+  setWalletConnected,
+  getAccountTokens,
+  getMetaToken,
+  getWalletToken,
+  getMetaConnected,
+  getWalletConnected,
+} from "/store/action/accountSlice";
+import { useDispatch, useSelector } from "react-redux";
 const normFile = (e) => {
   console.log("Upload event:", e);
 
@@ -21,7 +35,8 @@ function Profile() {
   const [isLoad, setLoad] = useState(false);
   const router = useRouter();
   const { profile } = router.query;
-
+  const accountTokens = useSelector(getAccountTokens);
+  console.log("accountCos", accountTokens);
   const onFinish = async (values) => {
     const data = { talentName: values.talentName, bio: values.bio };
     const formData = new FormData();

@@ -34,10 +34,25 @@ import {
 } from "next-share";
 import { displayAddress } from "/Utils/utils";
 import api from "/Components/axiosRequest";
-
+import {
+  setAccountTokens,
+  setMetaToken,
+  setWalletToken,
+  setWalletBalance,
+  setMetaConnected,
+  setWalletConnected,
+  getAccountTokens,
+  getMetaToken,
+  getWalletToken,
+  getMetaConnected,
+  getWalletConnected,
+} from "/store/action/accountSlice";
+import { useDispatch, useSelector } from "react-redux";
 const { TabPane } = Tabs;
 function Profile() {
+  const accountTokens = useSelector(getAccountTokens);
   const [isLoad, setLoad] = useState(false);
+  const [editProfile, setEditProfile] = useState(false);
   const [talent, setTalent] = useState({
     talentAvatar: {
       url: "/images/talentCover.png",
@@ -115,6 +130,9 @@ function Profile() {
           });
         })();
   }
+  accountTokens.metaToken[0] === profile
+    ? setEditProfile(true)
+    : setEditProfile(false);
   useEffect(() => {
     (async function fetchingTalent() {
       if (profile != undefined) {
@@ -211,9 +229,13 @@ function Profile() {
                     </Dropdown>
                   </ProfileButton>
                   <ProfileButton type="button">{"..."}</ProfileButton>
-                  <EditProfile>
-                    <Link href="/settings">{"Edit Profile"}</Link>
-                  </EditProfile>
+                  {editProfile ? (
+                    <EditProfile>
+                      <Link href="/settings">{"Edit Profile"}</Link>
+                    </EditProfile>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </BioDescription>
             </BiographyContainer>
