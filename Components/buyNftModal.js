@@ -41,7 +41,7 @@ margin-bottom: ${(props) => props.marginBottom ? props.marginBottom : ""};
 font-size: 0.98rem !important;
 padding: 13px 20px;
 `
-function BuyNftModal({asset, loadAgain})
+function BuyNftModal({asset, isBundle, order, loadAgain})
 {
     const isWalletConnected = useSelector(getWalletConnected)
     const isMetaConnected = useSelector(getMetaConnected)
@@ -67,7 +67,7 @@ function BuyNftModal({asset, loadAgain})
       const onFinish = async values => {
         try {
           setBuying(true)
-          let buy = await buyOrder(asset, address && address)
+          let buy = await buyOrder(asset, isBundle, order, address && address)
      
           setIsModalVisible(false)
           loadAgain(true)
@@ -210,7 +210,7 @@ function buy()
       <List.Item>
           <List.Item.Meta
           avatar={<Avatar shape={'square'} src={asset.thumbnail} size={64}/>}
-          title={<Link href={`/collection/${asset?.collection?.slug}`}><a>{asset?.collection.name}</a></Link>}
+          title={<Link href={`/collection/${asset?.collection?.slug}`}><a>{asset?.collection?.name}</a></Link>}
           description={asset.name}
           />
           <div>

@@ -135,8 +135,27 @@ export const ItemDescriptionText = styled.p`
 export const ItemImageContainer = styled.div`
     flex:1;
     display: flex;
+    flex-direction: column;
     align-items: center;
 `;
+export const ImageListContainer = styled.div`
+        margin-bottom: 100px;
+        display: flex;
+        flex-direction: row;
+        div{
+            background: red;
+            margin: 5px;
+            height: 60px;
+            width: 60px;
+            img{
+                width: 100%;
+                height: 100%;
+                &:hover{
+                    cursor: pointer;
+                }
+            }
+        }
+`
 export const AvatarContainer = styled.div`
         display: flex;
         align-item: center;

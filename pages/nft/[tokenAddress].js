@@ -31,12 +31,13 @@ import {
   PriceInDollarContainer,
   Wrapper,
   DetailTabDiv,
-  SaleEnd
+  SaleEnd,
+  ImageListContainer
 } from "../../Components/StyledComponents/productDetails-styledComponents";
 import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
-import { fetchOne } from "/Utils/strapiApi";
+import { fetchOne, fetchBundle } from "/Utils/strapiApi";
 import { unixToHumanDate, buyOrder, cancelThisOffer, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestOffer, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 import{FieldTimeOutlined} from "@ant-design/icons"
@@ -79,15 +80,66 @@ function ProductPage() {
   const tokenAddresses = useSelector(getAccountTokens)
   const [address, setAddress] = useState(null)
   const [balance, setBalance] = useState(null)
-
+  const [imageList, setImageList] = useState(null)
+  const [isBundle, setIsBundle] = useState(false)
+  const [mainImage, setMainImage] = useState(null)
+  const [assets, setAssets] = useState(null)
+  const [order, setOrder] = useState(null)
     const loadAgain = () =>{
       setLoading(true)
       loadNft()
     }
     const loadNft = async () => {
-    if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
+      if(queryParam.slug)
+      {
+        setIsBundle(true)
+        const bundle = await fetchBundle(queryParam.tokenAddress, queryParam.slug)
+            if(bundle)
+            {
+              setLoading(false)
+            }
+
+          if(bundle.status == 200)
+          {
+            setOrder(bundle.data)
+            const nft = bundle.data;
+            setAssets(nft.assetBundle.assets)
+            const owner= nft?.assetBundle?.maker;
+            let imgUrl=[nft.assetBundle.assets];
+            nft.assetBundle.assets.map((asset, index) => {
+              imgUrl[index] = {"thumbnail": asset.imageUrlThumbnail, "imageUrl": asset.imageUrl};
+            })
+            setImageList(imgUrl)
+            setAsset({
+              name: nft?.assetBundle.name,
+              slug: nft?.assetBundle.slug,
+              description: nft?.assetBundle.description,
+              owner: owner,
+              creator: owner, // this part needs to be changed
+              image: nft.assetBundle?.assets[0].imageUrl,
+              contractAddress: nft?.assetBundle?.assetContract?.address,
+              tokenId: nft?.tokenId,
+              tokenAddress: nft?.tokenAddress,
+              collection: nft?.collection,
+              isPresale: nft?.isPresale,
+              thumbnail: nft.assetBundle?.assets[0].imageUrlThumbnail,
+              sellOrder: nft,
+              numOfSales: nft?.numSales
+            });
+          setIsVideo(detectVideo(nft.assetBundle?.assets[0].imageUrl))
+          nft.assetBundle?.assets[0].imageUrl && setPreviewImage(prevImage(nft.assetBundle?.assets[0].imageUrl))
+          setMainImage(nft.assetBundle?.assets[0].imageUrl)
+          setOffers(nft?.buyOrders);
+          nft?.buyOrders && setHighestOffer(findHighestOffer(nft?.buyOrders));
+          setSellOrders(nft?.sellOrders);
+          }
+          else if(bundle=="error")
+          {
+            setNotFound(true)
+          }
+      }
+    else if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
-      console.log(data)
       if(data)
         {
           setLoading(false)
@@ -112,6 +164,7 @@ function ProductPage() {
           numOfSales: nft.numSales
         });
       setIsVideo(detectVideo(nft.imageUrl))
+      setMainImage(nft.imageUrl)
       nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl))
       setOffers(nft?.buyOrders);
       nft?.buyOrders && setHighestOffer(findHighestOffer(nft?.buyOrders));
@@ -156,6 +209,15 @@ async function cancelOffer(order, address){
     refresh && loadNft();
   }, [queryParam]);
 
+  function changeImage(url)
+  {
+    setIsVideo(detectVideo(url))
+    if(!isVideo)
+    {
+      setMainImage(url)
+      setPreviewImage(url)
+    }
+  }
 
   return (
     <>
@@ -175,12 +237,17 @@ async function cancelOffer(order, address){
             <ImageCon>
             {isVideo ? <ReactPlayer url={asset?.image} playing={true} width={"auto"} loop={true} controls={true} /> :
               <Image
-                src={`${asset?.image}`}
+                src={mainImage}
                 preview={{
                   src: `${previewImage}`,
                 }}
               />} 
-            </ImageCon>
+            </ImageCon> <br/>
+            <ImageListContainer>
+              {imageList && imageList.map((image, index) => {
+              return <div key={index}><img src={image.thumbnail} onClick={() => changeImage(image.imageUrl)} /></div>
+              })}
+            </ImageListContainer>
           </ItemImageContainer>
           <ItemInfo className={"float-none float-sm-left"}>
             <ItemDetails>
@@ -220,12 +287,12 @@ async function cancelOffer(order, address){
               </ItemDetailsHeader>
               <div>
                 <span className="text-gradient"> 
-                  {sellOrders && sellOrders.length>0 &&  getAuctionPriceDetails(sellOrders[0]).priceBase}
-                  {sellOrders && sellOrders.length>0 && sellOrders[0].paymentTokenContract &&
-                    sellOrders[0]?.paymentTokenContract.symbol}
+                  {asset?.sellOrder &&  getAuctionPriceDetails(asset?.sellOrder).priceBase}
+                  {asset?.sellOrder && asset?.sellOrder.paymentTokenContract &&
+                    asset?.sellOrder?.paymentTokenContract.symbol}
                 </span>
                 <span style={{ color: "#ccc" }}>
-                  {sellOrders && sellOrders.length>0 && ` 1 of  ${sellOrders.length}`}
+                  {/* {isBundle && ` 1 of  ${assets.length()}`} */}
                 </span>
               </div>
               {/* <div>
@@ -522,8 +589,8 @@ async function cancelOffer(order, address){
                 </FooterButton></a></Link>
 
                 : <>
-                  {asset?.sellOrder != null && !asset?.sellOrder?.waitingForBestCounterOrder && <BuyNftModal asset={asset} loadAgain={loadAgain} />}     
-                  <MakeOfferModal asset={asset} loadAgain={loadAgain} /></>}
+                  {asset?.sellOrder != null && !asset?.sellOrder?.waitingForBestCounterOrder && <BuyNftModal asset={asset} isBundle={isBundle} loadAgain={loadAgain} />}     
+                  <MakeOfferModal asset={asset} assets={assets} isBundle={isBundle} loadAgain={loadAgain} /></>}
               </ButtonContainer>
             </ItemFooter>
           </ItemInfo>

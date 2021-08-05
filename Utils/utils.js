@@ -28,24 +28,56 @@ const seaport = new OpenSeaPort(provider, {
   networkName: Network.Rinkeby,
   apiKey: "c2dde5d7c0a0465a8e994f711a3a3c31",
 });
-export async function makeOffer(offerData, asset, accountAddress)
+export async function makeOffer(offerData, asset, isBundle, assets, accountAddress)
 {
   const {tokenId, tokenAddress} = asset;
   const schemaName = "ERC721";
   let err = false 
-  return await seaport.createBuyOrder({
-    asset: {
-      tokenId, 
-      tokenAddress,
-      schemaName // WyvernSchemaName. If omitted, defaults to 'ERC721'. Other options include 'ERC20' and 'ERC1155'
-    },
-    accountAddress,
-    // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
-    startAmount: offerData.price.amount,
-  })
+  if(isBundle)
+  {
+          var expirationTime = null;
+          if(offerData.dateTime.days == "custom")
+          {
+            var date = new Date(offerData.dateTime.date);
+            expirationTime = date.getTime() / 1000;
+          }
+          else
+          {
+            let time = moment(offerData.dateTime.time).format("HH:mm:ss")
+            let timeInSeconds = moment(t, 'HH:mm:ss:').diff(moment().startOf('day'), 'seconds');
+            expirationTime = Math.round(Date.now() / 1000 + (offerData.dateTime.days *24*60*60 + timme))
+          }
+    return await seaport.createBundleBuyOrder({
+      assets,
+      accountAddress,
+      startAmount: offerData.price.amount,
+      // Optional expiration time for the order, in Unix time (seconds):
+      expirationTime: parseInt(expirationTime),
+    })
+  }
+  else
+  {
+    return await seaport.createBuyOrder({
+      asset: {
+        tokenId, 
+        tokenAddress,
+        schemaName // WyvernSchemaName. If omitted, defaults to 'ERC721'. Other options include 'ERC20' and 'ERC1155'
+      },
+      accountAddress,
+      // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
+      startAmount: offerData.price.amount,
+    })
+  }
 }
-export async function buyOrder(asset, accountAddress)
+export async function buyOrder(asset, isBundle, order, accountAddress)
 {
+  if(isBundle)
+  {
+      const transactionHash = await seaport.fulfillOrder({ order, accountAddress }).catch(() => {return "Error on buying the bundle"})
+      return transactionHash;
+  }
+  else
+ {
   const order = await seaport.api.getOrder({ 
     side: OrderSide.Sell,
     asset_contract_address: asset.tokenAddress,
@@ -53,6 +85,7 @@ export async function buyOrder(asset, accountAddress)
    }).catch(()=> { return "Error getting order"})
   const transactionHash = await seaport.fulfillOrder({ order, accountAddress }).catch(() => {return "Error on buying the token"})
   return transactionHash;
+}
 }
 export async function cancelThisOffer(order, accountAddress)
 {

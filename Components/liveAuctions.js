@@ -38,7 +38,7 @@ function LiveAuctions() {
   const [auctions, setAuctions] = useState([]);
   const loadLiveAuction = async () =>
   {
-    const nfts = await fetch("/nfts/auction"); 
+    const nfts = await fetch("/nfts/auction");
     if(nfts.data)
     {
       setAuctions(nfts.data) 
@@ -111,11 +111,11 @@ function Product(product, index) {
       </ProductCardHeader>
       <CardImage className={`p-3`}>
         <Link
-          href={`/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}`}  >
+          href={product?.asset ? `/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}` : `/nft/${product?.assetBundle?.maker?.address}?slug=${product?.assetBundle?.slug}`}  >
           <a>
             {" "}
             <img
-              src={product.asset?.imageUrl}
+              src={product?.asset ? product.asset?.imageUrl : product?.assetBundle?.assets[0].imageUrl}
               className="rounded"
             />
           </a>
@@ -129,9 +129,9 @@ function Product(product, index) {
           </CountDown>
         </CountDownContainer>
         <Link
-          href={`/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}`}  >
+          href={product?.asset ? `/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}` : `/nft/${product?.assetBundle?.maker?.address}?slug=${product?.assetBundle?.slug}`}  >
         <a>
-          <CardTitle>{product.asset?.name ? product.asset?.name : product.asset?.collection?.name}</CardTitle>
+          <CardTitle>{product?.asset ? (product.asset?.name ? product.asset?.name : product.asset?.collection?.name) : product?.assetBundle?.name}</CardTitle>
         </a>
         </Link>
         {/* <BidsStatus>{CONSTANTS.bidsStatus}</BidsStatus> */}

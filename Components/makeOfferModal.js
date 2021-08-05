@@ -7,6 +7,7 @@ import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/ac
 import { getAuctionPriceDetails } from "/Constants/constants";
 const { Option } = Select;
 import Link from "next/link"
+import moment from "moment";
 import styled from "styled-components";
 const SubmitButton = styled(Button)`
 margin: auto;
@@ -42,7 +43,7 @@ const ModalContainer = styled.div`
 const ModalTextContainer = styled.p`
   text-align: center;
 `
-function MakeOfferModal({asset, loadAgain})
+function MakeOfferModal({asset, assets, isBundle, loadAgain})
 {
 const isWalletConnected = useSelector(getWalletConnected)
 const isMetaConnected = useSelector(getMetaConnected)
@@ -71,7 +72,7 @@ const [balance, setBalance] = useState(null)
       const onFinish = async values => {
         try {
           setMakingOffer(true)
-          let offer = await makeOffer(values, asset, address && address)
+          let offer = await makeOffer(values, asset, isBundle, assets, address && address)
      
           setIsModalVisible(false)
           loadAgain(true)
@@ -109,7 +110,7 @@ const [balance, setBalance] = useState(null)
         setAddress(tokenAddresses.metaToken[0].toString());
         setBalance(tokenAddresses.metaBalance);
       }
-      }, [asset]);
+      }, [asset, assets]);
     return <>
         <FooterButton 
             color={"#0066ff"}
@@ -226,6 +227,7 @@ function offer()
                 </Input.Group>
                 </Form.Item>
                 {/* dds */}
+                {isBundle &&
                 <Form.Item label="Offer Expiration">
                 <Input.Group compact>
                     <Form.Item
@@ -246,14 +248,14 @@ function offer()
                     name={['dateTime', 'time']}
                     noStyle
                     rules={[{ required: true, message: 'Time is required' }]}>
-                        <TimePicker type={"object"} {...config} style={{ width: '75%' }}  size="large" />
+                        <TimePicker type={"object"} allowClear={false} {...config} style={{ width: '75%' }}  size="large" />
                     </Form.Item>
                     :
                     <Form.Item
                     name={['dateTime', 'date']}
                     noStyle
                     rules={[{ required: true, message: 'Date is required' }]}>
-                        <DatePicker showTime format="YYYY-MM-DD HH:mm:ss"
+                        <DatePicker showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss"
                         {...config}
                         style={{ width: '75%' }} 
                         size={"large"}
@@ -262,10 +264,8 @@ function offer()
                       </Form.Item>
                             
                       }
-                    
-                    
                 </Input.Group>
-                </Form.Item>
+                </Form.Item> }
                 <Form.Item><span style={{color: "red"}}>{responseMessage}</span></Form.Item> 
                 <div style={{textAlign: "center"}}>
            <ConnectButton color={"black"} style={{margin: "5px"}} onClick={handleCancel} background={"white"} marginBottom={"15px"} > Cancel </ConnectButton>
