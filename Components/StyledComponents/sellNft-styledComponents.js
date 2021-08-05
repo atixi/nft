@@ -14,4 +14,13 @@ export const CustomTapBarElement = styled.div`
         font-weight: 400;
         color: #8C8C8C;
     }
+`;
+export const SwitchContainer = styled.span`
+    width: 80px;
+    button{
+        width: 20px;
+    }
+    .ant-switch-checked {
+        background-color: #1890ff !important;
+    }
 `
