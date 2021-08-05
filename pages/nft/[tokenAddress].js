@@ -90,12 +90,10 @@ function ProductPage() {
       loadNft()
     }
     const loadNft = async () => {
-      console.log("loading")
       if(queryParam.slug)
       {
         setIsBundle(true)
         const bundle = await fetchBundle(queryParam.tokenAddress, queryParam.slug)
-        console.log(bundle)
             if(bundle)
             {
               setLoading(false)
@@ -112,7 +110,6 @@ function ProductPage() {
               imgUrl[index] = {"thumbnail": asset.imageUrlThumbnail, "imageUrl": asset.imageUrl};
             })
             setImageList(imgUrl)
-            console.log(imageList)
             setAsset({
               name: nft?.assetBundle.name,
               slug: nft?.assetBundle.slug,
@@ -143,7 +140,6 @@ function ProductPage() {
       }
     else if (queryParam.tokenAddress != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.tokenAddress,queryParam.tokenId);
-      console.log(data)
       if(data)
         {
           setLoading(false)
@@ -197,7 +193,6 @@ async function cancelOffer(order, address){
   // }
   useEffect(() => {
     if (!queryParam) {
-      console.log(queryParam)
       return null;
     }
     if(isWalletConnected) 
@@ -216,14 +211,12 @@ async function cancelOffer(order, address){
 
   function changeImage(url)
   {
-    console.log(url)
     setIsVideo(detectVideo(url))
     if(!isVideo)
     {
       setMainImage(url)
       setPreviewImage(url)
     }
-
   }
 
   return (

@@ -41,7 +41,6 @@ function LiveAuctions() {
     const nfts = await fetch("/nfts/auction");
     if(nfts.data)
     {
-      console.log("auctions data", nfts.data)
       setAuctions(nfts.data) 
     }
   }

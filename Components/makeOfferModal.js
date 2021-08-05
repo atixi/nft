@@ -45,7 +45,6 @@ const ModalTextContainer = styled.p`
 `
 function MakeOfferModal({asset, assets, isBundle, loadAgain})
 {
-  console.log("assets", assets)
 const isWalletConnected = useSelector(getWalletConnected)
 const isMetaConnected = useSelector(getMetaConnected)
 const tokenAddresses = useSelector(getAccountTokens)
@@ -71,7 +70,6 @@ const [balance, setBalance] = useState(null)
 
     const [error, setError] = useState()
       const onFinish = async values => {
-        console.log(values)
         try {
           setMakingOffer(true)
           let offer = await makeOffer(values, asset, isBundle, assets, address && address)

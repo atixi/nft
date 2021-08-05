@@ -47,7 +47,6 @@ export async function makeOffer(offerData, asset, isBundle, assets, accountAddre
             let timeInSeconds = moment(t, 'HH:mm:ss:').diff(moment().startOf('day'), 'seconds');
             expirationTime = Math.round(Date.now() / 1000 + (offerData.dateTime.days *24*60*60 + timme))
           }
-        console.log("ex", parseInt(expirationTime))
     return await seaport.createBundleBuyOrder({
       assets,
       accountAddress,
