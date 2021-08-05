@@ -251,8 +251,8 @@ async function cancelOffer(order, address){
               />} 
             </ImageCon> <br/>
             <ImageListContainer>
-              {imageList && imageList.map((image) => {
-              return <div><img src={image.thumbnail} onClick={() => changeImage(image.imageUrl)} /></div>
+              {imageList && imageList.map((image, index) => {
+              return <div key={index}><img src={image.thumbnail} onClick={() => changeImage(image.imageUrl)} /></div>
               })}
             </ImageListContainer>
           </ItemImageContainer>
