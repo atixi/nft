@@ -13,7 +13,6 @@ function SellNft()
 {
     
     const  queryParam = useQueryParam();
-    console.log(queryParam)
     const [asset, setAsset] = useState(null)
     const [loading, setLoading] = useState(true)
     const [notFound, setNotFound] = useState(false)
@@ -158,7 +157,7 @@ function SellNft()
                                     name={['price', 'blockchain']}
                                     noStyle
                                 >
-                                    <Input prefix={<img src={"https://storage.opensea.io/files/accae6b6fb3888cbff27a013729c22dc.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
+                                    <Input prefix={<img src={"https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
                                     </Form.Item>
                                     <Form.Item
                                         name={['price', 'amount']}
@@ -186,7 +185,7 @@ function SellNft()
                                     name={['price', 'blockchain']}
                                     noStyle
                                 >
-                                    <Input prefix={<img src={"https://storage.opensea.io/files/accae6b6fb3888cbff27a013729c22dc.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
+                                    <Input prefix={<img src={"https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
                                     </Form.Item>
                                     <Form.Item
                                         name={['price', 'amount']}
@@ -229,7 +228,7 @@ function SellNft()
                                     name={['price', 'blockchain']}
                                     noStyle
                                 >
-                                    <Input prefix={<img src={"https://storage.opensea.io/files/accae6b6fb3888cbff27a013729c22dc.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
+                                    <Input prefix={<img src={"https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
                                     </Form.Item>
                                     <Form.Item
                                         name={['price', 'amount']}
@@ -253,7 +252,7 @@ function SellNft()
                                     name={['price', 'blockchain']}
                                     noStyle
                                 >
-                                    <Input prefix={<img src={"https://storage.opensea.io/files/accae6b6fb3888cbff27a013729c22dc.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
+                                    <Input prefix={<img src={"https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
                                     </Form.Item>
                                     <Form.Item
                                         name={['price', 'amount']}
