@@ -145,7 +145,7 @@ function SellNft()
             </div>
             <Row>
                 <Col lg={16} md={16}>
-                        <Tabs defaultActiveKey="1" style={{height: "1000px"}} size={"large"} type={"card"}>
+                        <Tabs defaultActiveKey="1" tabBarGutter={10} style={{height: "1000px"}} size={"large"} type={"card"}>
                         <TabPane tab={<CustomTapBarElement>
                             <div>{"Set Price"}</div>
                             <span>{"Sell at a fixed or declining price"}</span>
