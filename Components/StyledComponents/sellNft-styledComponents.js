@@ -19,6 +19,9 @@ export const SwitchContainer = styled.span`
     width: 80px;
     button{
         width: 20px;
+        background: #BFBFBF;
+        position: relative;
+        right: 15px;
     }
     .ant-switch-checked {
         background-color: #1890ff !important;

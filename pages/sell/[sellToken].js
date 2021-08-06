@@ -199,14 +199,14 @@ function SellNft()
                             }>
                                 <List.Item.Meta title={"Ending Price"} description={"Must be less than or equal to the starting price. The price will progress linearly to this amount until the expiration date."}/>
                             </List.Item>
-                            <List.Item extra={ <DatePicker showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /> }>
+                            <List.Item extra={ <DatePicker style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /> }>
                               <List.Item.Meta title="Expiration Time" description={"Your listing will automatically end at this time. No need to cancel it!"} />
                             </List.Item>
                             
                             </>:
                             <List.Item extra={
                               <>
-                              {futureTime && <DatePicker showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /> }
+                              {futureTime && <DatePicker style={{position: "relative", right:"15px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /> }
                               <SwitchContainer><Switch onChange={handleFutureListing}/></SwitchContainer>
                             
                               </>
@@ -221,7 +221,59 @@ function SellNft()
                             <div>{"Highest Bid"}</div>
                             <span>{"Auction to the highest bidder"}</span>
                         </CustomTapBarElement>} key="2">
-                        <Switch defaultChecked onChange={handleIncludeEndPrice} />
+                        <List itemLayout="horizontal" >
+                            <List.Item extra={
+                                <Form.Item style={{width: "300px"}}> 
+                                <Input.Group compact>
+                                    <Form.Item
+                                    name={['price', 'blockchain']}
+                                    noStyle
+                                >
+                                    <Input prefix={<img src={"https://storage.opensea.io/files/accae6b6fb3888cbff27a013729c22dc.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name={['price', 'amount']}
+                                        noStyle
+                                        rules={[{ required: true, message: 'Amount is required' }]}>
+                                        <Input style={{ width: '65%' }}  size={"large"} placeholder="Amount" />
+                                    </Form.Item>
+                                </Input.Group>
+                                </Form.Item>
+                            }>
+                                <List.Item.Meta title={formText.price} description={formText.priceDesc}>
+                                   <div>
+                                   
+                                   </div>
+                                </List.Item.Meta>
+                            </List.Item>
+                            <List.Item extra={
+                                <Form.Item style={{width: "300px"}}> 
+                                <Input.Group compact>
+                                    <Form.Item
+                                    name={['price', 'blockchain']}
+                                    noStyle
+                                >
+                                    <Input prefix={<img src={"https://storage.opensea.io/files/accae6b6fb3888cbff27a013729c22dc.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name={['price', 'amount']}
+                                        noStyle
+                                        rules={[{ required: true, message: 'Amount is required' }]}>
+                                        <Input style={{ width: '70%' }}  size={"large"} placeholder="Amount" />
+                                    </Form.Item>
+                                </Input.Group>
+                                </Form.Item>
+                            }>
+                                <List.Item.Meta title={formText.price} description={formText.priceDesc}>
+                                   <div>
+                                   
+                                   </div>
+                                </List.Item.Meta>
+                            </List.Item>
+                                <List.Item extra={ <Form.Item><DatePicker style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item> }>
+                              <List.Item.Meta title="Expiration Time" description={"Your listing will automatically end at this time. No need to cancel it!"} />
+                            </List.Item>
+                            </List>
                         </TabPane>
                     
                         </Tabs>
