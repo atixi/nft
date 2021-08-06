@@ -145,7 +145,7 @@ function SellNft()
             </div>
             <Row>
                 <Col lg={16} md={16}>
-                        <Tabs defaultActiveKey="1" size={"large"} type={"card"}>
+                        <Tabs defaultActiveKey="1" style={{height: "1000px"}} size={"large"} type={"card"}>
                         <TabPane tab={<CustomTapBarElement>
                             <div>{"Set Price"}</div>
                             <span>{"Sell at a fixed or declining price"}</span>
@@ -240,7 +240,7 @@ function SellNft()
                                 </Input.Group>
                                 </Form.Item>
                             }>
-                                <List.Item.Meta title={formText.price} description={formText.priceDesc}>
+                                <List.Item.Meta title={"Minimum Bid"} description={"Set your starting bid price"}>
                                    <div>
                                    
                                    </div>
@@ -259,12 +259,12 @@ function SellNft()
                                         name={['price', 'amount']}
                                         noStyle
                                         rules={[{ required: true, message: 'Amount is required' }]}>
-                                        <Input style={{ width: '70%' }}  size={"large"} placeholder="Amount" />
+                                        <Input style={{ width: '65%' }}  size={"large"} placeholder="Amount" />
                                     </Form.Item>
                                 </Input.Group>
                                 </Form.Item>
                             }>
-                                <List.Item.Meta title={formText.price} description={formText.priceDesc}>
+                                <List.Item.Meta title={"Reserve Price"} description={"Create a hidden limit by setting a reserve price."}>
                                    <div>
                                    
                                    </div>
