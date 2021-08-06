@@ -1,9 +1,4 @@
 import { Tabs, Spin, Menu, Dropdown } from "antd";
-import {
-  FacebookFilled,
-  TwitterSquareFilled,
-  InstagramFilled,
-} from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import {
   ProfileContainer,

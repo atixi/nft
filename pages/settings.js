@@ -22,12 +22,9 @@ import {
 } from "/store/action/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
 const normFile = (e) => {
-  console.log("Upload event:", e);
-
   if (Array.isArray(e)) {
     return e;
   }
-
   return e && e.fileList;
 };
 function Profile() {
