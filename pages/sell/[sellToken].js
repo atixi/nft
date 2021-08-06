@@ -7,7 +7,7 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import { convertToUsd} from "/Utils/utils";
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 import {Wrapper, Content} from "../../Components/StyledComponents/productDetails-styledComponents";
-import {CustomTapBarElement, SwitchContainer} from "../../Components/StyledComponents/sellNft-styledComponents";
+import {CustomTapBarElement, SwitchContainer, ListTile, ListDescription} from "../../Components/StyledComponents/sellNft-styledComponents";
 const { TabPane } = Tabs;
 function SellNft()
 {
@@ -169,14 +169,14 @@ function SellNft()
                                 </Input.Group>
                                 </Form.Item>
                             }>
-                                <List.Item.Meta title={formText.price} description={formText.priceDesc}>
+                                <List.Item.Meta title={<ListTile>{formText.price}</ListTile>} description={<ListDescription>{formText.priceDesc}</ListDescription>}>
                                    <div>
                                    
                                    </div>
                                 </List.Item.Meta>
                             </List.Item>
                             <List.Item extra={<SwitchContainer><Switch onChange={handleIncludeEndPrice} /></SwitchContainer>}>
-                                <List.Item.Meta title={formText.includeEnding} description={formText.includeEndingDesc}>
+                                <List.Item.Meta title={<ListTile>{formText.includeEnding}</ListTile>} description={<ListDescription>{formText.includeEndingDesc}</ListDescription>}>
                                 </List.Item.Meta>
                             </List.Item> 
                             {endingPrice ? <><List.Item extra={
@@ -197,10 +197,10 @@ function SellNft()
                                 </Input.Group>
                                 </Form.Item>
                             }>
-                                <List.Item.Meta title={"Ending Price"} description={"Must be less than or equal to the starting price. The price will progress linearly to this amount until the expiration date."}/>
+                                <List.Item.Meta title={<ListTile>{"Ending Price"}</ListTile>} description={<ListDescription>{"Must be less than or equal to the starting price. The price will progress linearly to this amount until the expiration date."}</ListDescription>}/>
                             </List.Item>
                             <List.Item extra={ <DatePicker style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /> }>
-                              <List.Item.Meta title="Expiration Time" description={"Your listing will automatically end at this time. No need to cancel it!"} />
+                              <List.Item.Meta title={<ListTile>{"Expiration Time"}</ListTile>} description={<ListDescription>{"Your listing will automatically end at this time. No need to cancel it!"}</ListDescription>} />
                             </List.Item>
                             
                             </>:
@@ -212,7 +212,7 @@ function SellNft()
                               </>
 
                             }>
-                              <List.Item.Meta title={"Schedule for a future time"} description={"You can schedule this listing to only be buyable at a future date"} />
+                              <List.Item.Meta title={<ListTile>{"Schedule for a future time"}</ListTile>} description={<ListDescription>{"You can schedule this listing to only be buyable at a future date"}</ListDescription>} />
                             </List.Item>
                             }           
                         </List>
@@ -240,7 +240,7 @@ function SellNft()
                                 </Input.Group>
                                 </Form.Item>
                             }>
-                                <List.Item.Meta title={"Minimum Bid"} description={"Set your starting bid price"}>
+                                <List.Item.Meta title={<ListTile>{"Minimum Bid"}</ListTile>} description={<ListDescription>{"Set your starting bid price"}</ListDescription>}>
                                    <div>
                                    
                                    </div>
@@ -264,14 +264,14 @@ function SellNft()
                                 </Input.Group>
                                 </Form.Item>
                             }>
-                                <List.Item.Meta title={"Reserve Price"} description={"Create a hidden limit by setting a reserve price."}>
+                                <List.Item.Meta title={<ListTile>{"Reserve Price"}</ListTile>} description={<ListDescription>{"Create a hidden limit by setting a reserve price."}</ListDescription>}>
                                    <div>
                                    
                                    </div>
                                 </List.Item.Meta>
                             </List.Item>
                                 <List.Item extra={ <Form.Item><DatePicker style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item> }>
-                              <List.Item.Meta title="Expiration Time" description={"Your listing will automatically end at this time. No need to cancel it!"} />
+                              <List.Item.Meta title={<ListTile>{"Expiration Time"}</ListTile>} description={<ListDescription>{"Your listing will automatically end at this time. No need to cancel it!"}</ListDescription>} />
                             </List.Item>
                             </List>
                         </TabPane>

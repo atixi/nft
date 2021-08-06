@@ -26,4 +26,10 @@ export const SwitchContainer = styled.span`
     .ant-switch-checked {
         background-color: #1890ff !important;
     }
+`;
+export const ListTile = styled.span`
+    font-weight: 900;
+`
+export const ListDescription = styled.span`
+    font-weight: 500;
 `
