@@ -121,8 +121,16 @@ function SellNft()
         setBountyValue(value)
       };
       const onSubmitForm = async (values) => {
-        const sell = await sellOrder(queryParam.sellToken, queryParam.tokenId, address, values,isFixed);
         console.log("form values", values)
+
+        try{
+          const sell = await sellOrder(queryParam.sellToken, queryParam.tokenId, address, values,isFixed);
+          console.log("listed")
+        }
+        catch(e)
+        {
+          console.log(e.toString())
+        }
       }
       const onTabClick = (e) => {
         if(e == 2)
