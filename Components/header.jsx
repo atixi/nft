@@ -442,7 +442,7 @@ function Header(props) {
           <a
             target="_blank"
             rel="noreferrer"
-            href="https://www.notion.so/Top-NFT-Collectibles-ece713f206cb48838e4cd0d1113bcd14"
+            href="https://savory-vulcanodon-748.notion.site/Top-NFT-Collectibles-ece713f206cb48838e4cd0d1113bcd14"
           >
             {CONSTANTS.howItWorks}
           </a>
