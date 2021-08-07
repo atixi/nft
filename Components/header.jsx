@@ -439,7 +439,13 @@ function Header(props) {
           <a href="#">{CONSTANTS.myItems}</a>
         </li>
         <li className="d-none d-lg-flex">
-          <a href="#">{CONSTANTS.howItWorks}</a>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.notion.so/Top-NFT-Collectibles-ece713f206cb48838e4cd0d1113bcd14"
+          >
+            {CONSTANTS.howItWorks}
+          </a>
         </li>
       </ul>
       <div style={{ flex: 1 }} className="d-block d-xl-none"></div>

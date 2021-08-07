@@ -22,22 +22,21 @@ import {
 } from "/store/action/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
 const normFile = (e) => {
-  console.log("Upload event:", e);
-
   if (Array.isArray(e)) {
     return e;
   }
-
   return e && e.fileList;
 };
 function Profile() {
   const [form] = Form.useForm();
   const [isLoad, setLoad] = useState(false);
+  const [loadButton, setLoadButton] = useState(false);
   const router = useRouter();
   const { profile } = router.query;
   const accountTokens = useSelector(getAccountTokens);
   console.log("accountCos", accountTokens);
   const onFinish = async (values) => {
+    setLoadButton(true);
     console.log("values come from form", values);
     const data = { talentName: values.talentName, bio: values.bio };
     const formData = new FormData();
@@ -54,7 +53,10 @@ function Profile() {
           values.talentBanner[0].originFileObj
         )
       : "";
-    const req = await api.put(`/talents/${`1`}`, formData);
+    try {
+      const req = await api.put(`/talents/${`1`}`, formData);
+      if (req) setLoadButton(false);
+    } catch {}
   };
 
   useEffect(() => {
@@ -115,7 +117,11 @@ function Profile() {
                     </Upload>
                   </Form.Item>
                   <Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      loading={loadButton}
+                    >
                       Submit
                     </Button>
                   </Form.Item>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "react-multi-carousel/lib/styles.css";
-import OpenSeaAPI from "/Utils/openseaApi";
 import { SectionHeading } from "./StyledComponents/globalStyledComponents";
 import {
   ListCounter,
@@ -12,7 +11,6 @@ import {
   SellerDetails,
 } from "./StyledComponents/topSeller-styledComponents";
 import Link from "next/link";
-import axios from "axios";
 
 function TopSellers({ data }) {
   const topSellerDetails = async (top) => {
@@ -23,7 +21,7 @@ function TopSellers({ data }) {
     <>
       <div className="pt-3">
         {data[0]?.assets?.length ? (
-          <SectionHeading>{"Top Sellers in 1 Day"}</SectionHeading>
+          <SectionHeading>{"Top Sellers"}</SectionHeading>
         ) : (
           ""
         )}

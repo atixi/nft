@@ -100,7 +100,7 @@ function Products(props) {
                       <a>
                         <NFTImage>
                           <Image
-                            src={n.imageUrl ? n.imageUrl : n.previewImage?.url}
+                            src={n.imageUrl}
                             className="rounded"
                             preview={false}
                             alt=""

@@ -11,7 +11,23 @@ const {
   terms,
   policy,
 } = FOOTER;
-import { FooterContainer, SearchInput, LanguageContainer, TermAndPolicy, SocialLinksContainer, SearchButton, CopyRight, CopyRightAndPolicyContainer, FooterExtraLinkContainer, CategoryListUl, LinkText, CategoryLink, CategoryListLi, CategoryTitle, SelectLanguage } from "./StyledComponents/footer-styledComponents"
+import {
+  FooterContainer,
+  SearchInput,
+  LanguageContainer,
+  TermAndPolicy,
+  SocialLinksContainer,
+  SearchButton,
+  CopyRight,
+  CopyRightAndPolicyContainer,
+  FooterExtraLinkContainer,
+  CategoryListUl,
+  LinkText,
+  CategoryLink,
+  CategoryListLi,
+  CategoryTitle,
+  SelectLanguage,
+} from "./StyledComponents/footer-styledComponents";
 const { Option } = SelectLanguage;
 
 function Footer() {
@@ -40,44 +56,47 @@ function Footer() {
           <Col md={12} sm={24} xs={24} className={"text-center"}>
             <Row>
               <Col md={12} sm={12} xs={12} className={"text-left pl-5"}>
-                <CategoryTitle>{FOOTER_WEBSITE_LINKS.websiteTitle}</CategoryTitle>
+                <CategoryTitle>
+                  {FOOTER_WEBSITE_LINKS.websiteTitle}
+                </CategoryTitle>
                 <CategoryListUl>
-                  {FOOTER_WEBSITE_LINKS.websiteLinks.map((websiteLink, index) => (
-                    <CategoryListLi key={index}>
-                      <CategoryLink href="#" key={websiteLink.websiteLinkTitle}>
-                        <LinkText>{websiteLink.websiteLinkTitle}</LinkText>
-                      </CategoryLink>
-                    </CategoryListLi>
-                  ))}
+                  {FOOTER_WEBSITE_LINKS.websiteLinks.map(
+                    (websiteLink, index) => (
+                      <CategoryListLi key={index}>
+                        <CategoryLink
+                          href="#"
+                          key={websiteLink.websiteLinkTitle}
+                        >
+                          <LinkText>{websiteLink.websiteLinkTitle}</LinkText>
+                        </CategoryLink>
+                      </CategoryListLi>
+                    )
+                  )}
                 </CategoryListUl>
               </Col>
               <Col md={12} sm={12} xs={12} className={"text-left pl-5"}>
                 <CategoryTitle>{FOOTER_COMMUNITY.communityTitle}</CategoryTitle>
                 <CategoryListUl>
-                  {FOOTER_COMMUNITY.communityLinks.map((communitlink, index) => (
-                    <CategoryListLi key={index}>
-                      <CategoryLink key={communitlink.communityLinktitle}>
-                        <LinkText>{communitlink.communityLinktitle}</LinkText>
-                      </CategoryLink>
-                    </CategoryListLi>
-                  ))}
+                  {FOOTER_COMMUNITY.communityLinks.map(
+                    (communitlink, index) => (
+                      <CategoryListLi key={index}>
+                        <CategoryLink key={communitlink.communityLinktitle}>
+                          <LinkText>
+                            <a
+                              rel="noreferrer"
+                              target="_blank"
+                              href={communitlink.link}
+                            >
+                              {communitlink.communityLinktitle}
+                            </a>
+                          </LinkText>
+                        </CategoryLink>
+                      </CategoryListLi>
+                    )
+                  )}
                 </CategoryListUl>
               </Col>
             </Row>
-          </Col>
-          <Col md={6} lg={6} sm={24} xs={24} className="mt-4 mt-sm-0">
-            <LanguageContainer className="col-md-12 col-sm-6 col-xs-10">
-              <CategoryTitle>{FOOTER_LANGUAGES.languagesTitle}</CategoryTitle>
-              <div className={"mt-2"}>
-                <SelectLanguage defaultValue="English">
-                  {FOOTER_LANGUAGES.languages.map((language, index) => (
-                    <Option key={index} value={language.language}>
-                      {language.language}
-                    </Option>
-                  ))}
-                </SelectLanguage>
-              </div>
-            </LanguageContainer>
           </Col>
           <Col md={24} xs={24}>
             <hr />
@@ -85,10 +104,10 @@ function Footer() {
               <CopyRightAndPolicyContainer>
                 <CopyRight>{`© ${FOOTER_WEBSITE_LINKS.websiteTitle}, Inc. ${FOOTER_WEBSITE_LINKS.allRightReserved}`}</CopyRight>
               </CopyRightAndPolicyContainer>
-                <TermAndPolicy>
-                  <span>{terms}</span>
-                  <span>{policy}</span>
-                </TermAndPolicy>
+              <TermAndPolicy>
+                <span>{terms}</span>
+                <span>{policy}</span>
+              </TermAndPolicy>
               <SocialLinksContainer>
                 <a
                   rel="noreferrer"
