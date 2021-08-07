@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState, useReducer } from "react";
 import styles from "/styles/erc721.module.css";
-import axios from "axios";
 import {
   Input,
   Tooltip,
@@ -10,7 +9,12 @@ import {
   Form,
   Upload,
   message,
+<<<<<<< HEAD
   Modal, Spin
+=======
+  Modal,
+  Spin,
+>>>>>>> b038a582fe435f341bf7c2b7bf4a96527828ae70
 } from "antd";
 import { fetch, post } from "/Utils/strapiApi";
 import { useFormik, File } from "formik";
