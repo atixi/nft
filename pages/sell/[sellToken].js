@@ -112,6 +112,9 @@ function SellNft()
         }
         setBountyValue(value)
       };
+      const onSubmitForm = async (values) => {
+        console.log("form values", values)
+      }
     useEffect(() => {
         if (!queryParam) {
             return null;
@@ -131,7 +134,7 @@ function SellNft()
        ]}
      /> : 
        asset &&  <Content>
-           <Form>
+           <Form onFinish={onSubmitForm}>
             <div style={{paddingTop: "5px", borderBottom: "1px solid gray", marginBottom:"20px"}}>
             <List
                     itemLayout="horizontal"
@@ -182,7 +185,7 @@ function SellNft()
                                    </div>
                                 </List.Item.Meta>
                             </List.Item>
-                            <List.Item extra={<SwitchContainer><Switch onChange={handleIncludeEndPrice} /></SwitchContainer>}>
+                            <List.Item extra={<SwitchContainer><Form.Item name={['switch', "includeEnd"]} noStyle><Switch onChange={handleIncludeEndPrice} /></Form.Item></SwitchContainer>}>
                                 <List.Item.Meta title={<ListTile>{formText.includeEnding}</ListTile>} description={<ListDescription>{formText.includeEndingDesc}</ListDescription>}>
                                 </List.Item.Meta>
                             </List.Item> 
@@ -190,13 +193,13 @@ function SellNft()
                                 <Form.Item style={{width: "300px"}}> 
                                 <Input.Group compact>
                                     <Form.Item
-                                    name={['price', 'blockchain']}
+                                    name={['price', 'blockchainEnd']}
                                     noStyle
                                 >
                                     <Input prefix={<img src={"https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
                                     </Form.Item>
                                     <Form.Item
-                                        name={['price', 'amount']}
+                                        name={['price', 'endPrice']}
                                         noStyle
                                         rules={[{ required: true, message: 'Amount is required' }]}>
                                         <Input style={{ width: '65%' }}  size={"large"} placeholder="Amount" />
@@ -206,15 +209,15 @@ function SellNft()
                             }>
                                 <List.Item.Meta title={<ListTile>{"Ending Price"}</ListTile>} description={<ListDescription>{"Must be less than or equal to the starting price. The price will progress linearly to this amount until the expiration date."}</ListDescription>}/>
                             </List.Item>
-                            <List.Item extra={ <DatePicker style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /> }>
+                            <List.Item extra={<Form.Item name={['date', "expirationTime"]} noStyle><DatePicker style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /> </Form.Item>}>
                               <List.Item.Meta title={<ListTile>{"Expiration Time"}</ListTile>} description={<ListDescription>{"Your listing will automatically end at this time. No need to cancel it!"}</ListDescription>} />
                             </List.Item>
                             
                             </>:
                             <List.Item extra={
                               <>
-                              {futureTime && <DatePicker style={{position: "relative", right:"15px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /> }
-                              <SwitchContainer><Switch onChange={handleFutureListing}/></SwitchContainer>
+                              {futureTime && <Form.Item name={['date', "endFutureTime"]} noStyle><DatePicker style={{position: "relative", right:"15px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item>}
+                              <SwitchContainer><Form.Item name={['switch', "futureTime"]} noStyle><Switch onChange={handleFutureListing}/></Form.Item></SwitchContainer>
                             
                               </>
 
@@ -239,7 +242,7 @@ function SellNft()
                                     <Input prefix={<img src={"https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
                                     </Form.Item>
                                     <Form.Item
-                                        name={['price', 'amount']}
+                                        name={['price', 'minAmount']}
                                         noStyle
                                         rules={[{ required: true, message: 'Amount is required' }]}>
                                         <Input style={{ width: '65%' }}  size={"large"} placeholder="Amount" />
@@ -263,7 +266,7 @@ function SellNft()
                                     <Input prefix={<img src={"https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
                                     </Form.Item>
                                     <Form.Item
-                                        name={['price', 'amount']}
+                                        name={['price', 'reserveAmount']}
                                         noStyle
                                         rules={[{ required: true, message: 'Amount is required' }]}>
                                         <Input style={{ width: '65%' }}  size={"large"} placeholder="Amount" />
@@ -277,7 +280,7 @@ function SellNft()
                                    </div>
                                 </List.Item.Meta>
                             </List.Item>
-                                <List.Item extra={ <Form.Item><DatePicker style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item> }>
+                                <List.Item extra={ <Form.Item name={['date', 'auctionExpirationTime']}><DatePicker style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item> }>
                               <List.Item.Meta title={<ListTile>{"Expiration Time"}</ListTile>} description={<ListDescription>{"Your listing will automatically end at this time. No need to cancel it!"}</ListDescription>} />
                             </List.Item>
                             </List>
@@ -289,12 +292,12 @@ function SellNft()
                   <SummarySection>
                 <Card title={<><UnorderedListOutlined style={{position: "relative", top:-2, marginRight: "10px"}} /><span>{"Summary"}</span></>} style={{ width: "100%", marginTop: 3 }}>
                             <Form.Item>
-                              <Button type="secondary"                 color={"white"}
-                              style={{ background: "#0066ff", color: "white" }} disabled size={"large"}>Post your listing</Button>
+                              <Button type="secondary" key={"submit"} htmlType={"submit"}
+                              style={{ background: "#0066ff", color: "white" }} size={"large"}>Post your listing</Button>
                             </Form.Item>
                             <hr />
-                            <Form.Item>
-                              <h5>{"Bounties"}</h5>
+                            <h5>{"Bounties"}</h5>
+                            <Form.Item name={["bounty","bounty"]}>
                             <Slider
                                 min={1.00}
                                 max={2.5}
