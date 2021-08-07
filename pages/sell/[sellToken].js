@@ -32,6 +32,7 @@ function SellNft()
     const [address, setAddress] = useState(null)
     const [balance, setBalance] = useState(null)
     const [endingPrice, setEndingPrice] = useState(false)
+    const [isFixed, setIsFixed] = useState(true)
     async function loadNft()
     {
         if (queryParam.sellToken != undefined && queryParam.tokenId != undefined) {
@@ -120,9 +121,19 @@ function SellNft()
         setBountyValue(value)
       };
       const onSubmitForm = async (values) => {
-        const sell = await sellOrder(queryParam.sellToken, queryParam.tokenId, address, values,true);
+        const sell = await sellOrder(queryParam.sellToken, queryParam.tokenId, address, values,isFixed);
         console.log("form values", values)
       }
+      const onTabClick = (e) => {
+        if(e == 2)
+        {
+          setIsFixed(false)
+        }
+        else if(e == 1)
+        {
+        setIsFixed(true)
+        }
+      } 
     useEffect(() => {
         if (!queryParam) {
             return null;
@@ -173,7 +184,7 @@ function SellNft()
             </div>
             <Row>
                 <Col lg={16} md={16}>
-                        <Tabs defaultActiveKey="1" tabBarGutter={10} style={{height: "500px"}} size={"large"} type={"card"}>
+                        <Tabs defaultActiveKey="1"  onTabClick={onTabClick} tabBarGutter={10} style={{height: "500px"}} size={"large"} type={"card"}>
                         <TabPane tab={<CustomTapBarElement>
                             <div>{"Set Price"}</div>
                             <span>{"Sell at a fixed or declining price"}</span>

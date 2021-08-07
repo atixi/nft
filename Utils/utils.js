@@ -156,25 +156,39 @@ export async function cancelThisOffer(order, accountAddress) {
 
 export async function sellOrder(tokenAddress, tokenId, address, orderValue, fixed)
 {
-  const schemaName = "ERC720";
-  console.log(seaport)
   if(fixed)
   {
-        const expirationTime = Math.round(Date.now() / 1000 + 60 * 60 * 24)
+    console.log(orderValue)
 
-    const listing = await seaport.createSellOrder({
-      asset: {
-        tokenId,
-        tokenAddress,
-      },
-      accountAddress:address,
-      startAmount: 0.1,
-      // If `endAmount` is specified, the order will decline in value to that amount until `expirationTime`. Otherwise, it's a fixed-price order:
-      endAmount: 0.1,
-      expirationTime
-    })
-    console.log(listing)
-
+    return 0
+    if(orderValue.switch.includeEnd)
+    {
+      if(orderValue.date.expirationTime == undefined)
+        return "Set the expiration time";
+      var date = new Date(orderValue.date.expirationTime);
+      var expirationTime = date.getTime() / 1000;
+      return await seaport.createSellOrder({
+        asset: {
+          tokenId,
+          tokenAddress,
+        },
+        accountAddress:address,
+        startAmount: orderValue.price.amount,
+        endAmount: orderValue.price.endPrice,
+        expirationTime
+      })
+    }
+    else
+    {
+        return await seaport.createSellOrder({
+          asset: {
+            tokenId,
+            tokenAddress,
+          },
+          accountAddress:address,
+          startAmount: orderValue.price.amount,
+        })
+    }
   }
 }
 
