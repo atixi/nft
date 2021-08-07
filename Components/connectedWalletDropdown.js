@@ -230,6 +230,15 @@ function WalletInfoDropdown({ data }) {
       <Menu.Item key={"2"}>
         <Link
           href={{
+            pathname: `/create/collection`,
+          }}
+        >
+          <a>{"Create Collection"}</a>
+        </Link>
+      </Menu.Item>
+      <Menu.Item key={"2"}>
+        <Link
+          href={{
             pathname: `/create/erc721`,
           }}
         >

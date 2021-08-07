@@ -39,12 +39,11 @@ export const loadWeb3 = () => {
 
 export const loadWeb3Data = async () => {
   if (typeof window !== "undefined") {
-    if(window.ethereum){
+    if (window.ethereum) {
       window.web3 = new Web3(window.ethereum);
-    await window.ethereum.enable();
-    }
-    else{
-      window.web3 = new Web3(window.web3.currentProvider)
+      await window.ethereum.enable();
+    } else {
+      window.web3 = new Web3(window.web3.currentProvider);
     }
     const web3 = window.web3;
     const accounts = web3.eth.getAccounts();
@@ -59,24 +58,37 @@ export const loadWeb3Data = async () => {
 };
 
 export const subscribeToMetamask = () => {
-  const accounts = [];
-  const chainId;
-  const connectInfo;
-  ethereum.on('connect', (info) =>{
-    connectInfo = info;
-  })
-  ethereum.on("accountsChanged", function (ac) {
-    accounts = ac;
-    console.log('accounts are chaning mohammdin', accounts)
-  });
+  // const accounts = [];
+  // const chainId;
+  // const connectInfo;
+  // ethereum.on('connect', (info) =>{
+  //   connectInfo = info;
+  // })
+  // ethereum.on("accountsChanged", function (ac) {
+  //   accounts = ac;
+  //   console.log('accounts are chaning mohammdin', accounts)
+  // });
+  // ethereum.on("chainChanged", (chain) => {
+  //   chainId = chain
+  //   window.location.reload();
+  // });
+  // return {
+  //   accounts,
+  //   chainId,
+  //   connectInfo
+  // };
+};
 
-  ethereum.on("chainChanged", (chain) => {
-    chainId = chain
-    window.location.reload();
-  });
-  return {
-    accounts,
-    chainId,
-    connectInfo
-  };
+export const createWeb3 = async () => {
+  var Web3 = require("web3");
+
+  if (typeof web3 !== "undefined") {
+    web3 = new Web3(web3.currentProvider);
+  } else {
+    web3 = new Web3(
+      new Web3.providers.HttpProvider(
+        "wss://rinkeby.infura.io/ws/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
+      )
+    );
+  }
 };
