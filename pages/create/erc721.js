@@ -16,8 +16,6 @@ import { useFormik, File } from "formik";
 import * as Yup from "yup";
 import ReactPlayer from "react-player";
 import { checkForDuplicate, uploadNft, validateImage } from "Utils/mintApi";
-import styles from "/styles/erc721.module.css";
-import { fetch } from "/Utils/strapiApi";
 
 const initNft = {
   tokenId: null,
