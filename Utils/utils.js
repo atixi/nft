@@ -154,9 +154,56 @@ export async function cancelThisOffer(order, accountAddress) {
   );
 }
 
-export function unixToHumanDate(date, saleEndDate) {
-  if (saleEndDate) {
-    return moment.unix(date).format("LLLL");
+export async function sellOrder(tokenAddress, tokenId, address, orderValue, fixed)
+{
+  const schemaName = "ERC721";
+  console.log(seaport)
+  if(fixed)
+  {
+    const startAmount = 100
+    // Reward referrers with 10% of the final sale price,
+    // or 10 ETH in this case
+    const extraBountyPercent = 10
+    // The final bounty will be 10% + 1% from OpenSea, or 11 ETH!
+    
+    const auction = await seaport.createSellOrder({
+      tokenAddress: tokenAddress, // CryptoKitties
+      tokenId: tokenId, // Token ID
+      accountAddress: address,
+      schemaName: schemaName,
+      startAmount: orderValue.price.amount,
+      // extraBountyBasisPoints: extraBountyPercent * 100
+    });
+    console.log(auction)
+    return auction;
+  }
+ 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export function unixToHumanDate(date, saleEndDate)
+{
+  if(saleEndDate)
+  {
+  return moment.unix(date).format("LLLL");
   }
   return moment.unix(date).format("DD-MM-YYYY HH:m:s A");
 }

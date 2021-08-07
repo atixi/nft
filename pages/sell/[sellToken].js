@@ -4,12 +4,14 @@ import Link from "next/link";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne, fetchBundle } from "/Utils/strapiApi";
 import { getAuctionPriceDetails } from "/Constants/constants";
-import { convertToUsd} from "/Utils/utils";
+import { sellOrder} from "/Utils/utils";
 import {UnorderedListOutlined} from '@ant-design/icons';
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 import {Wrapper, Content} from "../../Components/StyledComponents/productDetails-styledComponents";
 import {CustomTapBarElement, SwitchContainer, SummarySection, ListTile, ListDescription} from "../../Components/StyledComponents/sellNft-styledComponents";
 const { TabPane } = Tabs;
+import { useSelector } from "react-redux";
+import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
 function SellNft()
 {
     
@@ -24,6 +26,11 @@ function SellNft()
       includeEnding: "Include ending price",
       includeEndingDesc: "Adding an ending price will allow this listing to expire, or for the price to be reduced until a buyer is found.",
     });
+    const isWalletConnected = useSelector(getWalletConnected)
+    const isMetaConnected = useSelector(getMetaConnected)
+    const tokenAddresses = useSelector(getAccountTokens)
+    const [address, setAddress] = useState(null)
+    const [balance, setBalance] = useState(null)
     const [endingPrice, setEndingPrice] = useState(false)
     async function loadNft()
     {
@@ -113,11 +120,22 @@ function SellNft()
         setBountyValue(value)
       };
       const onSubmitForm = async (values) => {
+        const sell = await sellOrder(queryParam.sellToken, queryParam.tokenId, address, values,true);
         console.log("form values", values)
       }
     useEffect(() => {
         if (!queryParam) {
             return null;
+          }
+          if(isWalletConnected) 
+          {
+            setAddress(tokenAddresses.walletToken[0]);
+            setBalance(tokenAddresses.walletBalance);
+          }
+          else if(isMetaConnected)
+          {
+            setAddress(tokenAddresses.metaToken[0]);
+            setBalance(tokenAddresses.metaBalance);
           }
         loadNft()
     }, [queryParam])
@@ -216,7 +234,7 @@ function SellNft()
                             </>:
                             <List.Item extra={
                               <>
-                              {futureTime && <Form.Item name={['date', "endFutureTime"]} noStyle><DatePicker style={{position: "relative", right:"15px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item>}
+                              {futureTime && <Form.Item name={['date', "endFutureTime"]} rules={[{ required: true, message: 'Expiration Time is required' }]} noStyle><DatePicker style={{position: "relative", right:"15px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item>}
                               <SwitchContainer><Form.Item name={['switch', "futureTime"]} noStyle><Switch onChange={handleFutureListing}/></Form.Item></SwitchContainer>
                             
                               </>
