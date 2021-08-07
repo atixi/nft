@@ -9,12 +9,8 @@ import {
   Form,
   Upload,
   message,
-<<<<<<< HEAD
-  Modal, Spin
-=======
   Modal,
   Spin,
->>>>>>> b038a582fe435f341bf7c2b7bf4a96527828ae70
 } from "antd";
 import { fetch, post } from "/Utils/strapiApi";
 import { useFormik, File } from "formik";
