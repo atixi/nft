@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from "react"
-import { Switch, Input, Form, Row, Col, List, DatePicker, Tabs, Avatar, Result, Button, Spin } from "antd";
+import { Switch, Card, Input, Form, Row, Col, List, DatePicker, Tabs, Slider, Avatar, Result, Button, Spin } from "antd";
 import Link from "next/link";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne, fetchBundle } from "/Utils/strapiApi";
 import { getAuctionPriceDetails } from "/Constants/constants";
 import { convertToUsd} from "/Utils/utils";
+import {UnorderedListOutlined} from '@ant-design/icons';
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 import {Wrapper, Content} from "../../Components/StyledComponents/productDetails-styledComponents";
-import {CustomTapBarElement, SwitchContainer, ListTile, ListDescription} from "../../Components/StyledComponents/sellNft-styledComponents";
+import {CustomTapBarElement, SwitchContainer, SummarySection, ListTile, ListDescription} from "../../Components/StyledComponents/sellNft-styledComponents";
 const { TabPane } = Tabs;
 function SellNft()
 {
@@ -104,6 +105,13 @@ function SellNft()
           },
         ],
       };
+      const [bountyValue, setBountyValue] = useState(parseFloat(1).toFixed(2))
+      const onChange = value => {
+        if (isNaN(value)) {
+          return;
+        }
+        setBountyValue(value)
+      };
     useEffect(() => {
         if (!queryParam) {
             return null;
@@ -144,7 +152,7 @@ function SellNft()
             </div>
             <Row>
                 <Col lg={16} md={16}>
-                        <Tabs defaultActiveKey="1" tabBarGutter={10} style={{height: "1000px"}} size={"large"} type={"card"}>
+                        <Tabs defaultActiveKey="1" tabBarGutter={10} style={{height: "500px"}} size={"large"} type={"card"}>
                         <TabPane tab={<CustomTapBarElement>
                             <div>{"Set Price"}</div>
                             <span>{"Sell at a fixed or declining price"}</span>
@@ -277,7 +285,32 @@ function SellNft()
                     
                         </Tabs>
                 </Col>
-                <Col lg={8} md={8}>{"final"}</Col>
+                <Col lg={8} md={8}>
+                  <SummarySection>
+                <Card title={<><UnorderedListOutlined style={{position: "relative", top:-2, marginRight: "10px"}} /><span>{"Summary"}</span></>} style={{ width: "100%", marginTop: 3 }}>
+                            <Form.Item>
+                              <Button type="secondary"                 color={"white"}
+                              style={{ background: "#0066ff", color: "white" }} disabled size={"large"}>Post your listing</Button>
+                            </Form.Item>
+                            <hr />
+                            <Form.Item>
+                              <h5>{"Bounties"}</h5>
+                            <Slider
+                                min={1.00}
+                                max={2.5}
+                                onChange={onChange}
+                                value={typeof bountyValue === 'number' ? bountyValue : 0}
+                                step={0.01}
+                              />
+                            </Form.Item>
+                            <span>{`Referral bounty ....................................................... ${bountyValue}%`}</span>
+                            <p  style={{marginTop: "20px"}}>{"You can increase your bounty from the 1% default up to the OpenSea fee (2.5%). OpenSea rewards this amount to registered affiliates who refer your buyer."}</p>
+                            <hr />
+                            <h5>{"Fees"}</h5>
+                            <p  style={{marginTop: "20px"}}>{"Listing is free! At the time of the sale, the following fees will be deducted."}</p>
+                </Card>
+                </SummarySection>
+                </Col>
             </Row>
             </Form>
         </Content>}
