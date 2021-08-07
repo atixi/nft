@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "/styles/erc721.module.css";
-
 import { Input, Button, Form } from "antd";
 import { fetch } from "/Utils/strapiApi";
 import { checkFileType, deployCollection } from "Utils/mintApi";

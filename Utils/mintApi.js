@@ -60,7 +60,7 @@ export const getTokenId = async (txHash) => {
 export const validateImage = (file, limitSize) => {
   if (!file) {
     return {
-      message: "NFT Image is Required hhh",
+      message: "NFT Image is Required",
       status: false,
     };
   } else {

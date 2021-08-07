@@ -137,7 +137,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
     }
   };
   const onFinishFailed = () => {
-    setDisplayUploadModal(true);
+    setDisplayUploadModal(false);
     const validationStatus = validateImage(nftImageFile, 40);
     if (!validationStatus.status) {
       setNftImageError(validationStatus.message);
@@ -197,7 +197,6 @@ const ERC721 = ({ collections, categories, nfts }) => {
                     <img
                       className={styles.nftImage}
                       src={uploadFileUrl}
-                      className={"img-fluid"}
                       onClick={openFileUpload}
                     />
                   </div>
@@ -250,7 +249,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
               onInput={checkNftNameDuplication}
             >
               <Input
-                name="name"
+                // name="name"
                 id="name"
                 placeholder="Asset Name"
                 className={styles.nftInput}
@@ -280,7 +279,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
               ]}
             >
               <Input
-                name="external_link"
+                // name="external_link"
                 id="external_link"
                 placeholder="https://yoursite.io/item/123"
                 className={styles.nftInput}
@@ -301,7 +300,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
               ]}
             >
               <Input.TextArea
-                name="description"
+                // name="description"
                 id="description"
                 placeholder="Provide a detailed description of your item"
                 className={styles.nftInput}
@@ -359,7 +358,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
               >
                 <Select
                   id="categories"
-                  name="categories"
+                  // name="categories"
                   mode="multiple"
                   style={{ width: "100%" }}
                   placeholder="Please select"
