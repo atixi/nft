@@ -3,7 +3,6 @@ import { FOOTER } from "/Constants/footerConstants";
 import { FOOTER_WEBSITE_LINKS } from "/Constants/footerConstants";
 import { FOOTER_COMMUNITY } from "/Constants/footerConstants";
 import { FOOTER_LANGUAGES } from "/Constants/footerConstants";
-import Link from "next/link";
 import React from "react";
 const {
   updatesMessage,
@@ -98,20 +97,6 @@ function Footer() {
                 </CategoryListUl>
               </Col>
             </Row>
-          </Col>
-          <Col md={6} lg={6} sm={24} xs={24} className="mt-4 mt-sm-0">
-            <LanguageContainer className="col-md-12 col-sm-6 col-xs-10">
-              <CategoryTitle>{FOOTER_LANGUAGES.languagesTitle}</CategoryTitle>
-              <div className={"mt-2"}>
-                <SelectLanguage defaultValue="English">
-                  {FOOTER_LANGUAGES.languages.map((language, index) => (
-                    <Option key={index} value={language.language}>
-                      {language.language}
-                    </Option>
-                  ))}
-                </SelectLanguage>
-              </div>
-            </LanguageContainer>
           </Col>
           <Col md={24} xs={24}>
             <hr />
