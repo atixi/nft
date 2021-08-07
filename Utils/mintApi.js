@@ -11,6 +11,8 @@ const RINKEBY_NODE_URL_WSS = `${process.env.RINKEBY_NODE_URL_WSS}/${RINKEBY_KEY}
 const METAMASK_MNEMONIC = process.env.METAMASK_MNEMONIC;
 const PINATA_API_KEY = process.env.PINATA_API_KEY;
 const PINATA_SECRET_KEY = process.env.PINATA_SECRET_KEY;
+const OWNER_ADDRESS = process.env.OWNER_ADDRESS;
+
 const provider = new HDWalletProvider({
   mnemonic: {
     phrase: METAMASK_MNEMONIC,
@@ -20,7 +22,6 @@ const provider = new HDWalletProvider({
 });
 // const provider = createWeb3();
 const web3 = new Web3(provider);
-const OWNER_ADDRESS = "0x8CA35f878fD14992b58a18bEB484f721b1d07A33";
 
 export const capitalizeWorkd = (value) => {
   return value.charAt(0).toUpperCase() + value.slice(1);
