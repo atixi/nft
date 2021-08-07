@@ -156,28 +156,26 @@ export async function cancelThisOffer(order, accountAddress) {
 
 export async function sellOrder(tokenAddress, tokenId, address, orderValue, fixed)
 {
-  const schemaName = "ERC721";
+  const schemaName = "ERC720";
   console.log(seaport)
   if(fixed)
   {
-    const startAmount = 100
-    // Reward referrers with 10% of the final sale price,
-    // or 10 ETH in this case
-    const extraBountyPercent = 10
-    // The final bounty will be 10% + 1% from OpenSea, or 11 ETH!
-    
-    const auction = await seaport.createSellOrder({
-      tokenAddress: tokenAddress, // CryptoKitties
-      tokenId: tokenId, // Token ID
-      accountAddress: address,
-      schemaName: schemaName,
-      startAmount: orderValue.price.amount,
-      // extraBountyBasisPoints: extraBountyPercent * 100
-    });
-    console.log(auction)
-    return auction;
+        const expirationTime = Math.round(Date.now() / 1000 + 60 * 60 * 24)
+
+    const listing = await seaport.createSellOrder({
+      asset: {
+        tokenId,
+        tokenAddress,
+      },
+      accountAddress:address,
+      startAmount: 0.1,
+      // If `endAmount` is specified, the order will decline in value to that amount until `expirationTime`. Otherwise, it's a fixed-price order:
+      endAmount: 0.1,
+      expirationTime
+    })
+    console.log(listing)
+
   }
- 
 }
 
 
