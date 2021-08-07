@@ -5,24 +5,17 @@ import Web3 from "web3";
 import axios from "axios";
 import { slugify } from "./utils";
 
-const INFURA_KEY = "c2dde5d7c0a0465a8e994f711a3a3c31";
-const ALCHEMY_KEY = "PGlxDmz18UTsTeDW5dc-qpKevhALbA-b";
-const RINKEBY_KEY = "c2dde5d7c0a0465a8e994f711a3a3c31";
-// const RINKEBY_NODE_URL = `https://rinkeby.infura.io/v3/${RINKEBY_KEY}`;
-const RINKEBY_NODE_URL = `wss://rinkeby.infura.io/ws/v3/${RINKEBY_KEY}`;
-const INFURA_NODE_URL = `https://infura.io/v3/${INFURA_KEY}`;
-const METAMASK_MNEMONIC =
-  "pink dose endorse soccer demand pink fringe search always invest twin tower";
-const pinataApiKey = "de68bc3ddb8bf7a53749";
-const pinataSecretApiKey =
-  "47ea101a80715e023688af759d27f84d8b5eca43b94612cb905735eb398fed55";
-const pinataJwt =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI1YzEwN2JkMC1kMjA5LTRlOGYtYWM2MS0zYzliZjM1ZjFjODQiLCJlbWFpbCI6Im1wYXJzYUBnYXRld2F5aWN0cy5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJpZCI6Ik5ZQzEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlfSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiZGU2OGJjM2RkYjhiZjdhNTM3NDkiLCJzY29wZWRLZXlTZWNyZXQiOiI0N2VhMTAxYTgwNzE1ZTAyMzY4OGFmNzU5ZDI3Zjg0ZDhiNWVjYTQzYjk0NjEyY2I5MDU3MzVlYjM5OGZlZDU1IiwiaWF0IjoxNjI2MDkxNDM5fQ.dQcFRAwxieC16TSZMJElj6_4kskljJpR_WdkqppFWQw";
+const STRAPI_BASE_URL = process.env.BASE_URL;
+const RINKEBY_KEY = process.env.RINKEBY_API_KEY;
+const RINKEBY_NODE_URL_WSS = `${process.env.RINKEBY_NODE_URL_WSS}/${RINKEBY_KEY}`;
+const METAMASK_MNEMONIC = process.env.METAMASK_MNEMONIC;
+const PINATA_API_KEY = process.env.PINATA_API_KEY;
+const PINATA_SECRET_KEY = process.env.PINATA_SECRET_KEY;
 const provider = new HDWalletProvider({
   mnemonic: {
     phrase: METAMASK_MNEMONIC,
   },
-  providerOrUrl: RINKEBY_NODE_URL,
+  providerOrUrl: RINKEBY_NODE_URL_WSS,
   pollingInterval: 200000,
 });
 // const provider = createWeb3();
@@ -146,8 +139,8 @@ export const saveFileToPinata = (file) => {
       maxContentLength: "Infinity",
       headers: {
         "Content-Type": `multipart/form-data; boundary=${pinataData._boundary}`,
-        pinata_api_key: pinataApiKey,
-        pinata_secret_api_key: pinataSecretApiKey,
+        pinata_api_key: PINATA_API_KEY,
+        pinata_secret_api_key: PINATA_SECRET_KEY,
       },
     })
     .then(function (response) {
@@ -180,8 +173,8 @@ export const pinJSONToIPFS = (metaContent, mediaType) => {
     .post(url, metadata, {
       maxContentLength: "Infinity",
       headers: {
-        pinata_api_key: pinataApiKey,
-        pinata_secret_api_key: pinataSecretApiKey,
+        pinata_api_key: PINATA_API_KEY,
+        pinata_secret_api_key: PINATA_SECRET_KEY,
       },
     })
     .then(function (response) {
@@ -369,7 +362,7 @@ export const uploadCollectionToStrapi = (logo, banner, collectionData) => {
   formData.append("data", JSON.stringify(collectionData));
   console.log("uploading to strapi...");
   return axios
-    .post("http://localhost:1337/collections", formData, {
+    .post(`${STRAPI_BASE_URL}/collections`, formData, {
       headers: {
         "Content-Type": `multipart/form-data`,
       },
@@ -395,7 +388,7 @@ export const uploadNftToStrapi = (file, nftMetadata) => {
   formData.append("data", JSON.stringify(nftMetadata));
   console.log("uploading fntData to strapi...");
   return axios
-    .post("http://localhost:1337/nfts", formData, {
+    .post(`${STRAPI_BASE_URL}//nfts`, formData, {
       headers: {
         "Content-Type": `multipart/form-data`,
       },
