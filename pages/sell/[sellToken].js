@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import { Switch, Card, Input, Form, Row, Col, List, DatePicker, Tabs, Slider, Avatar, Result, Button, Spin } from "antd";
+import { Switch, Card, Input, Form, Row, message, Col, List, DatePicker, Tabs, Slider, Avatar, Result, Button, Spin } from "antd";
 import Link from "next/link";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne, fetchBundle } from "/Utils/strapiApi";
@@ -125,11 +125,14 @@ function SellNft()
 
         try{
           const sell = await sellOrder(queryParam.sellToken, queryParam.tokenId, address, values,isFixed);
-          console.log("listed")
+          if(sell.hash)
+          {
+            message.success("Sell order is saved")
+          }
         }
         catch(e)
         {
-          console.log(e.toString())
+          message.error(e.toString())
         }
       }
       const onTabClick = (e) => {
@@ -197,6 +200,7 @@ function SellNft()
                             <div>{"Set Price"}</div>
                             <span>{"Sell at a fixed or declining price"}</span>
                         </CustomTapBarElement>} key="1" style={{ height: 200 }}>
+                          {isFixed && 
                         <List itemLayout="horizontal" >
                             <List.Item extra={
                                 <Form.Item style={{width: "300px"}}> 
@@ -263,11 +267,13 @@ function SellNft()
                             </List.Item>
                             }           
                         </List>
+                        }
                         </TabPane>
                         <TabPane tab={<CustomTapBarElement>
                             <div>{"Highest Bid"}</div>
                             <span>{"Auction to the highest bidder"}</span>
                         </CustomTapBarElement>} key="2">
+                          {!isFixed && 
                         <List itemLayout="horizontal" >
                             <List.Item extra={
                                 <Form.Item style={{width: "300px"}}> 
@@ -321,6 +327,7 @@ function SellNft()
                               <List.Item.Meta title={<ListTile>{"Expiration Time"}</ListTile>} description={<ListDescription>{"Your listing will automatically end at this time. No need to cancel it!"}</ListDescription>} />
                             </List.Item>
                             </List>
+                            }
                         </TabPane>
                     
                         </Tabs>
