@@ -11,8 +11,11 @@ export const FOOTER_WEBSITE_LINKS = {
   websiteTitle: "Rim Entertainment",
   websiteLinks: [
     { websiteLinkTitle: "Explore", link: "www.facebook.com" },
-    { websiteLinkTitle: "How it works", link: "www.facebook.com" },
-    { websiteLinkTitle: "Create", link: "www.facebook.com" },
+    {
+      websiteLinkTitle: "How it works",
+      link: "https://www.notion.so/Top-NFT-Collectibles-ece713f206cb48838e4cd0d1113bcd14",
+    },
+    { websiteLinkTitle: "Create", link: "/create" },
     { websiteLinkTitle: "Support", link: "www.facebook.com" },
   ],
   allRightReserved: "All rights reserved.",
@@ -20,10 +23,13 @@ export const FOOTER_WEBSITE_LINKS = {
 export const FOOTER_COMMUNITY = {
   communityTitle: "Community",
   communityLinks: [
-    { communityLinktitle: "Facebook", link: "www.facebook.com" },
+    {
+      communityLinktitle: "Facebook",
+      link: "https://www.facebook.com/topNFTcollectibles",
+    },
     { communityLinktitle: "Twitter", link: "www.facebook.com" },
     { communityLinktitle: "Instagram", link: "www.facebook.com" },
-    { communityLinktitle: "Telegram", link: "www.facebook.com" },
+    { communityLinktitle: "Telegram", link: "https://t.me/topNFTcollectibles" },
     { communityLinktitle: "WhatsApp", link: "www.facebook.com" },
   ],
 };

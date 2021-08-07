@@ -3,6 +3,7 @@ import { FOOTER } from "/Constants/footerConstants";
 import { FOOTER_WEBSITE_LINKS } from "/Constants/footerConstants";
 import { FOOTER_COMMUNITY } from "/Constants/footerConstants";
 import { FOOTER_LANGUAGES } from "/Constants/footerConstants";
+import Link from "next/link";
 import React from "react";
 const {
   updatesMessage,
@@ -11,7 +12,23 @@ const {
   terms,
   policy,
 } = FOOTER;
-import { FooterContainer, SearchInput, LanguageContainer, TermAndPolicy, SocialLinksContainer, SearchButton, CopyRight, CopyRightAndPolicyContainer, FooterExtraLinkContainer, CategoryListUl, LinkText, CategoryLink, CategoryListLi, CategoryTitle, SelectLanguage } from "./StyledComponents/footer-styledComponents"
+import {
+  FooterContainer,
+  SearchInput,
+  LanguageContainer,
+  TermAndPolicy,
+  SocialLinksContainer,
+  SearchButton,
+  CopyRight,
+  CopyRightAndPolicyContainer,
+  FooterExtraLinkContainer,
+  CategoryListUl,
+  LinkText,
+  CategoryLink,
+  CategoryListLi,
+  CategoryTitle,
+  SelectLanguage,
+} from "./StyledComponents/footer-styledComponents";
 const { Option } = SelectLanguage;
 
 function Footer() {
@@ -40,27 +57,44 @@ function Footer() {
           <Col md={12} sm={24} xs={24} className={"text-center"}>
             <Row>
               <Col md={12} sm={12} xs={12} className={"text-left pl-5"}>
-                <CategoryTitle>{FOOTER_WEBSITE_LINKS.websiteTitle}</CategoryTitle>
+                <CategoryTitle>
+                  {FOOTER_WEBSITE_LINKS.websiteTitle}
+                </CategoryTitle>
                 <CategoryListUl>
-                  {FOOTER_WEBSITE_LINKS.websiteLinks.map((websiteLink, index) => (
-                    <CategoryListLi key={index}>
-                      <CategoryLink href="#" key={websiteLink.websiteLinkTitle}>
-                        <LinkText>{websiteLink.websiteLinkTitle}</LinkText>
-                      </CategoryLink>
-                    </CategoryListLi>
-                  ))}
+                  {FOOTER_WEBSITE_LINKS.websiteLinks.map(
+                    (websiteLink, index) => (
+                      <CategoryListLi key={index}>
+                        <CategoryLink
+                          href="#"
+                          key={websiteLink.websiteLinkTitle}
+                        >
+                          <LinkText>{websiteLink.websiteLinkTitle}</LinkText>
+                        </CategoryLink>
+                      </CategoryListLi>
+                    )
+                  )}
                 </CategoryListUl>
               </Col>
               <Col md={12} sm={12} xs={12} className={"text-left pl-5"}>
                 <CategoryTitle>{FOOTER_COMMUNITY.communityTitle}</CategoryTitle>
                 <CategoryListUl>
-                  {FOOTER_COMMUNITY.communityLinks.map((communitlink, index) => (
-                    <CategoryListLi key={index}>
-                      <CategoryLink key={communitlink.communityLinktitle}>
-                        <LinkText>{communitlink.communityLinktitle}</LinkText>
-                      </CategoryLink>
-                    </CategoryListLi>
-                  ))}
+                  {FOOTER_COMMUNITY.communityLinks.map(
+                    (communitlink, index) => (
+                      <CategoryListLi key={index}>
+                        <CategoryLink key={communitlink.communityLinktitle}>
+                          <LinkText>
+                            <a
+                              rel="noreferrer"
+                              target="_blank"
+                              href={communitlink.link}
+                            >
+                              {communitlink.communityLinktitle}
+                            </a>
+                          </LinkText>
+                        </CategoryLink>
+                      </CategoryListLi>
+                    )
+                  )}
                 </CategoryListUl>
               </Col>
             </Row>
@@ -85,10 +119,10 @@ function Footer() {
               <CopyRightAndPolicyContainer>
                 <CopyRight>{`© ${FOOTER_WEBSITE_LINKS.websiteTitle}, Inc. ${FOOTER_WEBSITE_LINKS.allRightReserved}`}</CopyRight>
               </CopyRightAndPolicyContainer>
-                <TermAndPolicy>
-                  <span>{terms}</span>
-                  <span>{policy}</span>
-                </TermAndPolicy>
+              <TermAndPolicy>
+                <span>{terms}</span>
+                <span>{policy}</span>
+              </TermAndPolicy>
               <SocialLinksContainer>
                 <a
                   rel="noreferrer"
