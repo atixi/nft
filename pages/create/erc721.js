@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState, useReducer } from "react";
 import styles from "/styles/erc721.module.css";
-import axios from "axios";
 import {
   Input,
   Tooltip,
@@ -10,14 +9,14 @@ import {
   Form,
   Upload,
   message,
+  Modal,
+  Spin,
 } from "antd";
 import { fetch, post } from "/Utils/strapiApi";
 import { useFormik, File } from "formik";
 import * as Yup from "yup";
 import ReactPlayer from "react-player";
 import { checkForDuplicate, uploadNft, validateImage } from "Utils/mintApi";
-import styles from "/styles/erc721.module.css";
-import { fetch } from "/Utils/strapiApi";
 
 const initNft = {
   tokenId: null,
