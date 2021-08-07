@@ -5,7 +5,6 @@ import { Input, Tooltip, Select, Progress, Button } from "antd";
 import { fetch, post } from "/Utils/strapiApi";
 import { useFormik, File } from "formik";
 import * as Yup from "yup";
-import { localCols, localCategories } from "/Constants/constants";
 import ReactPlayer from "react-player";
 
 const pinataApiKey = "de68bc3ddb8bf7a53749";

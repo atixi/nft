@@ -275,7 +275,7 @@ export const getStaticProps = async ({ params }) => {
     `https://rim-entertainment.herokuapp.com/collections/${params.slug}`
   );
   const collection = await res.json();
-  return { props: { collection } };
+  return { props: { collection: JSON.parse(JSON.stringify(collection)) } };
 };
 
 export default CollectionDetails;
