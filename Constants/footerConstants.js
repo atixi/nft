@@ -1,7 +1,7 @@
 export const FOOTER = {
-  updatesMessage: "Get Latest Rarible updates",
+  updatesMessage: "Subscribed for Latest updates",
   searchPlaceHolder: "Your e-mail",
-  searchSubmitMessage: "I'm in",
+  searchSubmitMessage: "Submit",
   terms: "Terms",
   termsLink: "www.facebook.com",
   policy: "Policy",
@@ -13,10 +13,10 @@ export const FOOTER_WEBSITE_LINKS = {
     { websiteLinkTitle: "Explore", link: "www.facebook.com" },
     {
       websiteLinkTitle: "How it works",
-      link: "https://www.notion.so/Top-NFT-Collectibles-ece713f206cb48838e4cd0d1113bcd14",
+      link: "https://savory-vulcanodon-748.notion.site/Top-NFT-Collectibles-ece713f206cb48838e4cd0d1113bcd14",
     },
     { websiteLinkTitle: "Create", link: "/create" },
-    { websiteLinkTitle: "Support", link: "www.facebook.com" },
+    { websiteLinkTitle: "Support", link: "https://m.me/topNFTcollectibles" },
   ],
   allRightReserved: "All rights reserved.",
 };

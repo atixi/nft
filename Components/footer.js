@@ -1,4 +1,5 @@
-import { Row, Col, Input, Space } from "antd";
+import { Row, Col, Input, Space, Form, Button } from "antd";
+import { useState } from "react";
 import { FOOTER } from "/Constants/footerConstants";
 import { FOOTER_WEBSITE_LINKS } from "/Constants/footerConstants";
 import { FOOTER_COMMUNITY } from "/Constants/footerConstants";
@@ -31,6 +32,22 @@ import {
 const { Option } = SelectLanguage;
 
 function Footer() {
+  const [email, setEmail] = useState();
+  const [validEmail, setValidEmail] = useState();
+  const submitSubscribe = () => {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const validation = re.test(String(email).toLowerCase());
+    validation ? setValidEmail(true) : setValidEmail(false);
+  };
+  function settingEmail(e) {
+    setEmail(e.target.value);
+  }
+  function handleSubmit(e) {
+    if (e.charCode === 13) {
+      submitSubscribe();
+    }
+  }
   return (
     <>
       <FooterContainer className={` pt-5 pl-3 pr-3 pb-3`}>
@@ -46,11 +63,20 @@ function Footer() {
                   aria-label="Search"
                   size={"large"}
                   key={"0"}
+                  onChange={(e) => {
+                    settingEmail(e);
+                  }}
+                  onKeyPress={(e) => handleSubmit(e)}
                 />
-                <SearchButton type="button" className={`btn`}>
+                <SearchButton
+                  type="button"
+                  className={`btn`}
+                  onClick={submitSubscribe}
+                >
                   {searchSubmitMessage}
                 </SearchButton>
               </div>
+              {validEmail === false ? "Invalid Email Address" : ""}
             </div>
           </Col>
           <Col md={12} sm={24} xs={24} className={"text-center"}>
@@ -64,7 +90,8 @@ function Footer() {
                     (websiteLink, index) => (
                       <CategoryListLi key={index}>
                         <CategoryLink
-                          href="#"
+                          target="_blank"
+                          href={websiteLink.link}
                           key={websiteLink.websiteLinkTitle}
                         >
                           <LinkText>{websiteLink.websiteLinkTitle}</LinkText>
