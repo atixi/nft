@@ -33,6 +33,7 @@ function SellNft()
     const [balance, setBalance] = useState(null)
     const [endingPrice, setEndingPrice] = useState(false)
     const [isFixed, setIsFixed] = useState(true)
+    const [posting, setPosting] =  useState(false)
     async function loadNft()
     {
         if (queryParam.sellToken != undefined && queryParam.tokenId != undefined) {
@@ -121,18 +122,21 @@ function SellNft()
         setBountyValue(value)
       };
       const onSubmitForm = async (values) => {
-        console.log("form values", values)
-
+        console.log("form values", values.date.auctionExpirationTime)
+        // return 2;
+        setPosting(true)
         try{
-          const sell = await sellOrder(queryParam.sellToken, queryParam.tokenId, address, values,isFixed);
-          if(sell.hash)
+          const sell = await sellOrder(queryParam.sellToken, queryParam.tokenId, address, asset?.contractAddress, values,isFixed);
+          if(sell?.hash)
           {
             message.success("Sell order is saved")
           }
+          setPosting(false)
         }
         catch(e)
         {
           message.error(e.toString())
+          setPosting(false)
         }
       }
       const onTabClick = (e) => {
@@ -337,7 +341,7 @@ function SellNft()
                 <Card title={<><UnorderedListOutlined style={{position: "relative", top:-2, marginRight: "10px"}} /><span>{"Summary"}</span></>} style={{ width: "100%", marginTop: 3 }}>
                             <Form.Item>
                               <Button type="secondary" key={"submit"} htmlType={"submit"}
-                              style={{ background: "#0066ff", color: "white" }} size={"large"}>Post your listing</Button>
+                              style={{ background: "#0066ff", color: "white" }} loading={posting} size={"large"}>Post your listing</Button>
                             </Form.Item>
                             <hr />
                             <h5>{"Bounties"}</h5>

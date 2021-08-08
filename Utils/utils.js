@@ -154,7 +154,7 @@ export async function cancelThisOffer(order, accountAddress) {
   );
 }
 
-export async function sellOrder(tokenAddress, tokenId, address, orderValue, fixed)
+export async function sellOrder(tokenAddress, tokenId, address, contractAddress, orderValue, fixed)
 {
   if(fixed)
   {
@@ -189,6 +189,25 @@ export async function sellOrder(tokenAddress, tokenId, address, orderValue, fixe
           startAmount: orderValue.price.amount,
         })
     }
+  }
+  else
+  {
+    const paymentTokenAddress = "0xc778417e063141139fce010982780140aa0cd5ab"
+    var date = new Date(orderValue.date.auctionExpirationTime);
+    var expirationTime = parseInt(moment.duration(date).asMilliseconds() / 1000);
+    console.log(expirationTime)
+
+    return await seaport.createSellOrder({
+      asset: {
+        tokenId,
+        tokenAddress,
+      },
+      accountAddress: address,
+      startAmount: orderValue.price.minAmount,
+      expirationTime,
+      paymentTokenAddress,
+      waitForHighestBid: true
+    })
   }
 }
 
