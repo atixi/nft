@@ -66,6 +66,7 @@ export async function makeOffer(
       expirationTime: parseInt(expirationTime),
     });
   } else {
+    const referrerAddress = "0xe897B93557fb7D5B4dcA627a55181E52152cF035";
     return await seaport.createBuyOrder({
       asset: {
         tokenId,
@@ -75,6 +76,7 @@ export async function makeOffer(
       accountAddress,
       // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
       startAmount: offerData.price.amount,
+      referrerAddress
     });
   }
 }
