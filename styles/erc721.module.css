@@ -74,8 +74,7 @@
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  height: auto;
-  /* background-color: red; */
+  height: 100%;
 }
 .nftImageBox {
   display: flex;
@@ -83,16 +82,13 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: auto;
+  height: 100%;
   background-color: rebeccapurple;
 }
 
 .nftImage {
-  /* width: 200px;
-  height: 200px; */
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+  width: 100%;
+  height: auto;
 }
 .nftVideoBox {
   width: 200px;

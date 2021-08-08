@@ -1,29 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "/styles/erc721.module.css";
-import { Input, Button, Form } from "antd";
+import { Input, Button, Form, Spin, Modal } from "antd";
 import { fetch } from "/Utils/strapiApi";
 import { checkFileType, deployCollection } from "Utils/mintApi";
-
-const initNft = {
-  tokenId: null,
-  tokenAddress: null,
-  name: null,
-  collections: null,
-  categories: null,
-  metadata: {
-    external_link: null,
-    description: null,
-    name: null,
-    image_url: null,
-    preview_image_url: null,
-  },
-};
 
 const ERC721Collection = ({ collections }) => {
   const logoImageInputRef = useRef(null);
   const bannerImageInputRef = useRef(null);
   const formRef = React.createRef();
-  const [nftData, setNftData] = useState(initNft);
   const [logoError, setLogoError] = useState();
   const [bannerError, setBannerError] = useState();
   const [collectionError, setCollectionError] = useState(false);
@@ -34,14 +18,13 @@ const ERC721Collection = ({ collections }) => {
   const [bannerImageFile, setBannerImageFile] = useState();
   const [isLoading, setLoading] = useState(false);
   const [uploadPrecentage, setUploadPrecentage] = useState(0);
+  const [displayUploadModal, setDisplayUploadModal] = useState(false);
 
   const openLogoFileChooser = (event) => {
     event.preventDefault();
-    console.log("open file upload", event);
     logoImageInputRef.current.click();
   };
   const openFileUploadBanner = (event) => {
-    console.log("opne banner image file input", event.ref);
     event.preventDefault();
     bannerImageInputRef.current.click();
   };
@@ -50,7 +33,8 @@ const ERC721Collection = ({ collections }) => {
     event.preventDefault();
     const targetInput = event.target.name;
     var imageFile = event.target.files[0];
-
+    const typeResult = checkFileType(imageFile);
+    console.log("file type is ", typeResult.isTypeValid);
     if (imageFile) {
       if (targetInput == "logoImageFile") {
         setLogoError(null);
@@ -61,7 +45,6 @@ const ERC721Collection = ({ collections }) => {
         setBannerImageFile(imageFile);
         setBannerImageUrl(URL.createObjectURL(imageFile));
       }
-      const isTypeValid = checkFileType(imageFile);
     }
   };
 
@@ -85,6 +68,7 @@ const ERC721Collection = ({ collections }) => {
     }
 
     if (logoImageFile && bannerImageFile && !isDuplicate) {
+      setDisplayUploadModal(true);
       console.log("values are valide ", values);
       (async function () {
         const result = await saveCollection(
@@ -95,6 +79,7 @@ const ERC721Collection = ({ collections }) => {
         if (result.success) {
           console.log(result.message);
           clearForm();
+          setDisplayUploadModal(false);
         }
       })();
     }
@@ -106,7 +91,7 @@ const ERC721Collection = ({ collections }) => {
       bannerImageFile,
       values
     );
-    if (result.success) {
+    if (result) {
       return result;
     } else {
       return {
@@ -145,6 +130,29 @@ const ERC721Collection = ({ collections }) => {
 
   return (
     <div className={styles.container}>
+      <Modal
+        title="Uploading Collectin..."
+        visible={displayUploadModal}
+        header={null}
+        footer={null}
+        closable={false}
+        width={500}
+        height={500}
+        maskStyle={{
+          backgroundColor: "#EEEEEE",
+          opacity: 0.1,
+        }}
+        bodyStyle={{
+          height: 350,
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
+        <div className={styles.waitingSpiner}>
+          <Spin size="large" />
+        </div>
+      </Modal>
       <div className={styles.nftFormContainer}>
         <h1 className={styles.header}>Create new Collection</h1>
         <h4 className={styles.subHeader}>Collection Image</h4>

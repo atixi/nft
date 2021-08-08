@@ -140,6 +140,7 @@ const Wallet = () => {
         await dispatchMetaConnected(setMetaConnected(false));
         await dispatchMetaToken(setMetaToken(null));
       } else {
+        console.log("we are connected to wallet now?");
         await dispatchMetaConnected(setMetaConnected(true));
         await dispatchMetaToken(setMetaToken(accounts));
       }

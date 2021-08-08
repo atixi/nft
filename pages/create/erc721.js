@@ -144,7 +144,9 @@ const ERC721 = ({ collections, categories, nfts }) => {
       setNftImageError(null);
     }
   };
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // console.log("rinkey", RINKEBY_NODE_URL_WSS);
+  }, []);
   return (
     <div className={styles.container}>
       <div>

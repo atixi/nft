@@ -211,3 +211,13 @@ export function detectVideo(url) {
   if (formats.includes(format)) return true;
   else return false;
 }
+
+export const slugify = (str) => {
+  return str
+    .trim()
+    .toLowerCase()
+    .replace(/^-+/g, "")
+    .replace(/[^\w-]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/-+$/g, "");
+};
