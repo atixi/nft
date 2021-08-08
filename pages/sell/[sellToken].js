@@ -128,21 +128,19 @@ function SellNft()
       const onSubmitForm = async (values) => {
         // return 2;
         setPosting(true)
-        try{
           const sell = await sellOrder(queryParam.sellToken, queryParam.tokenId, address, asset?.contractAddress, values,isFixed);
           if(sell?.hash)
           {
             message.success("Sell order is saved")
             setHasOrder(true)
           }
+          else{
+            message.error(sell.toString())
+          
           setPosting(false)
-        }
-        catch(e)
-        {
-          message.error(e.toString())
-          setPosting(false)
-        }
+      
       }
+    }
       const onTabClick = (e) => {
         if(e == 2)
         {
