@@ -43,11 +43,9 @@ function Footer() {
           setValidEmail(true);
           const formData = new FormData();
           formData.append("data", JSON.stringify({ email: email }));
-          try {
-            api.post(`/subscribeds`, formData);
-          } catch {
-            console.log("duplicate entry");
-          }
+          api.post(`/subscribeds`, formData).catch(function (error) {
+            console.log("duplicate entry", error.message);
+          });
         })()
       : setValidEmail(false);
   };
