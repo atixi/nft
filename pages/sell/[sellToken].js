@@ -5,7 +5,7 @@ import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne, fetchBundle } from "/Utils/strapiApi";
 import { getAuctionPriceDetails } from "/Constants/constants";
 import { sellOrder} from "/Utils/utils";
-import {UnorderedListOutlined} from '@ant-design/icons';
+import {UnorderedListOutlined, CheckCircleTwoTone} from '@ant-design/icons';
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 import {Wrapper, Content} from "../../Components/StyledComponents/productDetails-styledComponents";
 import {CustomTapBarElement, SwitchContainer, SummarySection, ListTile, ListDescription} from "../../Components/StyledComponents/sellNft-styledComponents";
@@ -34,6 +34,7 @@ function SellNft()
     const [endingPrice, setEndingPrice] = useState(false)
     const [isFixed, setIsFixed] = useState(true)
     const [posting, setPosting] =  useState(false)
+    const [hasOrder, setHasOrder] = useState(false)
     async function loadNft()
     {
         if (queryParam.sellToken != undefined && queryParam.tokenId != undefined) {
@@ -47,6 +48,9 @@ function SellNft()
             {
                 console.log(data)
               const nft = data.data;
+              if(nft.sellOrder)
+              setHasOrder(true)
+
               setAsset({
                 name: nft.name,
                 description: nft.description,
@@ -130,6 +134,7 @@ function SellNft()
           if(sell?.hash)
           {
             message.success("Sell order is saved")
+            setHasOrder(true)
           }
           setPosting(false)
         }
@@ -177,7 +182,7 @@ function SellNft()
         <Link key={"goBack"} href={"/"}><a><Button key="buy">{"Back to home"}</Button></a></Link>
        ]}
      /> : 
-       asset &&  <Content>
+       asset &&  <Content> {!hasOrder ?
            <Form onFinish={onSubmitForm}>
             <div style={{paddingTop: "5px", borderBottom: "1px solid gray", marginBottom:"20px"}}>
             <List
@@ -363,7 +368,17 @@ function SellNft()
                 </SummarySection>
                 </Col>
             </Row>
-            </Form>
+            </Form> : <Result
+                      icon={<img src={'/images/checkMark.svg'} style={{height: "100px", width: "100px"}} />}                 
+                      title="Your order is listed!"
+                      subTitle="Please click below to to see latest updates on your token"
+                      extra={[
+                        <Link href={`nft/${queryParam.sellToken}?tokenId=${queryParam.tokenId}`}><a><Button type="primary" style={{ background: "#0066ff", color: "white" }} size={"large"} key="1">
+                          View my Token
+                        </Button></a></Link>,
+                        <Link href={"/"}><a><Button key="buy" size={"large"}>Go Home</Button></a></Link>
+                      ]}
+                    /> }
         </Content>}
      </Wrapper>
      </MainWrapper>
