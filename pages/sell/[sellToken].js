@@ -49,7 +49,7 @@ function SellNft()
                 console.log(data)
               const nft = data.data;
               if(nft.sellOrder)
-              setHasOrder(true)
+              setHasOrder(false) // console.log
 
               setAsset({
                 name: nft.name,
@@ -126,7 +126,6 @@ function SellNft()
         setBountyValue(value)
       };
       const onSubmitForm = async (values) => {
-        console.log("form values", values.date.auctionExpirationTime)
         // return 2;
         setPosting(true)
         try{
