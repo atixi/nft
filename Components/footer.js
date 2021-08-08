@@ -30,7 +30,7 @@ import {
   SelectLanguage,
 } from "./StyledComponents/footer-styledComponents";
 const { Option } = SelectLanguage;
-
+import api from "/components/axiosRequest";
 function Footer() {
   const [email, setEmail] = useState();
   const [validEmail, setValidEmail] = useState();
@@ -38,7 +38,18 @@ function Footer() {
     const re =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const validation = re.test(String(email).toLowerCase());
-    validation ? setValidEmail(true) : setValidEmail(false);
+    validation
+      ? (() => {
+          setValidEmail(true);
+          const formData = new FormData();
+          formData.append("data", JSON.stringify({ email: email }));
+          try {
+            api.post(`/subscribeds`, formData);
+          } catch {
+            console.log("duplicate entry");
+          }
+        })()
+      : setValidEmail(false);
   };
   function settingEmail(e) {
     setEmail(e.target.value);
