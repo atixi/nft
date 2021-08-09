@@ -28,7 +28,7 @@ const provider = new HDWalletProvider({
   pollingInterval: 200000,
 });
 const web3 = new Web3(provider);
-web3.setProvider(provider);
+
 const seaport = new OpenSeaPort(provider, {
   networkName: Network.Rinkeby,
   apiKey: "c2dde5d7c0a0465a8e994f711a3a3c31",
@@ -66,6 +66,7 @@ export async function makeOffer(
       expirationTime: parseInt(expirationTime),
     });
   } else {
+    const referrerAddress = "0xe897B93557fb7D5B4dcA627a55181E52152cF035";
     return await seaport.createBuyOrder({
       asset: {
         tokenId,
@@ -75,10 +76,14 @@ export async function makeOffer(
       accountAddress,
       // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
       startAmount: offerData.price.amount,
+      referrerAddress
     });
   }
 }
 export async function buyOrder(asset, isBundle, order, accountAddress) {
+  try{
+  const web3 = new Web3(provider);
+  
   if (isBundle) {
     const transactionHash = await seaport
       .fulfillOrder({ order, accountAddress })
@@ -103,6 +108,8 @@ export async function buyOrder(asset, isBundle, order, accountAddress) {
       });
     return transactionHash;
   }
+}
+catch(e){return e}
 }
 export async function cancelThisOffer(order, accountAddress) {
   await seaport._dispatch(EventType.CancelOrder, { order, accountAddress });
@@ -154,9 +161,112 @@ export async function cancelThisOffer(order, accountAddress) {
   );
 }
 
-export function unixToHumanDate(date, saleEndDate) {
-  if (saleEndDate) {
-    return moment.unix(date).format("LLLL");
+export async function sellOrder(tokenAddress, tokenId, address, contractAddress, orderValue, fixed)
+{
+  try{
+  if(fixed)
+  {
+    if(orderValue.switch.includeEnd)
+    {
+      if(orderValue.date.expirationTime == undefined)
+      return "Set the expiration time";
+      var date = new Date(orderValue.date.expirationTime);
+      var expirationTime = parseInt(date.getTime() / 1000);
+      var result = await seaport.createSellOrder({
+        asset: {
+          tokenId,
+          tokenAddress,
+        },
+        accountAddress:address,
+        startAmount: orderValue.price.amount,
+        endAmount: orderValue.price.endPrice,
+        expirationTime
+      })
+      provider.engine.stop();
+      return result;
+    }
+    else if(orderValue.switch.futureTime)
+    {
+      var date = new Date(orderValue.date.futureTime);
+      var listingTime = date.getTime() / 1000;
+      const result = await seaport.createSellOrder({
+        asset: {
+          tokenId,
+          tokenAddress,
+        },
+        accountAddress: address,
+        startAmount: orderValue.price.amount,
+        listingTime: listingTime,
+      })
+      provider.engine.stop();
+      return result;
+    }
+    else
+    {
+        const result = await seaport.createSellOrder({
+          asset: {
+            tokenId,
+            tokenAddress,
+          },
+          accountAddress:address,
+          startAmount: orderValue.price.amount,
+        })
+        provider.engine.stop();
+        return result;
+    }
+  }
+  else
+  {
+    const paymentTokenAddress = "0xc778417e063141139fce010982780140aa0cd5ab"
+    var date = new Date(orderValue.date.auctionExpirationTime);
+    var expirationTime = parseInt(moment.duration(date).asMilliseconds() / 1000);
+    console.log(expirationTime)
+
+    const result = await seaport.createSellOrder({
+      asset: {
+        tokenId,
+        tokenAddress,
+      },
+      accountAddress: address,
+      startAmount: orderValue.price.minAmount,
+      expirationTime,
+      paymentTokenAddress,
+      waitForHighestBid: true
+    })
+    provider.engine.stop();
+    return result;
+  }
+  }
+  catch(e)
+  {
+    return e
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export function unixToHumanDate(date, saleEndDate)
+{
+  if(saleEndDate)
+  {
+  return moment.unix(date).format("LLLL");
   }
   return moment.unix(date).format("DD-MM-YYYY HH:m:s A");
 }

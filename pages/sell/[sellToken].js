@@ -1,15 +1,17 @@
 import React, {useState, useEffect} from "react"
-import { Switch, Card, Input, Form, Row, Col, List, DatePicker, Tabs, Slider, Avatar, Result, Button, Spin } from "antd";
+import { Switch, Card, Input, Form, Row, message, Col, List, DatePicker, Tabs, Slider, Avatar, Result, Button, Spin } from "antd";
 import Link from "next/link";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne, fetchBundle } from "/Utils/strapiApi";
 import { getAuctionPriceDetails } from "/Constants/constants";
-import { convertToUsd} from "/Utils/utils";
-import {UnorderedListOutlined} from '@ant-design/icons';
+import { sellOrder} from "/Utils/utils";
+import {UnorderedListOutlined, CheckCircleTwoTone} from '@ant-design/icons';
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 import {Wrapper, Content} from "../../Components/StyledComponents/productDetails-styledComponents";
 import {CustomTapBarElement, SwitchContainer, SummarySection, ListTile, ListDescription} from "../../Components/StyledComponents/sellNft-styledComponents";
 const { TabPane } = Tabs;
+import { useSelector } from "react-redux";
+import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
 function SellNft()
 {
     
@@ -24,7 +26,15 @@ function SellNft()
       includeEnding: "Include ending price",
       includeEndingDesc: "Adding an ending price will allow this listing to expire, or for the price to be reduced until a buyer is found.",
     });
+    const isWalletConnected = useSelector(getWalletConnected)
+    const isMetaConnected = useSelector(getMetaConnected)
+    const tokenAddresses = useSelector(getAccountTokens)
+    const [address, setAddress] = useState(null)
+    const [balance, setBalance] = useState(null)
     const [endingPrice, setEndingPrice] = useState(false)
+    const [isFixed, setIsFixed] = useState(true)
+    const [posting, setPosting] =  useState(false)
+    const [hasOrder, setHasOrder] = useState(false)
     async function loadNft()
     {
         if (queryParam.sellToken != undefined && queryParam.tokenId != undefined) {
@@ -38,6 +48,9 @@ function SellNft()
             {
                 console.log(data)
               const nft = data.data;
+              if(nft.sellOrder)
+              setHasOrder(false) // console.log
+
               setAsset({
                 name: nft.name,
                 description: nft.description,
@@ -112,9 +125,45 @@ function SellNft()
         }
         setBountyValue(value)
       };
+      const onSubmitForm = async (values) => {
+        // return 2;
+        setPosting(true)
+          const sell = await sellOrder(queryParam.sellToken, queryParam.tokenId, address, asset?.contractAddress, values,isFixed);
+          if(sell?.hash)
+          {
+            message.success("Sell order is saved")
+            setHasOrder(true)
+          }
+          else{
+            message.error(sell.toString())
+          
+          setPosting(false)
+      
+      }
+    }
+      const onTabClick = (e) => {
+        if(e == 2)
+        {
+          setIsFixed(false)
+        }
+        else if(e == 1)
+        {
+        setIsFixed(true)
+        }
+      } 
     useEffect(() => {
         if (!queryParam) {
             return null;
+          }
+          if(isWalletConnected) 
+          {
+            setAddress(tokenAddresses.walletToken[0]);
+            setBalance(tokenAddresses.walletBalance);
+          }
+          else if(isMetaConnected)
+          {
+            setAddress(tokenAddresses.metaToken[0]);
+            setBalance(tokenAddresses.metaBalance);
           }
         loadNft()
     }, [queryParam])
@@ -130,8 +179,8 @@ function SellNft()
         <Link key={"goBack"} href={"/"}><a><Button key="buy">{"Back to home"}</Button></a></Link>
        ]}
      /> : 
-       asset &&  <Content>
-           <Form>
+       asset &&  <Content> {!hasOrder ?
+           <Form onFinish={onSubmitForm}>
             <div style={{paddingTop: "5px", borderBottom: "1px solid gray", marginBottom:"20px"}}>
             <List
                     itemLayout="horizontal"
@@ -152,11 +201,12 @@ function SellNft()
             </div>
             <Row>
                 <Col lg={16} md={16}>
-                        <Tabs defaultActiveKey="1" tabBarGutter={10} style={{height: "500px"}} size={"large"} type={"card"}>
+                        <Tabs defaultActiveKey="1"  onTabClick={onTabClick} tabBarGutter={10} style={{height: "500px"}} size={"large"} type={"card"}>
                         <TabPane tab={<CustomTapBarElement>
                             <div>{"Set Price"}</div>
                             <span>{"Sell at a fixed or declining price"}</span>
                         </CustomTapBarElement>} key="1" style={{ height: 200 }}>
+                          {isFixed && 
                         <List itemLayout="horizontal" >
                             <List.Item extra={
                                 <Form.Item style={{width: "300px"}}> 
@@ -182,7 +232,7 @@ function SellNft()
                                    </div>
                                 </List.Item.Meta>
                             </List.Item>
-                            <List.Item extra={<SwitchContainer><Switch onChange={handleIncludeEndPrice} /></SwitchContainer>}>
+                            <List.Item extra={<SwitchContainer><Form.Item name={['switch', "includeEnd"]} noStyle><Switch onChange={handleIncludeEndPrice} /></Form.Item></SwitchContainer>}>
                                 <List.Item.Meta title={<ListTile>{formText.includeEnding}</ListTile>} description={<ListDescription>{formText.includeEndingDesc}</ListDescription>}>
                                 </List.Item.Meta>
                             </List.Item> 
@@ -190,13 +240,13 @@ function SellNft()
                                 <Form.Item style={{width: "300px"}}> 
                                 <Input.Group compact>
                                     <Form.Item
-                                    name={['price', 'blockchain']}
+                                    name={['price', 'blockchainEnd']}
                                     noStyle
                                 >
                                     <Input prefix={<img src={"https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
                                     </Form.Item>
                                     <Form.Item
-                                        name={['price', 'amount']}
+                                        name={['price', 'endPrice']}
                                         noStyle
                                         rules={[{ required: true, message: 'Amount is required' }]}>
                                         <Input style={{ width: '65%' }}  size={"large"} placeholder="Amount" />
@@ -206,15 +256,15 @@ function SellNft()
                             }>
                                 <List.Item.Meta title={<ListTile>{"Ending Price"}</ListTile>} description={<ListDescription>{"Must be less than or equal to the starting price. The price will progress linearly to this amount until the expiration date."}</ListDescription>}/>
                             </List.Item>
-                            <List.Item extra={ <DatePicker style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /> }>
+                            <List.Item extra={<Form.Item name={['date', "expirationTime"]} noStyle><DatePicker key={"expirationTime"} style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item>}>
                               <List.Item.Meta title={<ListTile>{"Expiration Time"}</ListTile>} description={<ListDescription>{"Your listing will automatically end at this time. No need to cancel it!"}</ListDescription>} />
                             </List.Item>
                             
                             </>:
                             <List.Item extra={
                               <>
-                              {futureTime && <DatePicker style={{position: "relative", right:"15px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /> }
-                              <SwitchContainer><Switch onChange={handleFutureListing}/></SwitchContainer>
+                              {futureTime && <Form.Item name={['date', "endFutureTime"]} rules={[{ required: true, message: 'Future Time is required' }]} noStyle><DatePicker key={"futureExpirationTime"} style={{position: "relative", right:"15px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item>}
+                              <SwitchContainer><Form.Item name={['switch', "futureTime"]} noStyle><Switch onChange={handleFutureListing}/></Form.Item></SwitchContainer>
                             
                               </>
 
@@ -223,11 +273,13 @@ function SellNft()
                             </List.Item>
                             }           
                         </List>
+                        }
                         </TabPane>
                         <TabPane tab={<CustomTapBarElement>
                             <div>{"Highest Bid"}</div>
                             <span>{"Auction to the highest bidder"}</span>
                         </CustomTapBarElement>} key="2">
+                          {!isFixed && 
                         <List itemLayout="horizontal" >
                             <List.Item extra={
                                 <Form.Item style={{width: "300px"}}> 
@@ -239,7 +291,7 @@ function SellNft()
                                     <Input prefix={<img src={"https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
                                     </Form.Item>
                                     <Form.Item
-                                        name={['price', 'amount']}
+                                        name={['price', 'minAmount']}
                                         noStyle
                                         rules={[{ required: true, message: 'Amount is required' }]}>
                                         <Input style={{ width: '65%' }}  size={"large"} placeholder="Amount" />
@@ -263,7 +315,7 @@ function SellNft()
                                     <Input prefix={<img src={"https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"} width={"25"} height={"25"}/>} disabled style={{ width: '20%', textAlign:"center"}}  size={"large"} />
                                     </Form.Item>
                                     <Form.Item
-                                        name={['price', 'amount']}
+                                        name={['price', 'reserveAmount']}
                                         noStyle
                                         rules={[{ required: true, message: 'Amount is required' }]}>
                                         <Input style={{ width: '65%' }}  size={"large"} placeholder="Amount" />
@@ -277,10 +329,11 @@ function SellNft()
                                    </div>
                                 </List.Item.Meta>
                             </List.Item>
-                                <List.Item extra={ <Form.Item><DatePicker style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item> }>
+                                <List.Item extra={ <Form.Item name={['date', 'auctionExpirationTime']}><DatePicker style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item> }>
                               <List.Item.Meta title={<ListTile>{"Expiration Time"}</ListTile>} description={<ListDescription>{"Your listing will automatically end at this time. No need to cancel it!"}</ListDescription>} />
                             </List.Item>
                             </List>
+                            }
                         </TabPane>
                     
                         </Tabs>
@@ -289,12 +342,12 @@ function SellNft()
                   <SummarySection>
                 <Card title={<><UnorderedListOutlined style={{position: "relative", top:-2, marginRight: "10px"}} /><span>{"Summary"}</span></>} style={{ width: "100%", marginTop: 3 }}>
                             <Form.Item>
-                              <Button type="secondary"                 color={"white"}
-                              style={{ background: "#0066ff", color: "white" }} disabled size={"large"}>Post your listing</Button>
+                              <Button type="secondary" key={"submit"} htmlType={"submit"}
+                              style={{ background: "#0066ff", color: "white" }} loading={posting} size={"large"}>Post your listing</Button>
                             </Form.Item>
                             <hr />
-                            <Form.Item>
-                              <h5>{"Bounties"}</h5>
+                            <h5>{"Bounties"}</h5>
+                            <Form.Item name={["bounty","bounty"]}>
                             <Slider
                                 min={1.00}
                                 max={2.5}
@@ -312,7 +365,17 @@ function SellNft()
                 </SummarySection>
                 </Col>
             </Row>
-            </Form>
+            </Form> : <Result
+                      icon={<img src={'/images/checkMark.svg'} style={{height: "100px", width: "100px"}} />}                 
+                      title="Your order is listed!"
+                      subTitle="Please click below to to see latest updates on your token"
+                      extra={[
+                        <Link key={"vieTokenLink"} href={`/nft/${queryParam.sellToken}?tokenId=${queryParam.tokenId}`}><a><Button type="primary" style={{ background: "#0066ff", color: "white" }} size={"large"} key="1">
+                          View my Token
+                        </Button></a></Link>,
+                        <Link key={"goHomeLink"} href={"/"}><a><Button size={"large"}>Go Home</Button></a></Link>
+                      ]}
+                    /> }
         </Content>}
      </Wrapper>
      </MainWrapper>

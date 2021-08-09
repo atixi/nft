@@ -148,6 +148,7 @@ function ProductPage() {
       if(data.status == 200)
       {
         const nft = data.data;
+        console.log(nft)
         setAsset({
           name: nft.name,
           description: nft.description,
@@ -474,6 +475,10 @@ async function cancelOffer(order, address){
                               <span className={"bidDate"}>
                                 {unixToHumanDate(order?.createdTime)}
                               </span>
+                              <span>
+                              {order.makerAccount.address == address ? 
+                              <Button onClick={() => cancelOffer(order, address)} shape="round" size="small">{"Cancel"}</Button> : ""}
+                            </span>
                             </span>
                           </span>
                         </div>
@@ -580,7 +585,7 @@ async function cancelOffer(order, address){
                 )}
               </BidCountdown>}
               <ButtonContainer>
-                {address && asset?.owner?.address == address ? 
+                {address && asset?.owner?.address == address ?  sellOrders == null &&
                 <Link href={`/sell/${queryParam?.tokenAddress}?tokenId=${queryParam?.tokenId}`} passHref><a style={{display: "flex", flex:"1"}}><FooterButton
                 color={"white"}
                 style={{ background: "#0066ff" }}
