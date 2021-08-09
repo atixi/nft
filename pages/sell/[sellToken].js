@@ -256,14 +256,14 @@ function SellNft()
                             }>
                                 <List.Item.Meta title={<ListTile>{"Ending Price"}</ListTile>} description={<ListDescription>{"Must be less than or equal to the starting price. The price will progress linearly to this amount until the expiration date."}</ListDescription>}/>
                             </List.Item>
-                            <List.Item extra={<Form.Item name={['date', "expirationTime"]} noStyle><DatePicker style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /> </Form.Item>}>
+                            <List.Item extra={<Form.Item name={['date', "expirationTime"]} noStyle><DatePicker style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item>}>
                               <List.Item.Meta title={<ListTile>{"Expiration Time"}</ListTile>} description={<ListDescription>{"Your listing will automatically end at this time. No need to cancel it!"}</ListDescription>} />
                             </List.Item>
                             
                             </>:
                             <List.Item extra={
                               <>
-                              {futureTime && <Form.Item name={['date', "endFutureTime"]} rules={[{ required: true, message: 'Expiration Time is required' }]} noStyle><DatePicker style={{position: "relative", right:"15px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item>}
+                              {futureTime && <Form.Item name={['date', "endFutureTime"]} rules={[{ required: true, message: 'Future Time is required' }]} noStyle><DatePicker style={{position: "relative", right:"15px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item>}
                               <SwitchContainer><Form.Item name={['switch', "futureTime"]} noStyle><Switch onChange={handleFutureListing}/></Form.Item></SwitchContainer>
                             
                               </>

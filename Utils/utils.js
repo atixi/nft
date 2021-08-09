@@ -169,9 +169,9 @@ export async function sellOrder(tokenAddress, tokenId, address, contractAddress,
     if(orderValue.switch.includeEnd)
     {
       if(orderValue.date.expirationTime == undefined)
-        return "Set the expiration time";
+      return "Set the expiration time";
       var date = new Date(orderValue.date.expirationTime);
-      var expirationTime = date.getTime() / 1000;
+      var expirationTime = parseInt(date.getTime() / 1000);
       var result = await seaport.createSellOrder({
         asset: {
           tokenId,
@@ -181,6 +181,22 @@ export async function sellOrder(tokenAddress, tokenId, address, contractAddress,
         startAmount: orderValue.price.amount,
         endAmount: orderValue.price.endPrice,
         expirationTime
+      })
+      provider.engine.stop();
+      return result;
+    }
+    else if(orderValue.switch.futureTime)
+    {
+      var date = new Date(orderValue.date.futureTime);
+      var listingTime = date.getTime() / 1000;
+      const result = await seaport.createSellOrder({
+        asset: {
+          tokenId,
+          tokenAddress,
+        },
+        accountAddress: address,
+        startAmount: orderValue.price.amount,
+        listingTime: listingTime,
       })
       provider.engine.stop();
       return result;
