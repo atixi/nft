@@ -4,6 +4,7 @@ import moment from "moment";
 
 import { InjectedConnector } from "@web3-react/injected-connector";
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import { fetch } from "Utils/strapiApi";
 export const GOOGLE_ANALYTICS_ID = "UA-111688253-4";
 export const OPENSEA_URL = "https://opensea.io";
 export const OPENSEA_JS_URL = "https://github.com/ProjectOpenSea/opensea-js";
@@ -176,4 +177,14 @@ export const providers = {
   "0x3": "Ropsten Test Network",
   "0x5": "Goerli Test Network",
   "0x2a": "Kovan Test Network",
+};
+
+export const getTalentAccount = async (account) => {
+  const accountResult = await fetch(`/talents/talentexists/${account}`);
+  if (!accountResult.data)
+    return {
+      success: false,
+      message: "Servier is not available",
+    };
+  return accountResult.data;
 };

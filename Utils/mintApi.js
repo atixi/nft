@@ -5,7 +5,8 @@ import Web3 from "web3";
 import axios from "axios";
 import { slugify } from "./utils";
 
-const STRAPI_BASE_URL = "http://localhost:1337";
+const STRAPI_BASE_URL = process.env.HEROKU_BASE_URL;
+// const STRAPI_BASE_URL = process.env.STRAPI_LOCAL_BASE_URL;
 const RINKEBY_KEY = "c2dde5d7c0a0465a8e994f711a3a3c31";
 const RINKEBY_NODE_URL_WSS = `wss://rinkeby.infura.io/ws/v3/${RINKEBY_KEY}`;
 const METAMASK_MNEMONIC =
@@ -257,6 +258,22 @@ export const deployCollection = async (logo, banner, values) => {
             gas: "6721975",
           });
 
+        var tx = {
+          data: deployedCollection,
+        };
+
+        // const signedTransaction = await web3.eth.accounts
+        //   .signTransaction(
+        //     tx,
+        //     "7ada17da30078d59c3cded8edbb408b654f1a5e718afba9684134579243969a3"
+        //   )
+        //   .then((signed) => {
+        //     web3.eth
+        //       .sendSignedTransaction(signed.rawTransaction)
+        //       .on("receipt", console.log);
+        //   });
+        //   console.log("singed transaction ", signedTransaction);
+
         console.log(
           "collection is deployed at ",
           deployedCollection.options.address
@@ -282,7 +299,7 @@ export const deployCollection = async (logo, banner, values) => {
           };
         provider.engine.stop();
       } catch (e) {
-        console.log("error");
+        console.log("error in collection");
       }
     }
   }
