@@ -30,7 +30,7 @@ import {
   SelectLanguage,
 } from "./StyledComponents/footer-styledComponents";
 const { Option } = SelectLanguage;
-import api from "/components/axiosRequest";
+import api from "/Components/axiosRequest";
 function Footer() {
   const [email, setEmail] = useState();
   const [validEmail, setValidEmail] = useState();
