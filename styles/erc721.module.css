@@ -243,6 +243,10 @@
   align-items: center;
   margin-top: -30px;
 }
+
+.deplyingMessage {
+  padding-bottom: 20px;
+}
 @media (max-width: 1024px) {
   .container {
     width: 100%;

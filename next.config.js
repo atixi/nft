@@ -9,6 +9,7 @@ module.exports = {
   },
   env: {
     BASE_URL: process.env.BASE_URL,
+    STRAPI_LOCAL_BASE_URL: process.env.STRAPI_LOCAL_BASE_URL,
     HEROKU_BASE_URL: process.env.HEROKU_BASE_URL,
     NEXT_PUBLIC_STRAPI_URL: process.env.NEXT_PUBLIC_STRAPI_URL,
     RINKEBY_API_KEY: process.env.RINKEBY_API_KEY,

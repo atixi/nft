@@ -16,7 +16,12 @@ import { fetch, post } from "/Utils/strapiApi";
 import { useFormik, File } from "formik";
 import * as Yup from "yup";
 import ReactPlayer from "react-player";
-import { checkForDuplicate, uploadNft, validateImage } from "Utils/mintApi";
+import {
+  capitalizeWorkd,
+  checkForDuplicate,
+  uploadNft,
+  validateImage,
+} from "Utils/mintApi";
 
 const initNft = {
   tokenId: null,
@@ -170,6 +175,9 @@ const ERC721 = ({ collections, categories, nfts }) => {
           }}
         >
           <div className={styles.waitingSpiner}>
+            <div className={styles.deplyingMessage}>
+              Please Be Patient It may take serveral minutes
+            </div>
             <Spin size="large" />
           </div>
         </Modal>
@@ -373,7 +381,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
                       key={item.id}
                       style={{ height: 50, padding: 10 }}
                     >
-                      {item.category}
+                      {capitalizeWorkd(item.category)}
                     </Select.Option>
                   ))}
                 </Select>
@@ -400,7 +408,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
 export default ERC721;
 
 export const getServerSideProps = async () => {
-  const collectionsResult = await fetch("/collections/collectionsList");
+  const collectionsResult = await fetch("/collections/collectionslist");
   const cactegoriesResult = await fetch("/categories/categoriesList");
   const nftResult = await fetch("/nfts/nftsList");
   const nfts = nftResult.data;

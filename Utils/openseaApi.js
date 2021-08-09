@@ -11,15 +11,15 @@ const seaport = new OpenSeaPort(seaportProvider, {
   networkName: Network.Main,
   apiKey: "2e7ef0ac679f4860bbe49a34a98cf5ac",
 });
-async function getAccount() {
+export const getAccount = async () => {
   let error = null;
   let accountAddress = null;
   const web3 = await seaport.web3;
   const result = await web3.eth.getAccounts((e, res) => {
-    // accountAddress = res[0];
+    accountAddress = res[0];
   });
   return { accountAddress, error };
-}
+};
 /// handled and checked functions //////////////////////////////////////////////////////////////////////
 // asset functions
 

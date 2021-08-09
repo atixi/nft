@@ -3,7 +3,8 @@ import styles from "/styles/erc721.module.css";
 import { Input, Button, Form, Spin, Modal } from "antd";
 import { fetch } from "/Utils/strapiApi";
 import { checkFileType, deployCollection } from "Utils/mintApi";
-
+import { getAccount } from "Utils/openseaApi";
+import { getTalentAccount } from "Constants/constants";
 const ERC721Collection = ({ collections }) => {
   const logoImageInputRef = useRef(null);
   const bannerImageInputRef = useRef(null);
@@ -131,7 +132,7 @@ const ERC721Collection = ({ collections }) => {
   return (
     <div className={styles.container}>
       <Modal
-        title="Uploading Collectin..."
+        title="Uploading Collection..."
         visible={displayUploadModal}
         header={null}
         footer={null}
@@ -150,6 +151,9 @@ const ERC721Collection = ({ collections }) => {
         }}
       >
         <div className={styles.waitingSpiner}>
+          <div className={styles.deplyingMessage}>
+            {"Please Be Patient It may take serveral minutes"}
+          </div>
           <Spin size="large" />
         </div>
       </Modal>
@@ -327,7 +331,7 @@ const ERC721Collection = ({ collections }) => {
 export default ERC721Collection;
 
 export const getServerSideProps = async (context) => {
-  const collectionsResult = await fetch("/collections/collectionsList");
+  const collectionsResult = await fetch("/collections/collectionslist");
   const collections = collectionsResult.data;
   return {
     props: {
