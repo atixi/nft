@@ -256,14 +256,14 @@ function SellNft()
                             }>
                                 <List.Item.Meta title={<ListTile>{"Ending Price"}</ListTile>} description={<ListDescription>{"Must be less than or equal to the starting price. The price will progress linearly to this amount until the expiration date."}</ListDescription>}/>
                             </List.Item>
-                            <List.Item extra={<Form.Item name={['date', "expirationTime"]} noStyle><DatePicker style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item>}>
+                            <List.Item extra={<Form.Item name={['date', "expirationTime"]} noStyle><DatePicker key={"expirationTime"} style={{position: "relative", right:"45px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item>}>
                               <List.Item.Meta title={<ListTile>{"Expiration Time"}</ListTile>} description={<ListDescription>{"Your listing will automatically end at this time. No need to cancel it!"}</ListDescription>} />
                             </List.Item>
                             
                             </>:
                             <List.Item extra={
                               <>
-                              {futureTime && <Form.Item name={['date', "endFutureTime"]} rules={[{ required: true, message: 'Future Time is required' }]} noStyle><DatePicker style={{position: "relative", right:"15px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item>}
+                              {futureTime && <Form.Item name={['date', "endFutureTime"]} rules={[{ required: true, message: 'Future Time is required' }]} noStyle><DatePicker key={"futureExpirationTime"} style={{position: "relative", right:"15px"}} showTime allowClear={false} format="YYYY-MM-DD HH:mm:ss" {...config} size={"large"} /></Form.Item>}
                               <SwitchContainer><Form.Item name={['switch', "futureTime"]} noStyle><Switch onChange={handleFutureListing}/></Form.Item></SwitchContainer>
                             
                               </>
@@ -370,10 +370,10 @@ function SellNft()
                       title="Your order is listed!"
                       subTitle="Please click below to to see latest updates on your token"
                       extra={[
-                        <Link href={`/nft/${queryParam.sellToken}?tokenId=${queryParam.tokenId}`}><a><Button type="primary" style={{ background: "#0066ff", color: "white" }} size={"large"} key="1">
+                        <Link key={"vieTokenLink"} href={`/nft/${queryParam.sellToken}?tokenId=${queryParam.tokenId}`}><a><Button type="primary" style={{ background: "#0066ff", color: "white" }} size={"large"} key="1">
                           View my Token
                         </Button></a></Link>,
-                        <Link href={"/"}><a><Button key="buy" size={"large"}>Go Home</Button></a></Link>
+                        <Link key={"goHomeLink"} href={"/"}><a><Button size={"large"}>Go Home</Button></a></Link>
                       ]}
                     /> }
         </Content>}
