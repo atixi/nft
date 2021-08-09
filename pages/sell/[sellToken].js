@@ -370,7 +370,7 @@ function SellNft()
                       title="Your order is listed!"
                       subTitle="Please click below to to see latest updates on your token"
                       extra={[
-                        <Link href={`nft/${queryParam.sellToken}?tokenId=${queryParam.tokenId}`}><a><Button type="primary" style={{ background: "#0066ff", color: "white" }} size={"large"} key="1">
+                        <Link href={`/nft/${queryParam.sellToken}?tokenId=${queryParam.tokenId}`}><a><Button type="primary" style={{ background: "#0066ff", color: "white" }} size={"large"} key="1">
                           View my Token
                         </Button></a></Link>,
                         <Link href={"/"}><a><Button key="buy" size={"large"}>Go Home</Button></a></Link>
