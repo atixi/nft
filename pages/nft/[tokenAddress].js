@@ -1,4 +1,4 @@
-import { Dropdown, Image, Menu, message, Statistic, Tabs, Avatar, Result, Button, Spin } from "antd";
+import { Dropdown, Image, Menu, message, Modal, Statistic, Tabs, Avatar, Result, Button, Spin } from "antd";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -38,7 +38,7 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import CONSTANTS from "/Constants/productDetailsConstants";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { fetchOne, fetchBundle } from "/Utils/strapiApi";
-import { unixToHumanDate, buyOrder, cancelThisOffer, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestOffer, convertToUsd} from "/Utils/utils";
+import { unixToHumanDate, buyOrder, cancelThisOffer, acceptThisOffer, displayAddress, detectVideo, unixToMilSeconds, checkName, prevImage, findHighestOffer, convertToUsd} from "/Utils/utils";
 const { TabPane } = Tabs;
 import{FieldTimeOutlined} from "@ant-design/icons"
 import ReactPlayer from 'react-player';
@@ -189,9 +189,20 @@ async function cancelOffer(order, address){
         message.error("Offer not canceled");
       }
   }
-  // function cancelOffer(){
-  //   return 3;
-  // }
+  async function acceptOffer(order, address)
+  {
+    const accept = await acceptThisOffer(order, address);
+    if(accept != undefined)
+    {
+      message.success("Offer is accepted");
+      loadAgain()
+    }
+    else
+    {
+      message.error("Offer is not accepted");
+      message.error("accept");
+    }
+  }
   useEffect(() => {
     if (!queryParam) {
       return null;
@@ -403,6 +414,10 @@ async function cancelOffer(order, address){
                               <span>
                               {order.makerAccount.address == address ? 
                               <Button onClick={() => cancelOffer(order, address)} shape="round" size="small">{"Cancel"}</Button> : ""}
+                            </span>
+                            <span>
+                              {asset?.owner.address == address ? 
+                              <Button onClick={() => acceptOffer(order, address)} shape="round" size="small">{"Accept"}</Button> : ""}
                             </span>
                             </span>
                             
