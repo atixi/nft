@@ -9,6 +9,7 @@ import fromUnix from "date-fns/fromUnixTime";
 import * as Web3 from "web3";
 import { OpenSeaPort, Network, EventType } from "opensea-js";
 import { OrderSide } from "opensea-js/lib/types";
+import { isMobileDevice } from "Constants/constants";
 
 export const seaportProvider = new Web3.providers.HttpProvider(
   "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
@@ -324,6 +325,11 @@ export const isMetaMaskInstalled = () => {
 };
 
 export const requestUnlockMetamask = async (action) => {
+  if (isMobileDevice()) {
+    console.log("mobie");
+  } else {
+    console.log("not mobile");
+  }
   const { ethereum } = window;
   if (Boolean(ethereum)) {
     if (ethereum.isMetaMask) {
