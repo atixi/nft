@@ -8,7 +8,9 @@ import QRCodeModal from "@walletconnect/qrcode-modal";
 import Web3Modal from "web3modal";
 import { isMobileDevice, providerOptions } from "/Constants/constants";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-
+import Onboard from "bnc-onboard";
+import Web3 from "web3";
+import collectionArtifact from "./../../build/contracts/Rimable.json";
 import {
   checkFileType,
   checkForDuplicate,
@@ -25,6 +27,10 @@ import {
   getWalletToken,
 } from "store/action/accountSlice";
 import { useSelector } from "react-redux";
+import { useOnboard } from "use-onboard";
+
+let web3;
+
 const ERC721Collection = ({ collections }) => {
   const logoImageInputRef = useRef(null);
   const bannerImageInputRef = useRef(null);
@@ -50,6 +56,12 @@ const ERC721Collection = ({ collections }) => {
   const accountTokens = useSelector(getAccountTokens);
   const metaToken = useSelector(getMetaToken);
   const walletToken = useSelector(getWalletToken);
+
+  const { selectWallet, address, isWalletSelected, disconnectWallet, balance } =
+    useOnboard({
+      dappId: "2978c0ac-ae01-46c3-8054-9fc9ec2bfc2d", // optional API key
+      networkId: 4, // Ethereum network ID
+    });
 
   const openLogoFileChooser = (event) => {
     event.preventDefault();
@@ -163,8 +175,51 @@ const ERC721Collection = ({ collections }) => {
     setDisplayModalButtons(false);
     clearForm();
   };
+
+  const test = async () => {
+    let web3;
+    const onboard = Onboard({
+      dappId: "2978c0ac-ae01-46c3-8054-9fc9ec2bfc2d", // [String] The API key created by step one above
+      networkId: 4, // [Integer] The Ethereum network ID your Dapp uses.
+      subscriptions: {
+        wallet: (wallet) => {
+          web3 = new Web3(wallet.provider);
+          console.log("web is q", web3);
+        },
+      },
+    });
+    const selectResult = await onboard.walletSelect();
+
+    if (web3) {
+      const nftContract = new web3.eth.Contract(
+        collectionArtifact.abi,
+        "0xB0852fB56A49687642f4CaC0C18d7d8313EE2053",
+        {
+          gasLimit: "1000000",
+        }
+      );
+      const nftResult = await nftContract.methods
+        .mintTo(
+          "0x8CA35f878fD14992b58a18bEB484f721b1d07A33",
+          "https://gateway.pinata.cloud/ipfs/Qmar1qoaQpxZuPEz2mqjgLSJooeqe1zWhsxnLxeyqLcHms"
+        )
+        .send({ from: "0x8CA35f878fD14992b58a18bEB484f721b1d07A33" })
+        .once("transactionHash", function (hash) {
+          console.log("here is transaction nft hash ", hash);
+          transactionHash = hash;
+        })
+        .once("receipt", function (receipt) {
+          console.log("transaction onf nft receipt ", receipt);
+        })
+        .once("confirmation", function (confirmationNumber, receipt) {
+          console.log("configrmation nft number", confirmationNumber);
+        })
+        .on("error", console.error);
+    }
+  };
   useEffect(() => {
-    checkMetamaskUnlocked();
+    // checkMetamaskUnlocked();
+    test();
   }, [isMetaconnected]);
 
   const checkMetamaskUnlocked = async () => {

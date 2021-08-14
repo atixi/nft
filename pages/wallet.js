@@ -306,22 +306,22 @@ const Wallet = () => {
             </p>
           </div>
           <div className={styles.wallectContainer}>
-            {!isMobile && (
-              <div
-                className={styles.walletCard}
-                onClick={() => connectToMetamask("injected")}
-              >
-                <div className={styles.walletCardPopup}>
-                  <span>Most Popular</span>
-                </div>
-                <img
-                  width={28}
-                  height={28}
-                  src={"/images/walletIcons/metamask.svg"}
-                />
-                <div>Metamask</div>
+            {/* {isMobile && ( */}
+            <div
+              className={styles.walletCard}
+              onClick={() => connectToMetamask("injected")}
+            >
+              <div className={styles.walletCardPopup}>
+                <span>Most Popular</span>
               </div>
-            )}
+              <img
+                width={28}
+                height={28}
+                src={"/images/walletIcons/metamask.svg"}
+              />
+              <div>Metamask</div>
+            </div>
+            {/* )} */}
 
             <div className={styles.walletCard} onClick={onMobileConnect}>
               <div className={styles.walletCardPopup}>
