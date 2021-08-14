@@ -93,17 +93,15 @@ export async function makeOffer(
 }
 export async function buyOrder(asset, isBundle, order, accountAddress) {
   try {
-    const web3 = new Web3(provider);
-
     if (isBundle) {
-      const transactionHash = await seaport
+      const transactionHash = await seaport()
         .fulfillOrder({ order, accountAddress })
         .catch(() => {
           return "Error on buying the bundle";
         });
       return transactionHash;
     } else {
-      const order = await seaport.api
+      const order = await seaport().api
         .getOrder({
           side: OrderSide.Sell,
           asset_contract_address: asset.tokenAddress,
@@ -112,7 +110,7 @@ export async function buyOrder(asset, isBundle, order, accountAddress) {
         .catch(() => {
           return "Error getting order";
         });
-      const transactionHash = await seaport
+      const transactionHash = await seaport()
         .fulfillOrder({ order, accountAddress })
         .catch(() => {
           return "Error on buying the token";
