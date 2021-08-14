@@ -436,7 +436,17 @@ function Header(props) {
           <a href="#">{CONSTANTS.explore}</a>
         </li>
         <li className="d-none d-lg-flex">
-          <a href="#">{CONSTANTS.myItems}</a>
+          {(isMetaconnected || isWalletConnected) && (
+            <Link
+              href={{
+                pathname: `/profile/${
+                  metaToken[0] ? metaToken[0] : walletToken[0]
+                }`,
+              }}
+            >
+              <a>{"My Items"}</a>
+            </Link>
+          )}
         </li>
         <li className="d-none d-lg-flex">
           <a

@@ -9,6 +9,7 @@ import fromUnix from "date-fns/fromUnixTime";
 import * as Web3 from "web3";
 import { OpenSeaPort, Network, EventType } from "opensea-js";
 import { OrderSide } from "opensea-js/lib/types";
+import { isMobileDevice } from "Constants/constants";
 
 export const seaportProvider = new Web3.providers.HttpProvider(
   "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
@@ -76,52 +77,41 @@ export async function makeOffer(
       accountAddress,
       // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
       startAmount: offerData.price.amount,
-      referrerAddress
+      referrerAddress,
     });
   }
 }
 export async function buyOrder(asset, isBundle, order, accountAddress) {
-  try{
-  const web3 = new Web3(provider);
-  
-  if (isBundle) {
-    const transactionHash = await seaport
-      .fulfillOrder({ order, accountAddress })
-      .catch(() => {
-        return "Error on buying the bundle";
-      });
-    return transactionHash;
-  } else {
-    const order = await seaport.api
-      .getOrder({
-        side: OrderSide.Sell,
-        asset_contract_address: asset.tokenAddress,
-        token_id: asset.tokenId,
-      })
-      .catch(() => {
-        return "Error getting order";
-      });
-    const transactionHash = await seaport
-      .fulfillOrder({ order, accountAddress })
-      .catch(() => {
-        return "Error on buying the token";
-      });
-    return transactionHash;
-  }
-}
-catch(e){return e}
-}
-export async function acceptThisOffer(order, address)
-{
-  try{
-    const accountAddress = address // The owner's wallet address, also the taker
-    return await seaport.fulfillOrder({ order, accountAddress })
-  }
-  catch(e)
-  {
+  try {
+    const web3 = new Web3(provider);
+
+    if (isBundle) {
+      const transactionHash = await seaport
+        .fulfillOrder({ order, accountAddress })
+        .catch(() => {
+          return "Error on buying the bundle";
+        });
+      return transactionHash;
+    } else {
+      const order = await seaport.api
+        .getOrder({
+          side: OrderSide.Sell,
+          asset_contract_address: asset.tokenAddress,
+          token_id: asset.tokenId,
+        })
+        .catch(() => {
+          return "Error getting order";
+        });
+      const transactionHash = await seaport
+        .fulfillOrder({ order, accountAddress })
+        .catch(() => {
+          return "Error on buying the token";
+        });
+      return transactionHash;
+    }
+  } catch (e) {
     return e;
   }
-
 }
 export async function cancelThisOffer(order, accountAddress) {
   await seaport._dispatch(EventType.CancelOrder, { order, accountAddress });
@@ -173,112 +163,89 @@ export async function cancelThisOffer(order, accountAddress) {
   );
 }
 
-export async function sellOrder(tokenAddress, tokenId, address, contractAddress, orderValue, fixed)
-{
-  try{
-  if(fixed)
-  {
-    if(orderValue.switch.includeEnd)
-    {
-      if(orderValue.date.expirationTime == undefined)
-      return "Set the expiration time";
-      var date = new Date(orderValue.date.expirationTime);
-      var expirationTime = parseInt(date.getTime() / 1000);
-      var result = await seaport.createSellOrder({
-        asset: {
-          tokenId,
-          tokenAddress,
-        },
-        accountAddress:address,
-        startAmount: orderValue.price.amount,
-        endAmount: orderValue.price.endPrice,
-        expirationTime
-      })
-      provider.engine.stop();
-      return result;
-    }
-    else if(orderValue.switch.futureTime)
-    {
-      var date = new Date(orderValue.date.futureTime);
-      var listingTime = date.getTime() / 1000;
+export async function sellOrder(
+  tokenAddress,
+  tokenId,
+  address,
+  contractAddress,
+  orderValue,
+  fixed
+) {
+  try {
+    if (fixed) {
+      if (orderValue.switch.includeEnd) {
+        if (orderValue.date.expirationTime == undefined)
+          return "Set the expiration time";
+        var date = new Date(orderValue.date.expirationTime);
+        var expirationTime = parseInt(date.getTime() / 1000);
+        var result = await seaport.createSellOrder({
+          asset: {
+            tokenId,
+            tokenAddress,
+          },
+          accountAddress: address,
+          startAmount: orderValue.price.amount,
+          endAmount: orderValue.price.endPrice,
+          expirationTime,
+        });
+        provider.engine.stop();
+        return result;
+      } else if (orderValue.switch.futureTime) {
+        var date = new Date(orderValue.date.futureTime);
+        var listingTime = date.getTime() / 1000;
+        const result = await seaport.createSellOrder({
+          asset: {
+            tokenId,
+            tokenAddress,
+          },
+          accountAddress: address,
+          startAmount: orderValue.price.amount,
+          listingTime: listingTime,
+        });
+        provider.engine.stop();
+        return result;
+      } else {
+        const result = await seaport.createSellOrder({
+          asset: {
+            tokenId,
+            tokenAddress,
+          },
+          accountAddress: address,
+          startAmount: orderValue.price.amount,
+        });
+        provider.engine.stop();
+        return result;
+      }
+    } else {
+      const paymentTokenAddress = "0xc778417e063141139fce010982780140aa0cd5ab";
+      var date = new Date(orderValue.date.auctionExpirationTime);
+      var expirationTime = parseInt(
+        moment.duration(date).asMilliseconds() / 1000
+      );
+      console.log(expirationTime);
+
       const result = await seaport.createSellOrder({
         asset: {
           tokenId,
           tokenAddress,
         },
         accountAddress: address,
-        startAmount: orderValue.price.amount,
-        listingTime: listingTime,
-      })
+        startAmount: orderValue.price.minAmount,
+        expirationTime,
+        paymentTokenAddress,
+        waitForHighestBid: true,
+      });
       provider.engine.stop();
       return result;
     }
-    else
-    {
-        const result = await seaport.createSellOrder({
-          asset: {
-            tokenId,
-            tokenAddress,
-          },
-          accountAddress:address,
-          startAmount: orderValue.price.amount,
-        })
-        provider.engine.stop();
-        return result;
-    }
-  }
-  else
-  {
-    const paymentTokenAddress = "0xc778417e063141139fce010982780140aa0cd5ab"
-    var date = new Date(orderValue.date.auctionExpirationTime);
-    var expirationTime = parseInt(moment.duration(date).asMilliseconds() / 1000);
-    console.log(expirationTime)
-
-    const result = await seaport.createSellOrder({
-      asset: {
-        tokenId,
-        tokenAddress,
-      },
-      accountAddress: address,
-      startAmount: orderValue.price.minAmount,
-      expirationTime,
-      paymentTokenAddress,
-      waitForHighestBid: true
-    })
-    provider.engine.stop();
-    return result;
-  }
-  }
-  catch(e)
-  {
-    return e
+  } catch (e) {
+    return e;
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export function unixToHumanDate(date, saleEndDate)
-{
-  if(saleEndDate)
-  {
-  return moment.unix(date).format("LLLL");
+export function unixToHumanDate(date, saleEndDate) {
+  if (saleEndDate) {
+    return moment.unix(date).format("LLLL");
   }
   return moment.unix(date).format("DD-MM-YYYY HH:m:s A");
 }
@@ -334,12 +301,58 @@ export function detectVideo(url) {
   else return false;
 }
 
-export const slugify = (str) => {
-  return str
+/**
+ * this function is for generating slug for collection
+ * @param string The name of collection
+ */
+export const slugify = (string) => {
+  return string
     .trim()
     .toLowerCase()
     .replace(/^-+/g, "")
     .replace(/[^\w-]+/g, "-")
     .replace(/-+/g, "-")
     .replace(/-+$/g, "");
+};
+
+/**
+ * this function checks if metamask is installed or not
+ * return true or false
+ */
+export const isMetaMaskInstalled = () => {
+  const { ethereum } = window;
+  return Boolean(ethereum && ethereum.isMetaMask);
+};
+
+export const requestUnlockMetamask = async (action) => {
+  if (isMobileDevice()) {
+    console.log("mobie");
+  } else {
+    console.log("not mobile");
+  }
+  const { ethereum } = window;
+  if (Boolean(ethereum)) {
+    if (ethereum.isMetaMask) {
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log("accounts are account", accounts);
+      if (accounts.length > 0) {
+        return {
+          unlockAccepted: true,
+          message: `You have to unlock your account ${action} `,
+          action,
+          account: accounts[0],
+        };
+      } else {
+        return {
+          unlockAccepted: false,
+          message: `You Have Rejcted to unlock your Account ${action}`,
+          account: null,
+        };
+      }
+    }
+  } else {
+    alert("install metamask extension first");
+  }
 };
