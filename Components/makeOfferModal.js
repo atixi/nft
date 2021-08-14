@@ -194,7 +194,7 @@ function showInfo(asset)
                       {<span>{"Your balance"}</span>}
                     </List.Item>
                     <List.Item>
-                    <Checkbox onChange={onChange}>Accept the terms and policy</Checkbox>
+                    <Checkbox onChange={onChange}>Accept the {<a href={"#"}>Terms</a>} and {<a href={"/docs/privacy.pdf"}>Privacy policy</a>}</Checkbox>
                     </List.Item>
                 </List>
                 </>
