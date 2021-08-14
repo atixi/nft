@@ -16,11 +16,6 @@ export const seaportProvider = new Web3.providers.HttpProvider(
   "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
   // 'https://rinkeby-api.opensea.io/api/v1/'
 );
-const HDWalletProvider = require("@truffle/hdwallet-provider");
-const mnemonicPhrase =
-  "decrease lucky scare inherit trick soap snack smooth actress theory quote comic";
-const pollingInterval = 500000;
-const RINKEBY_NODE_URL = `https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31`;
 export function seaport()
 {
   const provider = window.ethereum;
@@ -116,7 +111,7 @@ export async function acceptThisOffer(order, address)
   {
     return e;
   }
-
+}
 export async function cancelThisOffer(order, accountAddress) {
   await seaport()._dispatch(EventType.CancelOrder, { order, accountAddress });
 
