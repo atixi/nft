@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { useEffect, useRef, useState, useReducer } from "react";
 import styles from "/styles/erc721.module.css";
 import {
@@ -22,6 +23,8 @@ import {
   uploadNft,
   validateImage,
 } from "Utils/mintApi";
+import { useSelector } from "react-redux";
+import { getMetaConnected } from "store/action/accountSlice";
 
 const initNft = {
   tokenId: null,
@@ -46,12 +49,14 @@ const ERC721 = ({ collections, categories, nfts }) => {
   const [duplicateNameError, setDuplicateNameError] = useState();
   const [selectedCategories, setSelectedCategories] = useState();
   const [displayUploadModal, setDisplayUploadModal] = useState(false);
+  const [displayUnlockModal, setDisplayUnlockModal] = useState(false);
 
   const [nftData, setNftData] = useState(initNft);
   const [uploadFileUrl, setUploadFileUrl] = useState("");
   const [nftImageFile, setNftImageFile] = useState();
   const [isLoading, setLoading] = useState(false);
   const [uploadPrecentage, setUploadPrecentage] = useState(0);
+  const isMetaconnected = useSelector(getMetaConnected);
 
   const getSelectedCollection = (colId) => {
     const selected = collections.filter((item) => item.id === colId)[0];
@@ -90,7 +95,12 @@ const ERC721 = ({ collections, categories, nfts }) => {
 
   const checkNftNameDuplication = (e) => {
     let input = e.target.value;
-    const nftDuplicationResult = checkForDuplicate(nfts, input, "name");
+    const nftDuplicationResult = checkForDuplicate(
+      nfts,
+      input,
+      "name",
+      "Asset Name"
+    );
     setDuplicateNameError(nftDuplicationResult);
   };
 
@@ -150,11 +160,73 @@ const ERC721 = ({ collections, categories, nfts }) => {
     }
   };
   useEffect(() => {
-    // console.log("rinkey", RINKEBY_NODE_URL_WSS);
-  }, []);
+    checkMetamaskUnlocked();
+  }, [isMetaconnected]);
+
+  const checkMetamaskUnlocked = async () => {
+    const { ethereum } = window;
+    if (ethereum && ethereum.isMetaMask) {
+      console.log("is metamask connected ", isMetaconnected);
+      if (!isMetaconnected) {
+        setDisplayUnlockModal(true);
+      }
+    } else {
+      if (!isMobileDevice()) {
+        alert("Please install MetaMask!");
+      } else {
+        alert("Please install Metamask for Mobile!");
+      }
+    }
+  };
   return (
     <div className={styles.container}>
       <div>
+        <Modal
+          title="Unlock Wallet To Create Collection"
+          visible={displayUnlockModal}
+          header={null}
+          footer={null}
+          closable={false}
+          width={500}
+          height={500}
+          maskStyle={{
+            backgroundColor: "#EEEEEE",
+            opacity: 0.1,
+          }}
+          bodyStyle={{
+            height: 350,
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+          }}
+        >
+          <div className={styles.modalContent}>
+            <div className={styles.modalControls}>
+              <Link
+                href={{
+                  pathname: `/`,
+                }}
+              >
+                <a>
+                  <span className={styles.linkButton}>{"Go To Main Page"}</span>
+                </a>
+              </Link>
+              <Link
+                href={{
+                  pathname: `/wallet`,
+                }}
+              >
+                <a>
+                  {
+                    <span className={styles.linkButton}>
+                      {"Connect with Wallet"}
+                    </span>
+                  }
+                </a>
+              </Link>
+            </div>
+          </div>
+        </Modal>
         <Modal
           title="Uploading NFT..."
           visible={displayUploadModal}
@@ -198,7 +270,13 @@ const ERC721 = ({ collections, categories, nfts }) => {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
-          <div className={styles.nftFileUploadContainer}>
+          <div
+            className={
+              !uploadFileUrl
+                ? styles.nftFileUploadContainer
+                : [styles.nftFileUploadContainer, styles.autoHeight].join(" ")
+            }
+          >
             {uploadFileUrl ? (
               <div className={styles.nftMediaContainer}>
                 {nftImageFile.type.toString().includes("image") ? (
