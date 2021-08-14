@@ -48,20 +48,6 @@ import { useSelector } from "react-redux";
 import { getAccountTokens, getWalletConnected, getMetaConnected } from "store/action/accountSlice";
 
 const { Countdown } = Statistic;
-const menu = (
-  <DropdownMenu className={"mt-3"}>
-    <Menu.Item>
-      <ItemLink>
-        <span>{"New Offer"}</span>
-      </ItemLink>
-    </Menu.Item>
-    <Menu.Item>
-      <ItemLink>
-        <span>{"View on OpenSea"}</span>
-      </ItemLink>
-    </Menu.Item>
-  </DropdownMenu>
-);
 function ProductPage() {
   const queryParam = useQueryParam();
   const [asset, setAsset] = useState({});
@@ -265,37 +251,6 @@ async function cancelOffer(order, address){
             <ItemDetails>
               <ItemDetailsHeader>
                 <ItemName>{asset.name ? asset.name : asset.collection?.name}</ItemName>
-                <ItemTopButtonContainer>
-                  <button
-                    style={{
-                      flex: "none",
-                      padding: "0px !important",
-                      width: "35px",
-                    }}
-                  >
-                    <Dropdown
-                      overlay={menu}
-                      placement="bottomLeft"
-                      trigger={["click"]}
-                    >
-                      <svg
-                        style={{ marginLeft: "-5px", color: "gray" }}
-                        viewBox="1 2 14 4"
-                        fill="none"
-                        width="13.200000000000001"
-                        height="13.200000000000001"
-                        xlmns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z"
-                          fill="currentColor"
-                        ></path>
-                      </svg>
-                    </Dropdown>
-                  </button>
-                </ItemTopButtonContainer>
               </ItemDetailsHeader>
               <div>
                 <span className="text-gradient"> 
