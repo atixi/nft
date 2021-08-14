@@ -10,6 +10,7 @@ import * as Web3 from "web3";
 import { OpenSeaPort, Network, EventType } from "opensea-js";
 import { OrderSide } from "opensea-js/lib/types";
 import { isMobileDevice } from "Constants/constants";
+import detectEthereumProvider from "@metamask/detect-provider";
 
 export const seaportProvider = new Web3.providers.HttpProvider(
   "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
@@ -30,10 +31,20 @@ const provider = new HDWalletProvider({
 });
 const web3 = new Web3(provider);
 
-const seaport = new OpenSeaPort(provider, {
-  networkName: Network.Rinkeby,
-  apiKey: "c2dde5d7c0a0465a8e994f711a3a3c31",
-});
+// const seaport = new OpenSeaPort(provider, {
+//   networkName: Network.Rinkeby,
+//   apiKey: "c2dde5d7c0a0465a8e994f711a3a3c31",
+// });
+export function seaport()
+{
+  const provider1 = window.ethereum;
+  // const web3 = new Web3(window.ethereum)
+  const seaport = new OpenSeaPort(provider1, {
+    networkName: Network.Rinkeby,
+    // apiKey: "c2dde5d7c0a0465a8e994f711a3a3c31",
+  });
+  return seaport;
+}
 export async function makeOffer(
   offerData,
   asset,
@@ -59,16 +70,15 @@ export async function makeOffer(
         Date.now() / 1000 + (offerData.dateTime.days * 24 * 60 * 60 + timme)
       );
     }
-    return await seaport.createBundleBuyOrder({
+    return await seaport().createBundleBuyOrder({
       assets,
       accountAddress,
       startAmount: offerData.price.amount,
-      // Optional expiration time for the order, in Unix time (seconds):
       expirationTime: parseInt(expirationTime),
     });
   } else {
     const referrerAddress = "0xe897B93557fb7D5B4dcA627a55181E52152cF035";
-    return await seaport.createBuyOrder({
+    return await seaport().createBuyOrder({
       asset: {
         tokenId,
         tokenAddress,
