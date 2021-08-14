@@ -188,3 +188,6 @@ export const getTalentAccount = async (account) => {
     };
   return accountResult.data;
 };
+
+export const allowedImageTypes =
+  "image/png,image/gif,image/jpeg,image/jpeg,image/gif,image/svg+xml";

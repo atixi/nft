@@ -2,17 +2,36 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "/styles/erc721.module.css";
 import { Input, Button, Form, Spin, Modal } from "antd";
 import { fetch } from "/Utils/strapiApi";
-import { checkFileType, deployCollection } from "Utils/mintApi";
-import { getAccount } from "Utils/openseaApi";
-import { getTalentAccount } from "Constants/constants";
+import Link from "next/link";
+import WalletConnect from "@walletconnect/client";
+import QRCodeModal from "@walletconnect/qrcode-modal";
+import Web3Modal from "web3modal";
+import { isMobileDevice, providerOptions } from "/Constants/constants";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+
+import {
+  checkFileType,
+  checkForDuplicate,
+  deployCollection,
+} from "Utils/mintApi";
+import { allowedImageTypes } from "Constants/constants";
+import detectEthereumProvider from "@metamask/detect-provider";
+import { requestUnlockMetamask } from "Utils/utils";
+import {
+  getAccountTokens,
+  getMetaConnected,
+  getMetaToken,
+  getWalletConnected,
+  getWalletToken,
+} from "store/action/accountSlice";
+import { useSelector } from "react-redux";
 const ERC721Collection = ({ collections }) => {
   const logoImageInputRef = useRef(null);
   const bannerImageInputRef = useRef(null);
   const formRef = React.createRef();
   const [logoError, setLogoError] = useState();
   const [bannerError, setBannerError] = useState();
-  const [collectionError, setCollectionError] = useState(false);
-  const [isDuplicate, setIsDuplicate] = useState(false);
+  const [duplicateNameError, setDuplicateNameError] = useState();
   const [logoImageUrl, setLogoImageUrl] = useState("");
   const [bannerImageUrl, setBannerImageUrl] = useState("");
   const [logoImageFile, setLogoImageFile] = useState();
@@ -20,6 +39,17 @@ const ERC721Collection = ({ collections }) => {
   const [isLoading, setLoading] = useState(false);
   const [uploadPrecentage, setUploadPrecentage] = useState(0);
   const [displayUploadModal, setDisplayUploadModal] = useState(false);
+  const [displayModalButtons, setDisplayModalButtons] = useState();
+  const [newCollectionSlug, setNewCollectionSlug] = useState();
+
+  const [displayUnlockModal, setDisplayUnlockModal] = useState(false);
+  const [mobileModal, setMobileModal] = useState(null);
+
+  const isMetaconnected = useSelector(getMetaConnected);
+  const isWalletConnected = useSelector(getWalletConnected);
+  const accountTokens = useSelector(getAccountTokens);
+  const metaToken = useSelector(getMetaToken);
+  const walletToken = useSelector(getWalletToken);
 
   const openLogoFileChooser = (event) => {
     event.preventDefault();
@@ -38,15 +68,36 @@ const ERC721Collection = ({ collections }) => {
     console.log("file type is ", typeResult.isTypeValid);
     if (imageFile) {
       if (targetInput == "logoImageFile") {
-        setLogoError(null);
+        const logoType = checkFileType(imageFile);
+        if (logoType.mediaType != "image") {
+          setLogoError("Only Images are allowed as Collection Image");
+        } else {
+          setLogoError(null);
+        }
         setLogoImageFile(imageFile);
         setLogoImageUrl(URL.createObjectURL(imageFile));
       } else if (targetInput == "bannerImageFile") {
-        setBannerError(null);
+        const bannerType = checkFileType(imageFile);
+        if (bannerType.mediaType != "image") {
+          setBannerError("Only Images Are allowed as Collection Banner");
+        } else {
+          setBannerError(null);
+        }
         setBannerImageFile(imageFile);
         setBannerImageUrl(URL.createObjectURL(imageFile));
       }
     }
+  };
+
+  const checkCollectionNameDuplication = (e) => {
+    let input = e.target.value;
+    const duplicationResult = checkForDuplicate(
+      collections,
+      input,
+      "collection",
+      "Collection Name"
+    );
+    setDuplicateNameError(duplicationResult);
   };
 
   const clearForm = () => {
@@ -68,56 +119,36 @@ const ERC721Collection = ({ collections }) => {
       setBannerError("Banner Image is Required");
     }
 
-    if (logoImageFile && bannerImageFile && !isDuplicate) {
+    if (
+      logoImageFile &&
+      bannerImageFile &&
+      !duplicateNameError.isDuplicate &&
+      logoError == null &&
+      bannerError == null
+    ) {
       setDisplayUploadModal(true);
-      console.log("values are valide ", values);
+      console.log("values are ready ", values);
       (async function () {
-        const result = await saveCollection(
+        const result = await deployCollection(
           logoImageFile,
           bannerImageFile,
           values
         );
-        if (result.success) {
-          console.log(result.message);
-          clearForm();
+        console.log("result of rejection is ", result);
+        if (!result.rejected && result.data) {
+          const slug = result.data.slug;
+          setNewCollectionSlug(slug);
+          setDisplayModalButtons(true);
+        } else if (result.rejected) {
           setDisplayUploadModal(false);
+          setDisplayModalButtons(false);
+        } else {
+          console.log("reult is ", result);
         }
       })();
     }
   };
 
-  const saveCollection = async (logoImageFile, bannerImageFile, values) => {
-    const result = await deployCollection(
-      logoImageFile,
-      bannerImageFile,
-      values
-    );
-    if (result) {
-      return result;
-    } else {
-      return {
-        success: false,
-        message: "Collection not uploaded",
-      };
-    }
-  };
-
-  const checkCollectionDuplicate = (e) => {
-    console.log("value is value", e.target.value.toString().trim());
-    let input = e.target.value;
-
-    const isDuplicate = collections.some(
-      (collection) => collection.collection == e.target.value.toString().trim()
-    );
-    console.log("duplicate is ", isDuplicate);
-    if (isDuplicate == true) {
-      setIsDuplicate(true);
-      setCollectionError("× Collection name is already taken");
-    } else {
-      setIsDuplicate(false);
-      setCollectionError("✔ This Collection name is available.");
-    }
-  };
   const onFinishFailed = (errorInfo) => {
     if (!logoImageFile) {
       setLogoError("Logo Image is Required");
@@ -127,10 +158,78 @@ const ERC721Collection = ({ collections }) => {
     }
   };
 
-  useEffect(() => {}, []);
+  const handleNewCollection = () => {
+    setDisplayUploadModal(false);
+    setDisplayModalButtons(false);
+    clearForm();
+  };
+  useEffect(() => {
+    checkMetamaskUnlocked();
+  }, [isMetaconnected]);
 
+  const checkMetamaskUnlocked = async () => {
+    const { ethereum } = window;
+    if (ethereum && ethereum.isMetaMask) {
+      console.log("is metamask connected ", isMetaconnected);
+      if (!isMetaconnected) {
+        setDisplayUnlockModal(true);
+      }
+    } else {
+      if (!isMobileDevice()) {
+        alert("Please install MetaMask!");
+      } else {
+        alert("Please install Metamask for Mobile!");
+      }
+    }
+  };
   return (
     <div className={styles.container}>
+      <Modal
+        title="Unlock Wallet To Create Collection"
+        visible={displayUnlockModal}
+        header={null}
+        footer={null}
+        closable={false}
+        width={500}
+        height={500}
+        maskStyle={{
+          backgroundColor: "#EEEEEE",
+          opacity: 0.1,
+        }}
+        bodyStyle={{
+          height: 350,
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
+        <div className={styles.modalContent}>
+          <div className={styles.modalControls}>
+            <Link
+              href={{
+                pathname: `/`,
+              }}
+            >
+              <a>
+                <span className={styles.linkButton}>{"Go To Main Page"}</span>
+              </a>
+            </Link>
+            <Link
+              href={{
+                pathname: `/wallet`,
+              }}
+            >
+              <a>
+                {
+                  <span className={styles.linkButton}>
+                    {"Connect with Wallet"}
+                  </span>
+                }
+              </a>
+            </Link>
+          </div>
+        </div>
+      </Modal>
       <Modal
         title="Uploading Collection..."
         visible={displayUploadModal}
@@ -150,11 +249,33 @@ const ERC721Collection = ({ collections }) => {
           alignContent: "center",
         }}
       >
-        <div className={styles.waitingSpiner}>
-          <div className={styles.deplyingMessage}>
-            {"Please Be Patient It may take serveral minutes"}
-          </div>
-          <Spin size="large" />
+        <div className={styles.modalContent}>
+          {!displayModalButtons ? (
+            <div className={styles.waitingSpiner}>
+              <div className={styles.deplyingMessage}>
+                {"Please Be Patient It may take serveral minutes"}
+              </div>
+              <Spin size="large" />
+            </div>
+          ) : (
+            <div className={styles.modalControls}>
+              <Button
+                type="primary"
+                className={styles.modalButton}
+                onClick={handleNewCollection}
+              >
+                New Collection
+              </Button>
+              <Link
+                className={styles.modalButton}
+                href={{
+                  pathname: `/collection/${newCollectionSlug}`,
+                }}
+              >
+                <a>{"View Collection"}</a>
+              </Link>
+            </div>
+          )}
         </div>
       </Modal>
       <div className={styles.nftFormContainer}>
@@ -198,6 +319,7 @@ const ERC721Collection = ({ collections }) => {
               <input
                 rules={[{ required: true }]}
                 type="file"
+                accept={allowedImageTypes}
                 name="logoImageFile"
                 onChange={handleFileUpload}
                 ref={logoImageInputRef}
@@ -238,6 +360,7 @@ const ERC721Collection = ({ collections }) => {
               <input
                 rules={[{ required: true }]}
                 type="file"
+                accept={allowedImageTypes}
                 name="bannerImageFile"
                 onChange={handleFileUpload}
                 ref={bannerImageInputRef}
@@ -248,30 +371,29 @@ const ERC721Collection = ({ collections }) => {
           <div className={styles.nftInputComponent}>
             <h3 className={styles.nftSubHeader}>Collection Name *</h3>
             <Form.Item
-              name="name"
+              name="collection"
               rules={[
                 {
                   required: true,
                   message: "Please input your Collection Name!",
                 },
               ]}
+              onInput={checkCollectionNameDuplication}
             >
               <Input
-                name="name"
-                id="name"
+                id="collection"
                 placeholder="Collection Name"
-                onInput={checkCollectionDuplicate}
                 className={styles.nftInput}
               />
             </Form.Item>
             <div
               className={
-                collectionError == "× Collection name is already taken"
+                duplicateNameError?.message.includes("×")
                   ? styles.nftFormErrors
                   : styles.nftFormValid
               }
             >
-              {collectionError}
+              {duplicateNameError?.message}
             </div>
           </div>
           <div className={styles.nftInputComponent}>
@@ -281,7 +403,10 @@ const ERC721Collection = ({ collections }) => {
                 "OpenSea will include a link to this URL. You are welcome to link to your own webpage with more details."
               }
             </p>
-            <Form.Item name="external_link" rules={[{ required: false }]}>
+            <Form.Item
+              name="external_link"
+              rules={[{ required: true, message: "External Link is required" }]}
+            >
               <Input
                 name="external_link"
                 id="external_link"

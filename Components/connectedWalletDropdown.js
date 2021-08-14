@@ -158,9 +158,7 @@ function WalletInfoDropdown({ data }) {
           }}
         >
           <Link href={"#"}>
-            <a>
-              <small>{CONSTANTS.setDisplay}</small>
-            </a>
+            <a>{/* <small>{CONSTANTS.setDisplay}</small> */}</a>
           </Link>
         </span>
       </Label>
@@ -178,7 +176,7 @@ function WalletInfoDropdown({ data }) {
             }
           />
         </List.Item>
-        <List.Item
+        {/* <List.Item
           extra={
             <Button>
               <SwapOutlined />
@@ -208,7 +206,7 @@ function WalletInfoDropdown({ data }) {
               </ListDescription>
             }
           />
-        </List.Item>
+        </List.Item> */}
       </List>
       <hr />
       <Menu.Item key={"1"}>
