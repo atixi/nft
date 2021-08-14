@@ -106,6 +106,17 @@ export async function buyOrder(asset, isBundle, order, accountAddress) {
     return e;
   }
 }
+export async function acceptThisOffer(order, address)
+{
+  try{
+    const accountAddress = address // The owner's wallet address, also the taker
+    return await seaport().fulfillOrder({ order, accountAddress })
+  }
+  catch(e)
+  {
+    return e;
+  }
+
 export async function cancelThisOffer(order, accountAddress) {
   await seaport()._dispatch(EventType.CancelOrder, { order, accountAddress });
 
