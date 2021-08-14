@@ -10,30 +10,21 @@ import * as Web3 from "web3";
 import { OpenSeaPort, Network, EventType } from "opensea-js";
 import { OrderSide } from "opensea-js/lib/types";
 import { isMobileDevice } from "Constants/constants";
+import detectEthereumProvider from "@metamask/detect-provider";
 
 export const seaportProvider = new Web3.providers.HttpProvider(
   "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
   // 'https://rinkeby-api.opensea.io/api/v1/'
 );
-const HDWalletProvider = require("@truffle/hdwallet-provider");
-const mnemonicPhrase =
-  "decrease lucky scare inherit trick soap snack smooth actress theory quote comic";
-const pollingInterval = 500000;
-const RINKEBY_NODE_URL = `https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31`;
-// const provider = new HDWalletProvider(mnemonicPhrase, RINKEBY_NODE_URL, pollingInterval);
-const provider = new HDWalletProvider({
-  mnemonic: {
-    phrase: mnemonicPhrase,
-  },
-  providerOrUrl: RINKEBY_NODE_URL,
-  pollingInterval: 200000,
-});
-const web3 = new Web3(provider);
-
-const seaport = new OpenSeaPort(provider, {
-  networkName: Network.Rinkeby,
-  apiKey: "c2dde5d7c0a0465a8e994f711a3a3c31",
-});
+export function seaport()
+{
+  const provider = window.ethereum;
+  const seaport = new OpenSeaPort(provider, {
+    networkName: Network.Rinkeby,
+    // apiKey: "c2dde5d7c0a0465a8e994f711a3a3c31",
+  });
+  return seaport;
+}
 export async function makeOffer(
   offerData,
   asset,
@@ -59,16 +50,15 @@ export async function makeOffer(
         Date.now() / 1000 + (offerData.dateTime.days * 24 * 60 * 60 + timme)
       );
     }
-    return await seaport.createBundleBuyOrder({
+    return await seaport().createBundleBuyOrder({
       assets,
       accountAddress,
       startAmount: offerData.price.amount,
-      // Optional expiration time for the order, in Unix time (seconds):
       expirationTime: parseInt(expirationTime),
     });
   } else {
     const referrerAddress = "0xe897B93557fb7D5B4dcA627a55181E52152cF035";
-    return await seaport.createBuyOrder({
+    return await seaport().createBuyOrder({
       asset: {
         tokenId,
         tokenAddress,
@@ -83,17 +73,15 @@ export async function makeOffer(
 }
 export async function buyOrder(asset, isBundle, order, accountAddress) {
   try {
-    const web3 = new Web3(provider);
-
     if (isBundle) {
-      const transactionHash = await seaport
+      const transactionHash = await seaport()
         .fulfillOrder({ order, accountAddress })
         .catch(() => {
           return "Error on buying the bundle";
         });
       return transactionHash;
     } else {
-      const order = await seaport.api
+      const order = await seaport().api
         .getOrder({
           side: OrderSide.Sell,
           asset_contract_address: asset.tokenAddress,
@@ -102,7 +90,7 @@ export async function buyOrder(asset, isBundle, order, accountAddress) {
         .catch(() => {
           return "Error getting order";
         });
-      const transactionHash = await seaport
+      const transactionHash = await seaport()
         .fulfillOrder({ order, accountAddress })
         .catch(() => {
           return "Error on buying the token";
@@ -113,12 +101,23 @@ export async function buyOrder(asset, isBundle, order, accountAddress) {
     return e;
   }
 }
+export async function acceptThisOffer(order, address)
+{
+  try{
+    const accountAddress = address // The owner's wallet address, also the taker
+    return await seaport().fulfillOrder({ order, accountAddress })
+  }
+  catch(e)
+  {
+    return e;
+  }
+}
 export async function cancelThisOffer(order, accountAddress) {
-  await seaport._dispatch(EventType.CancelOrder, { order, accountAddress });
+  await seaport()._dispatch(EventType.CancelOrder, { order, accountAddress });
 
-  const gasPrice = await seaport._computeGasPrice();
+  const gasPrice = await seaport()._computeGasPrice();
   const transactionHash =
-    await seaport._wyvernProtocol.wyvernExchange.cancelOrder_.sendTransactionAsync(
+    await seaport()._wyvernProtocol.wyvernExchange.cancelOrder_.sendTransactionAsync(
       [
         order.exchange,
         order.maker,
@@ -152,12 +151,12 @@ export async function cancelThisOffer(order, accountAddress) {
       { from: accountAddress, gasPrice }
     );
 
-  await seaport._confirmTransaction(
+  await seaport()._confirmTransaction(
     transactionHash.toString(),
     EventType.CancelOrder,
     "Cancelling order",
     async () => {
-      const isOpen = await seaport._validateOrder(order);
+      const isOpen = await seaport()._validateOrder(order);
       return !isOpen;
     }
   );
@@ -178,7 +177,7 @@ export async function sellOrder(
           return "Set the expiration time";
         var date = new Date(orderValue.date.expirationTime);
         var expirationTime = parseInt(date.getTime() / 1000);
-        var result = await seaport.createSellOrder({
+        var result = await seaport().createSellOrder({
           asset: {
             tokenId,
             tokenAddress,
@@ -193,7 +192,7 @@ export async function sellOrder(
       } else if (orderValue.switch.futureTime) {
         var date = new Date(orderValue.date.futureTime);
         var listingTime = date.getTime() / 1000;
-        const result = await seaport.createSellOrder({
+        const result = await seaport().createSellOrder({
           asset: {
             tokenId,
             tokenAddress,
@@ -205,7 +204,7 @@ export async function sellOrder(
         provider.engine.stop();
         return result;
       } else {
-        const result = await seaport.createSellOrder({
+        const result = await seaport().createSellOrder({
           asset: {
             tokenId,
             tokenAddress,
@@ -224,7 +223,7 @@ export async function sellOrder(
       );
       console.log(expirationTime);
 
-      const result = await seaport.createSellOrder({
+      const result = await seaport().createSellOrder({
         asset: {
           tokenId,
           tokenAddress,
