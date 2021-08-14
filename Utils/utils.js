@@ -124,11 +124,11 @@ export async function buyOrder(asset, isBundle, order, accountAddress) {
   }
 }
 export async function cancelThisOffer(order, accountAddress) {
-  await seaport._dispatch(EventType.CancelOrder, { order, accountAddress });
+  await seaport()._dispatch(EventType.CancelOrder, { order, accountAddress });
 
-  const gasPrice = await seaport._computeGasPrice();
+  const gasPrice = await seaport()._computeGasPrice();
   const transactionHash =
-    await seaport._wyvernProtocol.wyvernExchange.cancelOrder_.sendTransactionAsync(
+    await seaport()._wyvernProtocol.wyvernExchange.cancelOrder_.sendTransactionAsync(
       [
         order.exchange,
         order.maker,
@@ -162,12 +162,12 @@ export async function cancelThisOffer(order, accountAddress) {
       { from: accountAddress, gasPrice }
     );
 
-  await seaport._confirmTransaction(
+  await seaport()._confirmTransaction(
     transactionHash.toString(),
     EventType.CancelOrder,
     "Cancelling order",
     async () => {
-      const isOpen = await seaport._validateOrder(order);
+      const isOpen = await seaport()._validateOrder(order);
       return !isOpen;
     }
   );
