@@ -25,6 +25,7 @@ import {
 } from "Utils/mintApi";
 import { useSelector } from "react-redux";
 import { getMetaConnected, getMetaToken } from "store/action/accountSlice";
+import { isMobileDevice } from "Constants/constants";
 
 const initNft = {
   tokenId: null,
@@ -175,7 +176,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
       if (!isMobileDevice()) {
         alert("Please install MetaMask!");
       } else {
-        alert("Please install Metamask for Mobile!");
+        // alert("Please install Metamask for Mobile!");
       }
     }
   };

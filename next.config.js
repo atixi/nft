@@ -22,6 +22,7 @@ module.exports = {
     OWNER_ADDRESS: process.env.OWNER_ADDRESS,
     RINKEBY_PROXY_ADDRESS: process.env.RINKEBY_PROXY_ADDRESS,
     MAIN_NET_PROXY_ADDRESS: process.env.MAIN_NET_PROXY_ADDRESS,
+    ONBOARD_API_KEY: process.env.ONBOARD_API_KEY,
     PINATA_API_KEY: process.env.PINATA_API_KEY,
     PINATA_SECRET_KEY: process.env.PINATA_SECRET_KEY,
     PINTA_JWT: process.env.PINTA_JWT,

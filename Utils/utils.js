@@ -11,13 +11,12 @@ import { OpenSeaPort, Network, EventType } from "opensea-js";
 import { OrderSide } from "opensea-js/lib/types";
 import { isMobileDevice } from "Constants/constants";
 import detectEthereumProvider from "@metamask/detect-provider";
-
+import Onboard from "bnc-onboard";
 export const seaportProvider = new Web3.providers.HttpProvider(
   "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
   // 'https://rinkeby-api.opensea.io/api/v1/'
 );
-export function seaport()
-{
+export function seaport() {
   const provider = window.ethereum;
   const seaport = new OpenSeaPort(provider, {
     networkName: Network.Rinkeby,
@@ -81,8 +80,8 @@ export async function buyOrder(asset, isBundle, order, accountAddress) {
         });
       return transactionHash;
     } else {
-      const order = await seaport().api
-        .getOrder({
+      const order = await seaport()
+        .api.getOrder({
           side: OrderSide.Sell,
           asset_contract_address: asset.tokenAddress,
           token_id: asset.tokenId,
@@ -101,14 +100,11 @@ export async function buyOrder(asset, isBundle, order, accountAddress) {
     return e;
   }
 }
-export async function acceptThisOffer(order, address)
-{
-  try{
-    const accountAddress = address // The owner's wallet address, also the taker
-    return await seaport().fulfillOrder({ order, accountAddress })
-  }
-  catch(e)
-  {
+export async function acceptThisOffer(order, address) {
+  try {
+    const accountAddress = address; // The owner's wallet address, also the taker
+    return await seaport().fulfillOrder({ order, accountAddress });
+  } catch (e) {
     return e;
   }
 }
@@ -355,3 +351,34 @@ export const requestUnlockMetamask = async (action) => {
     alert("install metamask extension first");
   }
 };
+
+export function initOnboard(subscriptions) {
+  const onboard = Onboard;
+  return onboard({
+    dappId: process.env.ONBOARD_API_KEY,
+    hideBranding: false,
+    networkId: 4,
+    darkMode: true,
+    subscriptions,
+    walletSelect: {
+      wallets: [
+        {
+          walletName: "metamask",
+          rpcUrl:
+            "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31",
+        },
+        // {
+        //   walletName: 'walletConnect',
+        //   infuraKey: 'cea9deb6467748b0b81b920b005c10c1'
+        // },
+      ],
+    },
+    walletCheck: [
+      { checkName: "derivationPath" },
+      { checkName: "connect" },
+      { checkName: "accounts" },
+      { checkName: "network" },
+      { checkName: "balance", minimumBalance: "100000" },
+    ],
+  });
+}
