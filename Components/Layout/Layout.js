@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import styles from "/styles/erc721.module.css";
+import Onboard from "bnc-onboard";
 import {
   setAccountTokens,
   setMetaToken,
@@ -22,8 +24,10 @@ import Web3 from "web3";
 import { OpenSeaPort, Network } from "opensea-js";
 import { seaportProvider } from "/Utils/openseaApi";
 import openseaApi from "Utils/openseaApi";
-import {providers} from "/Constants/constants" 
-import {Modal} from "antd"
+import { providers } from "/Constants/constants";
+import { Modal } from "antd";
+import Link from "next/link";
+import { isMobileDevice } from "Constants/constants";
 // This example provider won't let you make transactions, only read-only calls:
 
 const seaport = new OpenSeaPort(seaportProvider, {
@@ -44,16 +48,23 @@ const Layout = ({ children }) => {
   const walletToken = useSelector(getWalletToken);
   const isMetaconnected = useSelector(getMetaConnected);
   const isWalletConnected = useSelector(getWalletConnected);
-  const [isWrongNet, setIsWrongNet] = useState(false)
+  const [isWrongNet, setIsWrongNet] = useState(false);
   const router = useRouter();
   const [displayHeader, setDisplayHeader] = useState(true);
-  const [network, setNetwork] = useState(null)
-
+  const [network, setNetwork] = useState(null);
+  const [displayUnlockModal, setDisplayUnlockModal] = useState(true);
+  const [onboard, setOnboard] = useState(null);
   useEffect(() => {
     // detectNetwork()
     subscribeMetamaskProvider();
     handleHeader();
-  });
+
+    if (isMobileDevice()) {
+      checkMobileMaskUnlocked();
+    } else {
+      checkMetamaskUnlocked();
+    }
+  }, [isMetaconnected]);
 
   const handleHeader = () => {
     if (router.pathname !== "/wallet") {
@@ -104,6 +115,50 @@ const Layout = ({ children }) => {
       }
     }
   };
+
+  const checkMetamaskUnlocked = async () => {
+    const { ethereum } = window;
+    if (ethereum && ethereum.isMetaMask) {
+      if (!isMetaconnected || !metaToken) {
+        setDisplayUnlockModal(true);
+      }
+    } else {
+      if (!isMobileDevice()) {
+        alert("Please install MetaMask!");
+      }
+    }
+  };
+
+  const checkMobileMaskUnlocked = async () => {
+    const onboard = Onboard({
+      dappId: process.env.ONBOARD_API_KEY, // [String] The API key created by step one above
+      networkId: 4, // [Integer] The Ethereum network ID your Dapp uses.
+      subscriptions: {
+        wallet: (wallet) => {
+          setWeb3(new Web3(wallet.provider));
+        },
+        address: (addres) => {
+          console.log("adddres is ", address);
+        },
+      },
+      walletSelect: {
+        wallets: [{ walletName: "metamask" }],
+      },
+    });
+    setOnboard(onboard);
+    if (
+      !isMetaconnected &&
+      router.pathname != "/wallet" &&
+      router.pathname != "/"
+    ) {
+      const data = await onboard.walletSelect();
+      if (data) {
+        const walletCheck = await onboard.walletCheck();
+        console.log("walletselct is ", data);
+        console.log("wallet checi is ", walletCheck);
+      }
+    }
+  };
   return (
     <>
       <Head>
@@ -116,24 +171,87 @@ const Layout = ({ children }) => {
       {displayHeader && <Header />}
       {children}
       {isWrongNet ? DisplayWrongNetModal() : ""}
+
       <Footer />
+
+      {router.pathname !== "/wallet" && !isMetaconnected && !isMobileDevice() && (
+        <Modal
+          title="Unlock Wallet To Create Collection"
+          visible={displayUnlockModal}
+          header={null}
+          footer={null}
+          closable={false}
+          width={500}
+          height={500}
+          maskStyle={{
+            backgroundColor: "#EEEEEE",
+            opacity: 0.1,
+          }}
+          bodyStyle={{
+            height: 350,
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+          }}
+        >
+          <div className={styles.modalContent}>
+            <div className={styles.modalControls}>
+              {router.pathname !== "/" && (
+                <Link
+                  href={{
+                    pathname: `/`,
+                  }}
+                >
+                  <a>
+                    <span className={styles.linkButton}>
+                      {"Go To Main Page"}
+                    </span>
+                  </a>
+                </Link>
+              )}
+              <Link
+                href={{
+                  pathname: `/wallet`,
+                }}
+              >
+                <a>
+                  {
+                    <span className={styles.linkButton}>
+                      {"Connect with Wallet"}
+                    </span>
+                  }
+                </a>
+              </Link>
+            </div>
+          </div>
+        </Modal>
+      )}
     </>
   );
-  async function detectNetwork()
-  {
+  async function detectNetwork() {
     let provider = await detectEthereumProvider();
-    if(provider.chainId != "0x1")
-    {
-      setIsWrongNet(true)
-      setNetwork(provider.chainId)
+    if (provider.chainId != "0x1") {
+      setIsWrongNet(true);
+      setNetwork(provider.chainId);
     }
   }
-  function DisplayWrongNetModal(){    
-    let  message = "You are connected to "+providers[network]+".\n Please change to "+providers["0x1"]+" and reload the page"
+  function DisplayWrongNetModal() {
+    let message =
+      "You are connected to " +
+      providers[network] +
+      ".\n Please change to " +
+      providers["0x1"] +
+      " and reload the page";
 
-    return <Modal title={<strong>{"Wrong Network!"}</strong>} footer={false} visible={true}>
-    {message }
-  </Modal>
+    return (
+      <Modal
+        title={<strong>{"Wrong Network!"}</strong>}
+        footer={false}
+        visible={true}
+      >
+        {message}
+      </Modal>
+    );
   }
 };
 
