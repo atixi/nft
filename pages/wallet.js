@@ -23,8 +23,6 @@ import { useDispatch, useSelector } from "react-redux";
 import router from "next/router";
 import QRCodeModal from "@walletconnect/qrcode-modal";
 import { useOnboard } from "use-onboard";
-import { initOnboard } from "Utils/utils";
-import { ethers } from "ethers";
 const bridge = "https://bridge.walletconnect.org";
 
 import Onboard from "bnc-onboard";

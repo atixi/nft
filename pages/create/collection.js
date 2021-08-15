@@ -49,7 +49,7 @@ const ERC721Collection = ({ collections }) => {
   const isMetaconnected = useSelector(getMetaConnected);
   const isWalletConnected = useSelector(getWalletConnected);
   const metaToken = useSelector(getMetaToken);
-
+  const [onboard, setOnboard] = useState(null);
   const { selectWallet, address, isWalletSelected, disconnectWallet, balance } =
     useOnboard({
       dappId: "2978c0ac-ae01-46c3-8054-9fc9ec2bfc2d", // optional API key
@@ -171,7 +171,11 @@ const ERC721Collection = ({ collections }) => {
   };
 
   useEffect(() => {
-    checkMetamaskUnlocked();
+    if (isMobileDevice()) {
+      checkMobileMaskUnlocked();
+    } else {
+      checkMetamaskUnlocked();
+    }
   }, [isMetaconnected, metaToken]);
 
   const checkMetamaskUnlocked = async () => {
@@ -183,8 +187,33 @@ const ERC721Collection = ({ collections }) => {
     } else {
       if (!isMobileDevice()) {
         alert("Please install MetaMask!");
-      } else {
-        alert("Please install Metamask for Mobile!");
+      }
+    }
+  };
+
+  const checkMobileMaskUnlocked = async () => {
+    const onboard = Onboard({
+      dappId: process.env.ONBOARD_API_KEY, // [String] The API key created by step one above
+      networkId: 4, // [Integer] The Ethereum network ID your Dapp uses.
+      subscriptions: {
+        wallet: (wallet) => {
+          setWeb3(new Web3(wallet.provider));
+        },
+        address: (addres) => {
+          console.log("adddres is ", address);
+        },
+      },
+      walletSelect: {
+        wallets: [{ walletName: "metamask" }],
+      },
+    });
+    setOnboard(onboard);
+    if (!isMetaconnected) {
+      const data = await onboard.walletSelect();
+      if (data) {
+        const walletCheck = await onboard.walletCheck();
+        console.log("walletselct is ", data);
+        console.log("wallet checi is ", walletCheck);
       }
     }
   };

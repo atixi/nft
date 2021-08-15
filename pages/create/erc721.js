@@ -26,6 +26,7 @@ import {
 import { useSelector } from "react-redux";
 import { getMetaConnected, getMetaToken } from "store/action/accountSlice";
 import { isMobileDevice } from "Constants/constants";
+import Onboard from "bnc-onboard";
 
 const initNft = {
   tokenId: null,
@@ -59,6 +60,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
   const [uploadPrecentage, setUploadPrecentage] = useState(0);
   const isMetaconnected = useSelector(getMetaConnected);
   const metaToken = useSelector(getMetaToken);
+  const [onboard, setOnboard] = useState(null);
 
   const getSelectedCollection = (colId) => {
     const selected = collections.filter((item) => item.id === colId)[0];
@@ -162,7 +164,11 @@ const ERC721 = ({ collections, categories, nfts }) => {
     }
   };
   useEffect(() => {
-    checkMetamaskUnlocked();
+    if (isMobileDevice()) {
+      checkMobileMaskUnlocked();
+    } else {
+      checkMetamaskUnlocked();
+    }
   }, [isMetaconnected]);
 
   const checkMetamaskUnlocked = async () => {
@@ -180,6 +186,34 @@ const ERC721 = ({ collections, categories, nfts }) => {
       }
     }
   };
+
+  const checkMobileMaskUnlocked = async () => {
+    const onboard = Onboard({
+      dappId: process.env.ONBOARD_API_KEY, // [String] The API key created by step one above
+      networkId: 4, // [Integer] The Ethereum network ID your Dapp uses.
+      subscriptions: {
+        wallet: (wallet) => {
+          setWeb3(new Web3(wallet.provider));
+        },
+        address: (addres) => {
+          console.log("adddres is ", address);
+        },
+      },
+      walletSelect: {
+        wallets: [{ walletName: "metamask" }],
+      },
+    });
+    setOnboard(onboard);
+    if (!isMetaconnected) {
+      const data = await onboard.walletSelect();
+      if (data) {
+        const walletCheck = await onboard.walletCheck();
+        console.log("walletselct is ", data);
+        console.log("wallet checi is ", walletCheck);
+      }
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div>
