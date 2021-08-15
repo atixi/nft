@@ -174,58 +174,61 @@ const Layout = ({ children }) => {
 
       <Footer />
 
-      {router.pathname !== "/wallet" && !isMetaconnected && !isMobileDevice() && (
-        <Modal
-          title="Unlock Wallet To Create Collection"
-          visible={displayUnlockModal}
-          header={null}
-          footer={null}
-          closable={false}
-          width={500}
-          height={500}
-          maskStyle={{
-            backgroundColor: "#EEEEEE",
-            opacity: 0.1,
-          }}
-          bodyStyle={{
-            height: 350,
-            display: "flex",
-            justifyContent: "center",
-            alignContent: "center",
-          }}
-        >
-          <div className={styles.modalContent}>
-            <div className={styles.modalControls}>
-              {router.pathname !== "/" && (
+      {router.pathname != "/wallet" &&
+        router.pathname != "/" &&
+        !isMetaconnected &&
+        !isMobileDevice() && (
+          <Modal
+            title="Unlock Wallet To Create Collection"
+            visible={displayUnlockModal}
+            header={null}
+            footer={null}
+            closable={false}
+            width={500}
+            height={500}
+            maskStyle={{
+              backgroundColor: "#EEEEEE",
+              opacity: 0.1,
+            }}
+            bodyStyle={{
+              height: 350,
+              display: "flex",
+              justifyContent: "center",
+              alignContent: "center",
+            }}
+          >
+            <div className={styles.modalContent}>
+              <div className={styles.modalControls}>
+                {router.pathname !== "/" && (
+                  <Link
+                    href={{
+                      pathname: `/`,
+                    }}
+                  >
+                    <a>
+                      <span className={styles.linkButton}>
+                        {"Go To Main Page"}
+                      </span>
+                    </a>
+                  </Link>
+                )}
                 <Link
                   href={{
-                    pathname: `/`,
+                    pathname: `/wallet`,
                   }}
                 >
                   <a>
-                    <span className={styles.linkButton}>
-                      {"Go To Main Page"}
-                    </span>
+                    {
+                      <span className={styles.linkButton}>
+                        {"Connect with Wallet"}
+                      </span>
+                    }
                   </a>
                 </Link>
-              )}
-              <Link
-                href={{
-                  pathname: `/wallet`,
-                }}
-              >
-                <a>
-                  {
-                    <span className={styles.linkButton}>
-                      {"Connect with Wallet"}
-                    </span>
-                  }
-                </a>
-              </Link>
+              </div>
             </div>
-          </div>
-        </Modal>
-      )}
+          </Modal>
+        )}
     </>
   );
   async function detectNetwork() {
