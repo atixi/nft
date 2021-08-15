@@ -8,7 +8,9 @@ import QRCodeModal from "@walletconnect/qrcode-modal";
 import Web3Modal from "web3modal";
 import { isMobileDevice, providerOptions } from "/Constants/constants";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-
+import Onboard from "bnc-onboard";
+import Web3 from "web3";
+import collectionArtifact from "./../../build/contracts/Rimable.json";
 import {
   checkFileType,
   checkForDuplicate,
@@ -25,6 +27,10 @@ import {
   getWalletToken,
 } from "store/action/accountSlice";
 import { useSelector } from "react-redux";
+import { useOnboard } from "use-onboard";
+
+let web3;
+
 const ERC721Collection = ({ collections }) => {
   const logoImageInputRef = useRef(null);
   const bannerImageInputRef = useRef(null);
@@ -50,6 +56,12 @@ const ERC721Collection = ({ collections }) => {
   const accountTokens = useSelector(getAccountTokens);
   const metaToken = useSelector(getMetaToken);
   const walletToken = useSelector(getWalletToken);
+
+  const { selectWallet, address, isWalletSelected, disconnectWallet, balance } =
+    useOnboard({
+      dappId: "2978c0ac-ae01-46c3-8054-9fc9ec2bfc2d", // optional API key
+      networkId: 4, // Ethereum network ID
+    });
 
   const openLogoFileChooser = (event) => {
     event.preventDefault();
@@ -163,6 +175,7 @@ const ERC721Collection = ({ collections }) => {
     setDisplayModalButtons(false);
     clearForm();
   };
+
   useEffect(() => {
     checkMetamaskUnlocked();
   }, [isMetaconnected]);

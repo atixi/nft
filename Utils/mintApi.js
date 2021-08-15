@@ -1,14 +1,11 @@
-import { ethers } from "ethers";
-
 import collectionArtifact from "./../build/contracts/Rimable.json";
-import WalletConnectProvider from "@walletconnect/web3-provider";
 
 import Web3 from "web3";
 import axios from "axios";
 import { requestUnlockMetamask, slugify } from "./utils";
 import detectEthereumProvider from "@metamask/detect-provider";
 
-const STRAPI_BASE_URL = process.env.STRAPI_LOCAL_BASE_URL;
+const STRAPI_BASE_URL = process.env.HEROKU_BASE_URL;
 const RINKEBY_API_KEY = process.env.RINKEBY_API_KEY;
 const RINKEBY_NODE_URL_WSS = process.env.RINKEBY_NODE_URL_WSS;
 const RINKEBY_NODE = `${RINKEBY_NODE_URL_WSS}${RINKEBY_API_KEY}`;
