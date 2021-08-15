@@ -22,7 +22,12 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import router from "next/router";
 import QRCodeModal from "@walletconnect/qrcode-modal";
+import { useOnboard } from "use-onboard";
+import { initOnboard } from "Utils/utils";
+import { ethers } from "ethers";
 const bridge = "https://bridge.walletconnect.org";
+
+import Onboard from "bnc-onboard";
 const Wallet = () => {
   const dispatchAccountTokens = useDispatch();
   const dispatchMetaToken = useDispatch();
@@ -42,44 +47,34 @@ const Wallet = () => {
   const [metamaskModal, setMetamaskModal] = useState(null);
   const [mobileModal, setMobileModal] = useState(null);
   const [mobileConnector, setMobileConnector] = useState();
+  const { selectWallet, address, isWalletSelected, disconnectWallet, balance } =
+    useOnboard({
+      options: {
+        dappId: process.env.ONBOARD_API_KEY, // optional API key
+        networkId: 4, // Ethereum network ID
+        walletSelect: {
+          wallets: [
+            {
+              walletName: "metamask",
+              rpcUrl:
+                "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31",
+            },
+          ],
+        },
+      },
+    });
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const browserModal = new Web3Modal({
-        network: "mainnet", // optional
-        cacheProvider: false, // optional
-        providerOptions, // required
-        disableInjectedProvider: true,
-      });
-      const mobileModal = new Web3Modal({
-        network: "mainnet", // optional
-        cacheProvider: false, // optional
-        providerOptions, // required
-        disableInjectedProvider: true,
-      });
-      setIsMobile(isMobileDevice());
-      if (browserModal.cachedProvider && isMobile) {
-        // onMobileConnect();
-      }
-      setMetamaskModal(browserModal);
-      setMobileModal(mobileModal);
-      setMobileConnector(
-        new WalletConnect({ bridge, qrcodeModal: QRCodeModal })
-      );
-      subscribeWalletProvider();
-    }
-  }, []);
+  const [onboard, setOnboard] = useState(null);
+
   const [metamaskWeb3, setMetamaskWeb3] = useState(null);
   const [metamaskProvider, setMetamaskProvider] = useState(null);
   const [metamaskConnected, setMetamaskConnected] = useState(null);
 
   const [fetching, setFetching] = useState(false);
-  const [address, setAddress] = useState();
+  // const [address, setAddress] = useState();
   const [web3, setWeb3] = useState(null);
   const [provider, setProvider] = useState(null);
   // const [connected, setConnected] = useState(false);
-  const [chainId, setChainId] = useState(1);
-  const [networkId, setNetworkId] = useState(1);
   const [assets, setAssets] = useState();
   const [showModal, setShowModal] = useState(false);
   const [pendingRequest, setPendingRequest] = useState(false);
@@ -111,19 +106,8 @@ const Wallet = () => {
 
       const accounts = await metamaskWeb3.eth.getAccounts();
 
-      const address = accounts[0];
-
-      const networkId = await metamaskWeb3.eth.net.getId();
-
-      const chainId = await metamaskWeb3.eth.chainId();
-
       await setMetamaskWeb3(metamaskWeb3);
       await setMetamaskProvider(metamaskProvider);
-
-      // await setConnected(true);
-      await setAddress(address);
-      await setChainId(chainId);
-      await setNetworkId(networkId);
     }
   };
 
@@ -146,20 +130,10 @@ const Wallet = () => {
       }
       // await getAccountAssets();
     });
-    provider.on("chainChanged", async (chainId) => {
-      const web3 = new Web3(provider);
-      const networkId = await web3.eth.net.getId();
-      await setChainId(chainId);
-      await setNetworkId(networkId);
-      // await getAccountAssets();
-    });
 
     provider.on("chainChanged", async (networkId) => {
       const web3 = new Web3(provider);
       const chainId = await web3.eth.chainId();
-      await setChainId(chainId);
-      await setNetworkId(networkId);
-      // await getAccountAssets();
     });
   };
   const comingSoon = () => {
@@ -172,21 +146,38 @@ const Wallet = () => {
   };
 
   const onMobileConnect = async () => {
-    const bridge = "https://bridge.walletconnect.org";
+    if (metaToken !== null) {
+      await dispatchMetaConnected(setMetaConnected(true));
+      router.push("/");
+    } else {
+      const data = await onboard.walletSelect();
 
-    // create new connector
-    const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
-
-    // check if already connected
-    if (!connector.connected) {
-      // create new session
-      await connector.createSession();
+      if (data) {
+        const walletCheck = await onboard.walletCheck();
+        console.log("walletselct is ", data);
+        console.log("wallet checi is ", walletCheck);
+      }
     }
-
-    // subscribe to events
-    subscribeWalletProvider(connector);
   };
 
+  const initBoard = async () => {
+    const onboard = Onboard({
+      dappId: process.env.ONBOARD_API_KEY, // [String] The API key created by step one above
+      networkId: 4, // [Integer] The Ethereum network ID your Dapp uses.
+      subscriptions: {
+        wallet: (wallet) => {
+          setWeb3(new Web3(wallet.provider));
+        },
+        address: (addres) => {
+          console.log("adddres is ", address);
+        },
+      },
+      walletSelect: {
+        wallets: [{ walletName: "metamask" }],
+      },
+    });
+    setOnboard(onboard);
+  };
   const subscribeWalletProvider = async (connector) => {
     if (isWalletConnected == false) {
       resetApp();
@@ -265,12 +256,7 @@ const Wallet = () => {
     }
   };
 
-  const disconnectWallet = () => {
-    dispatchWalletconnected(setWalletConnected(false));
-    dispatchWalletToken(setWalletToken(null));
-    resetApp();
-  };
-
+  const diconnectMobileWallet = async () => {};
   const resetApp = async () => {
     if (web3 && web3.currentProvider && web3.currentProvider.close) {
       await web3.currentProvider.close();
@@ -290,6 +276,35 @@ const Wallet = () => {
     // setPendingRequest(false);
     // setResult(null);
   };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const browserModal = new Web3Modal({
+        network: "mainnet", // optional
+        cacheProvider: false, // optional
+        providerOptions, // required
+        disableInjectedProvider: true,
+      });
+      const mobileModal = new Web3Modal({
+        network: "mainnet", // optional
+        cacheProvider: false, // optional
+        providerOptions, // required
+        disableInjectedProvider: true,
+      });
+      setIsMobile(isMobileDevice());
+      if (browserModal.cachedProvider && isMobile) {
+        // onMobileConnect();
+      }
+      setMetamaskModal(browserModal);
+      setMobileModal(mobileModal);
+      setMobileConnector(
+        new WalletConnect({ bridge, qrcodeModal: QRCodeModal })
+      );
+      subscribeWalletProvider();
+    }
+
+    initBoard();
+  }, []);
   return (
     <div className={styles.container}>
       <div className={styles.leftColumn}></div>
@@ -306,49 +321,51 @@ const Wallet = () => {
             </p>
           </div>
           <div className={styles.wallectContainer}>
-            {/* {isMobile && ( */}
-            <div
-              className={styles.walletCard}
-              onClick={() => connectToMetamask("injected")}
-            >
-              <div className={styles.walletCardPopup}>
-                <span>Most Popular</span>
+            {!isMobile && (
+              <div
+                className={styles.walletCard}
+                onClick={() => connectToMetamask("injected")}
+              >
+                <div className={styles.walletCardPopup}>
+                  <span>Most Popular</span>
+                </div>
+                <img
+                  width={28}
+                  height={28}
+                  src={"/images/walletIcons/metamask.svg"}
+                />
+                <div>Metamask</div>
               </div>
-              <img
-                width={28}
-                height={28}
-                src={"/images/walletIcons/metamask.svg"}
-              />
-              <div>Metamask</div>
-            </div>
-            {/* )} */}
+            )}
 
-            {/* <div className={styles.walletCard} onClick={onMobileConnect}>
-              <div className={styles.walletCardPopup}>
-                <span>Mobile Wallets</span>
+            {isMobile && (
+              <div className={styles.walletCard} onClick={onMobileConnect}>
+                <div className={styles.walletCardPopup}>
+                  <span>Mobile Wallets</span>
+                </div>
+                <div>
+                  <img
+                    className={styles.walletIcon}
+                    width={28}
+                    height={28}
+                    src={"/images/walletIcons/walletconnect-1.svg"}
+                  />
+                  <img
+                    className={styles.walletIcon}
+                    width={28}
+                    height={28}
+                    src={"/images/walletIcons/walletconnect-2.svg"}
+                  />
+                  <img
+                    className={styles.walletIcon}
+                    width={28}
+                    height={28}
+                    src={"/images/walletIcons/walletconnect-3.png"}
+                  />
+                </div>
+                <div className={styles.walletDetails}>WalletConnect</div>
               </div>
-              <div>
-                <img
-                  className={styles.walletIcon}
-                  width={28}
-                  height={28}
-                  src={"/images/walletIcons/walletconnect-1.svg"}
-                />
-                <img
-                  className={styles.walletIcon}
-                  width={28}
-                  height={28}
-                  src={"/images/walletIcons/walletconnect-2.svg"}
-                />
-                <img
-                  className={styles.walletIcon}
-                  width={28}
-                  height={28}
-                  src={"/images/walletIcons/walletconnect-3.png"}
-                />
-              </div>
-              <div className={styles.walletDetails}>WalletConnect</div>
-            </div> */}
+            )}
           </div>
           <div>
             <p className={styles.walletFooter}>
