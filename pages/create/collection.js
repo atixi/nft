@@ -3,14 +3,9 @@ import styles from "/styles/erc721.module.css";
 import { Input, Button, Form, Spin, Modal } from "antd";
 import { fetch } from "/Utils/strapiApi";
 import Link from "next/link";
-import WalletConnect from "@walletconnect/client";
-import QRCodeModal from "@walletconnect/qrcode-modal";
-import Web3Modal from "web3modal";
 import { isMobileDevice, providerOptions } from "/Constants/constants";
-import WalletConnectProvider from "@walletconnect/web3-provider";
 import Onboard from "bnc-onboard";
 import Web3 from "web3";
-import collectionArtifact from "./../../build/contracts/Rimable.json";
 import {
   checkFileType,
   checkForDuplicate,
@@ -53,9 +48,7 @@ const ERC721Collection = ({ collections }) => {
 
   const isMetaconnected = useSelector(getMetaConnected);
   const isWalletConnected = useSelector(getWalletConnected);
-  const accountTokens = useSelector(getAccountTokens);
   const metaToken = useSelector(getMetaToken);
-  const walletToken = useSelector(getWalletToken);
 
   const { selectWallet, address, isWalletSelected, disconnectWallet, balance } =
     useOnboard({
@@ -144,7 +137,8 @@ const ERC721Collection = ({ collections }) => {
         const result = await deployCollection(
           logoImageFile,
           bannerImageFile,
-          values
+          values,
+          metaToken[0]
         );
         console.log("result of rejection is ", result);
         if (!result.rejected && result.data) {
@@ -178,13 +172,12 @@ const ERC721Collection = ({ collections }) => {
 
   useEffect(() => {
     checkMetamaskUnlocked();
-  }, [isMetaconnected]);
+  }, [isMetaconnected, metaToken]);
 
   const checkMetamaskUnlocked = async () => {
     const { ethereum } = window;
     if (ethereum && ethereum.isMetaMask) {
-      console.log("is metamask connected ", isMetaconnected);
-      if (!isMetaconnected) {
+      if (!isMetaconnected || !metaToken) {
         setDisplayUnlockModal(true);
       }
     } else {
