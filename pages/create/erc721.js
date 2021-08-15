@@ -24,7 +24,7 @@ import {
   validateImage,
 } from "Utils/mintApi";
 import { useSelector } from "react-redux";
-import { getMetaConnected } from "store/action/accountSlice";
+import { getMetaConnected, getMetaToken } from "store/action/accountSlice";
 
 const initNft = {
   tokenId: null,
@@ -57,6 +57,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
   const [isLoading, setLoading] = useState(false);
   const [uploadPrecentage, setUploadPrecentage] = useState(0);
   const isMetaconnected = useSelector(getMetaConnected);
+  const metaToken = useSelector(getMetaToken);
 
   const getSelectedCollection = (colId) => {
     const selected = collections.filter((item) => item.id === colId)[0];
@@ -121,7 +122,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
 
   const saveNft = async (nftImageFile, values) => {
     const nftData = createNftData(values);
-    return await uploadNft(nftImageFile, nftData, {});
+    return await uploadNft(nftImageFile, nftData, metaToken[0]);
     console.log("result of minting ", result);
     // if (result.success) {
     //   return result;

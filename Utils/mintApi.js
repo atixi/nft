@@ -6,12 +6,13 @@ import { requestUnlockMetamask, slugify } from "./utils";
 import detectEthereumProvider from "@metamask/detect-provider";
 
 const STRAPI_BASE_URL = process.env.HEROKU_BASE_URL;
+// const STRAPI_BASE_URL = process.env.STRAPI_LOCAL_BASE_URL;
+const RINKEBY_PROXY_ADDRESS = process.env.RINKEBY_PROXY_ADDRESS;
 const RINKEBY_API_KEY = process.env.RINKEBY_API_KEY;
 const RINKEBY_NODE_URL_WSS = process.env.RINKEBY_NODE_URL_WSS;
 const RINKEBY_NODE = `${RINKEBY_NODE_URL_WSS}${RINKEBY_API_KEY}`;
 const PINATA_API_KEY = process.env.PINATA_API_KEY;
 const PINATA_SECRET_KEY = process.env.PINATA_SECRET_KEY;
-const OWNER_ADDRESS = "0x8CA35f878fD14992b58a18bEB484f721b1d07A33";
 
 export const capitalizeWorkd = (value) => {
   return value.charAt(0).toUpperCase() + value.slice(1);
@@ -219,7 +220,7 @@ export const pinJSONToIPFS = (metaContent, mediaType) => {
     });
 };
 
-export const deployCollection = async (logo, banner, values) => {
+export const deployCollection = async (logo, banner, values, ownerAddress) => {
   let strapiUploadResult = {
     success: false,
     message: "Deploy was not successful",
@@ -267,14 +268,14 @@ export const deployCollection = async (logo, banner, values) => {
             name: "Rimable",
             data: collectionArtifact.bytecode,
             arguments: [
-              "0xf57b2c51ded3a29e6891aba85459d600256cf317",
+              RINKEBY_PROXY_ADDRESS,
               "Rimable",
               "RIMABLE",
               collectionUri,
             ],
           })
           .send({
-            from: "0x8CA35f878fD14992b58a18bEB484f721b1d07A33",
+            from: ownerAddress,
             gas: "6721975",
           })
           .on("transactionHash", function (hash) {
@@ -306,7 +307,7 @@ export const deployCollection = async (logo, banner, values) => {
         if (!deployResult.rejected) {
           console.log("deploye result is ", deployResult);
           collectionData.contractAddress = deployResult._address;
-          collectionData.talentAddress = "unlockResult.account";
+          collectionData.talentAddress = ownerAddress;
           collectionData.collectionName = values.collection;
           collectionData.slug = slugify(values.collection.toString());
           return uploadCollectionToStrapi(logo, banner, collectionData);
@@ -332,7 +333,7 @@ export const deployCollection = async (logo, banner, values) => {
   }
 };
 
-export const uploadNft = async (file, values, onUploadProgress) => {
+export const uploadNft = async (file, values, ownerAddress) => {
   let nftData = new Object();
   let metadata = new Object();
   let tokenId;
@@ -366,7 +367,7 @@ export const uploadNft = async (file, values, onUploadProgress) => {
   console.log("uploaded metadata uri is ", metadataUploadResult);
   const hashResult = await mintNft(
     values.collections.contractAddress,
-    OWNER_ADDRESS,
+    ownerAddress,
     metadataUploadResult.ipfsUrl
   );
   console.log("hash result is after minting is ", hashResult);
