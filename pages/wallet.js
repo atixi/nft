@@ -323,7 +323,7 @@ const Wallet = () => {
             </div>
             {/* )} */}
 
-            <div className={styles.walletCard} onClick={onMobileConnect}>
+            {/* <div className={styles.walletCard} onClick={onMobileConnect}>
               <div className={styles.walletCardPopup}>
                 <span>Mobile Wallets</span>
               </div>
@@ -348,7 +348,7 @@ const Wallet = () => {
                 />
               </div>
               <div className={styles.walletDetails}>WalletConnect</div>
-            </div>
+            </div> */}
           </div>
           <div>
             <p className={styles.walletFooter}>
