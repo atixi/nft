@@ -20,13 +20,14 @@ import {
   getWalletConnected,
 } from "/store/action/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
-import router from "next/router";
+import router, { useRouter } from "next/router";
 import QRCodeModal from "@walletconnect/qrcode-modal";
 import { useOnboard } from "use-onboard";
 const bridge = "https://bridge.walletconnect.org";
 
 import Onboard from "bnc-onboard";
 const Wallet = () => {
+  const router = useRouter();
   const dispatchAccountTokens = useDispatch();
   const dispatchMetaToken = useDispatch();
   const dispatchWalletToken = useDispatch();
@@ -102,8 +103,6 @@ const Wallet = () => {
       await subscribeMetamaskProvider(metamaskProvider);
       const metamaskWeb3 = initWeb3(metamaskProvider);
 
-      const accounts = await metamaskWeb3.eth.getAccounts();
-
       await setMetamaskWeb3(metamaskWeb3);
       await setMetamaskProvider(metamaskProvider);
     }
@@ -134,17 +133,9 @@ const Wallet = () => {
       const chainId = await web3.eth.chainId();
     });
   };
-  const comingSoon = () => {
-    HandleNotification(
-      "info",
-      "Comming Soon",
-      "Portis Support Will be Available soon",
-      "topLeft"
-    );
-  };
 
   const onMobileConnect = async () => {
-    if (metaToken !== null) {
+    if (metaToken != null) {
       await dispatchMetaConnected(setMetaConnected(true));
       router.push("/");
     } else {
@@ -209,16 +200,6 @@ const Wallet = () => {
     });
 
     if (connector.connected) {
-      const { chainId, accounts } = connector;
-      const address = accounts[0];
-      console.log(connector);
-      // this.setState({
-      //   connected: true,
-      //   chainId,
-      //   accounts,
-      //   address,
-      // });
-      // this.onSessionUpdate(accounts, chainId);
     }
 
     setMobileConnector(connector);

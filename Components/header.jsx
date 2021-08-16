@@ -440,7 +440,7 @@ function Header(props) {
             <Link
               href={{
                 pathname: `/profile/${
-                  metaToken[0] ? metaToken[0] : walletToken[0]
+                  metaToken ? metaToken[0] : walletToken[0]
                 }`,
               }}
             >

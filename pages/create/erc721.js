@@ -27,6 +27,7 @@ import { useSelector } from "react-redux";
 import { getMetaConnected, getMetaToken } from "store/action/accountSlice";
 import { isMobileDevice } from "Constants/constants";
 import Onboard from "bnc-onboard";
+import { getCurrentAccount } from "Utils/utils";
 
 const initNft = {
   tokenId: null,
@@ -58,6 +59,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
   const [nftImageFile, setNftImageFile] = useState();
   const [isLoading, setLoading] = useState(false);
   const [uploadPrecentage, setUploadPrecentage] = useState(0);
+  const [ownerCollections, setOwnerCollections] = useState();
   const isMetaconnected = useSelector(getMetaConnected);
   const metaToken = useSelector(getMetaToken);
   const [onboard, setOnboard] = useState(null);
@@ -125,16 +127,8 @@ const ERC721 = ({ collections, categories, nfts }) => {
 
   const saveNft = async (nftImageFile, values) => {
     const nftData = createNftData(values);
-    return await uploadNft(nftImageFile, nftData, metaToken[0]);
-    console.log("result of minting ", result);
-    // if (result.success) {
-    //   return result;
-    // } else {
-    //   return {
-    //     success: false,
-    //     message: "Collection not uploaded",
-    //   };
-    // }
+    const ownerAccount = await getCurrentAccount();
+    return await uploadNft(nftImageFile, nftData, ownerAccount);
   };
 
   const [form] = Form.useForm();
@@ -164,6 +158,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
     }
   };
   useEffect(() => {
+    getOwnerCollections();
     if (isMobileDevice()) {
       checkMobileMaskUnlocked();
     } else {
@@ -187,6 +182,13 @@ const ERC721 = ({ collections, categories, nfts }) => {
     }
   };
 
+  const getOwnerCollections = async () => {
+    const ownerAccount = await getCurrentAccount();
+    const cols = collections.filter((item) => {
+      return item.talentAddress == ownerAccount;
+    });
+    setOwnerCollections(cols);
+  };
   const checkMobileMaskUnlocked = async () => {
     const onboard = Onboard({
       dappId: process.env.ONBOARD_API_KEY, // [String] The API key created by step one above
@@ -436,7 +438,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
             <p className={styles.nfgParagraph}>
               {`This is the collection where your item will appear`}
             </p>
-            {collections && (
+            {ownerCollections && (
               <Form.Item
                 name="collections"
                 rules={[
@@ -451,7 +453,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
                   placeholder="Please select"
                   onChange={(value) => getSelectedCollection(value)}
                 >
-                  {collections?.map((item) => (
+                  {ownerCollections?.map((item) => (
                     <Select.Option
                       value={item.id}
                       key={item.id}
@@ -527,6 +529,7 @@ export const getServerSideProps = async () => {
   const nftResult = await fetch("/nfts/nftsList");
   const nfts = nftResult.data;
   const collections = collectionsResult.data;
+
   const categories = cactegoriesResult.data;
 
   return {

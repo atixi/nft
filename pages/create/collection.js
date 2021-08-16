@@ -13,7 +13,7 @@ import {
 } from "Utils/mintApi";
 import { allowedImageTypes } from "Constants/constants";
 import detectEthereumProvider from "@metamask/detect-provider";
-import { requestUnlockMetamask } from "Utils/utils";
+import { getCurrentAccount, requestUnlockMetamask } from "Utils/utils";
 import {
   getAccountTokens,
   getMetaConnected,
@@ -134,11 +134,13 @@ const ERC721Collection = ({ collections }) => {
       setDisplayUploadModal(true);
       console.log("values are ready ", values);
       (async function () {
+        const ownerAccount = await getCurrentAccount();
+        console.log("current account is ", ownerAccount);
         const result = await deployCollection(
           logoImageFile,
           bannerImageFile,
           values,
-          metaToken[0]
+          ownerAccount
         );
         console.log("result of rejection is ", result);
         if (!result.rejected && result.data) {
