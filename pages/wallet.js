@@ -44,8 +44,6 @@ const Wallet = () => {
   const [connected, setConnected] = useState();
   const [isMobile, setIsMobile] = useState(false);
   const [metamaskModal, setMetamaskModal] = useState(null);
-  const [mobileModal, setMobileModal] = useState(null);
-  const [mobileConnector, setMobileConnector] = useState();
   const { selectWallet, address, isWalletSelected, disconnectWallet, balance } =
     useOnboard({
       options: {
@@ -69,11 +67,8 @@ const Wallet = () => {
   const [metamaskProvider, setMetamaskProvider] = useState(null);
   const [metamaskConnected, setMetamaskConnected] = useState(null);
 
-  const [fetching, setFetching] = useState(false);
-  // const [address, setAddress] = useState();
   const [web3, setWeb3] = useState(null);
   const [provider, setProvider] = useState(null);
-  // const [connected, setConnected] = useState(false);
   const [assets, setAssets] = useState();
   const [showModal, setShowModal] = useState(false);
   const [pendingRequest, setPendingRequest] = useState(false);
@@ -121,16 +116,13 @@ const Wallet = () => {
         await dispatchMetaConnected(setMetaConnected(false));
         await dispatchMetaToken(setMetaToken(null));
       } else {
-        console.log("we are connected to wallet now?");
         await dispatchMetaConnected(setMetaConnected(true));
         await dispatchMetaToken(setMetaToken(accounts));
       }
-      // await getAccountAssets();
     });
 
     provider.on("chainChanged", async (networkId) => {
       const web3 = new Web3(provider);
-      const chainId = await web3.eth.chainId();
     });
   };
 
@@ -167,104 +159,10 @@ const Wallet = () => {
     });
     setOnboard(onboard);
   };
-  const subscribeWalletProvider = async (connector) => {
-    if (isWalletConnected == false) {
-      resetApp();
-    }
-    if (!connector) {
-      return;
-    }
-
-    connector.on("session_update", async (error, payload) => {
-      if (error) {
-        throw error;
-      }
-
-      const { chainId, accounts } = payload.params[0];
-      console.log("accounts in event ", accounts);
-    });
-
-    connector.on("connect", (error, payload) => {
-      if (error) {
-        throw error;
-      }
-      onConnect(payload);
-    });
-
-    connector.on("disconnect", (error, payload) => {
-      if (error) {
-        throw error;
-      }
-
-      disconnectWallet();
-    });
-
-    if (connector.connected) {
-    }
-
-    setMobileConnector(connector);
-  };
-
-  const onConnect = async (payload) => {
-    const { accounts } = payload.params[0];
-    dispatchWalletToken(setWalletToken(accounts));
-    dispatchWalletconnected(setWalletConnected(true));
-    const web3 = new Web3(window.ethereum);
-    web3.eth.getBalance(accounts[0], async (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        await dispatchWalletBalance(
-          setWalletBalance(web3.utils.fromWei(result, "ether"))
-        );
-      }
-      console.log(
-        "wallet balance is ",
-        web3.utils.fromWei(result, "ether") + " ETH"
-      );
-    });
-    router.push("/");
-  };
-  const getAccountAssets = async () => {
-    setFetching(true);
-    try {
-      await setFetching(true);
-      await setAssets(assets);
-    } catch (error) {
-      await setFetching(false);
-    }
-  };
-
-  const diconnectMobileWallet = async () => {};
-  const resetApp = async () => {
-    if (web3 && web3.currentProvider && web3.currentProvider.close) {
-      await web3.currentProvider.close();
-    }
-
-    await dispatchWalletToken(setWalletToken(null));
-    await dispatchWalletconnected(setWalletConnected(false));
-    // setFetching(false);
-    // setAddress(null);
-    // setWeb3(null);
-    // setProvider(null);
-    // setConnected(false);
-    // setChainId(1);
-    // setNetworkId(1);
-    // setAssets([]);
-    // setShowModal(false);
-    // setPendingRequest(false);
-    // setResult(null);
-  };
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const browserModal = new Web3Modal({
-        network: "mainnet", // optional
-        cacheProvider: false, // optional
-        providerOptions, // required
-        disableInjectedProvider: true,
-      });
-      const mobileModal = new Web3Modal({
         network: "mainnet", // optional
         cacheProvider: false, // optional
         providerOptions, // required
@@ -275,13 +173,7 @@ const Wallet = () => {
         // onMobileConnect();
       }
       setMetamaskModal(browserModal);
-      setMobileModal(mobileModal);
-      setMobileConnector(
-        new WalletConnect({ bridge, qrcodeModal: QRCodeModal })
-      );
-      subscribeWalletProvider();
     }
-
     initBoard();
   }, []);
   return (
