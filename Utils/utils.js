@@ -183,7 +183,7 @@ export async function sellOrder(
           endAmount: orderValue.price.endPrice,
           expirationTime,
         });
-        provider.engine.stop();
+         
         return result;
       } else if (orderValue.switch.futureTime) {
         var date = new Date(orderValue.date.futureTime);
@@ -197,7 +197,7 @@ export async function sellOrder(
           startAmount: orderValue.price.amount,
           listingTime: listingTime,
         });
-        provider.engine.stop();
+         
         return result;
       } else {
         const result = await seaport().createSellOrder({
@@ -208,7 +208,7 @@ export async function sellOrder(
           accountAddress: address,
           startAmount: orderValue.price.amount,
         });
-        provider.engine.stop();
+         
         return result;
       }
     } else {
@@ -230,7 +230,7 @@ export async function sellOrder(
         paymentTokenAddress,
         waitForHighestBid: true,
       });
-      provider.engine.stop();
+       
       return result;
     }
   } catch (e) {
