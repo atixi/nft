@@ -32,7 +32,6 @@ export async function makeOffer(
   accountAddress
 ) {
   const { tokenId, tokenAddress } = asset;
-  const schemaName = "ERC721";
   let err = false;
   if (isBundle) {
     var expirationTime = null;
@@ -61,7 +60,6 @@ export async function makeOffer(
       asset: {
         tokenId,
         tokenAddress,
-        schemaName, // WyvernSchemaName. If omitted, defaults to 'ERC721'. Other options include 'ERC20' and 'ERC1155'
       },
       accountAddress,
       // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
@@ -183,7 +181,7 @@ export async function sellOrder(
           endAmount: orderValue.price.endPrice,
           expirationTime,
         });
-        provider.engine.stop();
+         
         return result;
       } else if (orderValue.switch.futureTime) {
         var date = new Date(orderValue.date.futureTime);
@@ -197,7 +195,7 @@ export async function sellOrder(
           startAmount: orderValue.price.amount,
           listingTime: listingTime,
         });
-        provider.engine.stop();
+         
         return result;
       } else {
         const result = await seaport().createSellOrder({
@@ -208,7 +206,7 @@ export async function sellOrder(
           accountAddress: address,
           startAmount: orderValue.price.amount,
         });
-        provider.engine.stop();
+         
         return result;
       }
     } else {
@@ -230,7 +228,7 @@ export async function sellOrder(
         paymentTokenAddress,
         waitForHighestBid: true,
       });
-      provider.engine.stop();
+       
       return result;
     }
   } catch (e) {
