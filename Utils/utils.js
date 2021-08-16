@@ -32,7 +32,6 @@ export async function makeOffer(
   accountAddress
 ) {
   const { tokenId, tokenAddress } = asset;
-  const schemaName = "ERC721";
   let err = false;
   if (isBundle) {
     var expirationTime = null;
@@ -61,7 +60,6 @@ export async function makeOffer(
       asset: {
         tokenId,
         tokenAddress,
-        schemaName, // WyvernSchemaName. If omitted, defaults to 'ERC721'. Other options include 'ERC20' and 'ERC1155'
       },
       accountAddress,
       // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
