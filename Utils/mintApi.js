@@ -225,113 +225,92 @@ export const deployCollection = async (logo, banner, values, ownerAddress) => {
     success: false,
     message: "Deploy was not successful",
   };
-
+  const etherumProvider = await detectEthereumProvider();
   console.log("owner address of collection owner is ", ownerAddress);
   console.log("proxy address is ", RINKEBY_PROXY_ADDRESS);
-  const etherumProvider = await detectEthereumProvider();
-  if (etherumProvider) {
-    const unlockResult = await requestUnlockMetamask("For Creating Collection");
-    if (unlockResult.unlockAccepted) {
-      console.log("User unlocked : ", unlockResult);
-      const web3 = new Web3(window.ethereum);
-      let collectionData = new Object();
-      const fileType = checkFileType(logo);
-      console.log("values is ", values);
-      const logoFileResult = await saveFileToPinata(logo);
-      const bannerFileResult = await saveFileToPinata(banner);
-      console.log("wating to upload collection image...");
-      if (logoFileResult.success && bannerFileResult.success) {
-        const ipfsUrl = logoFileResult.ipfsUrl;
-        const bannerIpfsUrl = bannerFileResult.ipfsUrl;
-        const metadata = {
-          name: values.collection,
-          description: values.description,
-          image: ipfsUrl,
-          banner: bannerIpfsUrl,
-          ...(fileType.mediaType == "video" && {
-            animation_url: ipfsUrl,
-          }),
-          ...(values.external_link && { external_link: values.external_link }),
-        };
-        console.log("collection metadata is ", metadata);
-        const collectionMetadataResult = await pinJSONToIPFS(
-          metadata,
-          "collection"
-        );
-        console.log("wating to upload collection metadata...");
-        // if (collectionMetadataResult.success) {
-        const collectionUri = collectionMetadataResult.ipfsUrl;
-        console.log("wating to deploy collection...");
-        // await provider.enable();
-        web3.setProvider(etherumProvider);
 
-        const deployResult = await new web3.eth.Contract(collectionArtifact.abi)
-          .deploy({
-            name: "Rimable",
-            data: collectionArtifact.bytecode,
-            arguments: [
-              RINKEBY_PROXY_ADDRESS,
-              "Rimable",
-              "RIMABLE",
-              collectionUri,
-            ],
-          })
-          .send({
-            from: ownerAddress,
-            gas: "6721975",
-          })
-          .on("transactionHash", function (hash) {
-            console.log("here is transaction hash ", hash);
-          })
-          .once("receipt", function (receipt) {
-            console.log("transaction receipt ", receipt);
-          })
-          .once("confirmation", function (confirmationNumber, receipt) {
-            console.log("configrmation number", confirmationNumber);
-          })
-          .on("error", (error) => {
-            if (error.code == 4001) {
-              return {
-                success: false,
-                rejected: true,
-                message: "User denied transaction signature",
-              };
-            }
-          })
-          .catch((e) => {
-            return {
-              success: false,
-              rejected: true,
-              message: "User denied transaction signature",
-            };
-          });
+  const web3 = new Web3(window.ethereum);
+  let collectionData = new Object();
+  const fileType = checkFileType(logo);
+  console.log("values is ", values);
+  const logoFileResult = await saveFileToPinata(logo);
+  const bannerFileResult = await saveFileToPinata(banner);
+  console.log("wating to upload collection image...");
+  if (logoFileResult.success && bannerFileResult.success) {
+    const ipfsUrl = logoFileResult.ipfsUrl;
+    const bannerIpfsUrl = bannerFileResult.ipfsUrl;
+    const metadata = {
+      name: values.collection,
+      description: values.description,
+      image: ipfsUrl,
+      banner: bannerIpfsUrl,
+      ...(fileType.mediaType == "video" && {
+        animation_url: ipfsUrl,
+      }),
+      ...(values.external_link && { external_link: values.external_link }),
+    };
+    console.log("collection metadata is ", metadata);
+    const collectionMetadataResult = await pinJSONToIPFS(
+      metadata,
+      "collection"
+    );
+    console.log("wating to upload collection metadata...");
+    // if (collectionMetadataResult.success) {
+    const collectionUri = collectionMetadataResult.ipfsUrl;
+    console.log("wating to deploy collection...");
+    // await provider.enable();
+    web3.setProvider(etherumProvider);
 
-        if (!deployResult.rejected) {
-          console.log("deploye result is ", deployResult);
-          collectionData.contractAddress = deployResult._address;
-          collectionData.talentAddress = ownerAddress;
-          collectionData.collectionName = values.collection;
-          collectionData.slug = slugify(values.collection.toString());
-          return uploadCollectionToStrapi(logo, banner, collectionData);
-        } else {
+    const deployResult = await new web3.eth.Contract(collectionArtifact.abi)
+      .deploy({
+        name: "Rimable",
+        data: collectionArtifact.bytecode,
+        arguments: [RINKEBY_PROXY_ADDRESS, "Rimable", "RIMABLE", collectionUri],
+      })
+      .send({
+        from: ownerAddress,
+        gas: "6721975",
+      })
+      .on("transactionHash", function (hash) {
+        console.log("here is transaction hash ", hash);
+      })
+      .once("receipt", function (receipt) {
+        console.log("transaction receipt ", receipt);
+      })
+      .once("confirmation", function (confirmationNumber, receipt) {
+        console.log("configrmation number", confirmationNumber);
+      })
+      .on("error", (error) => {
+        if (error.code == 4001) {
           return {
             success: false,
             rejected: true,
-            message: "User denied transaction signature!",
+            message: "User denied transaction signature",
           };
         }
-      }
+      })
+      .catch((e) => {
+        return {
+          success: false,
+          rejected: true,
+          message: "User denied transaction signature",
+        };
+      });
+
+    if (!deployResult.rejected) {
+      console.log("deploye result is ", deployResult);
+      collectionData.contractAddress = deployResult._address;
+      collectionData.talentAddress = ownerAddress;
+      collectionData.collectionName = values.collection;
+      collectionData.slug = slugify(values.collection.toString());
+      return uploadCollectionToStrapi(logo, banner, collectionData);
     } else {
-      console.log("user rejeted deploy");
       return {
         success: false,
         rejected: true,
-        message: "User denied transaction signature",
+        message: "User denied transaction signature!",
       };
     }
-    return strapiUploadResult;
-  } else {
-    alert("Connect with Mobile connect");
   }
 };
 
@@ -399,44 +378,35 @@ export const mintNft = async (contractAddress, ownerAddress, metadataUri) => {
   console.log("owner address of NFT owner is ", ownerAddress);
   console.log("proxy address is ", RINKEBY_PROXY_ADDRESS);
   const etherumProvider = await detectEthereumProvider();
-  if (etherumProvider) {
-    const unlockResult = await requestUnlockMetamask("For Creating NFT");
-    if (unlockResult.unlockAccepted) {
-      const web3 = new Web3(window.ethereum);
-      const nftContract = new web3.eth.Contract(
-        collectionArtifact.abi,
-        contractAddress,
-        {
-          gasLimit: "1000000",
-        }
-      );
-      const nftResult = await nftContract.methods
-        .mintTo(ownerAddress, metadataUri)
-        .send({ from: ownerAddress })
-        .once("transactionHash", function (hash) {
-          console.log("here is transaction nft hash ", hash);
-          transactionHash = hash;
-        })
-        .once("receipt", function (receipt) {
-          console.log("transaction onf nft receipt ", receipt);
-        })
-        .once("confirmation", function (confirmationNumber, receipt) {
-          console.log("configrmation nft number", confirmationNumber);
-        })
-        .on("error", console.error);
-      if (nftResult) {
-        return transactionHash;
-      } else {
-        return {
-          success: false,
-          message: "Can not get NFT Hash",
-        };
-      }
-    } else {
-      console.log("user recjected nft minting");
+  const web3 = new Web3(window.ethereum);
+  const nftContract = new web3.eth.Contract(
+    collectionArtifact.abi,
+    contractAddress,
+    {
+      gasLimit: "1000000",
     }
+  );
+  const nftResult = await nftContract.methods
+    .mintTo(ownerAddress, metadataUri)
+    .send({ from: ownerAddress })
+    .once("transactionHash", function (hash) {
+      console.log("here is transaction nft hash ", hash);
+      transactionHash = hash;
+    })
+    .once("receipt", function (receipt) {
+      console.log("transaction onf nft receipt ", receipt);
+    })
+    .once("confirmation", function (confirmationNumber, receipt) {
+      console.log("configrmation nft number", confirmationNumber);
+    })
+    .on("error", console.error);
+  if (nftResult) {
+    return transactionHash;
   } else {
-    alert("Please connect with mobile Connect");
+    return {
+      success: false,
+      message: "Can not get NFT Hash",
+    };
   }
 };
 
