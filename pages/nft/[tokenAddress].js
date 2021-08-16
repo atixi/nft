@@ -555,7 +555,7 @@ async function cancelOffer(order, address){
                 )}
               </BidCountdown>}
               <ButtonContainer>
-                {address && asset?.owner?.address == address ?  sellOrders == null &&
+                {address && asset?.owner?.address == address ? 
                 <Link href={`/sell/${queryParam?.tokenAddress}?tokenId=${queryParam?.tokenId}`} passHref><a style={{display: "flex", flex:"1"}}><FooterButton
                 color={"white"}
                 style={{ background: "#0066ff" }}
