@@ -136,22 +136,24 @@ const ERC721Collection = ({ collections }) => {
       (async function () {
         const ownerAccount = await getCurrentAccount();
         console.log("current account is ", ownerAccount);
-        const result = await deployCollection(
-          logoImageFile,
-          bannerImageFile,
-          values,
-          ownerAccount
-        );
-        console.log("result of rejection is ", result);
-        if (!result.rejected && result.data) {
-          const slug = result.data.slug;
-          setNewCollectionSlug(slug);
-          setDisplayModalButtons(true);
-        } else if (result.rejected) {
-          setDisplayUploadModal(false);
-          setDisplayModalButtons(false);
-        } else {
-          console.log("reult is ", result);
+        if (ownerAccount) {
+          const result = await deployCollection(
+            logoImageFile,
+            bannerImageFile,
+            values,
+            ownerAccount
+          );
+          console.log("result of rejection is ", result);
+          if (!result.rejected && result.data) {
+            const slug = result.data.slug;
+            setNewCollectionSlug(slug);
+            setDisplayModalButtons(true);
+          } else if (result.rejected) {
+            setDisplayUploadModal(false);
+            setDisplayModalButtons(false);
+          } else {
+            console.log("reult is ", result);
+          }
         }
       })();
     }

@@ -5,8 +5,8 @@ import axios from "axios";
 import { requestUnlockMetamask, slugify } from "./utils";
 import detectEthereumProvider from "@metamask/detect-provider";
 
-const STRAPI_BASE_URL = process.env.HEROKU_BASE_URL;
-// const STRAPI_BASE_URL = process.env.STRAPI_LOCAL_BASE_URL;
+// const STRAPI_BASE_URL = process.env.HEROKU_BASE_URL;
+const STRAPI_BASE_URL = process.env.STRAPI_LOCAL_BASE_URL;
 const RINKEBY_PROXY_ADDRESS = process.env.RINKEBY_PROXY_ADDRESS;
 const RINKEBY_API_KEY = process.env.RINKEBY_API_KEY;
 const RINKEBY_NODE_URL_WSS = process.env.RINKEBY_NODE_URL_WSS;
@@ -226,6 +226,8 @@ export const deployCollection = async (logo, banner, values, ownerAddress) => {
     message: "Deploy was not successful",
   };
 
+  console.log("owner address of collection owner is ", ownerAddress);
+  console.log("proxy address is ", RINKEBY_PROXY_ADDRESS);
   const etherumProvider = await detectEthereumProvider();
   if (etherumProvider) {
     const unlockResult = await requestUnlockMetamask("For Creating Collection");
@@ -394,7 +396,8 @@ export const uploadNft = async (file, values, ownerAddress) => {
 
 export const mintNft = async (contractAddress, ownerAddress, metadataUri) => {
   let transactionHash = null;
-
+  console.log("owner address of NFT owner is ", ownerAddress);
+  console.log("proxy address is ", RINKEBY_PROXY_ADDRESS);
   const etherumProvider = await detectEthereumProvider();
   if (etherumProvider) {
     const unlockResult = await requestUnlockMetamask("For Creating NFT");
