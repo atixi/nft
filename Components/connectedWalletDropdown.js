@@ -212,9 +212,7 @@ function WalletInfoDropdown({ data }) {
       <Menu.Item key={"1"}>
         <Link
           href={{
-            pathname: `/profile/${
-              metaToken[0] ? metaToken[0] : walletToken[0]
-            }`,
+            pathname: `/profile/${metaToken ? metaToken[0] : walletToken[0]}`,
             // query: {
             //   address: seller.address,
             //   talent: seller.talent,
@@ -247,9 +245,7 @@ function WalletInfoDropdown({ data }) {
         <Link
           href={{
             // pathname: "/profile/index",
-            pathname: `/account/${
-              metaToken[0] ? metaToken[0] : walletToken[0]
-            }`,
+            pathname: `/account/${metaToken ? metaToken[0] : walletToken[0]}`,
             // query: {
             //   address: seller.address,
             //   talent: seller.talent,
