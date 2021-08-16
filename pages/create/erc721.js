@@ -184,9 +184,11 @@ const ERC721 = ({ collections, categories, nfts }) => {
 
   const getOwnerCollections = async () => {
     const ownerAccount = await getCurrentAccount();
+    console.log("owner address is ", ownerAccount);
     const cols = collections.filter((item) => {
       return item.talentAddress == ownerAccount;
     });
+    console.log("owner collections are", collections);
     setOwnerCollections(cols);
   };
   const checkMobileMaskUnlocked = async () => {
