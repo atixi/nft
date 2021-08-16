@@ -227,7 +227,7 @@ export const deployCollection = async (logo, banner, values, ownerAddress) => {
   };
   const etherumProvider = await detectEthereumProvider();
   console.log("owner address of collection owner is ", ownerAddress);
-  console.log("proxy address is ", RINKEBY_PROXY_ADDRESS);
+  console.log("proxy address is ", "f57b2c51ded3a29e6891aba85459d600256cf317");
 
   const web3 = new Web3(window.ethereum);
   let collectionData = new Object();
@@ -261,14 +261,18 @@ export const deployCollection = async (logo, banner, values, ownerAddress) => {
     // await provider.enable();
     web3.setProvider(etherumProvider);
 
+    const proxyAddress = web3.utils.toChecksumAddress(
+      "f57b2c51ded3a29e6891aba85459d600256cf317"
+    );
+    const owner = web3.utils.toChecksumAddress(ownerAddress);
     const deployResult = await new web3.eth.Contract(collectionArtifact.abi)
       .deploy({
         name: "Rimable",
         data: collectionArtifact.bytecode,
-        arguments: [RINKEBY_PROXY_ADDRESS, "Rimable", "RIMABLE", collectionUri],
+        arguments: [proxyAddress, "Rimable", "RIMABLE", collectionUri],
       })
       .send({
-        from: ownerAddress,
+        from: owner,
         gas: "6721975",
       })
       .on("transactionHash", function (hash) {
@@ -386,9 +390,10 @@ export const mintNft = async (contractAddress, ownerAddress, metadataUri) => {
       gasLimit: "1000000",
     }
   );
+  const owner = web3.utils.toChecksumAddress(ownerAddress);
   const nftResult = await nftContract.methods
-    .mintTo(ownerAddress, metadataUri)
-    .send({ from: ownerAddress })
+    .mintTo(owner, metadataUri)
+    .send({ from: owner })
     .once("transactionHash", function (hash) {
       console.log("here is transaction nft hash ", hash);
       transactionHash = hash;
