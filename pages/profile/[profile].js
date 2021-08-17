@@ -90,9 +90,12 @@ function Profile() {
     assetLength === 0
       ? setLoadMore({ ...loadMore, onSalesLoad: false })
       : (() => {
+          const sellOrders = moreAssets.data.assets.filter(
+            (asset) => asset.sellOrders != null
+          );
           setOnsales({
             ...onSales,
-            assets: [...onSales.assets, ...moreAssets.data.assets],
+            assets: [...onSales.assets, sellOrders],
           });
           setLoadMore({
             ...loadMore,
@@ -140,14 +143,14 @@ function Profile() {
           (asset) => asset.sellOrders != null
         );
         setOnsales({
-          talent: { talentAvatar: { url: data.data.talentAvatar.url } },
+          talent: { talentAvatar: { url: data.data?.talentAvatar?.url } },
           assets: sellOrders,
         });
         const owneds = await data.data.assets.filter(
           (asset) => asset.owner.address === data.data.walletAddress
         );
         setOwned({
-          talent: { talentAvatar: { url: data.data.talentAvatar.url } },
+          talent: { talentAvatar: { url: data.data?.talentAvatar?.url } },
           assets: owneds,
         });
         setLoad(true);
