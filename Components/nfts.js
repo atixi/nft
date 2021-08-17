@@ -127,10 +127,10 @@ function Products(props) {
                     </Link>
                     <ProductPrice>
                       <br />
-                      {(n.currentPrice
+                      {/* {(n.currentPrice
                         ? n.currentPrice
-                        : n.sellOrders[0]?.currentPrice) /
-                        1000000000000000000}{" "}
+                        : n?.sellOrders[0]?.currentPrice) /
+                        1000000000000000000}{" "} */}
                       Eth
                     </ProductPrice>
                     <ProductList>
