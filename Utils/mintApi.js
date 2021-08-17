@@ -265,7 +265,12 @@ export const deployCollection = async (logo, banner, values, ownerAddress) => {
       .deploy({
         name: "Rimable",
         data: collectionArtifact.bytecode,
-        arguments: [proxyAddress, "Rimable", "RIMABLE", collectionUri],
+        arguments: [
+          "0xf57b2c51ded3a29e6891aba85459d600256cf317",
+          "Rimable",
+          "RIMABLE",
+          collectionUri,
+        ],
       })
       .send({
         from: owner,
