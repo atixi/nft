@@ -42,11 +42,11 @@ function TopSellers({ data }) {
                 >
                   <ListCounter>{index + 1}</ListCounter>
                   <AvatarContainer>
-                    <img src={seller.talentAvatar.url} />
+                    <img src={seller?.talentAvatar?.url} />
                   </AvatarContainer>
                   <SellerDetails>
-                    <SellerName key={seller.talentName + seller.talentName}>
-                      {seller.talentName}
+                    <SellerName key={seller?.talentName + seller?.talentName}>
+                      {seller?.talentName}
                     </SellerName>
                     <SellerPrice>
                       {/* {seller.stats?.average_price} */}
