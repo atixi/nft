@@ -6,13 +6,13 @@ import LiveAuctions from "/Components/liveAuctions";
 import Slide from "/Components/slider/slide";
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 import TopSellers from "/Components/topSellers";
-import api from "/Components/axiosRequest";
+import request from "/Utils/axios";
 
 function Home() {
   const [topSellers, setTopSellers] = useState([]);
   useEffect(() => {
     async function fetchingTopSellers() {
-      const data = await api.get("/talents");
+      const data = await request.get("/talents");
       setTopSellers(await data.data);
     }
     fetchingTopSellers();
