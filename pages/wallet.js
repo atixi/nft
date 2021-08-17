@@ -6,6 +6,8 @@ import HandleNotification from "/Components/commons/handleNotification";
 import { isMobileDevice, providerOptions } from "/Constants/constants";
 import styles from "/styles/wallet.module.css";
 import WalletConnect from "@walletconnect/client";
+const STRAPI_BASE_URL = process.env.HEROKU_BASE_URL;
+// const STRAPI_BASE_URL = process.env.STRAPI_LOCAL_BASE_URL;
 import {
   setAccountTokens,
   setMetaToken,
@@ -26,6 +28,8 @@ import { useOnboard } from "use-onboard";
 const bridge = "https://bridge.walletconnect.org";
 
 import Onboard from "bnc-onboard";
+import { getCurrentAccount } from "Utils/utils";
+import { fetch, post } from "Utils/strapiApi";
 const Wallet = () => {
   const router = useRouter();
   const dispatchAccountTokens = useDispatch();
@@ -89,6 +93,20 @@ const Wallet = () => {
     return web3;
   };
   const connectToMetamask = async (wallet) => {
+    const account = await getCurrentAccount();
+    const talentResult = await fetch(`/talents/talentexists/${account}`);
+    if (talentResult.data) {
+      const talentExists = talentResult.data.success;
+      if (!talentExists) {
+        let talentData = new FormData();
+        talentData.append("data", JSON.stringify({ walletAddress: account }));
+        const result = await post(`${STRAPI_BASE_URL}/talents`, talentData, {
+          headers: {
+            "Content-Type": `multipart/form-data`,
+          },
+        });
+      }
+    }
     console.log("connecting to metamask");
     if (metaToken !== null) {
       await dispatchMetaConnected(setMetaConnected(true));

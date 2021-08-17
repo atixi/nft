@@ -42,10 +42,10 @@ const ERC721Collection = ({ collections }) => {
   const [displayUploadModal, setDisplayUploadModal] = useState(false);
   const [displayModalButtons, setDisplayModalButtons] = useState();
   const [newCollectionSlug, setNewCollectionSlug] = useState();
-
+  const [collectionTalent, setCollectionTalent] = useState();
   const [displayUnlockModal, setDisplayUnlockModal] = useState(false);
   const [mobileModal, setMobileModal] = useState(null);
-
+  const [displayRegisterModal, setDisplayRegisterModal] = useState();
   const isMetaconnected = useSelector(getMetaConnected);
   const isWalletConnected = useSelector(getWalletConnected);
   const metaToken = useSelector(getMetaToken);
@@ -117,6 +117,8 @@ const ERC721Collection = ({ collections }) => {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
+    const collectionData = createCollectinData(values);
+    console.log("collectin dat ais ", collectionData);
     if (!logoImageFile) {
       setLogoError("Logo Image is Required");
     }
@@ -140,7 +142,7 @@ const ERC721Collection = ({ collections }) => {
           const result = await deployCollection(
             logoImageFile,
             bannerImageFile,
-            values,
+            collectionData,
             ownerAccount
           );
           console.log("result of rejection is ", result);
@@ -173,14 +175,6 @@ const ERC721Collection = ({ collections }) => {
     setDisplayModalButtons(false);
     clearForm();
   };
-
-  useEffect(() => {
-    if (isMobileDevice()) {
-      checkMobileMaskUnlocked();
-    } else {
-      checkMetamaskUnlocked();
-    }
-  }, [isMetaconnected, metaToken]);
 
   const checkMetamaskUnlocked = async () => {
     const { ethereum } = window;
@@ -221,8 +215,88 @@ const ERC721Collection = ({ collections }) => {
       }
     }
   };
+
+  const isTalentRegistered = async () => {
+    const account = await getCurrentAccount();
+    const talentResult = await fetch(`/talents/talentexists/${account}`);
+    if (talentResult.data) {
+      const talentExists = talentResult.data;
+      if (talentExists.success) {
+        setCollectionTalent({
+          id: talentExists.id,
+        });
+        setDisplayRegisterModal(false);
+      } else {
+        setDisplayRegisterModal(true);
+      }
+    } else {
+      setDisplayRegisterModal(true);
+    }
+  };
+
+  const createCollectinData = (values) => {
+    let collectionData = values;
+    collectionData.talent = collectionTalent;
+    return collectionData;
+  };
+
+  useEffect(() => {
+    isTalentRegistered();
+    if (isMobileDevice()) {
+      checkMobileMaskUnlocked();
+    } else {
+      checkMetamaskUnlocked();
+    }
+  }, [isMetaconnected, metaToken]);
+
   return (
     <div className={styles.container}>
+      <Modal
+        title="Please Register your wallet"
+        visible={displayRegisterModal}
+        header={null}
+        footer={null}
+        closable={false}
+        width={500}
+        height={500}
+        maskStyle={{
+          backgroundColor: "#EEEEEE",
+          opacity: 0.1,
+        }}
+        bodyStyle={{
+          height: 350,
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
+        <div className={styles.modalContent}>
+          <div className={styles.modalControls}>
+            <Link
+              href={{
+                pathname: `/`,
+              }}
+            >
+              <a>
+                <span className={styles.linkButton}>{"Go To Main Page"}</span>
+              </a>
+            </Link>
+            <Link
+              href={{
+                pathname: `/wallet`,
+              }}
+            >
+              <a>
+                {
+                  <span className={styles.linkButton}>
+                    {"Register My Wallet"}
+                  </span>
+                }
+              </a>
+            </Link>
+          </div>
+        </div>
+      </Modal>
       <Modal
         title="Unlock Wallet To Create Collection"
         visible={displayUnlockModal}
