@@ -46,14 +46,14 @@ function TopSellers({ data }) {
                   </AvatarContainer>
                   <SellerDetails>
                     <SellerName key={seller?.talentName + seller?.talentName}>
-                      {seller?.talentName}
+                      {seller.talentName ? seller.talentName : "Anonymous"}
                     </SellerName>
                     <SellerPrice>
                       {/* {seller.stats?.average_price} */}
                       {/* {seller.number_of_assets + " assets"} */}
                       {`${
                         seller?.assets?.length
-                          ? seller?.assets?.length + "assets"
+                          ? seller?.assets?.length + " assets"
                           : ""
                       } `}
                     </SellerPrice>
