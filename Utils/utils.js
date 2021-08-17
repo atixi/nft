@@ -385,6 +385,5 @@ export const getCurrentAccount = async () => {
   const web3 = new Web3(Web3.givenProvider);
   await window.ethereum.enable();
   const accounts = await web3.eth.getAccounts();
-  console.log("accounts is", accounts);
   return accounts[0];
 };

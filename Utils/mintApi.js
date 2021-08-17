@@ -226,8 +226,6 @@ export const deployCollection = async (logo, banner, values, ownerAddress) => {
     message: "Deploy was not successful",
   };
   const etherumProvider = await detectEthereumProvider();
-  console.log("owner address of collection owner is ", ownerAddress);
-  console.log("proxy address is ", "f57b2c51ded3a29e6891aba85459d600256cf317");
 
   const web3 = new Web3(window.ethereum);
   let collectionData = new Object();
@@ -261,9 +259,7 @@ export const deployCollection = async (logo, banner, values, ownerAddress) => {
     // await provider.enable();
     web3.setProvider(etherumProvider);
 
-    const proxyAddress = web3.utils.toChecksumAddress(
-      "f57b2c51ded3a29e6891aba85459d600256cf317"
-    );
+    const proxyAddress = web3.utils.toChecksumAddress(RINKEBY_PROXY_ADDRESS);
     const owner = web3.utils.toChecksumAddress(ownerAddress);
     const deployResult = await new web3.eth.Contract(collectionArtifact.abi)
       .deploy({
@@ -305,6 +301,7 @@ export const deployCollection = async (logo, banner, values, ownerAddress) => {
       console.log("deploye result is ", deployResult);
       collectionData.contractAddress = deployResult._address;
       collectionData.talentAddress = ownerAddress;
+      collectionData.talent = values.talent;
       collectionData.collectionName = values.collection;
       collectionData.slug = slugify(values.collection.toString());
       return uploadCollectionToStrapi(logo, banner, collectionData);
@@ -355,15 +352,25 @@ export const uploadNft = async (file, values, ownerAddress) => {
     ownerAddress,
     metadataUploadResult.ipfsUrl
   );
+
+  if (hashResult.rejected) {
+    return {
+      success: false,
+      rejected: true,
+      message: "User denied transaction signature",
+    };
+  }
+
   console.log("hash result is after minting is ", hashResult);
-  if (hashResult != null) {
-    tokenId = await getTokenId(hashResult);
+  if (hashResult.transactionHash) {
+    tokenId = await getTokenId(hashResult.transactionHash);
     console.log("Asset token Id is ", tokenId);
     nftData.tokenId = tokenId.toString();
     nftData.tokenAddress = values.collections.contractAddress;
     nftData.collections = values.collections;
     nftData.name = values.name;
     nftData.categories = values.categories;
+    nftData.talent = values.talent;
     nftData.metadata = metadata;
     console.log("NFT data is ", nftData);
     const strapiResult = await uploadNftToStrapi(file, nftData);
@@ -374,6 +381,7 @@ export const uploadNft = async (file, values, ownerAddress) => {
       };
     console.log("Nft is uploaded to strapi", strapiResult);
     return strapiResult;
+  } else {
   }
 };
 
@@ -404,9 +412,31 @@ export const mintNft = async (contractAddress, ownerAddress, metadataUri) => {
     .once("confirmation", function (confirmationNumber, receipt) {
       console.log("configrmation nft number", confirmationNumber);
     })
-    .on("error", console.error);
-  if (nftResult) {
-    return transactionHash;
+    .once("error", (error) => {
+      if (error.code == 4001) {
+        return {
+          success: false,
+          rejected: true,
+          message: "User denied transaction signature",
+        };
+      }
+    })
+    .catch((e) => {
+      return {
+        success: false,
+        rejected: true,
+        message: "User denied transaction signature",
+      };
+    });
+
+  if (nftResult.transactionHash) {
+    return nftResult;
+  } else if (nftResult.rejected) {
+    return {
+      success: false,
+      rejected: true,
+      message: "User denied transaction signature",
+    };
   } else {
     return {
       success: false,

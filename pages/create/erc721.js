@@ -51,9 +51,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
   const [nftImageError, setNftImageError] = useState();
   const [duplicateNameError, setDuplicateNameError] = useState();
   const [selectedCategories, setSelectedCategories] = useState();
-  const [displayUploadModal, setDisplayUploadModal] = useState(false);
-  const [displayUnlockModal, setDisplayUnlockModal] = useState(false);
-
+  const [nftTalent, setNftTalent] = useState();
   const [nftData, setNftData] = useState(initNft);
   const [uploadFileUrl, setUploadFileUrl] = useState("");
   const [nftImageFile, setNftImageFile] = useState();
@@ -63,6 +61,13 @@ const ERC721 = ({ collections, categories, nfts }) => {
   const isMetaconnected = useSelector(getMetaConnected);
   const metaToken = useSelector(getMetaToken);
   const [onboard, setOnboard] = useState(null);
+  const [nftContract, setNftContract] = useState();
+  const [nftTokenId, setNftTokenId] = useState();
+  const [displayUploadModal, setDisplayUploadModal] = useState(false);
+  const [displayModalButtons, setDisplayModalButtons] = useState();
+  const [displayUnlockModal, setDisplayUnlockModal] = useState(false);
+  const [displayRegisterModal, setDisplayRegisterModal] = useState();
+  const [form] = Form.useForm();
 
   const getSelectedCollection = (colId) => {
     const selected = collections.filter((item) => item.id === colId)[0];
@@ -70,6 +75,7 @@ const ERC721 = ({ collections, categories, nfts }) => {
     setSelectedCollection(selected);
     return selectedCollection;
   };
+
   const getSelectedCategories = (catList) => {
     const cats = categories.filter((item) => catList.includes(item.id));
     setSelectedCategories(cats);
@@ -121,17 +127,11 @@ const ERC721 = ({ collections, categories, nfts }) => {
   const createNftData = (values) => {
     let nftData = values;
     nftData.collections = selectedCollection;
+    nftData.talent = nftTalent;
     nftData.categories = selectedCategories;
     return nftData;
   };
 
-  const saveNft = async (nftImageFile, values) => {
-    const nftData = createNftData(values);
-    const ownerAccount = await getCurrentAccount();
-    return await uploadNft(nftImageFile, nftData, ownerAccount);
-  };
-
-  const [form] = Form.useForm();
   const onFinish = (values) => {
     let validationResult = validateImage(nftImageFile, 40);
     console.log("on finish", validationResult);
@@ -139,11 +139,20 @@ const ERC721 = ({ collections, categories, nfts }) => {
       setDisplayUploadModal(true);
       console.log("validation of nfig image is file is ready");
       (async function () {
-        const result = await saveNft(nftImageFile, values);
-        if (result) {
+        const nftData = createNftData(values);
+        console.log("nft deat ais ", nftData);
+        const ownerAccount = await getCurrentAccount();
+        const result = await uploadNft(nftImageFile, nftData, ownerAccount);
+        if (result.rejected) {
           console.log(result);
           setDisplayUploadModal(false);
-          clearForm();
+        } else {
+          if (result.data) {
+            setNftContract(result.data.tokenAddress);
+            setNftTokenId(result.data.tokenId);
+            setDisplayUploadModal(true);
+            setDisplayModalButtons(true);
+          }
         }
       })();
     }
@@ -157,14 +166,6 @@ const ERC721 = ({ collections, categories, nfts }) => {
       setNftImageError(null);
     }
   };
-  useEffect(() => {
-    getOwnerCollections();
-    if (isMobileDevice()) {
-      checkMobileMaskUnlocked();
-    } else {
-      checkMetamaskUnlocked();
-    }
-  }, [isMetaconnected]);
 
   const checkMetamaskUnlocked = async () => {
     const { ethereum } = window;
@@ -184,11 +185,9 @@ const ERC721 = ({ collections, categories, nfts }) => {
 
   const getOwnerCollections = async () => {
     const ownerAccount = await getCurrentAccount();
-    console.log("owner address is ", ownerAccount);
     const cols = collections.filter((item) => {
       return item.talentAddress == ownerAccount;
     });
-    console.log("owner collections are", collections);
     setOwnerCollections(cols);
   };
   const checkMobileMaskUnlocked = async () => {
@@ -218,9 +217,88 @@ const ERC721 = ({ collections, categories, nfts }) => {
     }
   };
 
+  const isTalentRegistered = async () => {
+    const account = await getCurrentAccount();
+    const talentResult = await fetch(`/talents/talentexists/${account}`);
+    if (talentResult.data) {
+      const talentExists = talentResult.data;
+      if (talentExists.success) {
+        setNftTalent({
+          id: talentExists.id,
+        });
+        setDisplayRegisterModal(false);
+      } else {
+        setDisplayRegisterModal(true);
+      }
+    } else {
+      setDisplayRegisterModal(true);
+    }
+  };
+
+  const handleNewNft = () => {
+    setDisplayUploadModal(false);
+    setDisplayModalButtons(false);
+    clearForm();
+  };
+  useEffect(() => {
+    isTalentRegistered();
+    getOwnerCollections();
+    if (isMobileDevice()) {
+      checkMobileMaskUnlocked();
+    } else {
+      checkMetamaskUnlocked();
+    }
+  }, [isMetaconnected]);
+
   return (
     <div className={styles.container}>
       <div>
+        <Modal
+          title="Please Register your wallet"
+          visible={displayRegisterModal}
+          header={null}
+          footer={null}
+          closable={false}
+          width={500}
+          height={500}
+          maskStyle={{
+            backgroundColor: "#EEEEEE",
+            opacity: 0.1,
+          }}
+          bodyStyle={{
+            height: 350,
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+          }}
+        >
+          <div className={styles.modalContent}>
+            <div className={styles.modalControls}>
+              <Link
+                href={{
+                  pathname: `/`,
+                }}
+              >
+                <a>
+                  <span className={styles.linkButton}>{"Go To Main Page"}</span>
+                </a>
+              </Link>
+              <Link
+                href={{
+                  pathname: `/wallet`,
+                }}
+              >
+                <a>
+                  {
+                    <span className={styles.linkButton}>
+                      {"Register My Wallet"}
+                    </span>
+                  }
+                </a>
+              </Link>
+            </div>
+          </div>
+        </Modal>
         <Modal
           title="Unlock Wallet To Create Collection"
           visible={displayUnlockModal}
@@ -286,11 +364,31 @@ const ERC721 = ({ collections, categories, nfts }) => {
             alignContent: "center",
           }}
         >
-          <div className={styles.waitingSpiner}>
-            <div className={styles.deplyingMessage}>
-              Please Be Patient It may take serveral minutes
-            </div>
-            <Spin size="large" />
+          <div className={styles.modalContent}>
+            {!displayModalButtons ? (
+              <div className={styles.waitingSpiner}>
+                <div className={styles.deplyingMessage}>
+                  {"Please Be Patient It may take serveral minutes"}
+                </div>
+                <Spin size="large" />
+              </div>
+            ) : (
+              <div className={styles.modalControls}>
+                <Button
+                  type="primary"
+                  className={styles.modalButton}
+                  onClick={handleNewNft}
+                >
+                  Create New NFT
+                </Button>
+                <Link
+                  className={styles.modalButton}
+                  href={`/nft/${nftContract}?tokenId=${nftTokenId}`}
+                >
+                  <a>{"View Minted NFT"}</a>
+                </Link>
+              </div>
+            )}
           </div>
         </Modal>
       </div>
