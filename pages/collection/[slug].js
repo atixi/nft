@@ -14,6 +14,7 @@ import {
   MainWrapper,
 } from "/Components/StyledComponents/globalStyledComponents";
 import CollectionLoader from "@/components/collectionLoader";
+import { useRouter } from "next/router";
 const { TabPane } = Tabs;
 import {
   FacebookShareButton,
@@ -27,7 +28,9 @@ import {
 } from "next-share";
 import { displayAddress } from "/Utils/utils";
 import api from "/Components/axiosRequest";
-function CollectionDetails({ collection }) {
+function CollectionDetails() {
+  const router = useRouter();
+  const { slug } = router.query;
   const [collect, setCollect] = useState({
     collectionName: "",
     collectionImageURL: {
@@ -36,6 +39,7 @@ function CollectionDetails({ collection }) {
     collectionBanner: {
       url: "",
     },
+    talent: { walletAddress: "" },
     assets: [],
   });
   const [loadMore, setLoadMore] = useState({
@@ -66,7 +70,7 @@ function CollectionDetails({ collection }) {
       onsalesLoadMoreButtonLoading: true,
     });
     const moreAssets = await api.get(
-      `/collections/${collection.slug}?offset=${loadMore.onSales}`
+      `/collections/${collect.slug}?offset=${loadMore.onSales}`
     );
     const assetLength = await moreAssets.data.assets.length;
     assetLength === 0
@@ -74,7 +78,7 @@ function CollectionDetails({ collection }) {
       : (() => {
           setOnsales({
             talent: {
-              talentAvatar: { url: collection.talent.talentAvatar.url },
+              talentAvatar: { url: collect.talent.talentAvatar.url },
             },
             assets: [...onSales.assets, ...moreAssets.data.assets],
           });
@@ -91,7 +95,7 @@ function CollectionDetails({ collection }) {
   async function LoadMoreOwned() {
     setLoadMoreButton({ ...loadMoreButton, ownedLoadMoreButtonLoading: true });
     const moreAssets = await api.get(
-      `/collections/${collection.slug}?offset=${loadMore.owned}`
+      `/collections/${collect.slug}?offset=${loadMore.owned}`
     );
     const assetLength = await moreAssets.data.assets.length;
     assetLength === 0
@@ -112,17 +116,26 @@ function CollectionDetails({ collection }) {
         })();
   }
   useEffect(() => {
-    setCollect(collection);
-    const sellOrders = collection.assets.filter(
-      (asset) => asset.sellOrders != null
-    );
-    setOnsales({
-      talent: { talentAvatar: { url: collection.talent.talentAvatar.url } },
-      assets: sellOrders,
-    });
-    console.log("onsales: =", onSales);
+    slug != undefined
+      ? (async function fetchCollection() {
+          const { data } = await api.get(
+            `https://rim-entertainment.herokuapp.com/collections/${slug}`
+          );
+          console.log("came", await data);
+          setCollect(await data);
+          const sellOrders = await data.assets.filter(
+            (asset) => asset.sellOrders != null
+          );
+          setOnsales({
+            talent: {
+              talentAvatar: { url: data?.talent?.talentAvatar?.url },
+            },
+            assets: sellOrders,
+          });
+        })()
+      : "";
     setLoad(true);
-  }, []);
+  }, [slug]);
 
   return (
     <>
@@ -130,12 +143,12 @@ function CollectionDetails({ collection }) {
         {isLoad === false ? <CollectionLoader /> : ""}
         {isLoad ? (
           <ProfileContainer>
-            <img src={collect.collectionBanner.url} />
+            <img src={collect.collectionBanner?.url} />
             <BiographyContainer>
               <div className={"avatar"}>
                 <img
                   alt="userAvatar"
-                  src={collect.collectionImageURL.url}
+                  src={collect.collectionImageURL?.url}
                   loading="lazy"
                 />
               </div>
@@ -145,7 +158,7 @@ function CollectionDetails({ collection }) {
                 </h3>
                 <h6>
                   <strong>
-                    {displayAddress(collection.talent.walletAddress)}
+                    {displayAddress(collect.talent?.walletAddress)}
                   </strong>
                 </h6>
                 <div className="mt-4">
@@ -158,8 +171,8 @@ function CollectionDetails({ collection }) {
                           <div>
                             <div>
                               <FacebookShareButton
-                                url={`${process.env.BASE_URL}/collection/${collection.slug}`}
-                                quote={`${collection.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
+                                url={`${process.env.BASE_URL}/collection/${collect.slug}`}
+                                quote={`${collect.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
                                 hashtag={"#rimentertainment"}
                               >
                                 <FacebookIcon size={32} round />
@@ -167,24 +180,24 @@ function CollectionDetails({ collection }) {
                             </div>
                             <div>
                               <TwitterShareButton
-                                url={`${process.env.BASE_URL}/collection/${collection.slug}`}
-                                title={`${collection.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
+                                url={`${process.env.BASE_URL}/collection/${collect.slug}`}
+                                title={`${collect.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
                               >
                                 <TwitterIcon size={32} round />
                               </TwitterShareButton>
                             </div>
                             <div>
                               <TelegramShareButton
-                                url={`${process.env.BASE_URL}/collection/${collection.slug}`}
-                                title={`${collection.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
+                                url={`${process.env.BASE_URL}/collection/${collect.slug}`}
+                                title={`${collect.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
                               >
                                 <TelegramIcon size={32} round />
                               </TelegramShareButton>
                             </div>
                             <div>
                               <WhatsappShareButton
-                                url={`${process.env.BASE_URL}/collection/${collection.slug}`}
-                                title={`${collection.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
+                                url={`${process.env.BASE_URL}/collection/${collect.slug}`}
+                                title={`${collect.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
                                 separator=":: "
                               >
                                 <WhatsappIcon size={32} round />
@@ -251,31 +264,5 @@ function CollectionDetails({ collection }) {
     </>
   );
 }
-
-export const getStaticPaths = async () => {
-  const res = await fetch(
-    "https://rim-entertainment.herokuapp.com/collections"
-  );
-  const collections = await res.json();
-  console.log("collection from path", collections);
-  const paths = collections.map((collection) => ({
-    params: {
-      slug: collection.slug,
-    },
-  }));
-
-  return {
-    paths,
-    fallback: true,
-  };
-};
-
-export const getStaticProps = async ({ params }) => {
-  const res = await fetch(
-    `https://rim-entertainment.herokuapp.com/collections/${params.slug}`
-  );
-  const collection = await res.json();
-  return { props: { collection: JSON.parse(JSON.stringify(collection)) } };
-};
 
 export default CollectionDetails;
