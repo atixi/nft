@@ -14,17 +14,8 @@ import {
   NFTImage,
   CardImage,
 } from "./StyledComponents/liveAuctions-styledComponents";
-
+import {randomAvatar} from "Utils/utils"
 function Products(props) {
-  const menu = (
-    <Menu>
-      <Menu.Item key="1">Purchase now</Menu.Item>
-      <Menu.Item key="2">Place a bid</Menu.Item>
-      <Menu.Item key="3">View on OpenSea</Menu.Item>
-      <Menu.Item key="3">Share</Menu.Item>
-    </Menu>
-  );
-
   return (
     <>
       <CardsContainer>
@@ -36,21 +27,22 @@ function Products(props) {
                   // style={{ width: "280px" }}
                   className="p-3 p-sm-2 p-md-2 p-lg-3"
                 >
-                  <ProductCardHeader className={`mt-1`}>
-                    <div className={"pl-3 float-left"}>
+                  <ProductCardHeader>
+                    <div className={"pl-0 float-left"}>
                       <Avatar.Group>
                         <Tooltip title={"Owner"} placement="top">
                           <Avatar
                             icon={
                               <img
                                 src={
-                                  props.data.talent
-                                    ? props.data.talent.talentAvatar?.url
-                                    : props.data.talentAvatar?.url
-                                    ? props.data.talentAvatar?.url
-                                    : n.talent?.talentAvatar?.url
-                                    ? n.talent?.talentAvatar?.url
-                                    : n.owner?.profile_img_url
+                                  // props.data.talent
+                                  //   ? props.data.talent.talentAvatar?.url
+                                  //   : props.data.talentAvatar?.url
+                                  //   ? props.data.talentAvatar?.url
+                                  //   : n.talent?.talentAvatar?.url
+                                  //   ? n.talent?.talentAvatar?.url
+                                  //   : n.owner?.profile_img_url
+                                  randomAvatar()
                                 }
                                 width={12}
                                 height={12}
@@ -100,7 +92,7 @@ function Products(props) {
                       <a>
                         <NFTImage>
                           <Image
-                            src={n.imageUrl}
+                            src={n?.metadata?.image}
                             className="rounded"
                             preview={false}
                             alt=""
@@ -127,7 +119,7 @@ function Products(props) {
                         ? n.currentPrice
                         : n?.sellOrders[0]?.currentPrice) /
                         1000000000000000000}{" "} */}
-                      Eth
+                      {/* Eth */}
                     </ProductPrice>
                     <ProductList>
                       {/* {" " + n.currentQTY + " of " + n.totalQTY} */}

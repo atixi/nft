@@ -283,7 +283,7 @@ export function findHighestOffer(orders) {
   return offer;
 }
 export function displayAddress(address) {
-  return address
+  return address && address
     .toString()
     .replace(address.toString().substring(10, address.length - 10), ".....");
 }
@@ -387,3 +387,8 @@ export const getCurrentAccount = async () => {
   const accounts = await web3.eth.getAccounts();
   return accounts[0];
 };
+export function randomAvatar()
+{
+  let randomNumber = Math.floor((Math.random() * 33) + 1);
+  return "https://storage.googleapis.com/opensea-static/opensea-profile/"+randomNumber+".png";
+}

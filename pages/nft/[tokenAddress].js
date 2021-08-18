@@ -309,16 +309,7 @@ async function cancelOffer(order, address){
                         <div className={"content"}>
                           <span className="avatarContainer">
                             <Link
-                              href={{
-                                pathname: "/profile/talent",
-                                query: {
-                                  address: order.makerAccount?.address,
-                                  talent: checkName(
-                                    order.makerAccount?.user?.username
-                                  ),
-                                  avatar: order.makerAccount?.profile_img_url,
-                                },
-                              }}
+                              href={`/profile/${order?.makerAccount?.address}`}
                               passHref
                             >
                               <a>
@@ -341,17 +332,7 @@ async function cancelOffer(order, address){
                                 } ${order?.paymentTokenContract?.symbol}`}</span>
                                 {" by "}
                                 <Link
-                                  href={{
-                                    pathname: "/profile/talent",
-                                    query: {
-                                      address: order.makerAccount?.address,
-                                      talent: checkName(
-                                        order.makerAccount?.user?.username
-                                      ),
-                                      avatar:
-                                        order.makerAccount?.profile_img_url,
-                                    },
-                                  }}
+                                  href={`/profile/${order?.makerAccount?.address}`}
                                   passHref
                                 >
                                   <a className={"bidderLink"}>
@@ -388,16 +369,7 @@ async function cancelOffer(order, address){
                         <div className={"content"}>
                           <span className="avatarContainer">
                             <Link
-                              href={{
-                                pathname: "/profile/talent",
-                                query: {
-                                  address: order.makerAccount?.address,
-                                  talent: checkName(
-                                    order.makerAccount?.user?.username
-                                  ),
-                                  avatar: order.makerAccount?.profile_img_url,
-                                },
-                              }}
+                              href={`/profile/${order?.makerAccount?.address}`}
                               passHref
                             >
                               <a>
@@ -420,17 +392,7 @@ async function cancelOffer(order, address){
                                 } ${order?.paymentTokenContract?.symbol}`}</span>
                                 {" by "}
                                 <Link
-                                  href={{
-                                    pathname: "/profile/talent",
-                                    query: {
-                                      address: order.makerAccount?.address,
-                                      talent: checkName(
-                                        order.makerAccount?.user?.username
-                                      ),
-                                      avatar:
-                                        order.makerAccount?.profile_img_url,
-                                    },
-                                  }}
+                                  href={`/profile/${order?.makerAccount?.address}`}
                                   passHref
                                 >
                                   <a className={"bidderLink"}>
@@ -459,14 +421,7 @@ async function cancelOffer(order, address){
                   <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
                   <br />
                   <Link
-                    href={{
-                      pathname: "/profile/talent",
-                      query: {
-                        address: asset?.owner?.address,
-                        talent: checkName(asset?.owner?.user?.username),
-                        avatar: asset?.owner?.profile_img_url,
-                      },
-                    }}
+                    href={`/profile/${asset?.owner?.address}`}
                     passHref
                   >
                     <a>
@@ -492,14 +447,7 @@ async function cancelOffer(order, address){
                   <BidOwner className={"float-left"}>
                     {CONSTANTS.highestOffer}{" "}
                     <Link
-                      href={{
-                        pathname: "/profile/talent",
-                        query: {
-                          address: highestOffer?.makerAccount?.address,
-                          talent: checkName(highestOffer?.makerAccount?.user?.username),
-                          avatar: highestOffer?.makerAccount?.profile_img_url,
-                        },
-                      }}
+                      href={`/profile/${highestOffer?.makerAccount?.address}`}
                       passHref
                     >
                       <a>{checkName(highestOffer?.makerAccount?.user?.username)}</a>
@@ -507,14 +455,7 @@ async function cancelOffer(order, address){
                   </BidOwner>
                   <BidPrice>
                     <Link
-                      href={{
-                        pathname: "/profile/talent",
-                        query: {
-                          address: highestOffer?.makerAccount?.address,
-                          talent: checkName(highestOffer?.makerAccount?.user?.username),
-                          avatar: highestOffer?.makerAccount?.profile_img_url,
-                        },
-                      }}
+                      href={`/profile/${highestOffer?.makerAccount?.address}`}
                       passHref
                     >
                       <a>
@@ -540,13 +481,13 @@ async function cancelOffer(order, address){
                     </BidPriceValue>
                   </BidPrice>
                 </BidOwnerContainer>}
-                {asset?.sellOrder && asset?.sellOrder?.expirationTime != "0" &&  (
+                {sellOrders !== undefined && sellOrders[0]?.expirationTime !== "0" && sellOrders[0]?.expirationTime != undefined &&  (
                   <Auction>
                     <div className={"auctionDiv"}>
                       <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
                       <AuctionTimer>
                         <Countdown
-                          value={ unixToMilSeconds(asset?.sellOrder?.expirationTime)}
+                          value={ unixToMilSeconds(sellOrders[0]?.expirationTime)}
                           format={`D[d] HH[h] mm[m] ss[s]`}
                         />
                       </AuctionTimer>

@@ -57,6 +57,7 @@ export const SliderItem = styled.div`
     img {
       transform: scale(1.2, 1.2);
     }
+    cursor: pointer;
   }
 `;
 export const SliderTitle = styled.span`

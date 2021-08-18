@@ -15,7 +15,7 @@ function AccountSetting({ accountAddress }) {
   useEffect(() => {
     console.log("account address is : ", accountAddress);
     setAddress(
-      address
+      address && address
         .toString()
         .replace(address.toString().substring(10, address.length - 10), ".....")
     );

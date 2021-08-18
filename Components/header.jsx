@@ -365,8 +365,6 @@ function Header(props) {
               <Image src="/logo/logo.png" width="40" height="40" />
             </Link>
           </div>
-          {/* might be changed to dropdown */}
-          <Button className={`mx-3`}>{CONSTANTS.english}</Button>
           <div style={{ flex: 1 }}></div>
           <Button
             onClick={() => {

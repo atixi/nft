@@ -64,22 +64,6 @@ function LiveAuctions() {
 function Product(product, index) {
   const pr = getAuctionPriceDetails(product);
   const price = pr.priceBase;
-  const menu = (
-    <Menu>
-      <Menu.Item key="1">
-        <span>{CONSTANTS.purchaseNow}</span>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <span>{CONSTANTS.placeBid}</span>
-      </Menu.Item>
-      <Menu.Item key="3">
-        <span>{CONSTANTS.viewOnOpenSea}</span>
-      </Menu.Item>
-      <Menu.Item key="4">
-        <span>{CONSTANTS.share}</span>
-      </Menu.Item>
-    </Menu>
-  );
   return (
     <ProductCard key={index} className={`p-2 p-lg-1 mr-3`}>
       <ProductCardHeader className={`mt-3`}>
@@ -104,7 +88,16 @@ function Product(product, index) {
           </Avatar.Group>
         </ProductCardHeaderOwners>
         <ProductCardHeaderButton>
-          <Dropdown trigger={["click"]} overlay={menu} placement="bottomRight">
+          <Dropdown trigger={["click"]} overlay={
+          <Menu>
+            <Menu.Item key="2">
+            <Link href={product?.asset ? `/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}` : `/nft/${product?.assetBundle?.maker?.address}?slug=${product?.assetBundle?.slug}`} >
+              <a>
+              <span>{CONSTANTS.placeBid}</span>
+              </a>
+              </Link>
+          </Menu.Item>
+          </Menu>} placement="bottomRight">
             <Button>...</Button>
           </Dropdown>
         </ProductCardHeaderButton>

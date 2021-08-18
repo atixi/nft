@@ -49,4 +49,8 @@ export const CategoriesList = styled.ul`
     background-color: #000;
     color: #fff;
   }
+  li:hover{
+    cursor: pointer;
+    color: #208DD5;
+  }
 `;
