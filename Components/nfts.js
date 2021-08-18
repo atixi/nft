@@ -110,17 +110,12 @@ function Products(props) {
                     </Link>
                   </CardImage>
                   <ProductDescription>
-                    {/* <Link
-                      href={`/product-details?ta=${n?.asset_contract.address}&ti=${n?.token_id}`}
-                    > */}
                     <Link
-                      href={{
-                        pathname: `/nft/${
-                          n?.assetContract?.address
-                            ? n?.assetContract?.address
-                            : n.tokenAddress
-                        }?tokenId=${n?.tokenId}`,
-                      }}
+                      href={`/nft/${
+                        n?.assetContract?.address
+                          ? n?.assetContract?.address
+                          : n.tokenAddress
+                      }?tokenId=${n?.tokenId}`}
                     >
                       <a>
                         <CardTitle>{n?.name}</CardTitle>
