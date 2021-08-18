@@ -115,7 +115,11 @@ function Products(props) {
                     > */}
                     <Link
                       href={{
-                        pathname: "/product-details",
+                        pathname: `/nft/${
+                          n?.assetContract?.address
+                            ? n?.assetContract?.address
+                            : n.tokenAddress
+                        }?tokenId=${n?.tokenId}`,
                         query: {
                           explore: JSON.stringify(n),
                         },
