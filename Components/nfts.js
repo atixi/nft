@@ -120,9 +120,6 @@ function Products(props) {
                             ? n?.assetContract?.address
                             : n.tokenAddress
                         }?tokenId=${n?.tokenId}`,
-                        query: {
-                          explore: JSON.stringify(n),
-                        },
                       }}
                     >
                       <a>
