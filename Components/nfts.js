@@ -16,7 +16,7 @@ import {
 } from "./StyledComponents/liveAuctions-styledComponents";
 
 function Products(props) {
-  console.log(props)
+  console.log("explore", props)
   const menu = (
     <Menu>
       <Menu.Item key="1">Purchase now</Menu.Item>
@@ -101,7 +101,7 @@ function Products(props) {
                       <a>
                         <NFTImage>
                           <Image
-                            src={n.imageUrl}
+                            src={n?.metadata?.image}
                             className="rounded"
                             preview={false}
                             alt=""
