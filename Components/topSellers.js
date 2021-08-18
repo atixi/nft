@@ -30,7 +30,7 @@ function TopSellers({ data }) {
         {data &&
           data.map((seller, index) => (
             <Link
-              key={seller.id}
+              key={index}
               href={{
                 pathname: `/profile/${seller.walletAddress}`,
               }}

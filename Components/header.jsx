@@ -96,10 +96,10 @@ function Header(props) {
 
   useEffect(() => {
     isConnectedToAnyWallet();
-  }, [isMetaconnected, isWalletConnected, metaBalance]);
+  }, [isMetaconnected]);
 
   const isConnectedToAnyWallet = async () => {
-    if (isMetaconnected == false && isWalletConnected == false) {
+    if (isMetaconnected == false) {
       setConnected(false);
     } else if (
       isMetaconnected == false &&
@@ -250,10 +250,10 @@ function Header(props) {
             ) : (
               ""
             )}
-            {data.assets.map((n, i) => {
+            {data.assets.map((n, index) => {
               return (
                 <Link
-                  key={i}
+                  key={index}
                   href={`/nft/${n.tokenAddress}?tokenId=${n?.tokenId}`}
                   passHref
                 >
@@ -290,9 +290,9 @@ function Header(props) {
             ) : (
               ""
             )}
-            {data.collections.map((n, i) => {
+            {data.collections.map((n, index) => {
               return (
-                <Link key={i} href={`/collection/${n.slug}`} passHref>
+                <Link key={index} href={`/collection/${n.slug}`} passHref>
                   <div
                     style={{
                       display: "flex",
@@ -326,9 +326,9 @@ function Header(props) {
             ) : (
               ""
             )}
-            {data.talents.map((n, i) => {
+            {data.talents.map((n, index) => {
               return (
-                <Link key={i} href={`/profile/${n.userName}`} passHref>
+                <Link key={index} href={`/profile/${n.userName}`} passHref>
                   <div
                     style={{
                       display: "flex",
@@ -432,10 +432,10 @@ function Header(props) {
           <a href="#">{CONSTANTS.explore}</a>
         </li>
         <li className="d-none d-lg-flex">
-          {(isMetaconnected || isWalletConnected) && (
+          {isMetaconnected && metaToken.length > 0 && (
             <Link
               href={{
-                pathname: `/profile/${metaToken[0] ? metaToken[0] : ""}`,
+                pathname: `/profile/${metaToken[0]}`,
               }}
             >
               <a>{"My Items"}</a>

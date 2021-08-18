@@ -6,10 +6,10 @@ const accountSlice = createSlice({
   name: "account",
   initialState: {
     accountTokens: {
-      metaToken: null,
+      metaToken: [],
       metaBalance: 0,
       walletBalance: null,
-      walletToken: null,
+      walletToken: [],
     },
     metaConnected: false,
     walletConnected: false,
