@@ -6,6 +6,7 @@ import Link from "next/link";
 import { isMobileDevice, providerOptions } from "/Constants/constants";
 import Onboard from "bnc-onboard";
 import Web3 from "web3";
+
 import {
   checkFileType,
   checkForDuplicate,
@@ -21,6 +22,7 @@ import {
   getWalletConnected,
   getWalletToken,
 } from "store/action/accountSlice";
+
 import { useSelector } from "react-redux";
 import { useOnboard } from "use-onboard";
 
@@ -241,7 +243,8 @@ const ERC721Collection = ({ collections }) => {
   };
 
   useEffect(() => {
-    isTalentRegistered();
+    test();
+    // isTalentRegistered();
     if (isMobileDevice()) {
       checkMobileMaskUnlocked();
     } else {
@@ -249,6 +252,10 @@ const ERC721Collection = ({ collections }) => {
     }
   }, [isMetaconnected, metaToken]);
 
+  const test = async () => {
+    const wallet = await open();
+    console.log(wallet);
+  };
   return (
     <div className={styles.container}>
       <Modal

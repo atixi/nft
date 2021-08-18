@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import styles from "/styles/erc721.module.css";
 import Onboard from "bnc-onboard";
+
 import {
   setAccountTokens,
   setMetaToken,
@@ -50,53 +51,40 @@ const Layout = ({ children }) => {
   const isWalletConnected = useSelector(getWalletConnected);
   const [isWrongNet, setIsWrongNet] = useState(false);
   const router = useRouter();
-  const [displayHeader, setDisplayHeader] = useState(true);
   const [network, setNetwork] = useState(null);
   const [displayUnlockModal, setDisplayUnlockModal] = useState(true);
   const [onboard, setOnboard] = useState(null);
-  useEffect(() => {
-    // detectNetwork()
-    subscribeMetamaskProvider();
-    handleHeader();
 
-    if (isMobileDevice()) {
-      checkMobileMaskUnlocked();
-    } else {
-      checkMetamaskUnlocked();
-    }
-  }, [isMetaconnected]);
-
-  const handleHeader = () => {
-    if (router.pathname !== "/wallet") {
-      setDisplayHeader(true);
-    } else {
-      setDisplayHeader(false);
-    }
-  };
-
-  const getWalletAccountData = () => {};
+  const showHeader = router.pathname.toString().includes("wallet")
+    ? false
+    : true;
   const subscribeMetamaskProvider = async () => {
     const provider = await detectEthereumProvider();
     if (provider !== window.ethereum) {
       return;
     }
     ethereum.on("accountsChanged", handleMetaAccount);
-    ethereum.on("chainChanged", (chainId) => {
-      console.log("chain changed");
-      console.log(chainId);
-    });
+    ethereum.on("chainChanged", (chainId) => {});
   };
   const handleMetaAccount = async (accounts) => {
+    router.reload(window.location.pathname);
+
     console.log("Listen to account changes");
     console.log("My Meta accounts are", accounts);
-    if (accounts.length === 0) {
+    if (accounts.length == 0) {
+      console.log("we are in account change if");
       await dispatchMetaConnected(setMetaConnected(false));
-      await dispatchMetaToken(setMetaToken(null));
+      await dispatchMetaToken(setMetaToken([]));
       await dipsatchMetaBalance(setMetaBalance(""));
     } else {
+      console.log("we are in account change else");
+
       await dispatchMetaConnected(setMetaConnected(true));
       await dispatchMetaToken(setMetaToken(accounts));
-      const web3 = new Web3(window.ethereum);
+      console.log("accounts are accountessdfkasdf", accounts);
+      let web3 = new Web3(window.ethereum);
+
+      console.log("accounts are hadisa", await web3.eth.getAccounts());
       web3.eth.getBalance(accounts[0], async (err, result) => {
         if (err) {
           console.log(err);
@@ -112,6 +100,8 @@ const Layout = ({ children }) => {
       });
       if (router.pathname === "/wallet") {
         router.push("/");
+      } else {
+        router.reload(window.location.pathname);
       }
     }
   };
@@ -159,6 +149,16 @@ const Layout = ({ children }) => {
       }
     }
   };
+
+  useEffect(() => {
+    subscribeMetamaskProvider();
+    if (isMobileDevice()) {
+      checkMobileMaskUnlocked();
+    } else {
+      checkMetamaskUnlocked();
+    }
+  }, [isMetaconnected]);
+
   return (
     <>
       <Head>
@@ -167,8 +167,11 @@ const Layout = ({ children }) => {
         <meta name="description" content="Rim Entertainment inc" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {!displayHeader && <div style={{ marginBottom: "-90px" }}></div>}
-      {displayHeader && <Header />}
+      {showHeader == false ? (
+        <div style={{ marginBottom: "-90px" }}></div>
+      ) : (
+        <Header />
+      )}
       {children}
       {isWrongNet ? DisplayWrongNetModal() : ""}
 

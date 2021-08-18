@@ -108,7 +108,7 @@ const Wallet = () => {
       }
     }
     console.log("connecting to metamask");
-    if (metaToken !== null) {
+    if (metaToken.length > 0) {
       await dispatchMetaConnected(setMetaConnected(true));
       router.push("/");
     } else {
@@ -132,7 +132,7 @@ const Wallet = () => {
     provider.on("accountsChanged", async (accounts) => {
       if (accounts.length == 0) {
         await dispatchMetaConnected(setMetaConnected(false));
-        await dispatchMetaToken(setMetaToken(null));
+        await dispatchMetaToken(setMetaToken([]));
       } else {
         await dispatchMetaConnected(setMetaConnected(true));
         await dispatchMetaToken(setMetaToken(accounts));

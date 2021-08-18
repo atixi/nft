@@ -96,11 +96,6 @@ const CONSTANTS = {
   manageFunds: "Manage Funds",
   disconnect: "Disconnect",
 };
-const MenuItem = styled.div`
-  &:hover {
-    cursor: pointer !important;
-  }
-`;
 function WalletInfoDropdown({ data }) {
   const dispatchMetaConnected = useDispatch();
   const dispatchWalletConnected = useDispatch();
@@ -113,10 +108,13 @@ function WalletInfoDropdown({ data }) {
   const metaToken = useSelector(getMetaToken);
   const walletToken = useSelector(getWalletToken);
   let address = data[0];
-  address = address
-    .toString()
-    .replace(address.toString().substring(10, address.length - 10), ".....");
-
+  // address = address
+  //   .toString()
+  //   .replace(address.toString().substring(10, address.length - 10), ".....");
+  address =
+    address.substring(0, 6) +
+    "..." +
+    address.substring(address.length - 4, address.length);
   const disconnectWallet = async () => {
     const bridge = "https://bridge.walletconnect.org";
 
@@ -168,7 +166,9 @@ function WalletInfoDropdown({ data }) {
             avatar={<Avatar src="/images/svg/ethcoin.png" size={"large"} />}
             title={<ListTitle>{CONSTANTS.balance}</ListTitle>}
             description={
-              <ListDescription>{metaBalance + " ETH"}</ListDescription>
+              <ListDescription>
+                {parseFloat(metaBalance).toFixed(8) + " ETH"}
+              </ListDescription>
             }
           />
         </List.Item>
@@ -205,21 +205,16 @@ function WalletInfoDropdown({ data }) {
         </List.Item> */}
       </List>
       <hr />
-      <Menu.Item key={"1"}>
+      <Menu.Item>
         <Link
           href={{
-            pathname: `/profile/${metaToken[0] ? metaToken[0] : ""}`,
-            // query: {
-            //   address: seller.address,
-            //   talent: seller.talent,
-            //   avatar: seller.profile_img_url,
-            // },
+            pathname: `/profile/${metaToken[0]}`,
           }}
         >
           <a>{"My Items"}</a>
         </Link>
       </Menu.Item>
-      <Menu.Item key={"2"}>
+      <Menu.Item>
         <Link
           href={{
             pathname: `/create/collection`,
@@ -228,7 +223,7 @@ function WalletInfoDropdown({ data }) {
           <a>{"Create Collection"}</a>
         </Link>
       </Menu.Item>
-      <Menu.Item key={"2"}>
+      <Menu.Item>
         <Link
           href={{
             pathname: `/create/erc721`,
@@ -237,7 +232,7 @@ function WalletInfoDropdown({ data }) {
           <a>{"Create Item"}</a>
         </Link>
       </Menu.Item>
-      <Menu.Item key={"3"}>
+      {/* <Menu.Item>
         <Link
           href={{
             // pathname: "/profile/index",
@@ -251,11 +246,9 @@ function WalletInfoDropdown({ data }) {
         >
           <a>{"My Account Setting"}</a>
         </Link>
-      </Menu.Item>
-      <Menu.Item key={"4"}>
-        <MenuItem style={{ cursor: "pointer" }} onClick={disconnectWallet}>
-          <label>{`Disconnect`}</label>
-        </MenuItem>
+      </Menu.Item> */}
+      <Menu.Item onClick={disconnectWallet}>
+        <label style={{ cursor: "pointer" }}>{`Disconnect`}</label>
       </Menu.Item>
     </DropdownMenu>
   );
