@@ -16,6 +16,7 @@ import {
 } from "./StyledComponents/liveAuctions-styledComponents";
 
 function Products(props) {
+  console.log(props)
   const menu = (
     <Menu>
       <Menu.Item key="1">Purchase now</Menu.Item>
