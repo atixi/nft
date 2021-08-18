@@ -16,16 +16,6 @@ import {
 } from "./StyledComponents/liveAuctions-styledComponents";
 
 function Products(props) {
-  console.log("explore", props)
-  const menu = (
-    <Menu>
-      <Menu.Item key="1">Purchase now</Menu.Item>
-      <Menu.Item key="2">Place a bid</Menu.Item>
-      <Menu.Item key="3">View on OpenSea</Menu.Item>
-      <Menu.Item key="3">Share</Menu.Item>
-    </Menu>
-  );
-
   return (
     <>
       <CardsContainer>
