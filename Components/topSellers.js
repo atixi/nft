@@ -11,7 +11,7 @@ import {
   SellerDetails,
 } from "./StyledComponents/topSeller-styledComponents";
 import Link from "next/link";
-
+import {randomAvatar} from "Utils/utils"
 function TopSellers({ data }) {
   const topSellerDetails = async (top) => {
     // const result = await OpenSeaAPI.getAssetsListByOwner(address);
@@ -42,7 +42,7 @@ function TopSellers({ data }) {
                 >
                   <ListCounter>{index + 1}</ListCounter>
                   <AvatarContainer>
-                    <img src={seller?.talentAvatar?.url} />
+                    <img src={seller?.talentAvatar?.url ? seller?.talentAvatar?.url : randomAvatar()} />
                   </AvatarContainer>
                   <SellerDetails>
                     <SellerName key={seller?.talentName + seller?.talentName}>
