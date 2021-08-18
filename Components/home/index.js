@@ -11,13 +11,6 @@ import OpenSeaAPI from "/Utils/openseaApi";
 import { isMobileDevice } from "../../Constants/constants";
 import HandleNotification from "/Components/commons/handleNotification";
 import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
-import {
-  bundlesAPI,
-  collectionsAPI,
-  exploresAPI,
-  liveAuctionsAPI,
-  topSellersAPI,
-} from "../../Constants/lists";
 function Home() {
   const [bundles, setBundles] = useState([]);
   const [topSellers, setTopSellers] = useState([]);
