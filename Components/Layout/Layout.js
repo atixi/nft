@@ -106,7 +106,7 @@ const Layout = ({ children }) => {
           );
         }
         console.log(
-          "account balance is ",
+          "metamask account balance is ",
           web3.utils.fromWei(result, "ether") + " ETH"
         );
       });
