@@ -27,7 +27,7 @@ import {
   WhatsappShareButton,
   WhatsappIcon,
 } from "next-share";
-import { displayAddress } from "/Utils/utils";
+import { displayAddress, randomAvatar } from "/Utils/utils";
 import api from "/Components/axiosRequest";
 import {
   setAccountTokens,
@@ -169,7 +169,7 @@ function Profile() {
               <div className={"avatar"}>
                 <img
                   alt="userAvatar"
-                  src={talent.talentAvatar?.url}
+                  src={talent.talentAvatar?.url ? talent.talentAvatar?.url : randomAvatar()}
                   loading="lazy"
                 />
               </div>

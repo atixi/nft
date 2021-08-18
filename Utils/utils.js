@@ -283,7 +283,7 @@ export function findHighestOffer(orders) {
   return offer;
 }
 export function displayAddress(address) {
-  return address
+  return address && address
     .toString()
     .replace(address.toString().substring(10, address.length - 10), ".....");
 }
