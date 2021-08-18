@@ -481,13 +481,13 @@ async function cancelOffer(order, address){
                     </BidPriceValue>
                   </BidPrice>
                 </BidOwnerContainer>}
-                {asset?.sellOrder && asset?.sellOrder?.expirationTime != "0" &&  (
+                {sellOrders !== undefined && sellOrders[0]?.expirationTime !== "0" && sellOrders[0]?.expirationTime != undefined &&  (
                   <Auction>
                     <div className={"auctionDiv"}>
                       <AuctionLabel>{CONSTANTS.auctionLabel}</AuctionLabel>
                       <AuctionTimer>
                         <Countdown
-                          value={ unixToMilSeconds(asset?.sellOrder?.expirationTime)}
+                          value={ unixToMilSeconds(sellOrders[0]?.expirationTime)}
                           format={`D[d] HH[h] mm[m] ss[s]`}
                         />
                       </AuctionTimer>
