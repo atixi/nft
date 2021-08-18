@@ -95,11 +95,7 @@ function Header(props) {
   }
 
   useEffect(() => {
-    console.log("Metabalance is", metaBalance);
     isConnectedToAnyWallet();
-    // this is just to test that we receive data from strapi
-    // const data = await fetchUsers();
-    // console.log("new data", data)
   }, [isMetaconnected, isWalletConnected, metaBalance]);
 
   const isConnectedToAnyWallet = async () => {
@@ -439,9 +435,7 @@ function Header(props) {
           {(isMetaconnected || isWalletConnected) && (
             <Link
               href={{
-                pathname: `/profile/${
-                  metaToken ? metaToken[0] : walletToken[0]
-                }`,
+                pathname: `/profile/${metaToken[0] ? metaToken[0] : ""}`,
               }}
             >
               <a>{"My Items"}</a>

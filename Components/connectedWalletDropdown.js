@@ -168,11 +168,7 @@ function WalletInfoDropdown({ data }) {
             avatar={<Avatar src="/images/svg/ethcoin.png" size={"large"} />}
             title={<ListTitle>{CONSTANTS.balance}</ListTitle>}
             description={
-              <ListDescription>
-                {walletBalance !== null && isWalletConnected == true
-                  ? walletBalance + " ETH "
-                  : metaBalance + " ETH"}
-              </ListDescription>
+              <ListDescription>{metaBalance + " ETH"}</ListDescription>
             }
           />
         </List.Item>
@@ -212,7 +208,7 @@ function WalletInfoDropdown({ data }) {
       <Menu.Item key={"1"}>
         <Link
           href={{
-            pathname: `/profile/${metaToken ? metaToken[0] : walletToken[0]}`,
+            pathname: `/profile/${metaToken[0] ? metaToken[0] : ""}`,
             // query: {
             //   address: seller.address,
             //   talent: seller.talent,
@@ -245,7 +241,7 @@ function WalletInfoDropdown({ data }) {
         <Link
           href={{
             // pathname: "/profile/index",
-            pathname: `/account/${metaToken ? metaToken[0] : walletToken[0]}`,
+            pathname: `/account/${metaToken[0] ? metaToken[0] : ""}`,
             // query: {
             //   address: seller.address,
             //   talent: seller.talent,
