@@ -243,8 +243,7 @@ const ERC721Collection = ({ collections }) => {
   };
 
   useEffect(() => {
-    test();
-    // isTalentRegistered();
+    isTalentRegistered();
     if (isMobileDevice()) {
       checkMobileMaskUnlocked();
     } else {
@@ -252,10 +251,6 @@ const ERC721Collection = ({ collections }) => {
     }
   }, [isMetaconnected, metaToken]);
 
-  const test = async () => {
-    const wallet = await open();
-    console.log(wallet);
-  };
   return (
     <div className={styles.container}>
       <Modal

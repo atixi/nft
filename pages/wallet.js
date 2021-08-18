@@ -32,6 +32,7 @@ import { getCurrentAccount } from "Utils/utils";
 import { fetch, post } from "Utils/strapiApi";
 const Wallet = () => {
   const router = useRouter();
+  const routerResult = router.pathname.toString().includes("wallet");
   const dispatchAccountTokens = useDispatch();
   const dispatchMetaToken = useDispatch();
   const dispatchWalletToken = useDispatch();
@@ -94,6 +95,7 @@ const Wallet = () => {
   };
   const connectToMetamask = async (wallet) => {
     const account = await getCurrentAccount();
+    console.log("current account is ", account);
     const talentResult = await fetch(`/talents/talentexists/${account}`);
     if (talentResult.data) {
       const talentExists = talentResult.data.success;
