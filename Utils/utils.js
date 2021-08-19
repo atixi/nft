@@ -10,8 +10,9 @@ import * as Web3 from "web3";
 import { OpenSeaPort, Network, EventType } from "opensea-js";
 import { OrderSide } from "opensea-js/lib/types";
 import { isMobileDevice } from "Constants/constants";
-import detectEthereumProvider from "@metamask/detect-provider";
 import Onboard from "bnc-onboard";
+const referrerAddress = process.env.REF_ADDRESS;
+
 export const seaportProvider = new Web3.providers.HttpProvider(
   "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
   // 'https://rinkeby-api.opensea.io/api/v1/'
@@ -55,7 +56,6 @@ export async function makeOffer(
       expirationTime: parseInt(expirationTime),
     });
   } else {
-    const referrerAddress = "0xe897B93557fb7D5B4dcA627a55181E52152cF035";
     return await seaport().createBuyOrder({
       asset: {
         tokenId,
