@@ -72,8 +72,6 @@ const Layout = ({ children }) => {
       await dispatchMetaToken(setMetaToken([]));
       await dipsatchMetaBalance(setMetaBalance(0));
     } else {
-      console.log("we are in account change else");
-
       await dispatchMetaConnected(setMetaConnected(true));
       await dispatchMetaToken(setMetaToken(accounts));
       let web3 = new Web3(window.ethereum);
