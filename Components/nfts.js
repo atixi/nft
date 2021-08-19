@@ -93,7 +93,7 @@ function Products(props) {
                       <a>
                         <NFTImage>
                           <Image
-                            src={n?.metadata?.image}
+                            src={n.imageUrl ? n.imageUrl : n?.metadata?.image}
                             className="rounded"
                             preview={false}
                             alt=""
