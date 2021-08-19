@@ -221,6 +221,9 @@ export const pinJSONToIPFS = (metaContent, mediaType) => {
 };
 
 export const deployCollection = async (logo, banner, values, ownerAddress) => {
+  if (process.env.RINKEBY_PROXY_ADDRESS) {
+    console.log("proxy address is ", process.env.RINKEBY_PROXY_ADDRESS);
+  }
   let strapiUploadResult = {
     success: false,
     message: "Deploy was not successful",

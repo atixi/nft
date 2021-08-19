@@ -67,24 +67,16 @@ const Layout = ({ children }) => {
     ethereum.on("chainChanged", (chainId) => {});
   };
   const handleMetaAccount = async (accounts) => {
-    router.reload(window.location.pathname);
-
-    console.log("Listen to account changes");
-    console.log("My Meta accounts are", accounts);
     if (accounts.length == 0) {
-      console.log("we are in account change if");
       await dispatchMetaConnected(setMetaConnected(false));
       await dispatchMetaToken(setMetaToken([]));
-      await dipsatchMetaBalance(setMetaBalance(""));
+      await dipsatchMetaBalance(setMetaBalance(0));
     } else {
       console.log("we are in account change else");
 
       await dispatchMetaConnected(setMetaConnected(true));
       await dispatchMetaToken(setMetaToken(accounts));
-      console.log("accounts are accountessdfkasdf", accounts);
       let web3 = new Web3(window.ethereum);
-
-      console.log("accounts are hadisa", await web3.eth.getAccounts());
       web3.eth.getBalance(accounts[0], async (err, result) => {
         if (err) {
           console.log(err);
@@ -93,15 +85,11 @@ const Layout = ({ children }) => {
             setMetaBalance(web3.utils.fromWei(result, "ether"))
           );
         }
-        console.log(
-          "metamask account balance is ",
-          web3.utils.fromWei(result, "ether") + " ETH"
-        );
       });
-      if (router.pathname === "/wallet") {
-        router.push("/");
-      } else {
+      if (router.pathname.toString().includes("create")) {
         router.reload(window.location.pathname);
+      } else {
+        router.push("/");
       }
     }
   };
@@ -157,7 +145,7 @@ const Layout = ({ children }) => {
     } else {
       checkMetamaskUnlocked();
     }
-  }, [isMetaconnected]);
+  }, [isMetaconnected, metaToken]);
 
   return (
     <>
