@@ -43,6 +43,7 @@ import {
   getWalletConnected,
 } from "/store/action/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
+
 const { TabPane } = Tabs;
 function Profile() {
   const accountTokens = useSelector(getAccountTokens);
@@ -169,7 +170,11 @@ function Profile() {
               <div className={"avatar"}>
                 <img
                   alt="userAvatar"
-                  src={talent.talentAvatar?.url ? talent.talentAvatar?.url : randomAvatar()}
+                  src={
+                    talent.talentAvatar?.url
+                      ? talent.talentAvatar?.url
+                      : randomAvatar()
+                  }
                   loading="lazy"
                 />
               </div>
