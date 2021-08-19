@@ -14,7 +14,7 @@ import {
   NFTImage,
   CardImage,
 } from "./StyledComponents/liveAuctions-styledComponents";
-import {randomAvatar} from "Utils/utils"
+import { randomAvatar } from "Utils/utils";
 function Products(props) {
   return (
     <>
@@ -35,14 +35,15 @@ function Products(props) {
                             icon={
                               <img
                                 src={
-                                  // props.data.talent
-                                  //   ? props.data.talent.talentAvatar?.url
-                                  //   : props.data.talentAvatar?.url
-                                  //   ? props.data.talentAvatar?.url
-                                  //   : n.talent?.talentAvatar?.url
-                                  //   ? n.talent?.talentAvatar?.url
-                                  //   : n.owner?.profile_img_url
-                                  randomAvatar()
+                                  props.data?.talent?.talentAvatar?.url
+                                    ? props.data.talent.talentAvatar?.url
+                                    : props.data.talentAvatar?.url
+                                    ? props.data.talentAvatar?.url
+                                    : n.talent?.talentAvatar?.url
+                                    ? n.talent?.talentAvatar?.url
+                                    : n.owner?.profile_img_url
+                                    ? n.owner?.profile_img_url
+                                    : randomAvatar()
                                 }
                                 width={12}
                                 height={12}
@@ -118,12 +119,12 @@ function Products(props) {
                       {/* {(n.currentPrice
                         ? n.currentPrice
                         : n?.sellOrders[0]?.currentPrice) /
-                        1000000000000000000}{" "} */}
-                      {/* Eth */}
+                        1000000000000000000}{" "}
+                      Eth */}
                     </ProductPrice>
-                    <ProductList>
-                      {/* {" " + n.currentQTY + " of " + n.totalQTY} */}
-                    </ProductList>
+                    {/* <ProductList>
+                      {" " + n.currentQTY + " of " + n.totalQTY}
+                    </ProductList> */}
                     <br />
                     {/* <ProductPrice fontSize={"12px"}>{n.price}</ProductPrice> */}
                   </ProductDescription>
