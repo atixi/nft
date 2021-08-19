@@ -452,9 +452,6 @@ function Header(props) {
       </ul>
       <div style={{ flex: 1 }} className="d-block d-xl-none"></div>
       <div style={{ display: "flex" }}>
-        <CreateButton className={`d-none d-lg-block`}>
-          {CONSTANTS.create}
-        </CreateButton>
         {connected == true ? (
           <Dropdown
             overlay={
