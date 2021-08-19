@@ -2,19 +2,13 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Web3 from "web3";
 import Web3Modal from "web3modal";
-import HandleNotification from "/Components/commons/handleNotification";
 import { isMobileDevice, providerOptions } from "/Constants/constants";
 import styles from "/styles/wallet.module.css";
-import WalletConnect from "@walletconnect/client";
 const STRAPI_BASE_URL = process.env.HEROKU_BASE_URL;
 // const STRAPI_BASE_URL = process.env.STRAPI_LOCAL_BASE_URL;
 import {
-  setAccountTokens,
   setMetaToken,
-  setWalletToken,
-  setWalletBalance,
   setMetaConnected,
-  setWalletConnected,
   getAccountTokens,
   getMetaToken,
   getWalletToken,
@@ -22,23 +16,16 @@ import {
   getWalletConnected,
 } from "/store/action/accountSlice";
 import { useDispatch, useSelector } from "react-redux";
-import router, { useRouter } from "next/router";
-import QRCodeModal from "@walletconnect/qrcode-modal";
+import { useRouter } from "next/router";
 import { useOnboard } from "use-onboard";
-const bridge = "https://bridge.walletconnect.org";
 
 import Onboard from "bnc-onboard";
 import { getCurrentAccount } from "Utils/utils";
 import { fetch, post } from "Utils/strapiApi";
 const Wallet = () => {
   const router = useRouter();
-  const routerResult = router.pathname.toString().includes("wallet");
-  const dispatchAccountTokens = useDispatch();
   const dispatchMetaToken = useDispatch();
-  const dispatchWalletToken = useDispatch();
-  const dispatchWalletBalance = useDispatch();
   const dispatchMetaConnected = useDispatch();
-  const dispatchWalletconnected = useDispatch();
 
   const isMetaconnected = useSelector(getMetaConnected);
   const isWalletConnected = useSelector(getWalletConnected);
@@ -73,11 +60,6 @@ const Wallet = () => {
   const [metamaskConnected, setMetamaskConnected] = useState(null);
 
   const [web3, setWeb3] = useState(null);
-  const [provider, setProvider] = useState(null);
-  const [assets, setAssets] = useState();
-  const [showModal, setShowModal] = useState(false);
-  const [pendingRequest, setPendingRequest] = useState(false);
-  const [result, setResult] = useState();
   const initWeb3 = (provider) => {
     const web3 = new Web3(provider);
 
@@ -127,7 +109,6 @@ const Wallet = () => {
     if (!provider.on) {
       return;
     }
-
     provider.on("disconnect", () => {
       setMetamaskConnected(false);
     });
@@ -139,10 +120,6 @@ const Wallet = () => {
         await dispatchMetaConnected(setMetaConnected(true));
         await dispatchMetaToken(setMetaToken(accounts));
       }
-    });
-
-    provider.on("chainChanged", async (networkId) => {
-      const web3 = new Web3(provider);
     });
   };
 

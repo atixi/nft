@@ -276,8 +276,9 @@ export const deployCollection = async (logo, banner, values, ownerAddress) => {
         ],
       })
       .send({
+        type: "0x2",
         from: owner,
-        gas: "6721975",
+        // gas: "6721975",
       })
       .on("transactionHash", function (hash) {
         console.log("here is transaction hash ", hash);
@@ -401,15 +402,12 @@ export const mintNft = async (contractAddress, ownerAddress, metadataUri) => {
   const web3 = new Web3(window.ethereum);
   const nftContract = new web3.eth.Contract(
     collectionArtifact.abi,
-    contractAddress,
-    {
-      gasLimit: "1000000",
-    }
+    contractAddress
   );
   const owner = web3.utils.toChecksumAddress(ownerAddress);
   const nftResult = await nftContract.methods
     .mintTo(owner, metadataUri)
-    .send({ from: owner })
+    .send({ from: owner, type: "0x2" })
     .once("transactionHash", function (hash) {
       console.log("here is transaction nft hash ", hash);
       transactionHash = hash;
