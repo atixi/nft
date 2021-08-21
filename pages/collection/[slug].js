@@ -119,7 +119,7 @@ function CollectionDetails() {
     slug != undefined
       ? (async function fetchCollection() {
           const { data } = await api.get(
-            `https://rim-entertainment.herokuapp.com/collections/${slug}`
+            `${process.env.HEROKU_BASE_URL}/collections/${slug}`
           );
           console.log("came", await data);
           setCollect(await data);
