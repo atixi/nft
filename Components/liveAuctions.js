@@ -44,25 +44,26 @@ const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;
 
 const { Countdown } = Statistic;
 function LiveAuctions() {
-  const [liveAuctions, setLiveAuctions] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [liveAuctions, setLiveAuctions] = useState(null);
+  const [loading, setLoading] = useState(false);
   const loadAuctions = async () => {
     const auctionResult = await fetch("/nfts/auction");
     const auctions = await auctionResult.data;
     if (auctions) {
-      console.log("acutions hare here", auctions);
       setLiveAuctions(auctions);
+      console.log("acutions hare here", auctions);
       setLoading(false);
     }
   };
   useEffect(() => {
+    setLoading(true);
     loadAuctions();
-  }, []);
+  }, [liveAuctions]);
 
   return (
     <>
       <SectionHeading>{CONSTANTS.liveAuctions}</SectionHeading>
-      {loading ? (
+      {loading == true && liveAuctions == null ? (
         <Carousel
           breakPoints={breakPoints}
           pagination={false}
