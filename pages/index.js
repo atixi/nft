@@ -9,20 +9,20 @@ import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents
 import TopSellers from "/Components/topSellers";
 import request from "/Utils/axios";
 
-function Home({ liveAuctions }) {
+function Home() {
   const [topSellers, setTopSellers] = useState([]);
   useEffect(() => {
-    async function fetchingTopSellers() {
-      const data = await request.get("/talents");
-      setTopSellers(await data.data);
-    }
-    fetchingTopSellers();
+    // async function fetchingTopSellers() {
+    //   const data = await request.get("/talents");
+    //   setTopSellers(await data.data);
+    // }
+    // fetchingTopSellers();
   }, []);
   return (
     <MainWrapper>
       <Slide />
-      <TopSellers data={topSellers} />
-      <LiveAuctions liveAuctions={liveAuctions} />
+      <TopSellers />
+      <LiveAuctions />
       <HotCollections />
       <Explore />
     </MainWrapper>
@@ -30,8 +30,8 @@ function Home({ liveAuctions }) {
 }
 
 export const getServerSideProps = async () => {
-  const auctionResult = await fetch("/nfts/auction");
-  const auctions = auctionResult.data;
+  // const auctionResult = await fetch("/nfts/auction");
+  // const auctions = auctionResult.data;
   // let auctions = [];
   // if (auctionResult) {
   //   auctions = auctionResult.data;
@@ -45,7 +45,7 @@ export const getServerSideProps = async () => {
   return {
     props: {
       // topSellers: JSON.parse(JSON.stringify(topSellers)),
-      liveAuctions: JSON.parse(JSON.stringify(auctions)),
+      // liveAuctions: JSON.parse(JSON.stringify(auctions)),
       // collections: JSON.parse(JSON.stringify(collections)),
       // assets: JSON.parse(JSON.stringify(assets)),
       // explores: JSON.parse(JSON.stringify(explores)),

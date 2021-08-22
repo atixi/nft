@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { getAuctionPriceDetails } from "/Constants/constants";
 import Carousel from "react-elastic-carousel";
-import { Menu, Dropdown, Avatar, Tooltip, Statistic } from "antd";
+import {
+  Menu,
+  Dropdown,
+  Avatar,
+  Tooltip,
+  Statistic,
+  Spin,
+  Space,
+  Card,
+} from "antd";
 import Link from "next/link";
 import CONSTANTS from "/Constants/liveAuctionsConstants";
 import {
@@ -22,6 +31,8 @@ import {
 } from "./StyledComponents/liveAuctions-styledComponents";
 import { SectionHeading } from "./StyledComponents/globalStyledComponents";
 import { unixToMilSeconds, checkName } from "/Utils/utils";
+import { fetch } from "Utils/strapiApi";
+import styles from "/styles/ui.module.css";
 const breakPoints = [
   { width: 1, itemsToShow: 1 },
   { width: 550, itemsToShow: 2, itemsToScroll: 2 },
@@ -32,23 +43,53 @@ const breakPoints = [
 const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;
 
 const { Countdown } = Statistic;
-function LiveAuctions({ liveAuctions }) {
-  useEffect(() => {}, []);
+function LiveAuctions() {
+  const [liveAuctions, setLiveAuctions] = useState({});
+  const [loading, setLoading] = useState(true);
+  const loadAuctions = async () => {
+    const auctionResult = await fetch("/nfts/auction");
+    const auctions = await auctionResult.data;
+    if (auctions) {
+      console.log("acutions hare here", auctions);
+      setLiveAuctions(auctions);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    loadAuctions();
+  }, []);
 
   return (
     <>
       <SectionHeading>{CONSTANTS.liveAuctions}</SectionHeading>
-      <Carousel
-        breakPoints={breakPoints}
-        pagination={false}
-        transitionMs={1000}
-      >
-        {liveAuctions &&
-          liveAuctions.map(
-            (product, index) =>
-              product.expirationTime && Product(product, index)
-          )}
-      </Carousel>
+      {loading ? (
+        <Carousel
+          breakPoints={breakPoints}
+          pagination={false}
+          transitionMs={1000}
+          className={styles.loadingCardContainer}
+        >
+          {[...Array(10).keys()].map((item, index) => (
+            <Card key={index} size="middle" className={styles.loadingCard}>
+              <Spin size="large" />
+            </Card>
+          ))}
+        </Carousel>
+      ) : (
+        <Carousel
+          breakPoints={breakPoints}
+          pagination={false}
+          transitionMs={1000}
+        >
+          {liveAuctions &&
+            liveAuctions.map(
+              (product, index) =>
+                product.expirationTime &&
+                product.expirationTime !== "0" &&
+                Product(product, index)
+            )}
+        </Carousel>
+      )}
     </>
   );
 }

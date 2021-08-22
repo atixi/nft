@@ -1,0 +1,20 @@
+.loadingCardContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.loadingCard {
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  max-width: 270px;
+  min-width: 260px;
+  min-height: 400px !important;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
