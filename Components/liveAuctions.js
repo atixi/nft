@@ -58,7 +58,7 @@ function LiveAuctions() {
   useEffect(() => {
     setLoading(true);
     loadAuctions();
-  }, [liveAuctions]);
+  }, []);
 
   return (
     <>
