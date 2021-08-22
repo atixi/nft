@@ -130,8 +130,6 @@ const Layout = ({ children }) => {
       const data = await onboard.walletSelect();
       if (data) {
         const walletCheck = await onboard.walletCheck();
-        console.log("walletselct is ", data);
-        console.log("wallet checi is ", walletCheck);
       }
     }
   };

@@ -11,6 +11,7 @@ module.exports = {
     BASE_URL: process.env.BASE_URL,
     STRAPI_LOCAL_BASE_URL: process.env.STRAPI_LOCAL_BASE_URL,
     HEROKU_BASE_URL: process.env.HEROKU_BASE_URL,
+    HEROKU_BASE_TNC: process.env.HEROKU_BASE_TNC,
     NEXT_PUBLIC_STRAPI_URL: process.env.NEXT_PUBLIC_STRAPI_URL,
     RINKEBY_API_KEY: process.env.RINKEBY_API_KEY,
     ALCHEMY_KEY: process.env.ALCHEMY_KEY,

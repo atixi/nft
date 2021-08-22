@@ -52,6 +52,7 @@ const ERC721Collection = ({ collections }) => {
   const isWalletConnected = useSelector(getWalletConnected);
   const metaToken = useSelector(getMetaToken);
   const [onboard, setOnboard] = useState(null);
+
   const { selectWallet, address, isWalletSelected, disconnectWallet, balance } =
     useOnboard({
       dappId: "2978c0ac-ae01-46c3-8054-9fc9ec2bfc2d", // optional API key
@@ -242,13 +243,7 @@ const ERC721Collection = ({ collections }) => {
     return collectionData;
   };
 
-  const tets = async () => {
-    let web3 = new Web3(window.ethereum);
-    const gasPrice = await web3.eth.getGasPrice();
-    console.log("gas price is gas price", gasPrice);
-  };
   useEffect(() => {
-    tets();
     isTalentRegistered();
     if (isMobileDevice()) {
       checkMobileMaskUnlocked();
