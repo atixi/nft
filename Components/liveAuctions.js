@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {getAuctionPriceDetails } from "/Constants/constants";
+import { getAuctionPriceDetails } from "/Constants/constants";
 import Carousel from "react-elastic-carousel";
 import { Menu, Dropdown, Avatar, Tooltip, Statistic } from "antd";
 import Link from "next/link";
@@ -18,11 +18,10 @@ import {
   CountDown,
   ProductCardHeaderButton,
   ProductCardHeaderOwners,
-  CardImage
+  CardImage,
 } from "./StyledComponents/liveAuctions-styledComponents";
 import { SectionHeading } from "./StyledComponents/globalStyledComponents";
-import { fetch } from "/Utils/strapiApi";
-import {unixToMilSeconds, checkName} from "/Utils/utils"
+import { unixToMilSeconds, checkName } from "/Utils/utils";
 const breakPoints = [
   { width: 1, itemsToShow: 1 },
   { width: 550, itemsToShow: 2, itemsToScroll: 2 },
@@ -33,29 +32,22 @@ const breakPoints = [
 const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;
 
 const { Countdown } = Statistic;
-function LiveAuctions() {
+function LiveAuctions({ liveAuctions }) {
+  useEffect(() => {}, []);
 
-  const [auctions, setAuctions] = useState([]);
-  const loadLiveAuction = async () =>
-  {
-    const nfts = await fetch("/nfts/auction");
-    if(nfts.data)
-    {
-      setAuctions(nfts.data) 
-    }
-  }
-  useEffect(() => {
-    loadLiveAuction()
-  },[])
   return (
-    auctions && <>
+    <>
       <SectionHeading>{CONSTANTS.liveAuctions}</SectionHeading>
       <Carousel
         breakPoints={breakPoints}
         pagination={false}
         transitionMs={1000}
       >
-        {auctions && auctions.map((product, index) => product.expirationTime && product.expirationTime !==  "0" && Product(product, index))}
+        {liveAuctions &&
+          liveAuctions.map(
+            (product, index) =>
+              product.expirationTime && Product(product, index)
+          )}
       </Carousel>
     </>
   );
@@ -69,7 +61,12 @@ function Product(product, index) {
       <ProductCardHeader className={`mt-3`}>
         <ProductCardHeaderOwners>
           <Avatar.Group>
-            <Tooltip title={`Owner: ${checkName(product?.asset?.owner?.user?.username)}`} placement="top">
+            <Tooltip
+              title={`Owner: ${checkName(
+                product?.asset?.owner?.user?.username
+              )}`}
+              placement="top"
+            >
               <Avatar
                 key={product.asset?.owner.address}
                 icon={
@@ -77,7 +74,12 @@ function Product(product, index) {
                 }
               />
             </Tooltip>
-            <Tooltip title={`Maker: ${checkName(product?.makerAccount.user?.username)}`} placement="top">
+            <Tooltip
+              title={`Maker: ${checkName(
+                product?.makerAccount.user?.username
+              )}`}
+              placement="top"
+            >
               <Avatar
                 key={product?.makerAccount.address}
                 icon={
@@ -88,27 +90,47 @@ function Product(product, index) {
           </Avatar.Group>
         </ProductCardHeaderOwners>
         <ProductCardHeaderButton>
-          <Dropdown trigger={["click"]} overlay={
-          <Menu>
-            <Menu.Item key="2">
-            <Link href={product?.asset ? `/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}` : `/nft/${product?.assetBundle?.maker?.address}?slug=${product?.assetBundle?.slug}`} >
-              <a>
-              <span>{CONSTANTS.placeBid}</span>
-              </a>
-              </Link>
-          </Menu.Item>
-          </Menu>} placement="bottomRight">
+          <Dropdown
+            trigger={["click"]}
+            overlay={
+              <Menu>
+                <Menu.Item key="2">
+                  <Link
+                    href={
+                      product?.asset
+                        ? `/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}`
+                        : `/nft/${product?.assetBundle?.maker?.address}?slug=${product?.assetBundle?.slug}`
+                    }
+                  >
+                    <a>
+                      <span>{CONSTANTS.placeBid}</span>
+                    </a>
+                  </Link>
+                </Menu.Item>
+              </Menu>
+            }
+            placement="bottomRight"
+          >
             <Button>...</Button>
           </Dropdown>
         </ProductCardHeaderButton>
       </ProductCardHeader>
       <CardImage className={`p-3`}>
         <Link
-          href={product?.asset ? `/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}` : `/nft/${product?.assetBundle?.maker?.address}?slug=${product?.assetBundle?.slug}`}  >
+          href={
+            product?.asset
+              ? `/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}`
+              : `/nft/${product?.assetBundle?.maker?.address}?slug=${product?.assetBundle?.slug}`
+          }
+        >
           <a>
             {" "}
             <img
-              src={product?.asset ? product.asset?.imageUrl : product?.assetBundle?.assets[0].imageUrl}
+              src={
+                product?.asset
+                  ? product.asset?.imageUrl
+                  : product?.assetBundle?.assets[0].imageUrl
+              }
               className="rounded"
             />
           </a>
@@ -117,15 +139,32 @@ function Product(product, index) {
       <ProductDescription>
         <CountDownContainer>
           <CountDown>
-            <Countdown value={product?.expirationTime >0  && unixToMilSeconds(product?.expirationTime)} format={`D[d] HH[h] mm[m] ss[s]`} />
+            <Countdown
+              value={
+                product?.expirationTime > 0 &&
+                unixToMilSeconds(product?.expirationTime)
+              }
+              format={`D[d] HH[h] mm[m] ss[s]`}
+            />
             {" left"} 🔥
           </CountDown>
         </CountDownContainer>
         <Link
-          href={product?.asset ? `/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}` : `/nft/${product?.assetBundle?.maker?.address}?slug=${product?.assetBundle?.slug}`}  >
-        <a>
-          <CardTitle>{product?.asset ? (product.asset?.name ? product.asset?.name : product.asset?.collection?.name) : product?.assetBundle?.name}</CardTitle>
-        </a>
+          href={
+            product?.asset
+              ? `/nft/${product.asset?.tokenAddress}?tokenId=${product.asset?.tokenId}`
+              : `/nft/${product?.assetBundle?.maker?.address}?slug=${product?.assetBundle?.slug}`
+          }
+        >
+          <a>
+            <CardTitle>
+              {product?.asset
+                ? product.asset?.name
+                  ? product.asset?.name
+                  : product.asset?.collection?.name
+                : product?.assetBundle?.name}
+            </CardTitle>
+          </a>
         </Link>
         {/* <BidsStatus>{CONSTANTS.bidsStatus}</BidsStatus> */}
         <ProductDescriptionBottom>

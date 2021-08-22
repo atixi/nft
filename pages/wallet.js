@@ -5,6 +5,7 @@ import Web3Modal from "web3modal";
 import { isMobileDevice, providerOptions } from "/Constants/constants";
 import styles from "/styles/wallet.module.css";
 const STRAPI_BASE_URL = process.env.HEROKU_BASE_URL;
+// const STRAPI_BASE_URL = process.env.HEROKU_BASE_TNC;
 // const STRAPI_BASE_URL = process.env.STRAPI_LOCAL_BASE_URL;
 import {
   setMetaToken,
