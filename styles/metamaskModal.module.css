@@ -1,0 +1,37 @@
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.modalControls {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.modalButton {
+  margin: 10px;
+}
+.linkButton {
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  min-width: 200px;
+  display: flex;
+  justify-content: center;
+}
+.metamaskInfoTextContainer {
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+.metamaskInfoText {
+  margin-bottom: 20px;
+}

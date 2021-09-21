@@ -1,0 +1,101 @@
+.container {
+  /* margin-top: -75px; */
+  display: flex;
+  width: 100%;
+  background-color: whitesmoke;
+  height: 100vh;
+}
+.leftColumn {
+  flex-direction: column;
+  flex: 2;
+  background-color: gainsboro;
+  background-image: url("https://rarible.com/static/7c160bd14b05b5c339f8f3bb2f506f50.jpg");
+  object-fit: cover;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  flex: 5;
+  background-color: ghostwhite;
+  min-height: 100%;
+  /* padding: 0 20px; */
+  overflow-y: auto;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 20px;
+}
+.contentHeader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 85%;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 85%;
+  margin-bottom: 100px;
+}
+.wallectContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  /* column-gap: 20px; */
+}
+.walletRow {
+  display: flex;
+  flex-direction: row;
+}
+.walletCard {
+  cursor: pointer;
+  height: 154px;
+  width: 48%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  border: 2px solid rgba(4, 4, 5, 0.1);
+  border-radius: 16px;
+  transition: all 0.12s ease-in-out 0s;
+  position: relative;
+  margin-top: 20px;
+  padding: 20px;
+  margin-top: 40px;
+}
+.walletIcon {
+  margin: 0 10px;
+}
+.walletDetails {
+  margin: 0 10px;
+}
+.walletCardPopup {
+  position: absolute;
+  top: -20px;
+  right: 5px;
+  background-color: black;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 10px;
+  line-height: 30px;
+}
+.walletFooter {
+  color: gray;
+  font-weight: bold;
+  padding: 20px 0px;
+}
+
+@media (max-width: 600px) {
+  .leftColumn {
+    display: none;
+  }
+}
+@media (max-width: 1024px) {
+  .walletCard {
+    width: 100%;
+  }
+}

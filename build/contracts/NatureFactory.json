@@ -1,0 +1,1214 @@
+{
+  "contractName": "NatureFactory",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "Transfer",
+      "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "baseURI",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_optionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "canMint",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "lootBoxNftAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_optionId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_toAddress",
+          "type": "address"
+        }
+      ],
+      "name": "mint",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "name",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "nftAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "numOptions",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "proxyRegistryAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "supportsFactoryInterface",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "symbol",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_optionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "tokenURI",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"tokenId\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"constant\":true,\"inputs\":[],\"name\":\"baseURI\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_optionId\",\"type\":\"uint256\"}],\"name\":\"canMint\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"lootBoxNftAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_optionId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_toAddress\",\"type\":\"address\"}],\"name\":\"mint\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"nftAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"numOptions\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"proxyRegistryAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"supportsFactoryInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_optionId\",\"type\":\"uint256\"}],\"name\":\"tokenURI\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{\"canMint(uint256)\":{\"details\":\"Returns whether the option ID can be minted. Can return false if the developer wishes to restrict a total supply per option ID (or overall).\"},\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"mint(uint256,address)\":{\"details\":\"Mints asset(s) in accordance to a specific address with a particular \\\"option\\\". This should be callable only by the contract owner or the owner's Wyvern Proxy (later universal login will solve this). Options should also be delineated 0 - (numOptions() - 1) for convenient indexing.\",\"params\":{\"_optionId\":\"the option id\",\"_toAddress\":\"address of the future owner of the asset(s)\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"tokenURI(uint256)\":{\"details\":\"Returns a URL specifying some metadata about the option. This metadata can be of the same structure as the ERC721 metadata.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}}},\"userdoc\":{\"methods\":{\"name()\":{\"notice\":\"Returns the name of this factory.\"},\"numOptions()\":{\"notice\":\"Number of options the factory supports.\"},\"supportsFactoryInterface()\":{\"notice\":\"Indicates that this is a factory contract. Ideally would use EIP 165 supportsInterface()\"},\"symbol()\":{\"notice\":\"Returns the symbol for this factory.\"}}}},\"settings\":{\"compilationTarget\":{\"project:/contracts/RimableFactory.sol\":\"NatureFactory\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"openzeppelin-solidity/contracts/GSN/Context.sol\":{\"keccak256\":\"0x90a3995645af7562d84b9d69363ffa5ae7217714ab61e951bf7bc450f40e4061\",\"urls\":[\"bzz-raw://216ef9d6b614db4eb46970b4e84903f2534a45572dd30a79f0041f1a5830f436\",\"dweb:/ipfs/QmNPrJ4MWKUAWzKXpUqeyKRUfosaoANZAqXgvepdrCwZAG\"]},\"openzeppelin-solidity/contracts/drafts/Counters.sol\":{\"keccak256\":\"0x5be8533c5950173dc2b77b75108fae6e6c5449aedadde3385ba457394aad2384\",\"urls\":[\"bzz-raw://d429fb04f5b31d909dc759d0f88e28055b80b4dd43e5def4dffc947fa0609229\",\"dweb:/ipfs/QmaY9idX5CwLLtjjTQAdiiaDSrncgafkatUZXTbbajpz8b\"]},\"openzeppelin-solidity/contracts/introspection/ERC165.sol\":{\"keccak256\":\"0x01aedbf24e121a744262e04c7815b2a4c8ce604dee4829c5cff00943a594ccf3\",\"urls\":[\"bzz-raw://999ab32a6498d8ad8db61d47c3774aae2ff919acceebe2aeb50879bef62642c3\",\"dweb:/ipfs/QmephAYF5hoymu9qCFK6mURM2kZJCxU4ntUb4KTf1miVPT\"]},\"openzeppelin-solidity/contracts/introspection/IERC165.sol\":{\"keccak256\":\"0xe0ed10f53955c35eecb02724538650a155aa940be3f0a54cd3bde6c6b0c6e48c\",\"urls\":[\"bzz-raw://7dcfda88e3225987245908c3296f3559752647036804325ebfaa9fd1545161c3\",\"dweb:/ipfs/QmXxx5rHfLL57zdgyyyG9MMv4XGN7bpVSc2MuDcaCgto6u\"]},\"openzeppelin-solidity/contracts/math/SafeMath.sol\":{\"keccak256\":\"0x640b6dee7a4b830bdfd52b5031a07fc2b12209f5b2e29e5d364a7d37f69d8076\",\"urls\":[\"bzz-raw://31113152e1ddb78fe7a4197f247591ca894e93f916867beb708d8e747b6cc74f\",\"dweb:/ipfs/QmbZaJyXdpsYGykVhHH9qpVGQg9DGCxE2QufbCUy3daTgq\"]},\"openzeppelin-solidity/contracts/ownership/Ownable.sol\":{\"keccak256\":\"0x6fb9d7889769d7cc161225f9ef7a90e468ba9788b253816f8d8b6894d3472c24\",\"urls\":[\"bzz-raw://cf4c00fc3c37cc5acf0c82ec6fd97bab67d72c2567fdc0ebf023d9c09b30a08e\",\"dweb:/ipfs/Qmb7TChG6DsEDX7LooJ4vmxot19f7VXX8S1zUGPeJTWbwZ\"]},\"openzeppelin-solidity/contracts/token/ERC721/ERC721.sol\":{\"keccak256\":\"0x1a1c02bc2487c763ad240f6b6440ec9dcb84870879aea3ed2a6b9cd300b637c7\",\"urls\":[\"bzz-raw://e6351696020fecf1c1b09437a2961cbdc3e1579238a9573b8577b58af463eeb6\",\"dweb:/ipfs/QmTg7UxUcuENko38JL2Pb2aqXkWgqW1xPDbJwmfo3RVrrV\"]},\"openzeppelin-solidity/contracts/token/ERC721/ERC721Enumerable.sol\":{\"keccak256\":\"0x28f4e41b86db783cd8daf9fdec839ce5930332b60f6dc9ac4992dfb584997e79\",\"urls\":[\"bzz-raw://6f1b545ec9e1f0284e86ddd4ffff353e1ab5e026bbbfaa2a5d2d791c39d7afd7\",\"dweb:/ipfs/Qmf9rVfj6LreiE7NHkkT1S7eLbSQDDY1gKd9XWERx2AN7W\"]},\"openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol\":{\"keccak256\":\"0x307231237999e19b618a03e7ecff1cee2a189dd019ebd203e5e43a63a7ac8aa3\",\"urls\":[\"bzz-raw://9a169446f024a24c3e5146cbeefea6be3bbbe9ba836f98f9d0c64af9f10773c4\",\"dweb:/ipfs/QmWibincTepM31suKeF6bd3shbPGjc9E7uULaXQBY1eNX5\"]},\"openzeppelin-solidity/contracts/token/ERC721/ERC721Metadata.sol\":{\"keccak256\":\"0xe454aab4894511c610fb28e63e212608004921c10dfbffaf0b0e18a2c3b204eb\",\"urls\":[\"bzz-raw://cbb33c4aa1ba8470e389a79702b1b0450c03acd0e9471ed3ae5d566a958d36a4\",\"dweb:/ipfs/QmXryp8Ncftr8WYt7vWwoFQVKnbxtQ7dQBHzfzgWWYGisK\"]},\"openzeppelin-solidity/contracts/token/ERC721/IERC721.sol\":{\"keccak256\":\"0x680c11bc8173eef7d5db843baaf64ce499476de2c172f6aea631dbee54bcd2e6\",\"urls\":[\"bzz-raw://0f314963ab26fb65c6f364d57900f0f1aa8f6aeb4396e327e5e5c646815f060e\",\"dweb:/ipfs/Qmf6eSUtRUF4YDxGyhQq7TVDYzuHcYEvk9Us3RVy5iZQVH\"]},\"openzeppelin-solidity/contracts/token/ERC721/IERC721Enumerable.sol\":{\"keccak256\":\"0x5c573acd6c7b98d71f3c1c44d63dc17400b0fd7b26a52c9fded43b8b533dc4ec\",\"urls\":[\"bzz-raw://e23af54444d2dbfae58895339eb7b189e1ba5d0b7abde63716e7ef7da23b2fde\",\"dweb:/ipfs/QmZva7dE1SMd1yyizzc6ivSoBXXwpNveLV7iFNATNpq68Y\"]},\"openzeppelin-solidity/contracts/token/ERC721/IERC721Metadata.sol\":{\"keccak256\":\"0x2b2b99dc7fe8fcd1f9427d00822b99cbc683dc21f5dd7532bd7e2281fd2c2ca2\",\"urls\":[\"bzz-raw://a8024c00e34efaf328f9592e76823c79f25fa0f6006bdf4a1e7fea204afd4773\",\"dweb:/ipfs/QmZns9jTr7843njq3J2iL2LLoWXK5mdzN1bDGd9GL3ahhD\"]},\"openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol\":{\"keccak256\":\"0x042048c375daca04b31e31c91bbae912b84b5eb818c4e31b2deb530fd2305342\",\"urls\":[\"bzz-raw://d877a87c5e29b9ffca3e334378058c051a4e012fd3635039681003a9376baf1f\",\"dweb:/ipfs/QmR45snf93cFXtB71TZcmoGy9DbcMha8CqgkDKaLvhjXZK\"]},\"openzeppelin-solidity/contracts/utils/Address.sol\":{\"keccak256\":\"0x1a8e5072509c5ea7365eb1d48030b9be865140c8fb779968da0a459a0e174a11\",\"urls\":[\"bzz-raw://03335b7b07c7c8c8d613cfdd8ec39a0b5ec133ee510bf2fe6cc5a496767bef4b\",\"dweb:/ipfs/Qmebp4nzPja645c9yXSdJkGq96oU3am3LUnG2K3R7XxyKf\"]},\"project:/contracts/ERC721Tradable.sol\":{\"keccak256\":\"0x6db9f4e6f326cc5ec1a7dec30c2676c4efabd3dec23f6ca2abd9b95045ab5c45\",\"urls\":[\"bzz-raw://04a65bdb430e2ac00efa8e6db03decce67d67c9755d21bbe8b51c2d5e4a0cbbe\",\"dweb:/ipfs/QmZktbBMrVtD9qyaeEsyAU146P4k4yGXsDyyoCXGrV33fc\"]},\"project:/contracts/IFactoryERC721.sol\":{\"keccak256\":\"0x48002b1913aa0f039235566892b977f01c508eb81d1b499db2bffa38d2369f1b\",\"urls\":[\"bzz-raw://263c95a847c3c93c85cd7b26ebcd76ca5b70f6798f6230d047a6050ac24d6fa7\",\"dweb:/ipfs/QmU4dUkHy1RkSXSaKousJiWnhjAv8XFQM3BUqB5mgPNCYt\"]},\"project:/contracts/Rimable.sol\":{\"keccak256\":\"0x322ffc207c480732fc5a8dd23c681e348b26838cbbcdcb9033930d715676b77d\",\"urls\":[\"bzz-raw://ba7d1b9739fcab027d6435ac22e456fcd72c2339c3e62493123ce5698251c241\",\"dweb:/ipfs/Qmbgeff3pS9eurjyRggoKofX8CJvGM4yZUhkfj1VgsSvfX\"]},\"project:/contracts/RimableFactory.sol\":{\"keccak256\":\"0x4910137ef4a31f64f776cc9eadb337e115904aee63c4a0a40e49eea715166c53\",\"urls\":[\"bzz-raw://096b80e6ae18ed107498e08a9f15ef60e39a5f27d9fb82414c01d1aea677fecc\",\"dweb:/ipfs/QmXMiLSCGAfVNah1wuxNx2VNBYyhr1R9zk3neh75V7pCHh\"]},\"project:/contracts/Strings.sol\":{\"keccak256\":\"0xa2d2f7242821570f122c7b42d655c27d698dfc0478771a8500ad89c8a4d92c8d\",\"urls\":[\"bzz-raw://a996b1771d14d78d8a238a318d19bf8724e28885cd52f7ec22ad1d9c63611cdf\",\"dweb:/ipfs/QmZSbvfPnkAhyggLupi4TULvJRYFEELAyPbcaLMDGmZrur\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity ^0.5.0;\n\nimport \"openzeppelin-solidity/contracts/ownership/Ownable.sol\";\nimport \"./IFactoryERC721.sol\";\nimport \"./Rimable.sol\";\nimport \"./Strings.sol\";\n\ncontract NatureFactory is FactoryERC721, Ownable {\n    using Strings for string;\n\n    event Transfer(\n        address indexed from,\n        address indexed to,\n        uint256 indexed tokenId\n    );\n\n    address public proxyRegistryAddress;\n    address public nftAddress;\n    address public lootBoxNftAddress;\n    string public baseURI = \"https://creatures-api.opensea.io/api/factory/\";\n\n    /**\n     * Enforce the existence of only 100 OpenSea creatures.\n     */\n    uint256 CREATURE_SUPPLY = 100;\n\n    /**\n     * Three different options for minting Creatures (basic, premium, and gold).\n     */\n\n    // constructor(address _proxyRegistryAddress, address _nftAddress) public {\n    //     proxyRegistryAddress = _proxyRegistryAddress;\n    //     nftAddress = _nftAddress;\n    //     fireTransferEvents(address(0), owner());\n    // }\n\n    // function name() external view returns (string memory) {\n    //     return \"Nature Photo Sale\";\n    // }\n\n    // function symbol() external view returns (string memory) {\n    //     return \"NAT\";\n    // }\n\n    // function supportsFactoryInterface() public view returns (bool) {\n    //     return true;\n    // }\n\n    // function transferOwnership(address newOwner) public onlyOwner {\n    //     address _prevOwner = owner();\n    //     super.transferOwnership(newOwner);\n    //     fireTransferEvents(_prevOwner, newOwner);\n    // }\n\n    // function mint(uint256 _optionId, address _toAddress) public {\n    //     // Must be sent from the owner proxy or owner.\n    //     ProxyRegistry proxyRegistry = ProxyRegistry(proxyRegistryAddress);\n    //     assert(\n    //         address(proxyRegistry.proxies(owner())) == msg.sender ||\n    //             owner() == msg.sender\n    //     );\n\n    //     Rimable rimable = Rimable(nftAddress);\n    //     rimable.mintTo(_toAddress);\n    // }\n\n    // function canMint(uint256 _optionId) public view returns (bool) {\n    //     Rimable openSeaCreature = Rimable(nftAddress);\n\n    //     return creatureSupply < (CREATURE_SUPPLY - numItemsAllocated);\n    // }\n\n    // function tokenURI(uint256 _optionId) external view returns (string memory) {\n    //     return Strings.strConcat(baseURI, Strings.uint2str(_optionId));\n    // }\n\n    // /**\n    //  * Hack to get things to work automatically on OpenSea.\n    //  * Use transferFrom so the frontend doesn't have to worry about different method names.\n    //  */\n    // function transferFrom(\n    //     address _from,\n    //     address _to,\n    //     uint256 _tokenId\n    // ) public {\n    //     mint(_tokenId, _to);\n    // }\n\n    // /**\n    //  * Hack to get things to work automatically on OpenSea.\n    //  * Use isApprovedForAll so the frontend doesn't have to worry about different method names.\n    //  */\n    // function isApprovedForAll(address _owner, address _operator)\n    //     public\n    //     view\n    //     returns (bool)\n    // {\n    //     if (owner() == _owner && _owner == _operator) {\n    //         return true;\n    //     }\n\n    //     ProxyRegistry proxyRegistry = ProxyRegistry(proxyRegistryAddress);\n    //     if (\n    //         owner() == _owner &&\n    //         address(proxyRegistry.proxies(_owner)) == _operator\n    //     ) {\n    //         return true;\n    //     }\n\n    //     return false;\n    // }\n\n    // /**\n    //  * Hack to get things to work automatically on OpenSea.\n    //  * Use isApprovedForAll so the frontend doesn't have to worry about different method names.\n    //  */\n    // function ownerOf(uint256 _tokenId) public view returns (address _owner) {\n    //     return owner();\n    // }\n}\n",
+  "sourcePath": "D:\\codegiant\\rimo\\rim-entertainment-backend\\contracts\\RimableFactory.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/RimableFactory.sol",
+    "exportedSymbols": {
+      "NatureFactory": [
+        2228
+      ]
+    },
+    "id": 2229,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2196,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:19"
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 2197,
+        "nodeType": "ImportDirective",
+        "scope": 2229,
+        "sourceUnit": 443,
+        "src": "25:63:19",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "project:/contracts/IFactoryERC721.sol",
+        "file": "./IFactoryERC721.sol",
+        "id": 2198,
+        "nodeType": "ImportDirective",
+        "scope": 2229,
+        "sourceUnit": 2081,
+        "src": "89:30:19",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "project:/contracts/Rimable.sol",
+        "file": "./Rimable.sol",
+        "id": 2199,
+        "nodeType": "ImportDirective",
+        "scope": 2229,
+        "sourceUnit": 2195,
+        "src": "120:23:19",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "project:/contracts/Strings.sol",
+        "file": "./Strings.sol",
+        "id": 2200,
+        "nodeType": "ImportDirective",
+        "scope": 2229,
+        "sourceUnit": 2553,
+        "src": "144:23:19",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2201,
+              "name": "FactoryERC721",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2080,
+              "src": "195:13:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_FactoryERC721_$2080",
+                "typeString": "contract FactoryERC721"
+              }
+            },
+            "id": 2202,
+            "nodeType": "InheritanceSpecifier",
+            "src": "195:13:19"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2203,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 442,
+              "src": "210:7:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$442",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 2204,
+            "nodeType": "InheritanceSpecifier",
+            "src": "210:7:19"
+          }
+        ],
+        "contractDependencies": [
+          26,
+          442,
+          2080
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 2228,
+        "linearizedBaseContracts": [
+          2228,
+          442,
+          26,
+          2080
+        ],
+        "name": "NatureFactory",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "id": 2207,
+            "libraryName": {
+              "contractScope": null,
+              "id": 2205,
+              "name": "Strings",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2552,
+              "src": "230:7:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Strings_$2552",
+                "typeString": "library Strings"
+              }
+            },
+            "nodeType": "UsingForDirective",
+            "src": "224:25:19",
+            "typeName": {
+              "id": 2206,
+              "name": "string",
+              "nodeType": "ElementaryTypeName",
+              "src": "242:6:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_string_storage_ptr",
+                "typeString": "string"
+              }
+            }
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 2215,
+            "name": "Transfer",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2214,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2209,
+                  "indexed": true,
+                  "name": "from",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2215,
+                  "src": "279:20:19",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2208,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "279:7:19",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2211,
+                  "indexed": true,
+                  "name": "to",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2215,
+                  "src": "309:18:19",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2210,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "309:7:19",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2213,
+                  "indexed": true,
+                  "name": "tokenId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2215,
+                  "src": "337:23:19",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2212,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "337:7:19",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "269:97:19"
+            },
+            "src": "255:112:19"
+          },
+          {
+            "constant": false,
+            "id": 2217,
+            "name": "proxyRegistryAddress",
+            "nodeType": "VariableDeclaration",
+            "scope": 2228,
+            "src": "373:35:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 2216,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "373:7:19",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 2219,
+            "name": "nftAddress",
+            "nodeType": "VariableDeclaration",
+            "scope": 2228,
+            "src": "414:25:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 2218,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "414:7:19",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 2221,
+            "name": "lootBoxNftAddress",
+            "nodeType": "VariableDeclaration",
+            "scope": 2228,
+            "src": "445:32:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 2220,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "445:7:19",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 2224,
+            "name": "baseURI",
+            "nodeType": "VariableDeclaration",
+            "scope": 2228,
+            "src": "483:71:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_string_storage",
+              "typeString": "string"
+            },
+            "typeName": {
+              "id": 2222,
+              "name": "string",
+              "nodeType": "ElementaryTypeName",
+              "src": "483:6:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_string_storage_ptr",
+                "typeString": "string"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "68747470733a2f2f6372656174757265732d6170692e6f70656e7365612e696f2f6170692f666163746f72792f",
+              "id": 2223,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "string",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "507:47:19",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_stringliteral_29dd1c4f1880428c4a7e955a101dffe14aeefb8e0da1a90f118d860367da377d",
+                "typeString": "literal_string \"https://creatures-api.opensea.io/api/factory/\""
+              },
+              "value": "https://creatures-api.opensea.io/api/factory/"
+            },
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 2227,
+            "name": "CREATURE_SUPPLY",
+            "nodeType": "VariableDeclaration",
+            "scope": 2228,
+            "src": "637:29:19",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 2225,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "637:7:19",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "313030",
+              "id": 2226,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "663:3:19",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_100_by_1",
+                "typeString": "int_const 100"
+              },
+              "value": "100"
+            },
+            "visibility": "internal"
+          }
+        ],
+        "scope": 2229,
+        "src": "169:3569:19"
+      }
+    ],
+    "src": "0:3739:19"
+  },
+  "legacyAST": {
+    "attributes": {
+      "absolutePath": "project:/contracts/RimableFactory.sol",
+      "exportedSymbols": {
+        "NatureFactory": [
+          2228
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.5",
+            ".0"
+          ]
+        },
+        "id": 2196,
+        "name": "PragmaDirective",
+        "src": "0:23:19"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 443,
+          "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+          "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+          "scope": 2229,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 2197,
+        "name": "ImportDirective",
+        "src": "25:63:19"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 2081,
+          "absolutePath": "project:/contracts/IFactoryERC721.sol",
+          "file": "./IFactoryERC721.sol",
+          "scope": 2229,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 2198,
+        "name": "ImportDirective",
+        "src": "89:30:19"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 2195,
+          "absolutePath": "project:/contracts/Rimable.sol",
+          "file": "./Rimable.sol",
+          "scope": 2229,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 2199,
+        "name": "ImportDirective",
+        "src": "120:23:19"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 2553,
+          "absolutePath": "project:/contracts/Strings.sol",
+          "file": "./Strings.sol",
+          "scope": 2229,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 2200,
+        "name": "ImportDirective",
+        "src": "144:23:19"
+      },
+      {
+        "attributes": {
+          "contractDependencies": [
+            26,
+            442,
+            2080
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": false,
+          "linearizedBaseContracts": [
+            2228,
+            442,
+            26,
+            2080
+          ],
+          "name": "NatureFactory",
+          "scope": 2229
+        },
+        "children": [
+          {
+            "attributes": {
+              "arguments": null
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "FactoryERC721",
+                  "referencedDeclaration": 2080,
+                  "type": "contract FactoryERC721"
+                },
+                "id": 2201,
+                "name": "UserDefinedTypeName",
+                "src": "195:13:19"
+              }
+            ],
+            "id": 2202,
+            "name": "InheritanceSpecifier",
+            "src": "195:13:19"
+          },
+          {
+            "attributes": {
+              "arguments": null
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "Ownable",
+                  "referencedDeclaration": 442,
+                  "type": "contract Ownable"
+                },
+                "id": 2203,
+                "name": "UserDefinedTypeName",
+                "src": "210:7:19"
+              }
+            ],
+            "id": 2204,
+            "name": "InheritanceSpecifier",
+            "src": "210:7:19"
+          },
+          {
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "Strings",
+                  "referencedDeclaration": 2552,
+                  "type": "library Strings"
+                },
+                "id": 2205,
+                "name": "UserDefinedTypeName",
+                "src": "230:7:19"
+              },
+              {
+                "attributes": {
+                  "name": "string",
+                  "type": "string"
+                },
+                "id": 2206,
+                "name": "ElementaryTypeName",
+                "src": "242:6:19"
+              }
+            ],
+            "id": 2207,
+            "name": "UsingForDirective",
+            "src": "224:25:19"
+          },
+          {
+            "attributes": {
+              "anonymous": false,
+              "documentation": null,
+              "name": "Transfer"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": true,
+                      "name": "from",
+                      "scope": 2215,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 2208,
+                        "name": "ElementaryTypeName",
+                        "src": "279:7:19"
+                      }
+                    ],
+                    "id": 2209,
+                    "name": "VariableDeclaration",
+                    "src": "279:20:19"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": true,
+                      "name": "to",
+                      "scope": 2215,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 2210,
+                        "name": "ElementaryTypeName",
+                        "src": "309:7:19"
+                      }
+                    ],
+                    "id": 2211,
+                    "name": "VariableDeclaration",
+                    "src": "309:18:19"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": true,
+                      "name": "tokenId",
+                      "scope": 2215,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 2212,
+                        "name": "ElementaryTypeName",
+                        "src": "337:7:19"
+                      }
+                    ],
+                    "id": 2213,
+                    "name": "VariableDeclaration",
+                    "src": "337:23:19"
+                  }
+                ],
+                "id": 2214,
+                "name": "ParameterList",
+                "src": "269:97:19"
+              }
+            ],
+            "id": 2215,
+            "name": "EventDefinition",
+            "src": "255:112:19"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "proxyRegistryAddress",
+              "scope": 2228,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "address",
+              "value": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "address",
+                  "stateMutability": "nonpayable",
+                  "type": "address"
+                },
+                "id": 2216,
+                "name": "ElementaryTypeName",
+                "src": "373:7:19"
+              }
+            ],
+            "id": 2217,
+            "name": "VariableDeclaration",
+            "src": "373:35:19"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "nftAddress",
+              "scope": 2228,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "address",
+              "value": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "address",
+                  "stateMutability": "nonpayable",
+                  "type": "address"
+                },
+                "id": 2218,
+                "name": "ElementaryTypeName",
+                "src": "414:7:19"
+              }
+            ],
+            "id": 2219,
+            "name": "VariableDeclaration",
+            "src": "414:25:19"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "lootBoxNftAddress",
+              "scope": 2228,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "address",
+              "value": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "address",
+                  "stateMutability": "nonpayable",
+                  "type": "address"
+                },
+                "id": 2220,
+                "name": "ElementaryTypeName",
+                "src": "445:7:19"
+              }
+            ],
+            "id": 2221,
+            "name": "VariableDeclaration",
+            "src": "445:32:19"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "baseURI",
+              "scope": 2228,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "string",
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "string",
+                  "type": "string"
+                },
+                "id": 2222,
+                "name": "ElementaryTypeName",
+                "src": "483:6:19"
+              },
+              {
+                "attributes": {
+                  "argumentTypes": null,
+                  "hexvalue": "68747470733a2f2f6372656174757265732d6170692e6f70656e7365612e696f2f6170692f666163746f72792f",
+                  "isConstant": false,
+                  "isLValue": false,
+                  "isPure": true,
+                  "lValueRequested": false,
+                  "subdenomination": null,
+                  "token": "string",
+                  "type": "literal_string \"https://creatures-api.opensea.io/api/factory/\"",
+                  "value": "https://creatures-api.opensea.io/api/factory/"
+                },
+                "id": 2223,
+                "name": "Literal",
+                "src": "507:47:19"
+              }
+            ],
+            "id": 2224,
+            "name": "VariableDeclaration",
+            "src": "483:71:19"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "CREATURE_SUPPLY",
+              "scope": 2228,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "uint256",
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "uint256",
+                  "type": "uint256"
+                },
+                "id": 2225,
+                "name": "ElementaryTypeName",
+                "src": "637:7:19"
+              },
+              {
+                "attributes": {
+                  "argumentTypes": null,
+                  "hexvalue": "313030",
+                  "isConstant": false,
+                  "isLValue": false,
+                  "isPure": true,
+                  "lValueRequested": false,
+                  "subdenomination": null,
+                  "token": "number",
+                  "type": "int_const 100",
+                  "value": "100"
+                },
+                "id": 2226,
+                "name": "Literal",
+                "src": "663:3:19"
+              }
+            ],
+            "id": 2227,
+            "name": "VariableDeclaration",
+            "src": "637:29:19"
+          }
+        ],
+        "id": 2228,
+        "name": "ContractDefinition",
+        "src": "169:3569:19"
+      }
+    ],
+    "id": 2229,
+    "name": "SourceUnit",
+    "src": "0:3739:19"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.2",
+  "updatedAt": "2021-08-01T19:28:54.926Z",
+  "devdoc": {
+    "methods": {
+      "canMint(uint256)": {
+        "details": "Returns whether the option ID can be minted. Can return false if the developer wishes to restrict a total supply per option ID (or overall)."
+      },
+      "isOwner()": {
+        "details": "Returns true if the caller is the current owner."
+      },
+      "mint(uint256,address)": {
+        "details": "Mints asset(s) in accordance to a specific address with a particular \"option\". This should be callable only by the contract owner or the owner's Wyvern Proxy (later universal login will solve this). Options should also be delineated 0 - (numOptions() - 1) for convenient indexing.",
+        "params": {
+          "_optionId": "the option id",
+          "_toAddress": "address of the future owner of the asset(s)"
+        }
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner.     * NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "tokenURI(uint256)": {
+        "details": "Returns a URL specifying some metadata about the option. This metadata can be of the same structure as the ERC721 metadata."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    }
+  },
+  "userdoc": {
+    "methods": {
+      "name()": {
+        "notice": "Returns the name of this factory."
+      },
+      "numOptions()": {
+        "notice": "Number of options the factory supports."
+      },
+      "supportsFactoryInterface()": {
+        "notice": "Indicates that this is a factory contract. Ideally would use EIP 165 supportsInterface()"
+      },
+      "symbol()": {
+        "notice": "Returns the symbol for this factory."
+      }
+    }
+  }
+}

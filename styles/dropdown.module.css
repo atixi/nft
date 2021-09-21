@@ -1,0 +1,19 @@
+.dropdown ul{
+    padding: 15px;
+    border-radius: 8px;
+}
+.dropdown ul li{
+  border-radius: 4px;
+}
+.dropdown a{
+  border-radius: 4px;
+}
+
+.menu_footer{
+  min-width: 200px;
+  display:flex;
+  justify-content:space-around;
+}
+.menu_footer a{
+  color:#888;
+}

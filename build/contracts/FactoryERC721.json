@@ -1,0 +1,1259 @@
+{
+  "contractName": "FactoryERC721",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "name",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "symbol",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "numOptions",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_optionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "canMint",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_optionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "tokenURI",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "supportsFactoryInterface",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_optionId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_toAddress",
+          "type": "address"
+        }
+      ],
+      "name": "mint",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_optionId\",\"type\":\"uint256\"}],\"name\":\"canMint\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_optionId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_toAddress\",\"type\":\"address\"}],\"name\":\"mint\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"numOptions\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"supportsFactoryInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_optionId\",\"type\":\"uint256\"}],\"name\":\"tokenURI\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{\"canMint(uint256)\":{\"details\":\"Returns whether the option ID can be minted. Can return false if the developer wishes to restrict a total supply per option ID (or overall).\"},\"mint(uint256,address)\":{\"details\":\"Mints asset(s) in accordance to a specific address with a particular \\\"option\\\". This should be callable only by the contract owner or the owner's Wyvern Proxy (later universal login will solve this). Options should also be delineated 0 - (numOptions() - 1) for convenient indexing.\",\"params\":{\"_optionId\":\"the option id\",\"_toAddress\":\"address of the future owner of the asset(s)\"}},\"tokenURI(uint256)\":{\"details\":\"Returns a URL specifying some metadata about the option. This metadata can be of the same structure as the ERC721 metadata.\"}}},\"userdoc\":{\"methods\":{\"name()\":{\"notice\":\"Returns the name of this factory.\"},\"numOptions()\":{\"notice\":\"Number of options the factory supports.\"},\"supportsFactoryInterface()\":{\"notice\":\"Indicates that this is a factory contract. Ideally would use EIP 165 supportsInterface()\"},\"symbol()\":{\"notice\":\"Returns the symbol for this factory.\"}},\"notice\":\"This is a generic factory contract that can be used to mint tokens. The configuration for minting is specified by an _optionId, which can be used to delineate various ways of minting.\"}},\"settings\":{\"compilationTarget\":{\"project:/contracts/IFactoryERC721.sol\":\"FactoryERC721\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/IFactoryERC721.sol\":{\"keccak256\":\"0x48002b1913aa0f039235566892b977f01c508eb81d1b499db2bffa38d2369f1b\",\"urls\":[\"bzz-raw://263c95a847c3c93c85cd7b26ebcd76ca5b70f6798f6230d047a6050ac24d6fa7\",\"dweb:/ipfs/QmU4dUkHy1RkSXSaKousJiWnhjAv8XFQM3BUqB5mgPNCYt\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity ^0.5.0;\n\n/**\n * This is a generic factory contract that can be used to mint tokens. The configuration\n * for minting is specified by an _optionId, which can be used to delineate various\n * ways of minting.\n */\ninterface FactoryERC721 {\n    /**\n     * Returns the name of this factory.\n     */\n    function name() external view returns (string memory);\n\n    /**\n     * Returns the symbol for this factory.\n     */\n    function symbol() external view returns (string memory);\n\n    /**\n     * Number of options the factory supports.\n     */\n    function numOptions() external view returns (uint256);\n\n    /**\n     * @dev Returns whether the option ID can be minted. Can return false if the developer wishes to\n     * restrict a total supply per option ID (or overall).\n     */\n    function canMint(uint256 _optionId) external view returns (bool);\n\n    /**\n     * @dev Returns a URL specifying some metadata about the option. This metadata can be of the\n     * same structure as the ERC721 metadata.\n     */\n    function tokenURI(uint256 _optionId) external view returns (string memory);\n\n    /**\n     * Indicates that this is a factory contract. Ideally would use EIP 165 supportsInterface()\n     */\n    function supportsFactoryInterface() external view returns (bool);\n\n    /**\n     * @dev Mints asset(s) in accordance to a specific address with a particular \"option\". This should be\n     * callable only by the contract owner or the owner's Wyvern Proxy (later universal login will solve this).\n     * Options should also be delineated 0 - (numOptions() - 1) for convenient indexing.\n     * @param _optionId the option id\n     * @param _toAddress address of the future owner of the asset(s)\n     */\n    function mint(uint256 _optionId, address _toAddress) external;\n}\n",
+  "sourcePath": "D:\\codegiant\\rimo\\rim-entertainment-backend\\contracts\\IFactoryERC721.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/IFactoryERC721.sol",
+    "exportedSymbols": {
+      "FactoryERC721": [
+        2080
+      ]
+    },
+    "id": 2081,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2038,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:16"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": "This is a generic factory contract that can be used to mint tokens. The configuration\nfor minting is specified by an _optionId, which can be used to delineate various\nways of minting.",
+        "fullyImplemented": false,
+        "id": 2080,
+        "linearizedBaseContracts": [
+          2080
+        ],
+        "name": "FactoryERC721",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": "Returns the name of this factory.",
+            "id": 2043,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "name",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2039,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "326:2:16"
+            },
+            "returnParameters": {
+              "id": 2042,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2041,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2043,
+                  "src": "352:13:16",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2040,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "352:6:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "351:15:16"
+            },
+            "scope": 2080,
+            "src": "313:54:16",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": "Returns the symbol for this factory.",
+            "id": 2048,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "symbol",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2044,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "448:2:16"
+            },
+            "returnParameters": {
+              "id": 2047,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2046,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2048,
+                  "src": "474:13:16",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2045,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "474:6:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "473:15:16"
+            },
+            "scope": 2080,
+            "src": "433:56:16",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": "Number of options the factory supports.",
+            "id": 2053,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "numOptions",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2049,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "577:2:16"
+            },
+            "returnParameters": {
+              "id": 2052,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2051,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2053,
+                  "src": "603:7:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2050,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "603:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "602:9:16"
+            },
+            "scope": 2080,
+            "src": "558:54:16",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": "@dev Returns whether the option ID can be minted. Can return false if the developer wishes to\nrestrict a total supply per option ID (or overall).",
+            "id": 2060,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "canMint",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2056,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2055,
+                  "name": "_optionId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2060,
+                  "src": "811:17:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2054,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "811:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "810:19:16"
+            },
+            "returnParameters": {
+              "id": 2059,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2058,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2060,
+                  "src": "853:4:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2057,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "853:4:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "852:6:16"
+            },
+            "scope": 2080,
+            "src": "794:65:16",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": "@dev Returns a URL specifying some metadata about the option. This metadata can be of the\nsame structure as the ERC721 metadata.",
+            "id": 2067,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "tokenURI",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2063,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2062,
+                  "name": "_optionId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2067,
+                  "src": "1042:17:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2061,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1042:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1041:19:16"
+            },
+            "returnParameters": {
+              "id": 2066,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2065,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2067,
+                  "src": "1084:13:16",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2064,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1084:6:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1083:15:16"
+            },
+            "scope": 2080,
+            "src": "1024:75:16",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": "Indicates that this is a factory contract. Ideally would use EIP 165 supportsInterface()",
+            "id": 2072,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "supportsFactoryInterface",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2068,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1250:2:16"
+            },
+            "returnParameters": {
+              "id": 2071,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2070,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2072,
+                  "src": "1276:4:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2069,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1276:4:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1275:6:16"
+            },
+            "scope": 2080,
+            "src": "1217:65:16",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": "@dev Mints asset(s) in accordance to a specific address with a particular \"option\". This should be\ncallable only by the contract owner or the owner's Wyvern Proxy (later universal login will solve this).\nOptions should also be delineated 0 - (numOptions() - 1) for convenient indexing.\n@param _optionId the option id\n@param _toAddress address of the future owner of the asset(s)",
+            "id": 2079,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "mint",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2077,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2074,
+                  "name": "_optionId",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2079,
+                  "src": "1732:17:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2073,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1732:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2076,
+                  "name": "_toAddress",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2079,
+                  "src": "1751:18:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2075,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1751:7:16",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1731:39:16"
+            },
+            "returnParameters": {
+              "id": 2078,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1779:0:16"
+            },
+            "scope": 2080,
+            "src": "1718:62:16",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "external"
+          }
+        ],
+        "scope": 2081,
+        "src": "226:1556:16"
+      }
+    ],
+    "src": "0:1783:16"
+  },
+  "legacyAST": {
+    "attributes": {
+      "absolutePath": "project:/contracts/IFactoryERC721.sol",
+      "exportedSymbols": {
+        "FactoryERC721": [
+          2080
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.5",
+            ".0"
+          ]
+        },
+        "id": 2038,
+        "name": "PragmaDirective",
+        "src": "0:23:16"
+      },
+      {
+        "attributes": {
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "interface",
+          "documentation": "This is a generic factory contract that can be used to mint tokens. The configuration\nfor minting is specified by an _optionId, which can be used to delineate various\nways of minting.",
+          "fullyImplemented": false,
+          "linearizedBaseContracts": [
+            2080
+          ],
+          "name": "FactoryERC721",
+          "scope": 2081
+        },
+        "children": [
+          {
+            "attributes": {
+              "body": null,
+              "documentation": "Returns the name of this factory.",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "name",
+              "scope": 2080,
+              "stateMutability": "view",
+              "superFunction": null,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 2039,
+                "name": "ParameterList",
+                "src": "326:2:16"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 2043,
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "type": "string",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "string",
+                          "type": "string"
+                        },
+                        "id": 2040,
+                        "name": "ElementaryTypeName",
+                        "src": "352:6:16"
+                      }
+                    ],
+                    "id": 2041,
+                    "name": "VariableDeclaration",
+                    "src": "352:13:16"
+                  }
+                ],
+                "id": 2042,
+                "name": "ParameterList",
+                "src": "351:15:16"
+              }
+            ],
+            "id": 2043,
+            "name": "FunctionDefinition",
+            "src": "313:54:16"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": "Returns the symbol for this factory.",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "symbol",
+              "scope": 2080,
+              "stateMutability": "view",
+              "superFunction": null,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 2044,
+                "name": "ParameterList",
+                "src": "448:2:16"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 2048,
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "type": "string",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "string",
+                          "type": "string"
+                        },
+                        "id": 2045,
+                        "name": "ElementaryTypeName",
+                        "src": "474:6:16"
+                      }
+                    ],
+                    "id": 2046,
+                    "name": "VariableDeclaration",
+                    "src": "474:13:16"
+                  }
+                ],
+                "id": 2047,
+                "name": "ParameterList",
+                "src": "473:15:16"
+              }
+            ],
+            "id": 2048,
+            "name": "FunctionDefinition",
+            "src": "433:56:16"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": "Number of options the factory supports.",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "numOptions",
+              "scope": 2080,
+              "stateMutability": "view",
+              "superFunction": null,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 2049,
+                "name": "ParameterList",
+                "src": "577:2:16"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 2053,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 2050,
+                        "name": "ElementaryTypeName",
+                        "src": "603:7:16"
+                      }
+                    ],
+                    "id": 2051,
+                    "name": "VariableDeclaration",
+                    "src": "603:7:16"
+                  }
+                ],
+                "id": 2052,
+                "name": "ParameterList",
+                "src": "602:9:16"
+              }
+            ],
+            "id": 2053,
+            "name": "FunctionDefinition",
+            "src": "558:54:16"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": "@dev Returns whether the option ID can be minted. Can return false if the developer wishes to\nrestrict a total supply per option ID (or overall).",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "canMint",
+              "scope": 2080,
+              "stateMutability": "view",
+              "superFunction": null,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_optionId",
+                      "scope": 2060,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 2054,
+                        "name": "ElementaryTypeName",
+                        "src": "811:7:16"
+                      }
+                    ],
+                    "id": 2055,
+                    "name": "VariableDeclaration",
+                    "src": "811:17:16"
+                  }
+                ],
+                "id": 2056,
+                "name": "ParameterList",
+                "src": "810:19:16"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 2060,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 2057,
+                        "name": "ElementaryTypeName",
+                        "src": "853:4:16"
+                      }
+                    ],
+                    "id": 2058,
+                    "name": "VariableDeclaration",
+                    "src": "853:4:16"
+                  }
+                ],
+                "id": 2059,
+                "name": "ParameterList",
+                "src": "852:6:16"
+              }
+            ],
+            "id": 2060,
+            "name": "FunctionDefinition",
+            "src": "794:65:16"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": "@dev Returns a URL specifying some metadata about the option. This metadata can be of the\nsame structure as the ERC721 metadata.",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "tokenURI",
+              "scope": 2080,
+              "stateMutability": "view",
+              "superFunction": null,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_optionId",
+                      "scope": 2067,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 2061,
+                        "name": "ElementaryTypeName",
+                        "src": "1042:7:16"
+                      }
+                    ],
+                    "id": 2062,
+                    "name": "VariableDeclaration",
+                    "src": "1042:17:16"
+                  }
+                ],
+                "id": 2063,
+                "name": "ParameterList",
+                "src": "1041:19:16"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 2067,
+                      "stateVariable": false,
+                      "storageLocation": "memory",
+                      "type": "string",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "string",
+                          "type": "string"
+                        },
+                        "id": 2064,
+                        "name": "ElementaryTypeName",
+                        "src": "1084:6:16"
+                      }
+                    ],
+                    "id": 2065,
+                    "name": "VariableDeclaration",
+                    "src": "1084:13:16"
+                  }
+                ],
+                "id": 2066,
+                "name": "ParameterList",
+                "src": "1083:15:16"
+              }
+            ],
+            "id": 2067,
+            "name": "FunctionDefinition",
+            "src": "1024:75:16"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": "Indicates that this is a factory contract. Ideally would use EIP 165 supportsInterface()",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "supportsFactoryInterface",
+              "scope": 2080,
+              "stateMutability": "view",
+              "superFunction": null,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 2068,
+                "name": "ParameterList",
+                "src": "1250:2:16"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 2072,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 2069,
+                        "name": "ElementaryTypeName",
+                        "src": "1276:4:16"
+                      }
+                    ],
+                    "id": 2070,
+                    "name": "VariableDeclaration",
+                    "src": "1276:4:16"
+                  }
+                ],
+                "id": 2071,
+                "name": "ParameterList",
+                "src": "1275:6:16"
+              }
+            ],
+            "id": 2072,
+            "name": "FunctionDefinition",
+            "src": "1217:65:16"
+          },
+          {
+            "attributes": {
+              "body": null,
+              "documentation": "@dev Mints asset(s) in accordance to a specific address with a particular \"option\". This should be\ncallable only by the contract owner or the owner's Wyvern Proxy (later universal login will solve this).\nOptions should also be delineated 0 - (numOptions() - 1) for convenient indexing.\n@param _optionId the option id\n@param _toAddress address of the future owner of the asset(s)",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "mint",
+              "scope": 2080,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_optionId",
+                      "scope": 2079,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 2073,
+                        "name": "ElementaryTypeName",
+                        "src": "1732:7:16"
+                      }
+                    ],
+                    "id": 2074,
+                    "name": "VariableDeclaration",
+                    "src": "1732:17:16"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_toAddress",
+                      "scope": 2079,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 2075,
+                        "name": "ElementaryTypeName",
+                        "src": "1751:7:16"
+                      }
+                    ],
+                    "id": 2076,
+                    "name": "VariableDeclaration",
+                    "src": "1751:18:16"
+                  }
+                ],
+                "id": 2077,
+                "name": "ParameterList",
+                "src": "1731:39:16"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 2078,
+                "name": "ParameterList",
+                "src": "1779:0:16"
+              }
+            ],
+            "id": 2079,
+            "name": "FunctionDefinition",
+            "src": "1718:62:16"
+          }
+        ],
+        "id": 2080,
+        "name": "ContractDefinition",
+        "src": "226:1556:16"
+      }
+    ],
+    "id": 2081,
+    "name": "SourceUnit",
+    "src": "0:1783:16"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.2",
+  "updatedAt": "2021-08-01T19:28:54.915Z",
+  "devdoc": {
+    "methods": {
+      "canMint(uint256)": {
+        "details": "Returns whether the option ID can be minted. Can return false if the developer wishes to restrict a total supply per option ID (or overall)."
+      },
+      "mint(uint256,address)": {
+        "details": "Mints asset(s) in accordance to a specific address with a particular \"option\". This should be callable only by the contract owner or the owner's Wyvern Proxy (later universal login will solve this). Options should also be delineated 0 - (numOptions() - 1) for convenient indexing.",
+        "params": {
+          "_optionId": "the option id",
+          "_toAddress": "address of the future owner of the asset(s)"
+        }
+      },
+      "tokenURI(uint256)": {
+        "details": "Returns a URL specifying some metadata about the option. This metadata can be of the same structure as the ERC721 metadata."
+      }
+    }
+  },
+  "userdoc": {
+    "methods": {
+      "name()": {
+        "notice": "Returns the name of this factory."
+      },
+      "numOptions()": {
+        "notice": "Number of options the factory supports."
+      },
+      "supportsFactoryInterface()": {
+        "notice": "Indicates that this is a factory contract. Ideally would use EIP 165 supportsInterface()"
+      },
+      "symbol()": {
+        "notice": "Returns the symbol for this factory."
+      }
+    },
+    "notice": "This is a generic factory contract that can be used to mint tokens. The configuration for minting is specified by an _optionId, which can be used to delineate various ways of minting."
+  }
+}

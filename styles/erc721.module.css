@@ -1,0 +1,284 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  -webkit-box-align: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  margin: 0px auto;
+  padding: 10px 200px;
+}
+.subHeader {
+  font-weight: normal;
+}
+.fileTypes {
+  font-weight: normal;
+}
+.uploadForm {
+  display: flex;
+  flex-direction: column;
+}
+.nftFormContainer {
+  width: 100%;
+  margin: auto;
+  padding: 10px;
+}
+.logoFileContainer {
+  border-radius: 5px;
+  border: 4px dashed rgb(204, 204, 204);
+  margin-bottom: 20px;
+  cursor: pointer;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 250px;
+  width: 250px;
+  padding: 5px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.nftFileUploadContainer {
+  border-radius: 5px;
+  border: 4px dashed rgb(204, 204, 204);
+  margin-bottom: 20px;
+  cursor: pointer;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 250px;
+  height: 250px;
+  padding: 10px;
+  overflow: hidden;
+}
+.logoImageBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.nftMediaContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.nftImageBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: rebeccapurple;
+}
+
+.nftImage {
+  width: 100%;
+  height: auto;
+}
+.nftVideoBox {
+  width: 200px;
+  height: 200px;
+}
+
+.logoImage {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.bannerFileContainer {
+  border-radius: 5px;
+  border: 4px dashed rgb(204, 204, 204);
+  margin-bottom: 20px;
+  cursor: pointer;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  max-width: 1400px;
+  width: 80%;
+  height: 186px;
+  padding: 5px;
+}
+.bannerImageBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: black;
+  width: 100%;
+  height: 100%;
+}
+.bannerImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.changeUploadedImage {
+  margin-top: 10px;
+  font-weight: normal;
+  color: rgb(133, 133, 133);
+}
+.uploadedFileImage {
+  cursor: pointer;
+  width: 200px;
+  height: auto;
+}
+.uploadedFileButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.uploadIcon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 200px;
+  margin: auto;
+}
+.nftInputComponent {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  font-weight: normal;
+  margin-bottom: 40px;
+}
+.nftSubHeader {
+  font-size: large;
+}
+.nfgParagraph {
+  font-weight: normal;
+}
+.nftTooltip {
+  font-weight: normal;
+  margin: 0px 10px;
+}
+.nftInput {
+  font-weight: normal;
+  font-size: 20px;
+  height: 50px;
+  padding: 10px;
+}
+.collectionDropdown {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: inline-flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  border-radius: 5px;
+  -webkit-box-pack: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 20px;
+  /* background-color: rgb(32, 129, 226);
+  border: 1px solid rgb(32, 129, 226); */
+  color: rgb(255, 255, 255);
+}
+
+.createButtonContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.createButton {
+  width: 162px;
+  max-width: 162px;
+  height: 40px;
+  display: inline-flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  border-radius: 5px;
+  -webkit-box-pack: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 20px;
+  background-color: rgb(32, 129, 226);
+  border: 1px solid rgb(32, 129, 226);
+  color: rgb(255, 255, 255);
+}
+
+.nftFormErrors {
+  margin-top: -10px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 900;
+  color: red;
+}
+.nftFormValid {
+  margin-top: -10px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 900;
+  color: green;
+}
+.waitingSpiner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: -30px;
+}
+
+.deplyingMessage {
+  padding-bottom: 20px;
+}
+.autoHeight {
+  height: auto;
+}
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.modalControls {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.modalButton {
+  margin: 10px;
+}
+.linkButton {
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    width: 100%;
+    padding: 10px;
+  }
+  .nftFormContainer {
+    width: 90%;
+  }
+}
