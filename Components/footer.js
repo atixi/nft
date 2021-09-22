@@ -73,111 +73,89 @@ function Footer() {
     }
   }
   return (
-    <>
-      <FooterContainer className={` pt-5 pl-3 pr-3 pb-3`}>
-        <Row>
-          <Col md={6} lg={6} sm={24} xs={24} className="mb-3 mb-md-0">
-            <div className="col-md-12 col-sm-12">
-              <CategoryTitle>{updatesMessage}</CategoryTitle>
-              <div className="input-group mt-3">
-                <SearchInput
-                  type="search"
-                  className={`form-control`}
-                  placeholder={searchPlaceHolder}
-                  aria-label="Search"
-                  size={"large"}
-                  key={"0"}
-                  onChange={(e) => {
-                    settingEmail(e);
-                  }}
-                  onKeyPress={(e) => handleSubmit(e)}
-                />
-                <SearchButton
-                  type="button"
-                  className={`btn`}
-                  onClick={submitSubscribe}
-                >
-                  {searchSubmitMessage}
-                </SearchButton>
-              </div>
-              {validEmail.invalidEmail
-                ? "Invalid Email Address"
-                : validEmail.dublicateEntry
-                ? "This email is already subscribed"
-                : ""}
+    <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 col-xs-1">
+                        <div class="widget">
+                            <h5>Marketplace</h5>
+                            <ul>
+                                <li><a href="#">All NFTs</a></li>
+                                <li><a href="#">Art</a></li>
+                                <li><a href="#">Music</a></li>
+                                <li><a href="#">Domain Names</a></li>
+                                <li><a href="#">Virtual World</a></li>
+                                <li><a href="#">Collectibles</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-1">
+                        <div class="widget">
+                            <h5>Resources</h5>
+                            <ul>
+                                <li><a href="#">Help Center</a></li>
+                                <li><a href="#">Partners</a></li>
+                                <li><a href="#">Suggestions</a></li>
+                                <li><a href="#">Discord</a></li>
+                                <li><a href="#">Docs</a></li>
+                                <li><a href="#">Newsletter</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-1">
+                        <div class="widget">
+                            <h5>Community</h5>
+                            <ul>
+                                <li><a href="#">Community</a></li>
+                                <li><a href="#">Documentation</a></li>
+                                <li><a href="#">Brand Assets</a></li>
+                                <li><a href="#">Blog</a></li>
+                                <li><a href="#">Forum</a></li>
+                                <li><a href="#">Mailing List</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-1">
+                        <div class="widget">
+                            <h5>Newsletter</h5>
+                            <p>Signup for our newsletter to get the latest news in your inbox.</p>
+                            <form action="blank.php" class="row form-dark" id="form_subscribe" method="post" name="form_subscribe">
+                                <div class="col text-center">
+                                    <input class="form-control" id="txt_subscribe" name="txt_subscribe" placeholder="enter your email" type="text" /> <a href="#" id="btn-subscribe"><i class="arrow_right bg-color-secondary"></i></a>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </form>
+                            <div class="spacer-10"></div>
+                            <small>Your email is safe with us. We don't spam.</small>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </Col>
-          <Col md={12} sm={24} xs={24} className={"text-center"}>
-            <Row>
-              <Col md={12} sm={12} xs={12} className={"text-left pl-5"}>
-                <CategoryTitle>
-                  {FOOTER_WEBSITE_LINKS.websiteTitle}
-                </CategoryTitle>
-                <CategoryListUl>
-                  {FOOTER_WEBSITE_LINKS.websiteLinks.map(
-                    (websiteLink, index) => (
-                      <CategoryListLi key={index}>
-                        <CategoryLink
-                          target="_blank"
-                          href={websiteLink.link}
-                          key={websiteLink.websiteLinkTitle}
-                        >
-                          <LinkText>{websiteLink.websiteLinkTitle}</LinkText>
-                        </CategoryLink>
-                      </CategoryListLi>
-                    )
-                  )}
-                </CategoryListUl>
-              </Col>
-              <Col md={12} sm={12} xs={12} className={"text-left pl-5"}>
-                <CategoryTitle>{FOOTER_COMMUNITY.communityTitle}</CategoryTitle>
-                <CategoryListUl>
-                  {FOOTER_COMMUNITY.communityLinks.map(
-                    (communitlink, index) => (
-                      <CategoryListLi key={index}>
-                        <CategoryLink key={communitlink.communityLinktitle}>
-                          <LinkText>
-                            <a
-                              rel="noreferrer"
-                              target="_blank"
-                              href={communitlink.link}
-                            >
-                              {communitlink.communityLinktitle}
-                            </a>
-                          </LinkText>
-                        </CategoryLink>
-                      </CategoryListLi>
-                    )
-                  )}
-                </CategoryListUl>
-              </Col>
-            </Row>
-          </Col>
-          <Col md={24} xs={24}>
-            <hr />
-            <FooterExtraLinkContainer>
-              <CopyRightAndPolicyContainer>
-                <CopyRight>
-                  {`© `}{" "}
-                  <Link href={"https://atixi.com/"}>
-                    <a target={"_blank"}>{FOOTER_WEBSITE_LINKS.websiteTitle}</a>
-                  </Link>
-                  {`, Inc. `} {FOOTER_WEBSITE_LINKS.allRightReserved}
-                </CopyRight>
-              </CopyRightAndPolicyContainer>
-              <TermAndPolicy>
-                <span>
-                  <a href={"/docs/terms.pdf"}>{terms}</a>
-                </span>
-                <span>
-                  <a href={"/docs/privacy.pdf"}>{`${privacy} ${policy}`}</a>
-                </span>
-              </TermAndPolicy>
-            </FooterExtraLinkContainer>
-          </Col>
-        </Row>
-      </FooterContainer>
-    </>
+            <div class="subfooter">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="de-flex">
+                                <div class="de-flex-col">
+                                    <a href="index.html">
+                                        <img alt="" class="f-logo" src="images/logo-2-light.png" /><span class="copy">&copy; Copyright 2021 - Gigaland by Designesia</span>
+                                    </a>
+                                </div>
+                                <div class="de-flex-col">
+                                    <div class="social-icons">
+                                        <a href="#"><i class="fa fa-facebook fa-lg"></i></a>
+                                        <a href="#"><i class="fa fa-twitter fa-lg"></i></a>
+                                        <a href="#"><i class="fa fa-linkedin fa-lg"></i></a>
+                                        <a href="#"><i class="fa fa-pinterest fa-lg"></i></a>
+                                        <a href="#"><i class="fa fa-rss fa-lg"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
   );
 }
 
