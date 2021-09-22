@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "antd/dist/antd.min.css";
 import "/styles/nprogress.css";
+import "/styles/style.css";
 import store, { persistor } from "../store";
 import { PersistGate } from "redux-persist/integration/react";
 import React from "react";

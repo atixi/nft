@@ -130,328 +130,99 @@ function Header(props) {
       address.substring(address.length - 5, address.length)
     );
   };
-  if (search)
-    return (
-      <Wrapper>
-        <HeaderContainer style={{ borderBottom: "1px solid #e5e5e5" }}>
-          <Button
-            onClick={() => {
-              setSearch(false);
-            }}
-          >
-            <CloseOutlined />
-          </Button>
-          <SearchWrapper style={{ flex: 1 }}>
-            <SearchOutlined
-              onClick={(e) => {
-                submitClick();
-              }}
-              style={{
-                marginRight: "10px",
-                color: "inherit",
-              }}
-            />
-            <input
-              type="text"
-              style={{ flex: 1, width: "auto" }}
-              placeholder="Search by creator, collections or NFT"
-              onChange={(e) => handleLiveSearch(e)}
-              onKeyPress={(e) => handleSearch(e)}
-            />
-          </SearchWrapper>
-        </HeaderContainer>
-        <SearchContainer>
-          <br />
-          <center>
-            {CONSTANTS.searchResult} &quot;{submit}&quot;
-          </center>
-          <div className="p-4">
-            {data.assets?.length !== 0 ? (
-              <h5>
-                <strong>Assets</strong>
-              </h5>
-            ) : (
-              ""
-            )}
-            {data.assets.map((n, index) => {
-              return (
-                <Link
-                  key={index}
-                  href={`/nft/${n.tokenAddress}?tokenId=${n?.tokenId}`}
-                  passHref
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                      justifyContent: "flex-start",
-                      marginBottom: "3px",
-                    }}
-                  >
-                    <Image
-                      src={n.previewImage.url}
-                      width={60}
-                      height={60}
-                      alt={n.name}
-                    />
-                    <div className="ml-2">
-                      <h5>{n.name}</h5>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-
-          <div className="p-4">
-            {data.assets?.length !== 0 ? (
-              <h5>
-                <strong>Collections</strong>
-              </h5>
-            ) : (
-              ""
-            )}
-            {data.collections.map((n, index) => {
-              return (
-                <Link key={index} href={`/collection/${n.slug}`} passHref>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                      justifyContent: "flex-start",
-                      marginBottom: "3px",
-                    }}
-                  >
-                    <Image
-                      src={n.collectionImageURL.url}
-                      width={60}
-                      height={60}
-                      alt={n.collectionName}
-                    />
-                    <div className="ml-2">
-                      <h5>{n.collectionName}</h5>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-
-          <div className="p-4">
-            {data.assets?.length !== 0 ? (
-              <h5>
-                <strong>Talents</strong>
-              </h5>
-            ) : (
-              ""
-            )}
-            {data.talents.map((n, index) => {
-              return (
-                <Link key={index} href={`/profile/${n.userName}`} passHref>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                      justifyContent: "flex-start",
-                      marginBottom: "3px",
-                    }}
-                  >
-                    <Image
-                      src={n.talentAvatar.url}
-                      width={60}
-                      height={60}
-                      alt={n.talentName}
-                    />
-                    <div className="ml-2">
-                      <h5>{n.talentName}</h5>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </SearchContainer>
-      </Wrapper>
-    );
-  if (menu)
-    return (
-      <Wrapper>
-        <HeaderContainer>
-          <div style={{ marginRight: "15px" }}>
-            <Link href="/">
-              <Image src="/logo/logo.png" width="40" height="40" />
-            </Link>
-          </div>
-          <div style={{ flex: 1 }}></div>
-          <Button
-            onClick={() => {
-              setMenu(false);
-            }}
-          >
-            <CloseOutlined />
-          </Button>
-        </HeaderContainer>
-        <WrapperItemContainer>
-          <ul>
-            <li>
-              <a href="#">{CONSTANTS.explore}</a>
-            </li>
-            <li>
-              <a href="#">{CONSTANTS.myItems}</a>
-            </li>
-            <li>
-              <a href="#">{CONSTANTS.howItWorks}</a>
-            </li>
-          </ul>
-
-          <HeaderBottomMenu>
-            <div style={{ display: "flex", padding: "20px 10px" }}>
-              <Button
-                style={{ flex: 1, backgroundColor: "#0066ff", color: "#fff" }}
-              >
-                {CONSTANTS.create}
-              </Button>
-              <CreateButton
-                onClick={() => {
-                  setMenu(false);
-                }}
-                style={{ flex: 1 }}
-              >
-                <Link href="/wallet" passHref>
-                  <a>{CONSTANTS.connect}</a>
-                </Link>
-              </CreateButton>
-            </div>
-          </HeaderBottomMenu>
-        </WrapperItemContainer>
-      </Wrapper>
-    );
   return (
-    <HeaderNav>
-      <div style={{ marginRight: "15px" }}>
-        <Link href="/" passHref>
-          <a>
-            <Image src="/logo/logo.png" width="40" height="40" />
-          </a>
-        </Link>
-      </div>
-      <div
-        className="d-none d-xl-flex px-1"
-        style={{ flex: "1", marginRight: "0px", height: "40px" }}
-      >
-        <Search />
-      </div>
-      <ul style={{ paddingRight: "30px" }}>
-        <li className={`active d-none d-lg-flex`}>
-          <a href="#">{CONSTANTS.explore}</a>
-        </li>
-        <li className="d-none d-lg-flex">
-          {isMetaconnected && metaToken.length > 0 && (
-            <Link
-              href={{
-                pathname: `/profile/${metaToken[0]}`,
-              }}
-            >
-              <a>{"My Items"}</a>
-            </Link>
-          )}
-        </li>
-        <li className="d-none d-lg-flex">
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href="https://savory-vulcanodon-748.notion.site/Top-NFT-Collectibles-ece713f206cb48838e4cd0d1113bcd14"
-          >
-            {CONSTANTS.howItWorks}
-          </a>
-        </li>
-      </ul>
-      <div style={{ flex: 1 }} className="d-block d-xl-none"></div>
-      <div style={{ display: "flex" }}>
-        {connected == true ? (
-          <Dropdown
-            overlay={
-              <WalletInfoDropdown
-                data={
-                  walletToken != null && isWalletConnected == true
-                    ? walletToken
-                    : metaToken != null && metaToken
-                }
-              />
-            }
-            overlayStyle={{ boxShadow: "0px 1px 2px grey"}}
-            placement="bottomRight"
-            trigger={["click"]}
-          >
-            <ConnectedButton className={`d-lg-block`}>
-              {walletBalance !== null && isWalletConnected == true ? (
-                <>
-                  <BalanceLabel>
-                    {parseFloat(walletBalance).toFixed(4) + " Eth"}
-                  </BalanceLabel>
-                  <Avatar
-                    size={36}
-                    src={"/images/walletIcons/walletIcon.svg"}
-                  />{" "}
-                </>
-              ) : (
-                <>
-                  <BalanceLabel>
-                    {parseFloat(metaBalance).toFixed(4) + " Eth"}
-                  </BalanceLabel>
-                  <Avatar size={36} src={"/images/walletIcons/metaIcon.svg"} />
-                </>
-              )}
-            </ConnectedButton>
-          </Dropdown>
-        ) : (
-          <ConnectButton
-            className={`d-none d-lg-block`}
-            onClick={connectToWallet}
-          >
-            <Link href={"/wallet"} passHref>
-              <a>{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</a>
-            </Link>
-          </ConnectButton>
-        )}
-        <Button
-          onClick={() => {
-            setSearch(true);
-          }}
-          className={`d-block d-xl-none`}
-        >
-          <SearchOutlined />
-        </Button>
-        <Button
-          onClick={() => {
-            setMenu(true);
-          }}
-          className={`d-block d-lg-none`}
-        >
-          <svg
-            style={{ color: "#000" }}
-            viewBox="0 0 18 8"
-            fill="none"
-            width="13.200000000000001"
-            height="13.200000000000001"
-            xlmns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M1 0C0.447715 0 0 0.447715 0 1C0 1.55228 0.447716 2 1 2H17C17.5523 2 18 1.55228 18 1C18 0.447715 17.5523 0 17 0H1ZM4 6C3.44772 6 3 6.44772 3 7C3 7.55228 3.44772 8 4 8H14C14.5523 8 15 7.55228 15 7C15 6.44772 14.5523 6 14 6H4Z"
-              fill="currentColor"
-            ></path>
-          </svg>
-        </Button>
-      </div>
-    </HeaderNav>
+    <header class="transparent header-light scroll-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="de-flex sm-pt10">
+                    <div class="de-flex-col">
+                        <div class="de-flex-col">
+                            {/* <!-- logo begin --> */}
+                            <div id="logo">
+                                <a href="index.html">
+                                    <img alt="" class="logo" src="images/logo-light.png" />
+                                    <img alt="" class="logo-2" src="images/logo.png" />
+                                </a>
+                            </div>
+                            {/* <!-- logo close --> */}
+                        </div>
+                        <div class="de-flex-col">
+                            <input id="quick_search" class="xs-hide" name="quick_search" placeholder="search item here..." type="text" />
+                        </div>
+                    </div>
+                    <div class="de-flex-col header-col-mid">
+                        {/* <!-- mainmenu begin --> */}
+                        <ul id="mainmenu">
+                            <li>
+                                <a href="index.html">Home<span></span></a>
+                                <ul>
+                                    <li><a href="03_grey-index.html">New: Grey Scheme</a></li>
+                                    <li><a href="index.html">Homepage 1</a></li>
+                                    <li><a href="index-2.html">Homepage 2</a></li>
+                                    <li><a href="index-3.html">Homepage 3</a></li>
+                                    <li><a href="index-4.html">Homepage 4</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="explore.html">Explore<span></span></a>
+                                <ul>
+                                    <li><a href="explore.html">Explore</a></li>
+                                    <li><a href="explore-2.html">Explore 2</a></li>
+                                    <li><a href="collection.html">Collections</a></li>
+                                    <li><a href="live-auction.html">Live Auction</a></li>
+                                    <li><a href="item-details.html">Item Details</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Pages<span></span></a>
+                                <ul>
+                                    <li><a href="author.html">Author</a></li>
+                                    <li><a href="wallet.html">Wallet</a></li>
+                                    <li><a href="create.html">Create</a></li>
+                                    <li><a href="news.html">News</a></li>
+                                    <li><a href="gallery.html">Gallery</a></li>
+                                    <li><a href="login.html">Login</a></li>
+                                    <li><a href="login-2.html">Login 2</a></li>
+                                    <li><a href="register.html">Register</a></li>
+                                    <li><a href="contact.html">Contact Us</a></li>
+                                </ul>
+                            </li>                                    
+                            <li>
+                                <a href="#">Stats<span></span></a>
+                                <ul>
+                                    <li><a href="activity.html">Activity</a></li>
+                                    <li><a href="rankings.html">Rankings</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Elements<span></span></a>
+                                <ul>
+                                    <li><a href="icons-elegant.html">Elegant Icons</a></li>
+                                    <li><a href="icons-etline.html">Etline Icons</a></li>
+                                    <li><a href="icons-font-awesome.html">Font Awesome Icons</a></li>
+                                    <li><a href="accordion.html">Accordion</a></li> 
+                                    <li><a href="alerts.html">Alerts</a></li>
+                                    <li><a href="counters.html">Counters</a></li>
+                                    <li><a href="modal.html">Modal</a></li>
+                                    <li><a href="popover.html">Popover</a></li>
+                                    <li><a href="pricing-table.html">Pricing Table</a></li>
+                                    <li><a href="progress-bar.html">Progress Bar</a></li>
+                                    <li><a href="tabs.html">Tabs</a></li>
+                                    <li><a href="tooltips.html">Tooltips</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <div class="menu_side_area">
+                            <a href="wallet.html" class="btn-main"><i class="icon_wallet_alt"></i><span>Connect Wallet</span></a>
+                            <span id="menu-btn"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
   );
 }
 export default Header;

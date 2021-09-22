@@ -1,4 +1,10 @@
 module.exports = {
+  module: {
+    loaders: [{test: /\.scss$/, loaders: ["style", "css", "sass"]},
+      {test: /\.css$/, loader: "style-loader!css-loader"},
+      {test   : /\.woff|\.woff2|\.svg|.eot|\.ttf|\.png/, loader : 'url?prefix=font/&limit=10000&name=/assets/fonts/[name].[ext]'
+      }]    
+  },
   mocha: {
     enableTimeouts: false,
     before_timeout: 320000,
