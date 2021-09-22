@@ -2,6 +2,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "antd/dist/antd.min.css";
 import "/styles/nprogress.css";
 import "/styles/style.css";
+import "/styles/coloring.css";
+import "/styles/colors/scheme-03.css";
 import store, { persistor } from "../store";
 import { PersistGate } from "redux-persist/integration/react";
 import React from "react";
@@ -20,9 +22,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-  }body {
-  padding-top: 74px;
-}
+  }
 * {
   font-size: 15px;
   font-weight: 900;
