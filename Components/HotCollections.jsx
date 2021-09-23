@@ -2,13 +2,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Carousel from "react-elastic-carousel";
 import { SectionHeading } from "./StyledComponents/globalStyledComponents";
-import {
-  CollectionCard,
-  ProfileAvatarContainer,
-  CardTitle,
-  CardDescription,
-  CardImageContainer,
-} from "./StyledComponents/hotCollections-styledComponents";
 import api from "/Components/axiosRequest";
 import { socket } from "config/websocket";
 import { fetch } from "Utils/strapiApi";

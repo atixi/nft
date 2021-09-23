@@ -24,8 +24,6 @@ import "/styles/custom.css";
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());
-// const isServer = typeof window === 'undefined'
-// const WOW = !isServer ? require('wowjs') : null
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -118,11 +116,11 @@ const queryClient = new QueryClient({
 });
 
 function MyApp({ Component, pageProps }) {
-  useEffect(()=>{
-    if(typeof window !== 'undefined') {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
 
       window.WOW = require('wowjs');
-  
+
     }
     new WOW.WOW().init()
   }, [])
