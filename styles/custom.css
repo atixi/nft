@@ -1,0 +1,55 @@
+.topCarouselSection{
+    padding-top: 0px !important;
+}
+.topCarouselPrev{
+    border: none;
+    border-radius: inherit;
+    left: 25px;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    height: 55px;
+    width: 40px;
+}
+.topCarouselPrev span{
+    position: relative;
+    left: 4px;
+    font-size: 30px;
+    top: 3px;
+    color: black;
+}
+.topCarouselNext{
+    border: none;
+    border-radius: inherit;
+    right: 25px;
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
+    height: 55px;
+    width: 40px;
+}
+.topCarouselNext span{
+    position: relative;
+    left: 4px;
+    font-size: 30px;
+    top: 3px;
+    color: black;
+}
+.carouselPrev{
+    border-radius: 50px !important;
+    border: 1px solid #c1bbbb;
+    background: white !important;
+    top: 85px;
+}
+.carouselPrev span{
+    color: black;
+    font-size: 30px;
+}
+.carouselNext{
+    border-radius: 50px !important;
+    border: 1px solid #c1bbbb;
+    background: white !important;
+    top: 85px;
+}
+.carouselNext span{
+    color: black;
+    font-size: 30px;
+}

@@ -14,11 +14,11 @@ function Home({ fixPricesData, acutionPricesData }) {
     <div class="no-bottom" id="content">
       <div id="top"></div>
       <Slide />
-      <TopSellers />
+      {/* <TopSellers />
       <LiveAuctions />
       <FixedSells />
-      <HotCollections />
-      <Explore />
+      <HotCollections />*/}
+      <Explore /> 
     </div>
   );
 }

@@ -1,21 +1,31 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import "antd/dist/antd.min.css";
-import "/styles/nprogress.css";
-import "/styles/style.css";
-import "/styles/coloring.css";
-import "/styles/colors/scheme-03.css";
-import store, { persistor } from "../store";
-import { PersistGate } from "redux-persist/integration/react";
-import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 import Router from "next/router";
+import NProgress from "nprogress"; //nprogress module
+import React, { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Provider } from "react-redux";
-import Layout from "/Components/Layout/Layout";
+import { PersistGate } from "redux-persist/integration/react";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
-import NProgress from "nprogress"; //nprogress module
+// import "/public/js/owl.carousel.js";
+import store, { persistor } from "../store";
+import Layout from "/Components/Layout/Layout";
+import "/styles/coloring.css";
+import "/styles/colors/scheme-03.css";
+import "/styles/jquery.countdown.css";
+import "/styles/magnific-popup.css";
+import "/styles/nprogress.css";
+import "/styles/owl.carousel.css";
+import "/styles/owl.theme.css";
+import "/styles/owl.transitions.css";
+import "/styles/animate.css";
+import "/styles/style.css";
+import "/styles/custom.css";
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());
+// const isServer = typeof window === 'undefined'
+// const WOW = !isServer ? require('wowjs') : null
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -108,6 +118,14 @@ const queryClient = new QueryClient({
 });
 
 function MyApp({ Component, pageProps }) {
+  useEffect(()=>{
+    if(typeof window !== 'undefined') {
+
+      window.WOW = require('wowjs');
+  
+    }
+    new WOW.WOW().init()
+  }, [])
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
