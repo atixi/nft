@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Products from "/Components/nfts";
 import Link from "next/link";
-import { Spin } from "antd";
+import { Spin, Statistic} from "antd";
+const {Countdown} = Statistic
 import EXPLORE_CONSTANTS from "/Constants/exploreConstants";
 import {
   CategoriesListContainer,
   CategoriesListScroll,
   CategoriesList,
+  CountDownContainer
 } from "./StyledComponents/explore-styledComponents";
 import {
   SectionHeading,
@@ -15,6 +17,7 @@ import {
 } from "./StyledComponents/globalStyledComponents";
 import { useRouter } from "next/router";
 import api from "/Components/axiosRequest";
+const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30; // Moment is also OK
 
 function Explore() {
   const [isLoad, setLoad] = useState(false);
@@ -92,7 +95,13 @@ function Explore() {
                                 {/* <!-- nft item begin --> */}
                                 <div className=" col-lg-3 col-md-6 col-sm-6 col-xs-12">
                                     <div className="nft__item style-2">
-                                        <div className="de_countdown bg-color-secondary text-white" data-year="2021" data-month="10" data-day="16" data-hour="8"></div>
+                                        <CountDownContainer>
+                                            <Countdown
+                                            value={deadline}
+                                            format={`D[d] HH[h] mm[m] ss[s]`}
+                                            valueStyle={{lineHeight: "1.1", color: "white"}}
+                                            />
+                                        </CountDownContainer>
                                         <div className="author_list_pp">
                                             <a href="author.html">                                    
                                                 <img className="lazy" src="images/author/author-1.jpg" alt=""  />
@@ -153,8 +162,13 @@ function Explore() {
                                 {/* <!-- nft item begin --> */}
                                 <div className=" col-lg-3 col-md-6 col-sm-6 col-xs-12">
                                     <div className="nft__item style-2">
-                                        <div className="de_countdown bg-color-secondary text-white" data-year="2021" data-month="10" data-day="14" data-hour="8"></div>
-                                        <div className="author_list_pp">
+                                        <CountDownContainer>
+                                            <Countdown
+                                            value={deadline}
+                                            format={`D[d] HH[h] mm[m] ss[s]`}
+                                            valueStyle={{lineHeight: "1.1", color: "white"}}
+                                            />
+                                        </CountDownContainer>                                        <div className="author_list_pp">
                                             <a href="author.html">                                    
                                                 <img className="lazy" src="images/author/author-11.jpg" alt=""  />
                                                 <i className="fa fa-check"></i>
@@ -244,8 +258,13 @@ function Explore() {
                                 {/* <!-- nft item begin --> */}
                                 <div className=" col-lg-3 col-md-6 col-sm-6 col-xs-12">
                                     <div className="nft__item style-2">
-                                        <div className="de_countdown bg-color-secondary text-white" data-year="2021" data-month="10" data-day="15" data-hour="8"></div>
-                                        <div className="author_list_pp">
+                                        <CountDownContainer>
+                                            <Countdown
+                                            value={deadline}
+                                            format={`D[d] HH[h] mm[m] ss[s]`}
+                                            valueStyle={{lineHeight: "1.1", color: "white"}}
+                                            />
+                                        </CountDownContainer>                                        <div className="author_list_pp">
                                             <a href="author.html">                                    
                                                 <img className="lazy" src="images/author/author-2.jpg" alt=""  />
                                                 <i className="fa fa-check"></i>
@@ -305,8 +324,13 @@ function Explore() {
                                 {/* <!-- nft item begin --> */}
                                 <div className=" col-lg-3 col-md-6 col-sm-6 col-xs-12">
                                     <div className="nft__item style-2">
-                                        <div className="de_countdown bg-color-secondary text-white" data-year="2021" data-month="9" data-day="29" data-hour="8"></div>
-                                        <div className="author_list_pp">
+                                        <CountDownContainer>
+                                            <Countdown
+                                            value={deadline}
+                                            format={`D[d] HH[h] mm[m] ss[s]`}
+                                            valueStyle={{lineHeight: "1.1", color: "white"}}
+                                            />
+                                        </CountDownContainer>                                        <div className="author_list_pp">
                                             <a href="author.html">                                    
                                                 <img className="lazy" src="images/author/author-4.jpg" alt=""  />
                                                 <i className="fa fa-check"></i>
