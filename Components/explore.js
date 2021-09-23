@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Products from "/Components/nfts";
 import Link from "next/link";
-import { Spin, Statistic} from "antd";
+import { Statistic} from "antd";
 const {Countdown} = Statistic
 import EXPLORE_CONSTANTS from "/Constants/exploreConstants";
 import {
-  CategoriesListContainer,
-  CategoriesListScroll,
-  CategoriesList,
   CountDownContainer
 } from "./StyledComponents/explore-styledComponents";
-import {
-  SectionHeading,
-  LoadingContainer,
-  LoadMoreButton,
-} from "./StyledComponents/globalStyledComponents";
+
 import { useRouter } from "next/router";
 import api from "/Components/axiosRequest";
 const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30; // Moment is also OK
