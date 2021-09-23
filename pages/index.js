@@ -16,9 +16,15 @@ function Home({ fixPricesData, acutionPricesData }) {
       <Slide />
       {/* <TopSellers />
       <LiveAuctions />
-      <FixedSells />
-      <HotCollections />*/}
-      <Explore /> 
+      <FixedSells />*/}
+      <div id={"section-collections"} className={"pt-30"}>
+        <div className={"container"}>
+        <div className="spacer-single"></div>
+        <HotCollections />
+        <div className="spacer-single"></div>
+        <Explore /> 
+        </div>
+      </div>
     </div>
   );
 }
