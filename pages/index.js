@@ -14,15 +14,14 @@ function Home({ fixPricesData, acutionPricesData }) {
     <div class="no-bottom" id="content">
       <div id="top"></div>
       <Slide />
-      {/* <TopSellers />
-      <LiveAuctions />
-      <FixedSells />*/}
       <div id={"section-collections"} className={"pt-30"}>
         <div className={"container"}>
         <div className="spacer-single"></div>
+        <Explore /> 
+        <div className="spacer-single"></div>
         <HotCollections />
         <div className="spacer-single"></div>
-        <Explore /> 
+        <TopSellers />
         </div>
       </div>
     </div>
