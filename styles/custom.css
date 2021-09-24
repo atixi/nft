@@ -53,3 +53,9 @@
     color: black;
     font-size: 30px;
 }
+.itemImageCard{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 250px !important;
+}
