@@ -134,8 +134,8 @@ const Layout = ({ children }) => {
       {showHeader == false ? (
         <div style={{ marginBottom: "-90px" }}></div>
       ) : (
-        <Header />
-      )}
+          <Header />
+        )}
       {children}
       {isWrongNet ? DisplayWrongNetModal() : ""}
 
@@ -148,17 +148,12 @@ const Layout = ({ children }) => {
         (ethereum &&
           router.pathname.includes("sell") &&
           !isMetaconnected &&
-          displayWalletModal) ||
-        (ethereum &&
-          router.pathname.includes("nft") &&
-          !isMetaconnected &&
           displayWalletModal)) && <ConnectWalletModal displayModal={true} />}
 
       {((!ethereum && router.pathname.includes("create")) ||
-        (!ethereum && router.pathname.includes("sell")) ||
-        (!ethereum && router.pathname.includes("nft"))) && (
-        <ConnectMobileWalletModal displayModal={true} />
-      )}
+        (!ethereum && router.pathname.includes("sell"))) && (
+          <ConnectMobileWalletModal displayModal={true} />
+        )}
     </>
   );
   async function detectNetwork() {
