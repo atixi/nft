@@ -55,3 +55,19 @@ export const CategoriesList = styled.ul`
     color: #208DD5;
   }
 `;
+
+
+export const CountDownContainer = styled.div`
+position: absolute;
+right: 20px;
+background: #ffffff;
+padding: 0px 10px 1px 10px;
+border-radius: 30px;
+-moz-border-radius: 30px;
+-webkit-border-radius: 30px;
+border: solid 2px #dddddd;
+z-index: 100;
+color: #0d0c22;
+background: #F32178;
+border-color: #F32178;
+`;

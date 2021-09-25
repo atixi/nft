@@ -1,0 +1,92 @@
+.topCarouselSection{
+    padding-top: 0px !important;
+}
+.topCarouselPrev{
+    border: none;
+    border-radius: inherit;
+    left: 25px;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    height: 55px;
+    width: 40px;
+}
+.topCarouselPrev span{
+    position: relative;
+    left: 4px;
+    font-size: 30px;
+    top: 3px;
+    color: black;
+}
+.topCarouselNext{
+    border: none;
+    border-radius: inherit;
+    right: 25px;
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
+    height: 55px;
+    width: 40px;
+}
+.topCarouselNext span{
+    position: relative;
+    left: 4px;
+    font-size: 30px;
+    top: 3px;
+    color: black;
+}
+.carouselPrev{
+    border-radius: 50px !important;
+    border: 1px solid #c1bbbb;
+    background: white !important;
+    top: 85px;
+}
+.carouselPrev span{
+    color: black;
+    font-size: 30px;
+}
+.carouselNext{
+    border-radius: 50px !important;
+    border: 1px solid #c1bbbb;
+    background: white !important;
+    top: 85px;
+}
+.carouselNext span{
+    color: black;
+    font-size: 30px;
+}
+.itemImageCard{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 250px !important;
+}
+.ant-tabs-tab-active{
+    background-color: #331B69 !important;
+    border-bottom: none;
+
+    min-width: 80px;
+    text-align: center;
+    border-radius: 3px;
+
+}
+.ant-tabs-tab-active div span{
+    color: #ffffff !important;
+}
+.ant-tabs-tab {
+    background-color: #EEE;
+    min-width: 80px;
+    padding: 10px 0px;
+    display: inline;
+    border-radius: 3px;
+    margin-left: 0px !important;
+
+}
+.ant-tabs-tab .ant-tabs-tab-btn{
+    text-align: center !important;
+    color: #F32178 !important;
+}
+.ant-tabs-nav::before{
+    border: none !important
+}
+.ant-tabs-ink-bar{
+    display: none !important;
+}

@@ -1,4 +1,19 @@
+const webpack = require('webpack');
 module.exports = {
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    config.plugins.push(new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            'window.jQuery': 'jquery'
+        }))
+    return config;
+    },
+  module: {
+    loaders: [{test: /\.scss$/, loaders: ["style", "css", "sass"]},
+      {test: /\.css$/, loader: "style-loader!css-loader"},
+      {test   : /\.woff|\.woff2|\.svg|.eot|\.ttf|\.png/, loader : 'url?prefix=font/&limit=10000&name=/assets/fonts/[name].[ext]'
+      }]    
+  },
   mocha: {
     enableTimeouts: false,
     before_timeout: 320000,

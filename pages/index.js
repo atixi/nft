@@ -11,14 +11,20 @@ import { fetch } from "Utils/strapiApi";
 
 function Home({ fixPricesData, acutionPricesData }) {
   return (
-    <MainWrapper>
+    <div class="no-bottom" id="content">
+      <div id="top"></div>
       <Slide />
-      <TopSellers />
-      <LiveAuctions />
-      <FixedSells />
-      <HotCollections />
-      <Explore />
-    </MainWrapper>
+      <div id={"section-collections"} className={"pt-30"}>
+        <div className={"container"}>
+        <div className="spacer-single"></div>
+        <Explore /> 
+        <div className="spacer-single"></div>
+        <HotCollections />
+        <div className="spacer-single"></div>
+        <TopSellers />
+        </div>
+      </div>
+    </div>
   );
 }
 

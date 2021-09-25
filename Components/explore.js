@@ -1,132 +1,102 @@
 import React, { useState, useEffect } from "react";
 import Products from "/Components/nfts";
 import Link from "next/link";
-import { Spin } from "antd";
+import { Statistic } from "antd";
+const { Countdown } = Statistic
 import EXPLORE_CONSTANTS from "/Constants/exploreConstants";
 import {
-  CategoriesListContainer,
-  CategoriesListScroll,
-  CategoriesList,
+    CountDownContainer
 } from "./StyledComponents/explore-styledComponents";
-import {
-  SectionHeading,
-  LoadingContainer,
-  LoadMoreButton,
-} from "./StyledComponents/globalStyledComponents";
+import { getAuctionPriceDetails } from "/Constants/constants";
 import { useRouter } from "next/router";
 import api from "/Components/axiosRequest";
+import request from "../Utils/axios"
+const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30; // Moment is also OK
 
 function Explore() {
-  const [isLoad, setLoad] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [explores, setExplores] = useState({ assets: [] });
-  const [loadMore, setLoadMore] = useState({
-    dataLimit: 2,
-    dataStart: 0,
-    countBy: 2,
-    dataLoad: true,
-    dataLoadMoreButtonLoading: false,
-  });
-  async function LoadMoreData(slug) {
-    setLoadMore({
-      ...loadMore,
-      dataLoadMoreButtonLoading: true,
-    });
-    const fetchedData = await api.get(
-      `/categories/${slug}?limit=${loadMore.dataLimit}&offset=${loadMore.dataStart}`
-    );
-    const assetLength = fetchedData.data.assets.length;
-    assetLength === 0
-      ? setLoadMore({ ...loadMore, dataLoad: false })
-      : (() => {
-          setExplores({
-            ...explores,
-            assets: [...explores.assets, ...fetchedData.data.assets],
-          });
-          setLoadMore({
-            ...loadMore,
-            dataStart: loadMore.dataStart + loadMore.countBy,
-            dataLoadMoreButtonLoading: false,
-          });
-        })();
-  }
+    const [items, setItems] = useState();
+    const loadItems = async () => {
+        try {
+            const data = await request("nfts?_limit=8", {
+                method: "GET"
+            });
+            console.log("data is", data)
+            if (data.status === 200) {
+                setItems(data.data)
+            }
+        }
+        catch (e) {
 
-  const router = useRouter();
-  const { cat } = router.query;
-
-  async function fetchingData(slug) {
-    const fetchedData = await api.get(
-      `/categories/${slug}?limit=${loadMore.dataLimit}&offset=0`
-    );
-    setExplores({
-      ...fetchedData.data,
-    });
-    setLoadMore({
-      ...loadMore,
-      dataStart: loadMore.countBy,
-      dataLoad: true,
-    });
-    setLoad(true);
-  }
-  useEffect(() => {
-    async function fetchingCats() {
-      const data = await api.get("/categories?_sort=id:ASC");
-      setCategories(await data.data);
+        }
     }
-    fetchingCats();
+    useEffect(() => {
+        loadItems()
+    }, []);
+    return (
+        <>
 
-    if (cat != undefined) {
-      fetchingData(cat);
-    } else {
-      fetchingData("all");
-    }
-  }, [cat]);
-  return (
-    <>
-      <div>
-        <CategoriesListContainer>
-        {categories?.length >0 && <SectionHeading>{EXPLORE_CONSTANTS.explore}</SectionHeading> }
-          <CategoriesListScroll>
-            <CategoriesList className={"m-2"}>
-              {categories && categories.map((category, v) => (
-                <Link key={v} href={`/?cat=${category.slug}`} passHref>
-                  <li className={cat == category.slug ? "active" : ""}>{`${
-                    category.icon ? category.icon : ""
-                  } ${category.categoryName}`}</li>
-                </Link>
-              ))}
-            </CategoriesList>
-          </CategoriesListScroll>
-        </CategoriesListContainer>
-        {explores ? (
-          <>
-            {explores && <Products data={explores} />}
-            {isLoad ? (
-              loadMore.dataLoad ? (
-                loadMore.dataLoadMoreButtonLoading ? (
-                  <LoadMoreButton block shape={"round"} size={"large"}>
-                    <Spin></Spin>
-                  </LoadMoreButton>
-                ) : (
-                  <LoadMoreButton
-                    block
-                    shape={"round"}
-                    size={"large"}
-                    onClick={() => LoadMoreData(cat ? cat : "all")}
-                  >
-                    Load More
-                  </LoadMoreButton>
-                )
-              ) : null
-            ) : null}
-          </>
-        ) : (
-          <LoadingContainer>
-            <Spin />
-          </LoadingContainer>
-        )}
-      </div>
-    </>
-  );
+            <div className="row  fadeIn">
+                <div className="col-lg-12">
+                    <h2 className="style-2">New Items</h2>
+                </div>
+
+                {/* <!-- nft item begin --> */}
+                {items && items.map((item) => {
+                    return <div className=" col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                        <div className="nft__item style-2">
+                            {item?.sellOrders && item?.sellOrders[0]?.saleKind === 1 &&
+                                <CountDownContainer>
+                                    <Countdown
+                                        value={deadline}
+                                        format={`D[d] HH[h] mm[m] ss[s]`}
+                                        valueStyle={{ lineHeight: "1.1", color: "white" }}
+                                    />
+                                </CountDownContainer>}
+                            <div className="author_list_pp">
+                                <a href="author.html">
+                                    <img className="lazy" src={item?.owner?.profile_img_url} alt="" />
+                                    <i className="fa fa-check"></i>
+                                </a>
+                            </div>
+                            <div className="nft__item_wrap itemImageCard">
+                                <Link
+                                    href={
+                                        item?.assetContract
+                                            ? `/nft/${item?.tokenAddress}?tokenId=${item?.tokenId}`
+                                            : `/nft/${item?.assetBundle?.maker?.address}?slug=${item?.assetBundle?.slug}`
+                                    }
+                                ><a>
+                                        <img src={item.imageUrl} className="lazy nft__item_preview" alt="" />
+                                    </a>
+                                </Link>
+                            </div>
+                            <div className="nft__item_info">
+                                <a href="item-details.html">
+                                    <h4>{item?.name}</h4>
+                                </a>
+                                <div className="nft__item_price">
+                                    <span> {item?.sellOrders?.length > 0 ? `${getAuctionPriceDetails(item?.sellOrders[0]).priceBase} ${item?.sellOrders[0]?.paymentTokenContract.symbol}` : ""}
+                                        {/* 0.08 ETH */}
+                                    </span>
+                                </div>
+                                <div className="nft__item_action">
+                                    <a href="#">Place a bid</a>
+                                </div>
+                                <div className="nft__item_like">
+                                    <i className="fa fa-heart"></i><span>50</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                })}
+            </div>
+
+            {/* <div className="spacer-single"></div> */}
+
+            <div className="spacer-single"></div>
+
+
+        </>
+    );
 }
 export default Explore;
