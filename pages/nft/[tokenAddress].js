@@ -186,6 +186,7 @@ function ProductPage() {
       }
 
       if (data.status == 200) {
+        console.log("nft", data.data)
         const nft = data.data;
         nft.owner.address = web3.utils.toChecksumAddress(nft.owner.address);
         setAsset({
@@ -272,10 +273,11 @@ function ProductPage() {
       setPreviewImage(url);
     }
   }
-
   return (
     <>
-      <Wrapper>
+      {/* <!-- content begin --> */}
+      <div className="no-bottom" id="content">
+        <div id="top"></div>
         {loading ? (
           <Spin style={{ marginTop: "200px" }} />
         ) : notFound ? (
@@ -292,403 +294,185 @@ function ProductPage() {
             ]}
           />
         ) : (
-          <Content className={`d-sm-flex`}>
-            <ItemImageContainer className=" text-center">
-              <ImageCon>
-                {isVideo ? (
-                  <ReactPlayer
-                    url={asset?.image}
-                    playing={true}
-                    width={"auto"}
-                    loop={true}
-                    controls={true}
-                  />
-                ) : (
-                  <Image
-                    src={mainImage}
-                    preview={{
-                      src: `${previewImage}`,
-                    }}
-                  />
-                )}
-              </ImageCon>{" "}
-              <br />
-              <ImageListContainer>
-                {imageList &&
-                  imageList.map((image, index) => {
-                    return (
-                      <div key={index}>
-                        <img
-                          src={image.thumbnail}
-                          onClick={() => changeImage(image.imageUrl)}
-                        />
-                      </div>
-                    );
-                  })}
-              </ImageListContainer>
-            </ItemImageContainer>
-            <ItemInfo className={"float-none float-sm-left"}>
-              <ItemDetails>
-                <ItemDetailsHeader>
-                  <ItemName>
-                    {asset.name ? asset.name : asset.collection?.name}
-                  </ItemName>
-                </ItemDetailsHeader>
-                <div>
-                  <span className="text-gradient">
-                    {asset?.sellOrder &&
-                      getAuctionPriceDetails(asset?.sellOrder).priceBase}
-                    {asset?.sellOrder &&
-                      asset?.sellOrder.paymentTokenContract &&
-                      asset?.sellOrder?.paymentTokenContract.symbol}
-                  </span>
-                  <span style={{ color: "#ccc" }}>
-                    {/* {isBundle && ` 1 of  ${assets.length()}`} */}
-                  </span>
-                </div>
-                {/* <div>
-                <button>{item.category}</button>
-              </div> */}
-                <ItemDescriptionText>{asset?.description}</ItemDescriptionText>
-                {sellOrders &&
-                  sellOrders.length > 0 &&
-                  sellOrders[0].expirationTime !== "0" && (
-                    <SaleEnd>
-                      <FieldTimeOutlined style={{ marginRight: "5px" }} />
-                      {`Sale ends on ${unixToHumanDate(
-                        sellOrders[0].expirationTime,
-                        true
-                      )}`}
-                    </SaleEnd>
-                  )}
-                <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
-                <br />
-                <Link href={`/profile/${asset?.owner?.address}`} passHref>
-                  <a>
-                    <AvatarContainer>
-                      <Avatar
-                        size={"small"}
-                        icon={<img src={asset?.owner?.profile_img_url} />}
-                      />
-                      <span style={{ flex: "1" }}>
-                        {checkName(asset?.owner?.user?.username)}
-                      </span>
-                    </AvatarContainer>
-                  </a>
-                </Link>
-                <Tabs defaultActiveKey="4">
-                  <TabPane key="1" tab={<span>{CONSTANTS.details}</span>}>
-                    <DetailTabDiv>
-                      <span>{"Contract Address"}</span>
-                      <span className="float-right">
-                        {asset?.contractAddress &&
-                          displayAddress(asset?.contractAddress)}
-                      </span>
-                    </DetailTabDiv>
-                    <DetailTabDiv>
-                      <span>{"Token ID"}</span>
-                      <span className="float-right">
-                        {asset?.tokenId && asset.tokenId.length > 15
-                          ? displayAddress(asset?.tokenId)
-                          : asset?.tokenId}
-                      </span>
-                    </DetailTabDiv>
-                    <DetailTabDiv>
-                      <span>{"Blockchain"}</span>
-                      <span className="float-right">
-                        {sellOrders && sellOrders[0]?.paymentTokenContract.name}
-                      </span>
-                    </DetailTabDiv>
-                  </TabPane>
-                  <TabPane key="2" tab={<span>{CONSTANTS.offers}</span>}>
-                    {offers &&
-                      offers.map((order, i) => (
-                        <LastBidder key={i} id={order.owner?.address}>
-                          <div className={"content"}>
-                            <span className="avatarContainer">
-                              <Link
-                                href={`/profile/${order?.makerAccount?.address}`}
-                                passHref
-                              >
-                                <a>
-                                  <Avatar
-                                    size={"small"}
-                                    icon={
-                                      <img
-                                        src={
-                                          order.makerAccount?.profile_img_url
-                                        }
-                                      />
-                                    }
-                                  />
-                                </a>
-                              </Link>
-                            </span>
-                            <span className={"bidInfo"}>
-                              <span className={"bidedPriceContainer"}>
-                                <span className={"bidedPriceText"}>
-                                  <span className={"bidValue"}>{`${
-                                    getAuctionPriceDetails(order).priceBase
-                                  } ${
-                                    order?.paymentTokenContract?.symbol
-                                  }`}</span>
-                                  {" by "}
-                                  <Link
-                                    href={`/profile/${order?.makerAccount?.address}`}
-                                    passHref
-                                  >
-                                    <a className={"bidderLink"}>
-                                      {checkName(
-                                        order.makerAccount?.user?.username
-                                      )}
-                                    </a>
-                                  </Link>
-                                </span>
-                              </span>
-                              <span className={"bidOwnerAndDateContainer"}>
-                                <span className={"bidDate"}>
-                                  {unixToHumanDate(order?.createdTime)}
-                                </span>
-                                <span>
-                                  {order.makerAccount.address == address ? (
-                                    <Button
-                                      onClick={() =>
-                                        cancelOffer(order, address)
-                                      }
-                                      shape="round"
-                                      size="small"
-                                    >
-                                      {"Cancel"}
-                                    </Button>
-                                  ) : (
-                                    ""
-                                  )}
-                                </span>
-                                <span>
-                                  {asset?.owner.address == address ? (
-                                    <Button
-                                      onClick={() =>
-                                        acceptOffer(order, address)
-                                      }
-                                      shape="round"
-                                      size="small"
-                                    >
-                                      {"Accept"}
-                                    </Button>
-                                  ) : (
-                                    ""
-                                  )}
-                                </span>
-                              </span>
-                            </span>
-                          </div>
-                        </LastBidder>
-                      ))}
-                  </TabPane>
-                  <TabPane key="4" tab={<span>{"Listing"}</span>}>
-                    {sellOrders &&
-                      sellOrders.map((order, i) => (
-                        <LastBidder key={i} id={order.owner?.address}>
-                          <div className={"content"}>
-                            <span className="avatarContainer">
-                              <Link
-                                href={`/profile/${order?.makerAccount?.address}`}
-                                passHref
-                              >
-                                <a>
-                                  <Avatar
-                                    size={"small"}
-                                    icon={
-                                      <img
-                                        src={
-                                          order.makerAccount?.profile_img_url
-                                        }
-                                      />
-                                    }
-                                  />
-                                </a>
-                              </Link>
-                            </span>
-                            <span className={"bidInfo"}>
-                              <span className={"bidedPriceContainer"}>
-                                <span className={"bidedPriceText"}>
-                                  <span className={"bidValue"}>{`${
-                                    getAuctionPriceDetails(order).priceBase
-                                  } ${
-                                    order?.paymentTokenContract?.symbol
-                                  }`}</span>
-                                  {" by "}
-                                  <Link
-                                    href={`/profile/${order?.makerAccount?.address}`}
-                                    passHref
-                                  >
-                                    <a className={"bidderLink"}>
-                                      {checkName(
-                                        order.makerAccount?.user?.username
-                                      )}
-                                    </a>
-                                  </Link>
-                                </span>
-                              </span>
-                              <span className={"bidOwnerAndDateContainer"}>
-                                <span className={"bidDate"}>
-                                  {unixToHumanDate(order?.createdTime)}
-                                </span>
-                                <span>
-                                  {order.makerAccount.address == address ? (
-                                    <Button
-                                      onClick={() =>
-                                        cancelOffer(order, address)
-                                      }
-                                      shape="round"
-                                      size="small"
-                                    >
-                                      {"Cancel"}
-                                    </Button>
-                                  ) : (
-                                    ""
-                                  )}
-                                </span>
-                              </span>
-                            </span>
-                          </div>
-                        </LastBidder>
-                      ))}
-                  </TabPane>
-                  <TabPane key="3" tab={<span>{CONSTANTS.owners}</span>}>
-                    <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
-                    <br />
-                    <Link href={`/profile/${asset?.owner?.address}`} passHref>
-                      <a>
-                        <AvatarContainer>
-                          <Avatar
-                            size={"small"}
-                            icon={<img src={asset?.owner?.profile_img_url} />}
+              <section aria-label="section" className=" sm-mt-0">
+                <div className="container">
+                  <div className="row">
+                    <ItemImageContainer className=" text-center">
+                      <ImageCon>
+                        {isVideo ? (
+                          <ReactPlayer
+                            url={asset?.image}
+                            playing={true}
+                            width={"auto"}
+                            loop={true}
+                            controls={true}
                           />
-                          <span style={{ flex: "1" }}>
-                            {checkName(asset?.owner?.user?.username)}
-                          </span>
-                        </AvatarContainer>
-                      </a>
-                    </Link>
-                  </TabPane>
-                </Tabs>
-              </ItemDetails>
-              <ItemFooter>
-                {sellOrders && (
-                  <BidCountdown>
-                    {highestOffer && (
-                      <BidOwnerContainer className={"border-right pr-2 pl-2"}>
-                        <BidOwner className={"float-left"}>
-                          {CONSTANTS.highestOffer}{" "}
-                          <Link
-                            href={`/profile/${highestOffer?.makerAccount?.address}`}
-                            passHref
-                          >
-                            <a>
-                              {checkName(
-                                highestOffer?.makerAccount?.user?.username
-                              )}
-                            </a>
-                          </Link>
-                        </BidOwner>
-                        <BidPrice>
-                          <Link
-                            href={`/profile/${highestOffer?.makerAccount?.address}`}
-                            passHref
-                          >
-                            <a>
-                              <BidOwnerProfile className={"mr-3"}>
-                                <Avatar
-                                  size={"large"}
-                                  icon={
-                                    <img
-                                      src={
-                                        highestOffer?.makerAccount
-                                          ?.profile_img_url
-                                      }
-                                    />
-                                  }
+                        ) : (
+                            <Image
+                              src={mainImage}
+                              preview={{
+                                src: `${previewImage}`,
+                              }}
+                            />
+                          )}
+                      </ImageCon>{" "}
+                      <br />
+                      <ImageListContainer>
+                        {imageList &&
+                          imageList.map((image, index) => {
+                            return (
+                              <div key={index}>
+                                <img
+                                  src={image.thumbnail}
+                                  onClick={() => changeImage(image.imageUrl)}
                                 />
-                              </BidOwnerProfile>
-                            </a>
-                          </Link>
-                          <BidPriceValue>
-                            <PriceInCryptoContainer>
-                              <span className={"bidValue"}>{`${
-                                getAuctionPriceDetails(highestOffer).priceBase
-                              } ${
-                                highestOffer?.paymentTokenContract?.symbol
-                              }`}</span>
-                            </PriceInCryptoContainer>
-                            <PriceInDollarContainer>
-                              {/* <span>{`~$ ${convertToUsd(highestOffer)}`}</span> */}
-                            </PriceInDollarContainer>
-                          </BidPriceValue>
-                        </BidPrice>
-                      </BidOwnerContainer>
-                    )}
-                    {sellOrders !== undefined &&
-                      sellOrders[0]?.expirationTime !== "0" &&
-                      sellOrders[0]?.expirationTime != undefined && (
-                        <Auction>
-                          <div className={"auctionDiv"}>
-                            <AuctionLabel>
-                              {CONSTANTS.auctionLabel}
-                            </AuctionLabel>
-                            <AuctionTimer>
-                              <Countdown
-                                value={unixToMilSeconds(
-                                  sellOrders[0]?.expirationTime
-                                )}
-                                format={`D[d] HH[h] mm[m] ss[s]`}
-                              />
-                            </AuctionTimer>
+                              </div>
+                            );
+                          })}
+                      </ImageListContainer>
+                    </ItemImageContainer>
+                    <div className="col-md-6">
+                      <div className="item_info">
+                        {sellOrders?.length > 0 && sellOrders[0].waitingForBestCounterOrder && sellOrders[0].expirationTime !== "0" && <><span>{`Auctions ends on `}
+                        </span>
+                          <span style={{ display: "inline" }}>
+                            <Countdown
+                              value={unixToMilSeconds(sellOrders[0].expirationTime)}
+                              format={`D[d] HH[h] mm[m] ss[s]`}
+                            />
+                          </span></>
+                        }
+                        <h2>{asset.name ? asset.name : asset.collection?.name}</h2>
+                        <div className="item_info_counts">
+                          <div className="item_info_type"><i className="fa fa-image"></i>Art</div>
+                          <div className="item_info_views"><i className="fa fa-eye"></i>250</div>
+                          <div className="item_info_like"><i className="fa fa-heart"></i>18</div>
+                        </div>
+                        <p>{asset?.description}</p>
+
+                        <h6>Owner</h6>
+                        <div className="item_author">
+                          <div className="author_list_pp">
+                            <Link href={`/profile/${asset?.owner?.address}`} passHref>
+                              <a>
+                                <img className="lazy" src={asset?.owner?.profile_img_url} alt="" />
+                                <i className="fa fa-check"></i>
+                              </a>
+                            </Link>
                           </div>
-                        </Auction>
-                      )}
-                  </BidCountdown>
-                )}
-                <ButtonContainer>
-                  {address && asset?.owner?.address == address ? (
-                    <Link
-                      href={`/sell/${queryParam?.tokenAddress}?tokenId=${queryParam?.tokenId}`}
-                      passHref
-                    >
-                      <a style={{ display: "flex", flex: "1" }}>
-                        <FooterButton
-                          color={"white"}
-                          style={{ background: "#0066ff" }}
-                        >
-                          {"Sell"}
-                        </FooterButton>
-                      </a>
-                    </Link>
-                  ) : (
-                    <>
-                      {sellOrders &&
-                        sellOrders[0] != null &&
-                        !sellOrders[0]?.waitingForBestCounterOrder && (
-                          <BuyNftModal
-                            asset={asset}
-                            isBundle={isBundle}
-                            loadAgain={loadAgain}
-                          />
-                        )}
-                      <MakeOfferModal
-                        asset={asset}
-                        assets={assets}
-                        isBundle={isBundle}
-                        loadAgain={loadAgain}
-                      />
-                    </>
-                  )}
-                </ButtonContainer>
-              </ItemFooter>
-            </ItemInfo>
-          </Content>
-        )}
-      </Wrapper>
+                          <div className="author_list_info">
+                            <a href="author.html">{checkName(asset?.owner?.user?.username)}</a>
+                          </div>
+                        </div>
+
+                        <div className="spacer-40"></div>
+                        <Tabs defaultActiveKey="2" tabBarGutter={10}>
+                          <TabPane key="1" tab={<span>{"Listing"}</span>}>
+                            {sellOrders &&
+                              sellOrders.map((order, i) => (
+                                <div className="p_list">
+                                  <div className="p_list_pp">
+                                    <Link
+                                      href={`/profile/${order?.makerAccount?.address}`}
+                                      passHref
+                                    >
+                                      <a>
+                                        <img className="lazy" src={order.makerAccount?.profile_img_url} alt="" />
+                                        <i className="fa fa-check"></i>
+                                      </a>
+                                    </Link>
+                                  </div>
+                                  <div className="p_list_info">
+                                    Listed <b>{`${getAuctionPriceDetails(order).priceBase
+                                      } ${order?.paymentTokenContract?.symbol
+                                      }`}</b>
+                                    <span>by <b>{checkName(
+                                      order.makerAccount?.user?.username
+                                    )}</b>{` at ${unixToHumanDate(order?.createdTime)}`}</span>
+                                    <span>
+                                      {order.makerAccount.address == address ? (
+                                        <Button
+                                          onClick={() =>
+                                            cancelOffer(order, address)
+                                          }
+                                          shape="round"
+                                          size="small"
+                                        >
+                                          {"Cancel"}
+                                        </Button>
+                                      ) : (
+                                          ""
+                                        )}
+                                    </span>
+                                  </div>
+                                </div>
+                              ))}
+                          </TabPane>
+                          <TabPane key="2" tab={<span>{"Bids"}</span>}>
+                            {offers &&
+                              offers.map((order, i) => (
+                                <>
+                                  <div className="p_list">
+                                    <div className="p_list_pp">
+                                      <a href="author.html">
+                                        <img className="lazy" src={order.makerAccount?.profile_img_url} alt="" />
+                                        <i className="fa fa-check"></i>
+                                      </a>
+                                    </div>
+                                    <div className="p_list_info">
+                                      Bid <b>{`${getAuctionPriceDetails(order).priceBase
+                                        } ${order?.paymentTokenContract?.symbol
+                                        }`}</b>
+                                      <span>by <b>{checkName(
+                                        order.makerAccount?.user?.username
+                                      )}</b>{` at ${unixToHumanDate(order?.createdTime)}`}</span>
+                                      <span>
+                                        {order.makerAccount.address == address ? (
+                                          <Button
+                                            onClick={() =>
+                                              cancelOffer(order, address)
+                                            }
+                                            shape="round"
+                                            size="small"
+                                          >
+                                            {"Cancel"}
+                                          </Button>
+                                        ) : (
+                                            ""
+                                          )}
+                                      </span>
+                                      <span>
+                                        {asset?.owner.address == address ? (
+                                          <Button
+                                            onClick={() =>
+                                              acceptOffer(order, address)
+                                            }
+                                            shape="round"
+                                            size="small"
+                                          >
+                                            {"Accept"}
+                                          </Button>
+                                        ) : (
+                                            ""
+                                          )}
+                                      </span>
+                                    </div>
+                                  </div>
+
+                                </>
+                              ))}
+                          </TabPane>
+                        </Tabs>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+            )}
+      </div>
+      {/* <!-- content close --> */}
+
     </>
   );
 }

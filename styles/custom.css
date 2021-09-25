@@ -59,3 +59,34 @@
     justify-content: center !important;
     height: 250px !important;
 }
+.ant-tabs-tab-active{
+    background-color: #331B69 !important;
+    border-bottom: none;
+
+    min-width: 80px;
+    text-align: center;
+    border-radius: 3px;
+
+}
+.ant-tabs-tab-active div span{
+    color: #ffffff !important;
+}
+.ant-tabs-tab {
+    background-color: #EEE;
+    min-width: 80px;
+    padding: 10px 0px;
+    display: inline;
+    border-radius: 3px;
+    margin-left: 0px !important;
+
+}
+.ant-tabs-tab .ant-tabs-tab-btn{
+    text-align: center !important;
+    color: #F32178 !important;
+}
+.ant-tabs-nav::before{
+    border: none !important
+}
+.ant-tabs-ink-bar{
+    display: none !important;
+}
