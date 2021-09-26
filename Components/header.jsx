@@ -196,20 +196,11 @@ function Header(props) {
                     </ul>
                   </li>
                   <li>
-                    <a href="#">Elements<span></span></a>
+                    <a href="#">Create<span></span></a>
                     <ul>
-                      <li><a href="icons-elegant.html">Elegant Icons</a></li>
-                      <li><a href="icons-etline.html">Etline Icons</a></li>
-                      <li><a href="icons-font-awesome.html">Font Awesome Icons</a></li>
-                      <li><a href="accordion.html">Accordion</a></li>
-                      <li><a href="alerts.html">Alerts</a></li>
-                      <li><a href="counters.html">Counters</a></li>
-                      <li><a href="modal.html">Modal</a></li>
-                      <li><a href="popover.html">Popover</a></li>
-                      <li><a href="pricing-table.html">Pricing Table</a></li>
-                      <li><a href="progress-bar.html">Progress Bar</a></li>
-                      <li><a href="tabs.html">Tabs</a></li>
-                      <li><a href="tooltips.html">Tooltips</a></li>
+                      <li><Link href={"/"}><a>Create Asset</a></Link></li>
+                      <li><Link href={"/add/asset"}><a>Add Existing Asset</a></Link></li>
+
                     </ul>
                   </li>
                 </ul>
