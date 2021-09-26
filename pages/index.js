@@ -14,8 +14,8 @@ function Home({ fixPricesData, acutionPricesData }) {
     <div className="no-bottom" id="content">
       <div id="top"></div>
       <Slide />
-      <div id={"section-collections"} className={"pt-30"}>
-        <div className={"container"}>
+      <div id={"section-collections"} className={"mb-5 pt-30"}>
+        <div className={"container mb-5"}>
           <div className="spacer-single"></div>
           <Explore />
           <div className="spacer-single"></div>
