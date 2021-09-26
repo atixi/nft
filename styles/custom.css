@@ -90,3 +90,8 @@
 .ant-tabs-ink-bar{
     display: none !important;
 }
+
+.AssetSubheader
+{
+    background: url("/images/background/subheader.jpg");
+}
