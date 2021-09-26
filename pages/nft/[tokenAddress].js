@@ -370,7 +370,7 @@ function ProductPage() {
                           <TabPane key="1" tab={<span>{"Listing"}</span>}>
                             {sellOrders &&
                               sellOrders.map((order, i) => (
-                                <div className="p_list">
+                                <div className="p_list" key={i}>
                                   <div className="p_list_pp">
                                     <Link
                                       href={`/profile/${order?.makerAccount?.address}`}
@@ -412,7 +412,7 @@ function ProductPage() {
                             {offers &&
                               offers.map((order, i) => (
                                 <>
-                                  <div className="p_list">
+                                  <div className="p_list" key={i}>
                                     <div className="p_list_pp">
                                       <a href="author.html">
                                         <img className="lazy" src={order.makerAccount?.profile_img_url} alt="" />

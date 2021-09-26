@@ -11,17 +11,17 @@ import { fetch } from "Utils/strapiApi";
 
 function Home({ fixPricesData, acutionPricesData }) {
   return (
-    <div class="no-bottom" id="content">
+    <div className="no-bottom" id="content">
       <div id="top"></div>
       <Slide />
       <div id={"section-collections"} className={"pt-30"}>
         <div className={"container"}>
-        <div className="spacer-single"></div>
-        <Explore /> 
-        <div className="spacer-single"></div>
-        <HotCollections />
-        <div className="spacer-single"></div>
-        <TopSellers />
+          <div className="spacer-single"></div>
+          <Explore />
+          <div className="spacer-single"></div>
+          <HotCollections />
+          <div className="spacer-single"></div>
+          <TopSellers />
         </div>
       </div>
     </div>
