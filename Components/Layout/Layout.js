@@ -127,7 +127,7 @@ const Layout = ({ children }) => {
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Rim Entertainment</title>
+        <title>NFT Marketplace</title>
         <meta name="description" content="Rim Entertainment inc" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
