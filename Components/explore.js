@@ -11,6 +11,7 @@ import { getAuctionPriceDetails } from "/Constants/constants";
 import { useRouter } from "next/router";
 import api from "/Components/axiosRequest";
 import request from "../Utils/axios"
+import { unixToMilSeconds } from "../Utils/utils"
 const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30; // Moment is also OK
 
 function Explore() {
@@ -44,46 +45,43 @@ function Explore() {
                 {items && items.map((item) => {
                     return <div className=" col-lg-3 col-md-6 col-sm-6 col-xs-12">
                         <div className="nft__item style-2">
-                            {item?.sellOrders && item?.sellOrders[0]?.saleKind === 1 &&
+                            {item?.asset?.sellOrders && item?.asset?.sellOrders?.length > 0 &&
                                 <CountDownContainer>
                                     <Countdown
-                                        value={deadline}
+                                        value={unixToMilSeconds(item?.asset?.sellOrders[0].expirationTime)}
                                         format={`D[d] HH[h] mm[m] ss[s]`}
                                         valueStyle={{ lineHeight: "1.1", color: "white" }}
                                     />
                                 </CountDownContainer>}
                             <div className="author_list_pp">
                                 <a href="author.html">
-                                    <img className="lazy" src={item?.owner?.profile_img_url} alt="" />
+                                    <img className="lazy" src={item?.asset?.owner?.profile_img_url} alt="" />
                                     <i className="fa fa-check"></i>
                                 </a>
                             </div>
                             <div className="nft__item_wrap itemImageCard">
                                 <Link
                                     href={
-                                        item?.assetContract
+                                        item?.asset?.assetContract
                                             ? `/nft/${item?.tokenAddress}?tokenId=${item?.tokenId}`
-                                            : `/nft/${item?.assetBundle?.maker?.address}?slug=${item?.assetBundle?.slug}`
+                                            : `/nft/${item?.asset?.assetBundle?.maker?.address}?slug=${item?.asset?.assetBundle?.slug}`
                                     }
                                 ><a>
-                                        <img src={item.imageUrl} className="lazy nft__item_preview" alt="" />
+                                        <img src={item?.asset?.imageUrl} className="lazy nft__item_preview" alt="" />
                                     </a>
                                 </Link>
                             </div>
                             <div className="nft__item_info">
                                 <a href="item-details.html">
-                                    <h4>{item?.name}</h4>
+                                    <h4>{item?.asset?.name}</h4>
                                 </a>
                                 <div className="nft__item_price">
-                                    <span> {item?.sellOrders?.length > 0 ? `${getAuctionPriceDetails(item?.sellOrders[0]).priceBase} ${item?.sellOrders[0]?.paymentTokenContract.symbol}` : ""}
-                                        {/* 0.08 ETH */}
+                                    <span> {item?.asset?.sellOrders?.length > 0 ? `${getAuctionPriceDetails(item?.asset?.sellOrders[0]).priceBase} ${item?.asset?.sellOrders[0]?.paymentTokenContract.symbol}` : ""}
+
                                     </span>
                                 </div>
                                 <div className="nft__item_action">
                                     <a href="#">Place a bid</a>
-                                </div>
-                                <div className="nft__item_like">
-                                    <i className="fa fa-heart"></i><span>50</span>
                                 </div>
                             </div>
                         </div>
