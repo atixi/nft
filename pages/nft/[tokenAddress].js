@@ -374,12 +374,11 @@ function ProductPage() {
                                 passHref
                               >
                                 <a style={{ display: "flex", flex: "1" }}>
-                                  <FooterButton
-                                    color={"white"}
-                                    style={{ background: "#0066ff" }}
+                                  <button
+                                    className={"bnt-main"}
                                   >
                                     {"Sell"}
-                                  </FooterButton>
+                                  </button>
                                 </a>
                               </Link>
                             ) : (
