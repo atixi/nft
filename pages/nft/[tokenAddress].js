@@ -343,11 +343,11 @@ function ProductPage() {
                           </span></>
                         }
                         <h2>{asset.name ? asset.name : asset.collection?.name}</h2>
-                        <div className="item_info_counts">
+                        {/* <div className="item_info_counts">
                           <div className="item_info_type"><i className="fa fa-image"></i>Art</div>
                           <div className="item_info_views"><i className="fa fa-eye"></i>250</div>
                           <div className="item_info_like"><i className="fa fa-heart"></i>18</div>
-                        </div>
+                        </div> */}
                         <p>{asset?.description}</p>
 
                         <h6>Owner</h6>
@@ -366,7 +366,43 @@ function ProductPage() {
                         </div>
 
                         <div className="spacer-40"></div>
-                        <Tabs defaultActiveKey="2" tabBarGutter={10}>
+                        <Tabs defaultActiveKey="2" tabBarGutter={10} tabBarExtraContent={
+                          <ButtonContainer>
+                            {address && asset?.owner?.address == address ? (
+                              <Link
+                                href={`/sell/${queryParam?.tokenAddress}?tokenId=${queryParam?.tokenId}`}
+                                passHref
+                              >
+                                <a style={{ display: "flex", flex: "1" }}>
+                                  <FooterButton
+                                    color={"white"}
+                                    style={{ background: "#0066ff" }}
+                                  >
+                                    {"Sell"}
+                                  </FooterButton>
+                                </a>
+                              </Link>
+                            ) : (
+                                <>
+                                  {sellOrders &&
+                                    sellOrders[0] != null &&
+                                    !sellOrders[0]?.waitingForBestCounterOrder && (
+                                      <BuyNftModal
+                                        asset={asset}
+                                        isBundle={isBundle}
+                                        loadAgain={loadAgain}
+                                      />
+                                    )}
+                                  <MakeOfferModal
+                                    asset={asset}
+                                    assets={assets}
+                                    isBundle={isBundle}
+                                    loadAgain={loadAgain}
+                                  />
+                                </>
+                              )}
+                          </ButtonContainer>
+                        }>
                           <TabPane key="1" tab={<span>{"Listing"}</span>}>
                             {sellOrders &&
                               sellOrders.map((order, i) => (
