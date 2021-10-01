@@ -1,40 +1,13 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Search from "./search";
 import Link from "next/link";
-import { Avatar, Dropdown } from "antd";
-import {
-  TwitterOutlined,
-  YoutubeFilled,
-  InstagramFilled,
-  SearchOutlined,
-  CloseOutlined,
-} from "@ant-design/icons";
-
+import { Avatar } from "antd";
 import CONSTANTS from "../Constants/headerConstants";
 import {
-  Wrapper,
-  WrapperItemContainer,
-  SearchContainer,
-  HeaderContainer,
-  HeaderNav,
-  CreateButton,
-  ConnectButton,
-  Button,
-  HeaderBottomMenu,
-  SearchWrapper,
-  SocialLinkContainer,
   ConnectedButton,
   BalanceLabel,
 } from "./StyledComponents/header-styledComponents.js";
-import WalletInfoDropdown from "./connectedWalletDropdown";
-import { fetchUsers } from "/Utils/strapiApi";
 import {
-  setAccountTokens,
-  setMetaToken,
-  setWalletToken,
-  setMetaConnected,
-  setWalletConnected,
   getAccountTokens,
   getMetaToken,
   getMetaBalance,
@@ -48,12 +21,6 @@ import { useRouter } from "next/router";
 import api from "/Components/axiosRequest";
 function Header(props) {
   const router = useRouter();
-  const dispatchAccountTokens = useDispatch();
-  const dispatchMetaToken = useDispatch();
-  const dispatchWalletToken = useDispatch();
-  const dispatchMetaConnected = useDispatch();
-  const dispatchWalletconneted = useDispatch();
-
   const accountTokens = useSelector(getAccountTokens);
   const metaToken = useSelector(getMetaToken);
   const metaBalance = useSelector(getMetaBalance);
@@ -205,8 +172,35 @@ function Header(props) {
                   </li>
                 </ul>
                 <div className="menu_side_area">
-                  <a href="wallet.html" className="btn-main"><i className="icon_wallet_alt"></i><span>Connect Wallet</span></a>
-                  <span id="menu-btn"></span>
+                  {connected == true ? (
+                    <ConnectedButton className={`d-lg-block`}>
+                      {walletBalance !== null && isWalletConnected == true ? (
+                        <>
+                          <BalanceLabel>
+                            {parseFloat(walletBalance).toFixed(4) + " Eth"}
+                          </BalanceLabel>
+                          <Avatar
+                            size={36}
+                            src={"/images/walletIcons/walletIcon.svg"}
+                          />{" "}
+                        </>
+                      ) : (
+                          <>
+                            <BalanceLabel>
+                              {parseFloat(metaBalance).toFixed(4) + " Eth"}
+                            </BalanceLabel>
+                            <Avatar size={36} src={"/images/walletIcons/metaIcon.svg"} />
+                          </>
+                        )}
+                    </ConnectedButton>
+                  ) : (
+                      <>
+                        <Link href={"/wallet"} passHref>
+                          <a className="btn-main"><i className="icon_wallet_alt"></i><span>{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</span></a>
+                        </Link>
+                        <span id="menu-btn"></span>
+                      </>
+                    )}
                 </div>
               </div>
             </div>
