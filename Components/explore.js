@@ -43,7 +43,7 @@ function Explore() {
                 {items && items.map((item) => {
                     return <div className=" col-lg-3 col-md-6 col-sm-6 col-xs-12">
                         <div className="nft__item style-2">
-                            {item?.asset?.sellOrders && item?.asset?.sellOrders?.length > 0 &&
+                            {item?.asset?.sellOrders && item?.asset?.sellOrders?.length > 0 && item?.asset?.sellOrders[0].expirationTime !== "0" &&
                                 <CountDownContainer>
                                     <Countdown
                                         value={unixToMilSeconds(item?.asset?.sellOrders[0].expirationTime)}
@@ -70,16 +70,20 @@ function Explore() {
                                 </Link>
                             </div>
                             <div className="nft__item_info">
-                                <a href="item-details.html">
-                                    <h4>{item?.asset?.name}</h4>
-                                </a>
+                                <Link
+                                    href={
+                                        item?.asset?.assetContract
+                                            ? `/nft/${item?.tokenAddress}?tokenId=${item?.tokenId}`
+                                            : `/nft/${item?.asset?.assetBundle?.maker?.address}?slug=${item?.asset?.assetBundle?.slug}`
+                                    }
+                                ><a>
+                                        <h4>{item?.asset?.name ? item?.asset?.name : item?.asset?.collection?.name}</h4>
+                                    </a></Link>
+
                                 <div className="nft__item_price">
                                     <span> {item?.asset?.sellOrders?.length > 0 ? `${getAuctionPriceDetails(item?.asset?.sellOrders[0]).priceBase} ${item?.asset?.sellOrders[0]?.paymentTokenContract.symbol}` : ""}
 
                                     </span>
-                                </div>
-                                <div className="nft__item_action">
-                                    <a href="#">Place a bid</a>
                                 </div>
                             </div>
                         </div>

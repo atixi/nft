@@ -38,7 +38,7 @@ const SubmitButton = styled(Button)`
   width: 200px;
   line-height: 12px;
   font-weight: 600;
-  border-radius: 25px;
+  border-radius: 5px;
   border: 1px solid rgba(4, 4, 5, 0.1);
   background-color: ${(props) => props.background} !important;
   color: ${(props) => props.color} !important;
@@ -51,7 +51,7 @@ const ConnectButton = styled.button`
   width: 200px;
   line-height: 12px;
   font-weight: 600;
-  border-radius: 25px;
+  border-radius: 5px;
   border: 1px solid rgba(4, 4, 5, 0.1);
   background-color: ${(props) => props.background} !important;
   color: ${(props) => props.color} !important;
@@ -175,7 +175,7 @@ function MakeOfferModal({ asset, assets, isBundle, loadAgain }) {
       <Modal title={<strong>{"You are not connect to any wallet!"}</strong>} footer={false} visible={notConnected} onCancel={handleCancel}>
         <ModalContainer>
           <ModalTextContainer>{"You need to connect your Ethereum wallet to sign messages and send transactions to Ethereum blockchain"}</ModalTextContainer>
-          <Link style={{ textAlign: "center" }} href="/wallet" passHref><a><ConnectButton color={"white"} background={"#0066ff"} marginBottom={"15px"} > Connect Wallet </ConnectButton></a></Link>
+          <Link style={{ textAlign: "center" }} href="/wallet" passHref><a><button className={"btn-main"} marginBottom={"15px"} > Connect Wallet </button></a></Link>
         </ModalContainer>
       </Modal>
     </>
@@ -387,7 +387,7 @@ function MakeOfferModal({ asset, assets, isBundle, loadAgain }) {
             loading={makingOffer}
             color={"white"}
             marginBottom={"15px"}
-            background={"#0066ff"}
+            background={"#F32178"}
             form={"makeOffer"}
             htmlType={"submit"}
             type="primary"

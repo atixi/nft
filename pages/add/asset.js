@@ -1,5 +1,5 @@
 import react, { useState } from "react"
-import { Form, Statistic, Spin, message } from "antd"
+import { Form, Statistic, Spin, message, Radio } from "antd"
 import Link from "next/link"
 import {
     CountDownContainer
@@ -18,7 +18,7 @@ function AddAsset() {
         setLoading(true)
         const add = await request(`nfts/add`, {
             method: "POST",
-            data: { tokenId: values.tokenId, tokenAddress: values.tokenAddress }
+            data: { tokenId: values.tokenId, tokenAddress: values.tokenAddress, featured: values.featured }
         })
         if (add.status === 200) {
             if (add.data === 1) {
@@ -76,6 +76,14 @@ function AddAsset() {
                                 ]}>
                                     <input type="text" id="item_title" className="form-control" placeholder="Enter asset token ID" />
                                 </Form.Item>
+                                <h5>Featured</h5>
+                                <Form.Item name={"featured"}>
+                                    <Radio.Group>
+                                        <Radio value={true}>Yes</Radio>
+                                        <Radio value={false}>No</Radio>
+                                    </Radio.Group>
+                                </Form.Item>
+
                                 <div className="spacer-10"></div>
                                 <div className="spacer-single"></div>
                                 <input type="submit" id="submit" class="btn-main" value="Add Asset" />
@@ -89,7 +97,7 @@ function AddAsset() {
                             <>
                                 <h5>Preview Asset</h5>
                                 <div className="nft__item">
-                                    {addedAsset?.sellOrders && addedAsset?.sellOrders?.length > 0 &&
+                                    {addedAsset?.sellOrders && addedAsset?.sellOrders?.length > 0 && addedAsset?.sellOrders[0].expirationTime !== "0" &&
                                         <CountDownContainer>
                                             <Countdown
                                                 value={unixToMilSeconds(addedAsset?.sellOrders[0].expirationTime)}

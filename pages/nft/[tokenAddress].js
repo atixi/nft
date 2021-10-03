@@ -279,7 +279,7 @@ function ProductPage() {
       <div className="no-bottom" id="content">
         <div id="top"></div>
         {loading ? (
-          <Spin style={{ marginTop: "200px" }} />
+          <div style={{ margin: "auto" }}><Spin style={{ marginTop: "200px", marginBottom: "259px", width: "100%" }} /></div>
         ) : notFound ? (
           <Result
             status="500"
@@ -333,7 +333,7 @@ function ProductPage() {
                     </ItemImageContainer>
                     <div className="col-md-6">
                       <div className="item_info">
-                        {sellOrders?.length > 0 && sellOrders[0].waitingForBestCounterOrder && sellOrders[0].expirationTime !== "0" && <><span>{`Auctions ends on `}
+                        {sellOrders?.length > 0 && sellOrders[0].waitingForBestCounterOrder && sellOrders[0].expirationTime !== "0" && <><span>{`Auctions ends in `}
                         </span>
                           <span style={{ display: "inline" }}>
                             <Countdown
