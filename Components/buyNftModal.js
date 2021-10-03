@@ -30,7 +30,7 @@ const ConnectButton = styled.button`
   width: 200px;
   line-height: 12px;
   font-weight: 600;
-  border-radius: 25px;
+  border-radius: 5px;
   border: 1px solid rgba(4, 4, 5, 0.1);
   background-color: ${(props) => props.background} !important;
   color: ${(props) => props.color} !important;
@@ -51,7 +51,7 @@ const SubmitButton = styled(Button)`
   width: 200px;
   line-height: 12px;
   font-weight: 600;
-  border-radius: 25px;
+  border-radius: 5px;
   border: 1px solid rgba(4, 4, 5, 0.1);
   background-color: ${(props) => props.background} !important;
   color: ${(props) => props.color} !important;
@@ -179,14 +179,13 @@ function BuyNftModal({ asset, isBundle, order, loadAgain }) {
           </ModalTextContainer>
           <Link style={{ textAlign: "center" }} href="/wallet" passHref>
             <a>
-              <ConnectButton
-                color={"white"}
-                background={"#0066ff"}
+              <button
+                className={"btn-main"}
                 marginBottom={"15px"}
               >
                 {" "}
                 Connect Wallet{" "}
-              </ConnectButton>
+              </button>
             </a>
           </Link>
         </ModalContainer>
@@ -320,7 +319,7 @@ function BuyNftModal({ asset, isBundle, order, loadAgain }) {
               loading={buying}
               color={"white"}
               marginBottom={"15px"}
-              background={"#0066ff"}
+              background={"#F32178"}
               form={"makeBuy"}
               htmlType={"submit"}
               type="primary"
