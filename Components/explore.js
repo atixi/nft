@@ -43,7 +43,7 @@ function Explore() {
                 {items && items.map((item) => {
                     return <div className=" col-lg-3 col-md-6 col-sm-6 col-xs-12">
                         <div className="nft__item style-2">
-                            {item?.asset?.sellOrders && item?.asset?.sellOrders?.length > 0 &&
+                            {item?.asset?.sellOrders && item?.asset?.sellOrders?.length > 0 && item?.asset?.sellOrders[0].expirationTime !== "0" &&
                                 <CountDownContainer>
                                     <Countdown
                                         value={unixToMilSeconds(item?.asset?.sellOrders[0].expirationTime)}
