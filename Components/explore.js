@@ -35,12 +35,10 @@ function Explore() {
     }, []);
     return (
         <>
-
             <div className="row  fadeIn">
                 <div className="col-lg-12">
                     <h2 className="style-2">New Items</h2>
                 </div>
-
                 {/* <!-- nft item begin --> */}
                 {items && items.map((item) => {
                     return <div className=" col-lg-3 col-md-6 col-sm-6 col-xs-12">

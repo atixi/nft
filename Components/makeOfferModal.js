@@ -155,14 +155,11 @@ function MakeOfferModal({ asset, assets, isBundle, loadAgain }) {
   }, [asset, assets]);
   return (
     <>
-      <FooterButton
-        color={"#0066ff"}
-        style={{ background: "#0066ff26" }}
+      <button
+        className={"btn-main"}
         disabled={address && address == asset?.owner?.address ? true : false}
         onClick={showModal}
-      >
-        Make Offer
-      </FooterButton>
+      >Offer</button>
       {isModalVisible && (
         <Modal
           title="Make an Offer"
@@ -175,12 +172,12 @@ function MakeOfferModal({ asset, assets, isBundle, loadAgain }) {
       )}
       {/* <ConnectWalletModal displayModal={isDisplayWalletModal} /> */}
       {/* {!isMetaConnected && <ConnectWalletModal />} */}
-      {/* <Modal title={<strong>{"You are not connect to any wallet!"}</strong>} footer={false} visible={notConnected} onCancel={handleCancel}>
-           <ModalContainer>
-             <ModalTextContainer>{"You need to connect your Ethereum wallet to sign messages and send transactions to Ethereum blockchain"}</ModalTextContainer>
-           <Link style={{textAlign: "center"}} href="/wallet" passHref><a><ConnectButton color={"white"} background={"#0066ff"} marginBottom={"15px"} > Connect Wallet </ConnectButton></a></Link>
-           </ModalContainer>
-         </Modal> */}
+      <Modal title={<strong>{"You are not connect to any wallet!"}</strong>} footer={false} visible={notConnected} onCancel={handleCancel}>
+        <ModalContainer>
+          <ModalTextContainer>{"You need to connect your Ethereum wallet to sign messages and send transactions to Ethereum blockchain"}</ModalTextContainer>
+          <Link style={{ textAlign: "center" }} href="/wallet" passHref><a><ConnectButton color={"white"} background={"#0066ff"} marginBottom={"15px"} > Connect Wallet </ConnectButton></a></Link>
+        </ModalContainer>
+      </Modal>
     </>
   );
 
@@ -204,8 +201,7 @@ function MakeOfferModal({ asset, assets, isBundle, loadAgain }) {
           >
             <div>
               {asset.sellOrder != null &&
-                `${getAuctionPriceDetails(asset.sellOrder).priceBase} ${
-                  asset.sellOrder.paymentTokenContract.symbol
+                `${getAuctionPriceDetails(asset.sellOrder).priceBase} ${asset.sellOrder.paymentTokenContract.symbol
                 }`}
             </div>
           </List.Item.Meta>
@@ -297,7 +293,7 @@ function MakeOfferModal({ asset, assets, isBundle, loadAgain }) {
             <Form.Item
               name={["price", "amountInDollar"]}
               noStyle
-              // rules={[{ required: true, message: 'amountInDollar is required' }]}
+            // rules={[{ required: true, message: 'amountInDollar is required' }]}
             >
               <Input
                 style={{ width: "25%" }}
@@ -347,22 +343,22 @@ function MakeOfferModal({ asset, assets, isBundle, loadAgain }) {
                   />
                 </Form.Item>
               ) : (
-                <Form.Item
-                  name={["dateTime", "date"]}
-                  noStyle
-                  rules={[{ required: true, message: "Date is required" }]}
-                >
-                  <DatePicker
-                    showTime
-                    allowClear={false}
-                    format="YYYY-MM-DD HH:mm:ss"
-                    {...config}
-                    style={{ width: "75%" }}
-                    size={"large"}
-                    type={"object"}
-                  />
-                </Form.Item>
-              )}
+                  <Form.Item
+                    name={["dateTime", "date"]}
+                    noStyle
+                    rules={[{ required: true, message: "Date is required" }]}
+                  >
+                    <DatePicker
+                      showTime
+                      allowClear={false}
+                      format="YYYY-MM-DD HH:mm:ss"
+                      {...config}
+                      style={{ width: "75%" }}
+                      size={"large"}
+                      type={"object"}
+                    />
+                  </Form.Item>
+                )}
             </Input.Group>
           </Form.Item>
         )}

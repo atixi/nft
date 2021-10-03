@@ -147,14 +147,13 @@ function BuyNftModal({ asset, isBundle, order, loadAgain }) {
   }, [asset]);
   return (
     <>
-      <FooterButton
-        color={"#ffffff"}
-        style={{ background: "#0066ff" }}
+      <button
+        className={"btn-main mr-1"}
         onClick={showModal}
-        // disabled={address && address == asset?.owner?.address ? true : false}
+      // disabled={address && address == asset?.owner?.address ? true : false}
       >
         Buy
-      </FooterButton>
+      </button>
       {isModalVisible && (
         <Modal
           title="Buy this token "
@@ -215,8 +214,7 @@ function BuyNftModal({ asset, isBundle, order, loadAgain }) {
           >
             <div>
               {asset.sellOrder != null &&
-                `${getAuctionPriceDetails(asset.sellOrder).priceBase} ${
-                  asset.sellOrder.paymentTokenContract.symbol
+                `${getAuctionPriceDetails(asset.sellOrder).priceBase} ${asset.sellOrder.paymentTokenContract.symbol
                 }`}
             </div>
           </List.Item.Meta>
@@ -295,8 +293,7 @@ function BuyNftModal({ asset, isBundle, order, loadAgain }) {
                 />
                 <div>
                   {asset.sellOrder &&
-                    `${getAuctionPriceDetails(asset.sellOrder).priceBase} ${
-                      asset.sellOrder.paymentTokenContract.symbol
+                    `${getAuctionPriceDetails(asset.sellOrder).priceBase} ${asset.sellOrder.paymentTokenContract.symbol
                     }`}
                 </div>
               </List.Item>

@@ -86,7 +86,7 @@ const Wallet = () => {
     }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   const presisMetamask = async (accounts) => {
     let web3 = new Web3(window.ethereum);
@@ -113,74 +113,93 @@ const Wallet = () => {
       presisMetamask(newAccounts);
     }
   };
-  return (
-    <div className={styles.container}>
-      <InstallMetamaskModal displayModal={displayInstallModal} />
-      <div className={styles.leftColumn}></div>
-      <div className={styles.rightColumn}>
-        <div className={styles.content}>
-          <div className={styles.contentHeader}>
-            <Link className={styles.navigation} href="/">
-              Go Home
-            </Link>
-            <h1 className={styles.walletHeader}>Connect your wallet</h1>
-            <p className={styles.walletParagraph}>
-              Connect with one of available wallet providers or create a new
-              wallet. What is a wallet?
-            </p>
-          </div>
-          <div className={styles.wallectContainer}>
-            {/* {!isMobile && ( */}
-            <div className={styles.walletCard} onClick={onDesktopConnect}>
-              <div className={styles.walletCardPopup}>
-                <span>Most Popular</span>
-              </div>
-              <img
-                width={28}
-                height={28}
-                src={"/images/walletIcons/metamask.svg"}
-              />
-              <div>Metamask</div>
-            </div>
-            {/* )} */}
+  <InstallMetamaskModal displayModal={displayInstallModal} />
 
-            {/* {isMobile && (
-              <div className={styles.walletCard} onClick={onMobileConnect}>
-                <div className={styles.walletCardPopup}>
-                  <span>Mobile Wallets</span>
-                </div>
-                <div>
-                  <img
-                    className={styles.walletIcon}
-                    width={28}
-                    height={28}
-                    src={"/images/walletIcons/walletconnect-1.svg"}
-                  />
-                  <img
-                    className={styles.walletIcon}
-                    width={28}
-                    height={28}
-                    src={"/images/walletIcons/walletconnect-2.svg"}
-                  />
-                  <img
-                    className={styles.walletIcon}
-                    width={28}
-                    height={28}
-                    src={"/images/walletIcons/walletconnect-3.png"}
-                  />
-                </div>
-                <div className={styles.walletDetails}>WalletConnect</div>
+  return (
+    <div className="no-bottom" id="content">
+      {/* <div id="top"></div> */}
+      <section id="subheader" className="text-light AssetSubheader" data-bgimage="url(images/background/subheader.jpg) top">
+        <div className="center-y relative text-center">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-12 text-center">
+                <h1>Connect your Wallet</h1>
               </div>
-            )} */}
-          </div>
-          <div>
-            <p className={styles.walletFooter}>
-              We do not own your private keys and cannot access your funds
-              without your confirmation.
-            </p>
+              <div className="clearfix"></div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+      <section aria-label="section">
+        <div class="contentContainer">
+          <div class="row">
+            <div class="col-lg-3 mb30">
+              <a class="box-url" onClick={onDesktopConnect}>
+                <span class="box-url-label">Most Popular</span>
+                <img src="images/wallet/1.png" alt="" class="mb20" />
+                <h4>Metamask</h4>
+                <p>Start exploring blockchain applications in seconds.  Trusted by over 1 million users worldwide.</p>
+              </a>
+            </div>
+            <div class="col-lg-3 mb30">
+              <a class="box-url" aria-disabled={true} href={null}>
+                <img src="images/wallet/2.png" alt="" class="mb20" />
+                <h4>Bitski</h4>
+                <p>Bitski connects communities, creators and brands through unique, ownable digital content.</p>
+              </a>
+            </div>
+            <div class="col-lg-3 mb30 disable">
+              <a class="box-url" href={null}>
+                <img src="images/wallet/3.png" alt="" class="mb20" />
+                <h4>Fortmatic</h4>
+                <p>Let users access your Ethereum app from anywhere. No more browser extensions.</p>
+              </a>
+            </div>
+
+            <div class="col-lg-3 mb30">
+              <a class="box-url" href={null}>
+                <img src="images/wallet/4.png" alt="" class="mb20" />
+                <h4>WalletConnect</h4>
+                <p>Open source protocol for connecting decentralised applications to mobile wallets.</p>
+              </a>
+            </div>
+
+            <div class="col-lg-3 mb30">
+              <a class="box-url" href={null}>
+                <img src="images/wallet/5.png" alt="" class="mb20" />
+                <h4>Coinbase Wallet</h4>
+                <p>The easiest and most secure crypto wallet. ... No Coinbase account required.
+                                </p>
+              </a>
+            </div>
+
+            <div class="col-lg-3 mb30">
+              <a class="box-url" href={null}>
+                <img src="images/wallet/6.png" alt="" class="mb20" />
+                <h4>Arkane</h4>
+                <p>Make it easy to create blockchain applications with secure wallets solutions.</p>
+              </a>
+            </div>
+
+            <div class="col-lg-3 mb30">
+              <a class="box-url" href={null}>
+                <img src="images/wallet/7.png" alt="" class="mb20" />
+                <h4>Authereum</h4>
+                <p>Your wallet where you want it. Log into your favorite dapps with Authereum.</p>
+              </a>
+            </div>
+
+            <div class="col-lg-3 mb30">
+              <a class="box-url" href={null}>
+                <span class="box-url-label">Most Simple</span>
+                <img src="images/wallet/8.png" alt="" class="mb20" />
+                <h4>Torus</h4>
+                <p>Open source protocol for connecting decentralised applications to mobile wallets.</p>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
