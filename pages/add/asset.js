@@ -15,6 +15,7 @@ function AddAsset() {
     const [response, setShowResponse] = useState(false)
     const [exist, setExist] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [errorMessage, setErrorMessage] = useState()
     const loadCollections = async () => {
         const cols = await request("collections", {
             method: "GET"
@@ -43,6 +44,12 @@ function AddAsset() {
         })
         if (add.status === 200) {
             if (add.data === 1) {
+                setErrorMessage("This Asset already exist")
+                setShowResponse(true)
+                setExist(true)
+            }
+            else if (add.data === 2) {
+                setErrorMessage("This asset is not NFT, please add NFT")
                 setShowResponse(true)
                 setExist(true)
             }
@@ -187,8 +194,8 @@ function AddAsset() {
                             <h5>Result:</h5>
                             <div className="alert alert-danger d-flex align-items-center" role="alert">
                                 <div>
-                                    <i className={"fa fa-error-circle"} /> This Asset already exist
-                             </div>
+                                    <i className={"fa fa-error-circle"} /> {errorMessage}
+                                </div>
                             </div>
                         </>
                         }
