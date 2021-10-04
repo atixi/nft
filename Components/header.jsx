@@ -109,7 +109,7 @@ function Header(props) {
                   <div id="logo">
                     <a href="index.html">
                       <img alt="" className="logo" src="/images/logo-light.png" />
-                      <img alt="" className="logo-2" src="/images/logo.png" />
+                      <img alt="" style={{ width: "250px" }} className="logo-2" src="/images/logo.svg" />
                     </a>
                   </div>
                   {/* <!-- logo close --> */}
