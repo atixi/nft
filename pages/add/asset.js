@@ -11,6 +11,7 @@ const { Option } = Select
 function AddAsset() {
     const [addedAsset, setAddedAsset] = useState()
     const [collections, setCollections] = useState()
+    const [categories, setCategories] = useState()
     const [response, setShowResponse] = useState(false)
     const [exist, setExist] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -23,13 +24,22 @@ function AddAsset() {
             setCollections(cols.data)
         }
     }
+    const loadCategories = async () => {
+        const cats = await request("categories", {
+            method: "GET"
+        });
+        if (cats.status === 200) {
+            console.log("cats", cats)
+            setCategories(cats.data)
+        }
+    }
     const submitAsset = async (values) => {
         setExist(false)
         setShowResponse(false)
         setLoading(true)
         const add = await request(`nfts/add`, {
             method: "POST",
-            data: { tokenId: values.tokenId, tokenAddress: values.tokenAddress, collections: values.collections, featured: values.featured }
+            data: { tokenId: values.tokenId, tokenAddress: values.tokenAddress, categories: values.categories, collections: values.collections, featured: values.featured }
         })
         if (add.status === 200) {
             if (add.data === 1) {
@@ -43,12 +53,13 @@ function AddAsset() {
             else {
                 setShowResponse(false)
                 setLoading(false)
-                message.error("Error adding asset")
+                message.error("Error adding asset, try again!")
             }
         }
     }
     useEffect(() => {
         loadCollections()
+        loadCategories();
     }, [])
     const [form] = Form.useForm();
     return <div className="no-bottom" id="content">
@@ -103,7 +114,23 @@ function AddAsset() {
                                             return <option key={col.id} value={col.id}>{col.collectionName}</option>
                                         })}
                                     </select>
-
+                                </Form.Item>
+                                <h5>Categories</h5>
+                                <Form.Item name={"categories"} rules={[
+                                    {
+                                        required: true,
+                                        message: 'This field is required',
+                                    },
+                                ]}>
+                                    <Select
+                                        mode="multiple"
+                                        style={{ width: '100%' }}
+                                        placeholder="---"
+                                    >
+                                        {categories && categories.map((cat) => {
+                                            return <Option key={cat.id} value={cat.id}>{cat.categoryName}</Option>
+                                        })}
+                                    </Select>
                                 </Form.Item>
                                 <h5>Featured</h5>
                                 <Form.Item name={"featured"}>
