@@ -6,7 +6,14 @@ import {
   ShareButton,
   ShareProfile,
 } from "/Components/StyledComponents/talentPage-styledComponents";
-import { Dropdown, Spin, Tabs } from "antd";
+import { Dropdown, Spin, Tabs, Statistic } from "antd";
+const { Countdown } = Statistic
+import {
+  CountDownContainer
+} from "../../Components/StyledComponents/explore-styledComponents";
+import { getAuctionPriceDetails } from "/Constants/constants";
+import { unixToMilSeconds } from "../../Utils/utils"
+import Link from "next/link"
 import {
   FacebookIcon,
   FacebookShareButton,
@@ -28,7 +35,7 @@ import Products from "/Components/nfts";
 import api from "/Components/axiosRequest";
 import { displayAddress } from "/Utils/utils";
 import { useRouter } from "next/router";
-
+import request from "../../Utils/axios"
 const { TabPane } = Tabs;
 
 function CollectionDetails() {
@@ -79,21 +86,21 @@ function CollectionDetails() {
     assetLength === 0
       ? setLoadMoreButton({ ...loadMoreButton, onSalesLoad: false })
       : (() => {
-          setOnsales({
-            talent: {
-              talentAvatar: { url: collect.talent.talentAvatar.url },
-            },
-            assets: [...onSales.assets, ...moreAssets.data.assets],
-          });
-          setLoadMore({
-            ...loadMore,
-            onSales: loadMore.onSales + 10,
-          });
-          setLoadMoreButton({
-            ...loadMoreButton,
-            onsalesLoadMoreButtonLoading: false,
-          });
-        })();
+        setOnsales({
+          talent: {
+            talentAvatar: { url: collect.talent.talentAvatar.url },
+          },
+          assets: [...onSales.assets, ...moreAssets.data.assets],
+        });
+        setLoadMore({
+          ...loadMore,
+          onSales: loadMore.onSales + 10,
+        });
+        setLoadMoreButton({
+          ...loadMoreButton,
+          onsalesLoadMoreButtonLoading: false,
+        });
+      })();
   }
   async function LoadMoreOwned() {
     setLoadMoreButton({ ...loadMoreButton, ownedLoadMoreButtonLoading: true });
@@ -104,167 +111,214 @@ function CollectionDetails() {
     assetLength === 0
       ? setLoadMoreButton({ ...loadMoreButton, ownedLoad: false })
       : (() => {
-          setCollect({
-            ...collect,
-            assets: [...collect.assets, ...moreAssets.data.assets],
-          });
-          setLoadMore({
-            ...loadMore,
-            owned: loadMore.owned + 10,
-          });
-          setLoadMoreButton({
-            ...loadMoreButton,
-            ownedLoadMoreButtonLoading: false,
-          });
-        })();
+        setCollect({
+          ...collect,
+          assets: [...collect.assets, ...moreAssets.data.assets],
+        });
+        setLoadMore({
+          ...loadMore,
+          owned: loadMore.owned + 10,
+        });
+        setLoadMoreButton({
+          ...loadMoreButton,
+          ownedLoadMoreButtonLoading: false,
+        });
+      })();
   }
+
+  const [collection, setCollection] = useState()
+  const [ownedAssets, setOwnedAssets] = useState()
+  const [onSaleAssets, setOnSaleAssets] = useState()
+  const loadCollection = async () => {
+    const col = await request(`collections/${slug}`, {
+      method: "GET"
+    });
+    if (col.status === 200) {
+      setCollection(col.data)
+      setOwnedAssets(col.data.nfts)
+      setOnSaleAssets(col.data.nfts)
+    }
+    console.log("new function", col)
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   useEffect(() => {
     slug != undefined
-      ? (async function fetchCollection() {
-          const { data } = await api.get(
-            `${process.env.HEROKU_BASE_URL}/collections/${slug}`
-            // `${process.env.STRAPI_LOCAL_BASE_URL}/collections/${slug}`
-          );
-          console.log("came", await data);
-          setCollect(await data);
-          const sellOrders = await data.assets.filter(
-            (asset) => asset.sellOrders != null
-          );
-          setOnsales({
-            talent: {
-              talentAvatar: { url: data?.talent?.talentAvatar?.url },
-            },
-            assets: sellOrders,
-          });
-        })()
+      ? loadCollection()
       : "";
-    setLoad(true);
   }, [slug]);
 
   return (
     <>
-      <MainWrapper>
-        {isLoad === false ? <CollectionLoader /> : ""}
-        {isLoad ? (
-          <ProfileContainer>
-            <img src={collect.collectionBanner?.url} />
-            <BiographyContainer>
-              <div className={"avatar"}>
-                <img
-                  alt="userAvatar"
-                  src={collect.collectionImageURL?.url}
-                  loading="lazy"
-                />
+      <div className="no-bottom no-top" id="content">
+        <div id="top"></div>
+
+        {/* <!-- section begin --> */}
+        <section id="profile_banner" aria-label="section" className="text-light" style={{ paddingBottom: "0px", width: "100%" }}>
+          <img src={collection?.collectionBanner?.url} style={{ width: "100%", height: "250px" }} />
+        </section>
+
+        {/* <!-- section close --> */}
+
+
+        <section aria-label="section" className="d_coll no-top">
+          <div className="contentContainer">
+            <div className="row">
+              <div className="col-md-12">
+                <div className="d_profile">
+                  <div className="profile_avatar">
+                    <div className="d_profile_img">
+                      <img src={collection?.collectionImageURL?.url} alt="" />
+                      <i className="fa fa-check"></i>
+                    </div>
+
+                    <div className="profile_name">
+                      <h4>
+                        {collection?.collectionName}
+                        <div className="clearfix"></div>
+                        <span id="wallet" className="profile_wallet">DdzFFzCqrhshMSxb9oW3mRo4MJrQkusV3fGFSTwaiu4wPBqMryA9DYVJCkW9n7twCffG5f5wX2sSkoDXGiZB1HPa7K7f865Kk4LqnrME</span>
+                        <button id="btn_copy" title="Copy Text">Copy</button>
+                      </h4>
+                    </div>
+                  </div>
+
+                </div>
               </div>
-              <BioDescription>
-                <h3>
-                  <strong>{collect.collectionName}</strong>
-                </h3>
-                <h6>
-                  <strong>
-                    {displayAddress(collect.talent?.walletAddress)}
-                  </strong>
-                </h6>
-                <div className="mt-4">
-                  <ProfileButton type="button">
-                    <Dropdown
-                      trigger={["click"]}
-                      overlay={
-                        <ShareProfile>
-                          <h5>Share on social medias</h5>
-                          <div>
-                            <div>
-                              <FacebookShareButton
-                                url={`${process.env.BASE_URL}/collection/${collect.slug}`}
-                                quote={`${collect.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
-                                hashtag={"#rimentertainment"}
-                              >
-                                <FacebookIcon size={32} round />
-                              </FacebookShareButton>
+
+              <div className="col-md-12">
+                <Tabs tabBarGutter={10} centered={true}>
+                  <TabPane key="1" tab={<span>{"On Sale"}</span>}>
+                    <div className="row">
+                      {/* <!-- nft item begin --> */}
+                      {onSaleAssets && onSaleAssets.map((item, index) => {
+                        return <div key={index} className=" col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                          <div className="nft__item style-2" style={{ border: "1px solid #e6e2e2" }}>
+                            {item?.asset?.sellOrders && item?.asset?.sellOrders?.length > 0 && item?.asset?.sellOrders[0].expirationTime !== "0" &&
+                              <CountDownContainer>
+                                <Countdown
+                                  value={unixToMilSeconds(item?.asset?.sellOrders[0].expirationTime)}
+                                  format={`D[d] HH[h] mm[m] ss[s]`}
+                                  valueStyle={{ lineHeight: "1.1", color: "white" }}
+                                />
+                              </CountDownContainer>}
+                            <div className="author_list_pp">
+                              <a href="author.html">
+                                <img className="lazy" src={item?.asset?.owner?.profile_img_url} alt="" />
+                                <i className="fa fa-check"></i>
+                              </a>
                             </div>
-                            <div>
-                              <TwitterShareButton
-                                url={`${process.env.BASE_URL}/collection/${collect.slug}`}
-                                title={`${collect.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
-                              >
-                                <TwitterIcon size={32} round />
-                              </TwitterShareButton>
+                            <div className="nft__item_wrap itemImageCard">
+                              <Link
+                                href={
+                                  item?.asset?.assetContract
+                                    ? `/nft/${item?.tokenAddress}?tokenId=${item?.tokenId}`
+                                    : `/nft/${item?.asset?.assetBundle?.maker?.address}?slug=${item?.asset?.assetBundle?.slug}`
+                                }
+                              ><a>
+                                  <img src={item?.asset?.imageUrl} className="lazy nft__item_preview" alt="" />
+                                </a>
+                              </Link>
                             </div>
-                            <div>
-                              <TelegramShareButton
-                                url={`${process.env.BASE_URL}/collection/${collect.slug}`}
-                                title={`${collect.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
-                              >
-                                <TelegramIcon size={32} round />
-                              </TelegramShareButton>
-                            </div>
-                            <div>
-                              <WhatsappShareButton
-                                url={`${process.env.BASE_URL}/collection/${collect.slug}`}
-                                title={`${collect.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
-                                separator=":: "
-                              >
-                                <WhatsappIcon size={32} round />
-                              </WhatsappShareButton>
+                            <div className="nft__item_info">
+                              <Link
+                                href={
+                                  item?.asset?.assetContract
+                                    ? `/nft/${item?.tokenAddress}?tokenId=${item?.tokenId}`
+                                    : `/nft/${item?.asset?.assetBundle?.maker?.address}?slug=${item?.asset?.assetBundle?.slug}`
+                                }
+                              ><a>
+                                  <h4>{item?.asset?.name ? item?.asset?.name : item?.asset?.collection?.name}</h4>
+                                </a></Link>
+
+                              <div className="nft__item_price">
+                                <span> {item?.asset?.sellOrders?.length > 0 ? `${getAuctionPriceDetails(item?.asset?.sellOrders[0]).priceBase} ${item?.asset?.sellOrders[0]?.paymentTokenContract.symbol}` : ""}
+
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </ShareProfile>
-                      }
-                      placement="bottomRight"
-                    >
-                      <ShareButton />
-                    </Dropdown>
-                  </ProfileButton>
-                  <ProfileButton type="button">{"..."}</ProfileButton>
-                </div>
-              </BioDescription>
-            </BiographyContainer>
-          </ProfileContainer>
-        ) : (
-          ""
-        )}
+                        </div>
+                      })}
+                    </div>
+                  </TabPane>
+                  <TabPane key="2" tab={<span>{"Owned"}</span>}>
+                    <div className="row">
+                      {/* <!-- nft item begin --> */}
+                      {ownedAssets && ownedAssets.map((item, index) => {
+                        return <div key={index} className=" col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                          <div className="nft__item style-2" style={{ border: "1px solid #e6e2e2" }}>
+                            {item?.asset?.sellOrders && item?.asset?.sellOrders?.length > 0 && item?.asset?.sellOrders[0].expirationTime !== "0" &&
+                              <CountDownContainer>
+                                <Countdown
+                                  value={unixToMilSeconds(item?.asset?.sellOrders[0].expirationTime)}
+                                  format={`D[d] HH[h] mm[m] ss[s]`}
+                                  valueStyle={{ lineHeight: "1.1", color: "white" }}
+                                />
+                              </CountDownContainer>}
+                            <div className="author_list_pp">
+                              <a href="author.html">
+                                <img className="lazy" src={item?.asset?.owner?.profile_img_url} alt="" />
+                                <i className="fa fa-check"></i>
+                              </a>
+                            </div>
+                            <div className="nft__item_wrap itemImageCard">
+                              <Link
+                                href={
+                                  item?.asset?.assetContract
+                                    ? `/nft/${item?.tokenAddress}?tokenId=${item?.tokenId}`
+                                    : `/nft/${item?.asset?.assetBundle?.maker?.address}?slug=${item?.asset?.assetBundle?.slug}`
+                                }
+                              ><a>
+                                  <img src={item?.asset?.imageUrl} className="lazy nft__item_preview" alt="" />
+                                </a>
+                              </Link>
+                            </div>
+                            <div className="nft__item_info">
+                              <Link
+                                href={
+                                  item?.asset?.assetContract
+                                    ? `/nft/${item?.tokenAddress}?tokenId=${item?.tokenId}`
+                                    : `/nft/${item?.asset?.assetBundle?.maker?.address}?slug=${item?.asset?.assetBundle?.slug}`
+                                }
+                              ><a>
+                                  <h4>{item?.asset?.name ? item?.asset?.name : item?.asset?.collection?.name}</h4>
+                                </a></Link>
 
-        <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
-          <TabPane tab="On Sale" key="1">
-            <Products data={onSales} />
-            {loadMoreButton.onSalesLoad ? (
-              loadMoreButton.onsalesLoadMoreButtonLoading ? (
-                <LoadMoreButton block shape={"round"} size={"large"}>
-                  <Spin></Spin>
-                </LoadMoreButton>
-              ) : (
-                <LoadMoreButton
-                  block
-                  shape={"round"}
-                  size={"large"}
-                  onClick={() => LoadMoreOnsales()}
-                >
-                  Load More
-                </LoadMoreButton>
-              )
-            ) : null}
-          </TabPane>
-          <TabPane tab="Owned" key="2">
-            <Products data={collect} />
-            {loadMoreButton.ownedLoad ? (
-              loadMoreButton.ownedLoadMoreButtonLoading ? (
-                <LoadMoreButton block shape={"round"} size={"large"}>
-                  <Spin></Spin>
-                </LoadMoreButton>
-              ) : (
-                <LoadMoreButton
-                  block
-                  shape={"round"}
-                  size={"large"}
-                  onClick={() => LoadMoreOwned()}
-                >
-                  Load More
-                </LoadMoreButton>
-              )
-            ) : null}
-          </TabPane>
-        </Tabs>
-      </MainWrapper>
+                              <div className="nft__item_price">
+                                <span> {item?.asset?.sellOrders?.length > 0 ? `${getAuctionPriceDetails(item?.asset?.sellOrders[0]).priceBase} ${item?.asset?.sellOrders[0]?.paymentTokenContract.symbol}` : ""}
+
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      })}
+                    </div>
+                  </TabPane>
+                </Tabs>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+      </div>
     </>
   );
 }

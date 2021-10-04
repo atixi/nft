@@ -21,7 +21,6 @@ function AddAsset() {
             method: "GET"
         });
         if (cols.status === 200) {
-            console.log(cols)
             setCollections(cols.data)
         }
     }
@@ -30,7 +29,6 @@ function AddAsset() {
             method: "GET"
         });
         if (cats.status === 200) {
-            console.log("cats", cats)
             setCategories(cats.data)
         }
     }
