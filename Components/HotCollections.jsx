@@ -46,8 +46,8 @@ function HotCollections() {
                 <h2 className="style-2">Hot Collections</h2>
             </div>
             {serverCollections && <OwlCarousel className='owl-theme  fadeIn' responsive={responsive} responsiveClass={"-"} dots={false} items={5} navClass={["owl-prev carouselPrev", "owl-next carouselNext"]} loop margin={15} nav>
-                {serverCollections.map((collection) => {
-                    return <div className="nft_coll style-2">
+                {serverCollections.map((collection, index) => {
+                    return <div key={index} className="nft_coll style-2">
                         <div className="nft_wrap">
                             <a href="collection.html"><img src={collection?.collectionBanner?.url} className="lazy img-fluid" alt="" /></a>
                         </div>

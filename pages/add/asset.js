@@ -1,5 +1,5 @@
-import react, { useState } from "react"
-import { Form, Statistic, Spin, message, Radio } from "antd"
+import react, { useState, useEffect } from "react"
+import { Form, Statistic, Spin, message, Radio, Select } from "antd"
 import Link from "next/link"
 import {
     CountDownContainer
@@ -7,18 +7,29 @@ import {
 import request from "../../Utils/axios"
 import { unixToMilSeconds } from "../../Utils/utils"
 const { Countdown } = Statistic
+const { Option } = Select
 function AddAsset() {
     const [addedAsset, setAddedAsset] = useState()
+    const [collections, setCollections] = useState()
     const [response, setShowResponse] = useState(false)
     const [exist, setExist] = useState(false)
     const [loading, setLoading] = useState(false)
+    const loadCollections = async () => {
+        const cols = await request("collections", {
+            method: "GET"
+        });
+        if (cols.status === 200) {
+            console.log(cols)
+            setCollections(cols.data)
+        }
+    }
     const submitAsset = async (values) => {
         setExist(false)
         setShowResponse(false)
         setLoading(true)
         const add = await request(`nfts/add`, {
             method: "POST",
-            data: { tokenId: values.tokenId, tokenAddress: values.tokenAddress, featured: values.featured }
+            data: { tokenId: values.tokenId, tokenAddress: values.tokenAddress, collections: values.collections, featured: values.featured }
         })
         if (add.status === 200) {
             if (add.data === 1) {
@@ -36,6 +47,9 @@ function AddAsset() {
             }
         }
     }
+    useEffect(() => {
+        loadCollections()
+    }, [])
     const [form] = Form.useForm();
     return <div className="no-bottom" id="content">
         {/* <div id="top"></div> */}
@@ -75,6 +89,21 @@ function AddAsset() {
                                     },
                                 ]}>
                                     <input type="text" id="item_title" className="form-control" placeholder="Enter asset token ID" />
+                                </Form.Item>
+                                <h5>Collection</h5>
+                                <Form.Item name={"collections"} rules={[
+                                    {
+                                        required: true,
+                                        message: 'This field is required',
+                                    },
+                                ]}>
+                                    <select className={"form-control"}>
+                                        <option key={"empty"} >----</option>
+                                        {collections && collections.map((col) => {
+                                            return <option key={col.id} value={col.id}>{col.collectionName}</option>
+                                        })}
+                                    </select>
+
                                 </Form.Item>
                                 <h5>Featured</h5>
                                 <Form.Item name={"featured"}>

@@ -107,7 +107,7 @@ function Header(props) {
                 <div className="de-flex-col">
                   {/* <!-- logo begin --> */}
                   <div id="logo">
-                    <a href="index.html">
+                    <a href="/">
                       <img alt="" className="logo" src="/images/logo-light.png" />
                       <img alt="" style={{ width: "250px" }} className="logo-2" src="/images/logo.svg" />
                     </a>
