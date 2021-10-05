@@ -14,24 +14,7 @@ const {
   policy,
   privacy,
 } = FOOTER;
-import {
-  FooterContainer,
-  SearchInput,
-  LanguageContainer,
-  TermAndPolicy,
-  SocialLinksContainer,
-  SearchButton,
-  CopyRight,
-  CopyRightAndPolicyContainer,
-  FooterExtraLinkContainer,
-  CategoryListUl,
-  LinkText,
-  CategoryLink,
-  CategoryListLi,
-  CategoryTitle,
-  SelectLanguage,
-} from "./StyledComponents/footer-styledComponents";
-const { Option } = SelectLanguage;
+
 import api from "/Components/axiosRequest";
 function Footer() {
   const [email, setEmail] = useState();
@@ -109,8 +92,8 @@ function Footer() {
           </div>
           <div class="col-md-3 col-sm-6 col-xs-1">
             <div class="widget">
-              <h5>Newsletter</h5>
-              <p>Signup for our newsletter to get the latest news in your inbox.</p>
+              <h5>subscribe</h5>
+              <p>subscribe for to get the latest news in your inbox.</p>
               <form action="blank.php" class="row form-dark" id="form_subscribe" method="post" name="form_subscribe">
                 <div class="col text-center">
                   <input class="form-control" id="txt_subscribe" name="txt_subscribe" placeholder="enter your email" type="text" /> <a href="#" id="btn-subscribe"><i class="arrow_right bg-color-secondary"></i></a>
