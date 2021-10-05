@@ -29,6 +29,7 @@ import api from "/Components/axiosRequest";
 import { displayAddress } from "/Utils/utils";
 import { useRouter } from "next/router";
 import request from "../../Utils/axios"
+import UserAvatar from "@/components/userAvatar";
 const { TabPane } = Tabs;
 
 function CollectionDetails() {
@@ -205,12 +206,7 @@ function CollectionDetails() {
                               valueStyle={{ lineHeight: "1.1", color: "white" }}
                             />
                           </CountDownContainer>}
-                        <div className="author_list_pp">
-                          <a href="author.html">
-                            <img className="lazy" src={item?.asset?.owner?.profile_img_url} alt="" />
-                            <i className="fa fa-check"></i>
-                          </a>
-                        </div>
+                        <UserAvatar user={{ avatar: item?.asset?.owner?.profile_img_url, verified: item.isInternal, userName: item?.asset?.owner?.username }} />
                         <div className="nft__item_wrap itemImageCard">
                           <Link
                             href={
