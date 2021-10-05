@@ -1,11 +1,4 @@
-import {
-  BioDescription,
-  BiographyContainer,
-  ProfileButton,
-  ProfileContainer,
-  ShareButton,
-  ShareProfile,
-} from "/Components/StyledComponents/talentPage-styledComponents";
+
 import { Dropdown, Spin, Tabs, Statistic } from "antd";
 const { Countdown } = Statistic
 import {
@@ -127,18 +120,15 @@ function CollectionDetails() {
   }
 
   const [collection, setCollection] = useState()
-  const [ownedAssets, setOwnedAssets] = useState()
-  const [onSaleAssets, setOnSaleAssets] = useState()
+  const [assets, setAssets] = useState()
   const loadCollection = async () => {
     const col = await request(`collections/${slug}`, {
       method: "GET"
     });
     if (col.status === 200) {
       setCollection(col.data)
-      setOwnedAssets(col.data.nfts)
-      setOnSaleAssets(col.data.nfts)
+      setAssets(col.data.nfts)
     }
-    console.log("new function", col)
   }
 
 
@@ -202,116 +192,58 @@ function CollectionDetails() {
               </div>
 
               <div className="col-md-12">
-                <Tabs tabBarGutter={10} centered={true}>
-                  <TabPane key="1" tab={<span>{"On Sale"}</span>}>
-                    <div className="row">
-                      {/* <!-- nft item begin --> */}
-                      {onSaleAssets && onSaleAssets.map((item, index) => {
-                        return <div key={index} className=" col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                          <div className="nft__item style-2" style={{ border: "1px solid #e6e2e2" }}>
-                            {item?.asset?.sellOrders && item?.asset?.sellOrders?.length > 0 && item?.asset?.sellOrders[0].expirationTime !== "0" &&
-                              <CountDownContainer>
-                                <Countdown
-                                  value={unixToMilSeconds(item?.asset?.sellOrders[0].expirationTime)}
-                                  format={`D[d] HH[h] mm[m] ss[s]`}
-                                  valueStyle={{ lineHeight: "1.1", color: "white" }}
-                                />
-                              </CountDownContainer>}
-                            <div className="author_list_pp">
-                              <a href="author.html">
-                                <img className="lazy" src={item?.asset?.owner?.profile_img_url} alt="" />
-                                <i className="fa fa-check"></i>
-                              </a>
-                            </div>
-                            <div className="nft__item_wrap itemImageCard">
-                              <Link
-                                href={
-                                  item?.asset?.assetContract
-                                    ? `/nft/${item?.tokenAddress}?tokenId=${item?.tokenId}`
-                                    : `/nft/${item?.asset?.assetBundle?.maker?.address}?slug=${item?.asset?.assetBundle?.slug}`
-                                }
-                              ><a>
-                                  <img src={item?.asset?.imageUrl} className="lazy nft__item_preview" alt="" />
-                                </a>
-                              </Link>
-                            </div>
-                            <div className="nft__item_info">
-                              <Link
-                                href={
-                                  item?.asset?.assetContract
-                                    ? `/nft/${item?.tokenAddress}?tokenId=${item?.tokenId}`
-                                    : `/nft/${item?.asset?.assetBundle?.maker?.address}?slug=${item?.asset?.assetBundle?.slug}`
-                                }
-                              ><a>
-                                  <h4>{item?.asset?.name ? item?.asset?.name : item?.asset?.collection?.name}</h4>
-                                </a></Link>
+                <div className="row">
+                  {/* <!-- nft item begin --> */}
+                  {assets && assets.map((item, index) => {
+                    return <div key={index} className=" col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                      <div className="nft__item style-2" style={{ border: "1px solid #e6e2e2" }}>
+                        {item?.asset?.sellOrders && item?.asset?.sellOrders?.length > 0 && item?.asset?.sellOrders[0].expirationTime !== "0" &&
+                          <CountDownContainer>
+                            <Countdown
+                              value={unixToMilSeconds(item?.asset?.sellOrders[0].expirationTime)}
+                              format={`D[d] HH[h] mm[m] ss[s]`}
+                              valueStyle={{ lineHeight: "1.1", color: "white" }}
+                            />
+                          </CountDownContainer>}
+                        <div className="author_list_pp">
+                          <a href="author.html">
+                            <img className="lazy" src={item?.asset?.owner?.profile_img_url} alt="" />
+                            <i className="fa fa-check"></i>
+                          </a>
+                        </div>
+                        <div className="nft__item_wrap itemImageCard">
+                          <Link
+                            href={
+                              item?.asset?.assetContract
+                                ? `/nft/${item?.tokenAddress}?tokenId=${item?.tokenId}`
+                                : `/nft/${item?.asset?.assetBundle?.maker?.address}?slug=${item?.asset?.assetBundle?.slug}`
+                            }
+                          ><a>
+                              <img src={item?.asset?.imageUrl} className="lazy nft__item_preview" alt="" />
+                            </a>
+                          </Link>
+                        </div>
+                        <div className="nft__item_info">
+                          <Link
+                            href={
+                              item?.asset?.assetContract
+                                ? `/nft/${item?.tokenAddress}?tokenId=${item?.tokenId}`
+                                : `/nft/${item?.asset?.assetBundle?.maker?.address}?slug=${item?.asset?.assetBundle?.slug}`
+                            }
+                          ><a>
+                              <h4>{item?.asset?.name ? item?.asset?.name : item?.asset?.collection?.name}</h4>
+                            </a></Link>
 
-                              <div className="nft__item_price">
-                                <span> {item?.asset?.sellOrders?.length > 0 ? `${getAuctionPriceDetails(item?.asset?.sellOrders[0]).priceBase} ${item?.asset?.sellOrders[0]?.paymentTokenContract.symbol}` : ""}
+                          <div className="nft__item_price">
+                            <span> {item?.asset?.sellOrders?.length > 0 ? `${getAuctionPriceDetails(item?.asset?.sellOrders[0]).priceBase} ${item?.asset?.sellOrders[0]?.paymentTokenContract.symbol}` : ""}
 
-                                </span>
-                              </div>
-                            </div>
+                            </span>
                           </div>
                         </div>
-                      })}
+                      </div>
                     </div>
-                  </TabPane>
-                  <TabPane key="2" tab={<span>{"Owned"}</span>}>
-                    <div className="row">
-                      {/* <!-- nft item begin --> */}
-                      {ownedAssets && ownedAssets.map((item, index) => {
-                        return <div key={index} className=" col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                          <div className="nft__item style-2" style={{ border: "1px solid #e6e2e2" }}>
-                            {item?.asset?.sellOrders && item?.asset?.sellOrders?.length > 0 && item?.asset?.sellOrders[0].expirationTime !== "0" &&
-                              <CountDownContainer>
-                                <Countdown
-                                  value={unixToMilSeconds(item?.asset?.sellOrders[0].expirationTime)}
-                                  format={`D[d] HH[h] mm[m] ss[s]`}
-                                  valueStyle={{ lineHeight: "1.1", color: "white" }}
-                                />
-                              </CountDownContainer>}
-                            <div className="author_list_pp">
-                              <a href="author.html">
-                                <img className="lazy" src={item?.asset?.owner?.profile_img_url} alt="" />
-                                <i className="fa fa-check"></i>
-                              </a>
-                            </div>
-                            <div className="nft__item_wrap itemImageCard">
-                              <Link
-                                href={
-                                  item?.asset?.assetContract
-                                    ? `/nft/${item?.tokenAddress}?tokenId=${item?.tokenId}`
-                                    : `/nft/${item?.asset?.assetBundle?.maker?.address}?slug=${item?.asset?.assetBundle?.slug}`
-                                }
-                              ><a>
-                                  <img src={item?.asset?.imageUrl} className="lazy nft__item_preview" alt="" />
-                                </a>
-                              </Link>
-                            </div>
-                            <div className="nft__item_info">
-                              <Link
-                                href={
-                                  item?.asset?.assetContract
-                                    ? `/nft/${item?.tokenAddress}?tokenId=${item?.tokenId}`
-                                    : `/nft/${item?.asset?.assetBundle?.maker?.address}?slug=${item?.asset?.assetBundle?.slug}`
-                                }
-                              ><a>
-                                  <h4>{item?.asset?.name ? item?.asset?.name : item?.asset?.collection?.name}</h4>
-                                </a></Link>
-
-                              <div className="nft__item_price">
-                                <span> {item?.asset?.sellOrders?.length > 0 ? `${getAuctionPriceDetails(item?.asset?.sellOrders[0]).priceBase} ${item?.asset?.sellOrders[0]?.paymentTokenContract.symbol}` : ""}
-
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      })}
-                    </div>
-                  </TabPane>
-                </Tabs>
+                  })}
+                </div>
               </div>
             </div>
           </div>
