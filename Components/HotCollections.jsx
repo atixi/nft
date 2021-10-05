@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { socket } from "config/websocket";
 import { fetch } from "Utils/strapiApi";
 import dynamic from "next/dynamic"
+import Link from "next/link"
 const OwlCarousel = dynamic(import("react-owl-carousel"), { ssr: false });
 
 
@@ -48,19 +49,19 @@ function HotCollections() {
             </div>
             {serverCollections && <OwlCarousel className='owl-theme  fadeIn' responsive={responsive} responsiveClass={"-"} dots={false} items={5} navClass={["owl-prev carouselPrev", "owl-next carouselNext"]} loop={false} margin={15} nav>
                 {serverCollections.map((collection, index) => {
-                    return <div key={index} className="nft_coll style-2">
+                    return <Link href={`/collection/${collection?.slug}`} passHref><a><div key={index} className="nft_coll style-2">
                         <div className="nft_wrap">
-                            <a href="collection.html"><img src={collection?.collectionBanner?.url} className="lazy img-fluid" alt="" /></a>
+                            <img src={collection?.collectionBanner?.url} className="lazy img-fluid" alt="" />
                         </div>
                         <div className="nft_coll_pp">
-                            <a href="collection.html"><img className="lazy" src={collection?.collectionImageURL?.url} alt="" /></a>
+                            <img className="lazy" src={collection?.collectionImageURL?.url} alt="" />
                             <i className="fa fa-check"></i>
                         </div>
                         <div className="nft_coll_info">
-                            <a href="collection.html"><h4>{collection?.collectionName}</h4></a>
+                            <h4>{collection?.collectionName}</h4>
                             <span>{`${collection?.nfts?.length} assets`}</span>
                         </div>
-                    </div>
+                    </div></a></Link>
                 })}
             </OwlCarousel>}
         </div>
