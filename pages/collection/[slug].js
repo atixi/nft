@@ -35,91 +35,7 @@ const { TabPane } = Tabs;
 function CollectionDetails() {
   const router = useRouter();
   const { slug } = router.query;
-  const [collect, setCollect] = useState({
-    collectionName: "",
-    collectionImageURL: {
-      url: "",
-    },
-    collectionBanner: {
-      url: "",
-    },
-    talent: { walletAddress: "" },
-    assets: [],
-  });
-  const [loadMore, setLoadMore] = useState({
-    onSales: 10,
-    owned: 10,
-  });
   const [isLoad, setLoad] = useState(false);
-  const [loadMoreButton, setLoadMoreButton] = useState({
-    onSalesLoad: true,
-    ownedLoad: true,
-    onsalesLoadMoreButtonLoading: false,
-    ownedLoadMoreButtonLoading: false,
-  });
-  const [onSales, setOnsales] = useState({
-    assets: [],
-  });
-
-  const loadTabData = async (e) => {
-    if (e === "1") {
-      //loadAssets(slug);
-    } else if (e === "2") {
-      //loadCollections(slug);
-    }
-  };
-  async function LoadMoreOnsales() {
-    setLoadMoreButton({
-      ...loadMoreButton,
-      onsalesLoadMoreButtonLoading: true,
-    });
-    const moreAssets = await api.get(
-      `/collections/${collect.slug}?offset=${loadMore.onSales}`
-    );
-    const assetLength = await moreAssets.data.assets.length;
-    assetLength === 0
-      ? setLoadMoreButton({ ...loadMoreButton, onSalesLoad: false })
-      : (() => {
-        setOnsales({
-          talent: {
-            talentAvatar: { url: collect.talent.talentAvatar.url },
-          },
-          assets: [...onSales.assets, ...moreAssets.data.assets],
-        });
-        setLoadMore({
-          ...loadMore,
-          onSales: loadMore.onSales + 10,
-        });
-        setLoadMoreButton({
-          ...loadMoreButton,
-          onsalesLoadMoreButtonLoading: false,
-        });
-      })();
-  }
-  async function LoadMoreOwned() {
-    setLoadMoreButton({ ...loadMoreButton, ownedLoadMoreButtonLoading: true });
-    const moreAssets = await api.get(
-      `/collections/${collect.slug}?offset=${loadMore.owned}`
-    );
-    const assetLength = await moreAssets.data.assets.length;
-    assetLength === 0
-      ? setLoadMoreButton({ ...loadMoreButton, ownedLoad: false })
-      : (() => {
-        setCollect({
-          ...collect,
-          assets: [...collect.assets, ...moreAssets.data.assets],
-        });
-        setLoadMore({
-          ...loadMore,
-          owned: loadMore.owned + 10,
-        });
-        setLoadMoreButton({
-          ...loadMoreButton,
-          ownedLoadMoreButtonLoading: false,
-        });
-      })();
-  }
-
   const [collection, setCollection] = useState()
   const [assets, setAssets] = useState()
   const loadCollection = async () => {
@@ -206,7 +122,7 @@ function CollectionDetails() {
                               valueStyle={{ lineHeight: "1.1", color: "white" }}
                             />
                           </CountDownContainer>}
-                        <UserAvatar user={{ avatar: item?.asset?.owner?.profile_img_url, verified: item.isInternal, userName: item?.asset?.owner?.username }} />
+                        <UserAvatar user={{ userName: item?.talent?.userName, avatar: item?.asset?.owner?.profile_img_url, verified: item.isInternal }} />
                         <div className="nft__item_wrap itemImageCard">
                           <Link
                             href={
