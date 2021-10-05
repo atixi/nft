@@ -49,12 +49,10 @@ function Header(props) {
     async function fetchingData() {
       const data = await api.get(`/talents/search/${e.target.value}`);
       setData(await data.data);
-      console.log("coskash", await data.data);
     }
     fetchingData();
   }
   function handleSearch(e) {
-    console.log("search handled", e.target.value);
     if (e.charCode === 13) {
       setSearch(false);
       router.push(`search?query=${e.target.value}`);

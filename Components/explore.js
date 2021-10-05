@@ -20,7 +20,6 @@ function Explore() {
             const data = await request("nfts?_limit=8", {
                 method: "GET"
             });
-            console.log("data is", data)
             if (data.status === 200) {
                 setItems(data.data)
             }

@@ -35,7 +35,6 @@ function Footer() {
         const formData = new FormData();
         formData.append("data", JSON.stringify({ email: email }));
         api.post(`/subscribeds`, formData).catch(function (error) {
-          console.log("duplicate entry", error.message);
           setValidEmail({
             invalidEmail: false,
             dublicateEntry: true,

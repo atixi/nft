@@ -186,7 +186,6 @@ function ProductPage() {
       }
 
       if (data.status == 200) {
-        console.log("nft", data.data)
         const nft = data.data;
         nft.owner.address = web3.utils.toChecksumAddress(nft.owner.address);
         setAsset({
@@ -237,7 +236,6 @@ function ProductPage() {
 
   const refreshData = () => {
     socket.on("serverBroadCaseNewFixedPriceSell", (data) => {
-      console.log("user receive new sell from server", data);
       if (typeof window !== "undefined") {
         router.replace({
           pathname: router.pathname,
@@ -246,7 +244,6 @@ function ProductPage() {
             tokenId: queryParam?.tokenId,
           },
         });
-        console.log("router is ", router);
       }
     });
   };

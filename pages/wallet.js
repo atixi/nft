@@ -30,15 +30,11 @@ const Wallet = () => {
   const onDesktopConnect = async () => {
     const { ethereum } = window;
     if (ethereum) {
-      console.log("wallet is connected from walled modal");
       let web3 = new Web3(ethereum);
       const accounts = await web3.eth.getAccounts();
-      console.log("accounts are null?", accounts);
       if (accounts.length > 0) {
-        console.log("accounts are", accounts);
         presisMetamask(accounts);
       } else {
-        console.log("request to connect to metamask from walled modal");
         if (ethereum && ethereum.isMetaMask) {
           ethereum
             .request({ method: "eth_requestAccounts" })
@@ -68,10 +64,8 @@ const Wallet = () => {
       networkId: 4, // [Integer] The Ethereum network ID your Dapp uses.
       subscriptions: {
         wallet: (wallet) => {
-          console.log("wallet is ", wallet);
         },
         address: (addres) => {
-          console.log("adddres is ", address);
         },
       },
       walletSelect: {

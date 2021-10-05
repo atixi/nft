@@ -26,7 +26,6 @@ function HotCollections() {
         try {
             const collections = await fetch("/collections");
             if (collections) {
-                console.log("hot collections", collections)
                 setServerCollections(collections.data);
             }
         }
