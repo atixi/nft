@@ -78,7 +78,7 @@ function Footer() {
         <div class="row">
           <div class="col-md-3 col-sm-6 col-xs-1">
             <div class="widget">
-              <h5>Marketplace</h5>
+              <h5>Categories</h5>
               <ul>
                 <li><a href="#">All NFTs</a></li>
                 <li><a href="#">Art</a></li>
@@ -94,11 +94,7 @@ function Footer() {
               <h5>Resources</h5>
               <ul>
                 <li><a href="#">Help Center</a></li>
-                <li><a href="#">Partners</a></li>
-                <li><a href="#">Suggestions</a></li>
-                <li><a href="#">Discord</a></li>
                 <li><a href="#">Docs</a></li>
-                <li><a href="#">Newsletter</a></li>
               </ul>
             </div>
           </div>
@@ -106,12 +102,8 @@ function Footer() {
             <div class="widget">
               <h5>Community</h5>
               <ul>
-                <li><a href="#">Community</a></li>
-                <li><a href="#">Documentation</a></li>
                 <li><a href="#">Brand Assets</a></li>
-                <li><a href="#">Blog</a></li>
                 <li><a href="#">Forum</a></li>
-                <li><a href="#">Mailing List</a></li>
               </ul>
             </div>
           </div>
@@ -137,17 +129,17 @@ function Footer() {
             <div class="col-md-12">
               <div class="de-flex">
                 <div class="de-flex-col">
-                  <a href="index.html">
-                    <img alt="" class="f-logo" src="images/logo-2-light.png" /><span class="copy">&copy; Copyright 2021 - Gigaland by Designesia</span>
+                  <a href="https://thecodegiant.ca" target={"_blank"}>
+                    <img alt="" class="f-logo" src="images/logo-2-light.png" /><span class="copy">&copy; Copyright 2021 - The Code Giant</span>
                   </a>
                 </div>
                 <div class="de-flex-col">
                   <div class="social-icons">
-                    <a href="#"><i class="fa fa-facebook fa-lg"></i></a>
-                    <a href="#"><i class="fa fa-twitter fa-lg"></i></a>
-                    <a href="#"><i class="fa fa-linkedin fa-lg"></i></a>
-                    <a href="#"><i class="fa fa-pinterest fa-lg"></i></a>
-                    <a href="#"><i class="fa fa-rss fa-lg"></i></a>
+                    {/* <a href="#"><i class="fa fa-facebook fa-lg"></i></a>
+                    <a href="#"><i class="fa fa-twitter fa-lg"></i></a> */}
+                    <a href="https://www.linkedin.com/company/the-code-giant" target={"_blank"}><i class="fa fa-linkedin fa-lg"></i></a>
+                    {/* <a href="#"><i class="fa fa-pinterest fa-lg"></i></a>
+                    <a href="#"><i class="fa fa-rss fa-lg"></i></a> */}
                   </div>
                 </div>
               </div>
