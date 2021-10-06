@@ -6,6 +6,10 @@ import {
 } from "../../Components/StyledComponents/explore-styledComponents";
 import request from "../../Utils/axios"
 import { unixToMilSeconds } from "../../Utils/utils"
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { getUser } from '../../store/action/accountSlice';
+
 const { Countdown } = Statistic
 const { Option } = Select
 function AddAsset() {
@@ -16,6 +20,13 @@ function AddAsset() {
     const [exist, setExist] = useState(false)
     const [loading, setLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState()
+    const router = useRouter();
+    const { jwt } = useSelector(getUser);
+    useEffect(() => {
+        if (jwt === null) {
+            router.push("/404");
+        }
+    }, []);
     const loadCollections = async () => {
         const cols = await request("collections", {
             method: "GET"
@@ -69,7 +80,7 @@ function AddAsset() {
     const [form] = Form.useForm();
     return <div className="no-bottom" id="content">
         {/* <div id="top"></div> */}
-        <section id="subheader" className="text-light AssetSubheader" data-bgimage="url(images/background/subheader.jpg) top">
+        <section id="subheader" className="text-light AssetSubheader">
             <div className="center-y relative text-center">
                 <div className="container">
                     <div className="row">
@@ -147,7 +158,7 @@ function AddAsset() {
 
                                 <div className="spacer-10"></div>
                                 <div className="spacer-single"></div>
-                                <input type="submit" id="submit" class="btn-main" value="Add Asset" />
+                                <input type="submit" id="submit" className="btn-main" value="Add Asset" />
                                 <div className="spacer-single"></div>
                             </div>
                         </Form>

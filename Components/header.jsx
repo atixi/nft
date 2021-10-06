@@ -20,8 +20,11 @@ import LoginModal from "../Components/loginModal"
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import api from "/Components/axiosRequest";
+import { getUser, signout } from '../store/action/accountSlice';
+
 function Header(props) {
   const router = useRouter();
+  const { jwt } = useSelector(getUser)
   const accountTokens = useSelector(getAccountTokens);
   const metaToken = useSelector(getMetaToken);
   const metaBalance = useSelector(getMetaBalance);
@@ -101,6 +104,17 @@ function Header(props) {
   const openLogin = () => {
     setShowLoginModal(true)
   }
+  const dispatch = useDispatch();
+  const handleLogout = async () => {
+    try {
+      const logout = await dispatch(signout(null));
+      console.log("sign out", logout)
+      if (logout.meta?.requestStatus === "fulfilled") {
+        router.push("/")
+      }
+    } catch (err) {
+    }
+  }
   return (
     <header className="transparent header-light scroll-light">
       <div className="container">
@@ -140,7 +154,9 @@ function Header(props) {
                     </ul>
                   </li>
                   <li>
-                    <a onClick={openLogin}>Login</a>
+                    {jwt ?
+                      <a onClick={handleLogout}>Logout</a> :
+                      <a onClick={openLogin}>Login</a>}
                   </li>
                 </ul>
                 <div className="menu_side_area">
