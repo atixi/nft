@@ -1,27 +1,37 @@
-import react from "react"
-import { Modal, Form, notification } from "antd"
+import react, { useState } from "react"
+import { Modal, Form, notification, Spin } from "antd"
+import { LoadingOutlined } from '@ant-design/icons';
+
 import { signin } from '../store/action/accountSlice';
 import { useDispatch } from 'react-redux';
 import { useRouter } from "next/router"
+const antIcon = <LoadingOutlined style={{ fontSize: 16, marginLeft: "-25px", marginRight: "20px", position: "relative", top: "-5px", color: "white" }} spin />;
 function LoginModal({ showLoginModal, setShowLoginModal }) {
-
+    const [loading, setLoading] = useState(false)
     const dispatch = useDispatch();
     const router = useRouter()
     const onFinish = async (values) => {
+        setLoading(true)
         try {
             const res = await dispatch(signin(values));
             if (res.meta?.requestStatus === "fulfilled") {
+                setLoading(false)
                 setShowLoginModal(false)
                 router.push("/")
             }
             else if (res.meta?.requestStatus === "rejected") {
+                setLoading(false)
                 notification["error"]({
                     duration: 5,
                     message: "Username or Password is wrong",
                 });
             }
-        } catch (err) {
-            console.log('ERR:Login:onFinish ', err);
+        } catch (e) {
+            setLoading(false)
+            notification["error"]({
+                duration: 5,
+                message: e,
+            });
         }
     };
 
@@ -54,8 +64,7 @@ function LoginModal({ showLoginModal, setShowLoginModal }) {
                 </Form.Item>
             </div>
             <div id='submit'>
-                <input type='submit' id='send_message' value='Login' className="btn btn-main color-2" />
-
+                <button type='submit' id='send_message' className="btn btn-main color-2">{loading && <Spin indicator={antIcon} color={"white"} />} Login</button>
             </div>
         </Form>
     </Modal>)
