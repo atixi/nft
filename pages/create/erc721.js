@@ -1,11 +1,6 @@
 import { Button, Form, Input, Modal, Select, Spin } from "antd";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  capitalizeWord,
-  checkAssetForDuplicate,
-  uploadNft,
-  validateImage,
-} from "Utils/mintApi";
+import { capitalizeWord, checkAssetForDuplicate, uploadNft, validateImage } from "Utils/mintApi";
 import { fetch, post } from "/Utils/strapiApi";
 import { getMetaConnected, getMetaToken } from "store/action/accountSlice";
 
@@ -98,12 +93,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
   const checkNftNameDuplication = (e) => {
     console.log("nfts are", nfts);
     let input = e.target.value;
-    const nftDuplicationResult = checkAssetForDuplicate(
-      nfts,
-      input,
-      "name",
-      "Asset Name"
-    );
+    const nftDuplicationResult = checkAssetForDuplicate(nfts, input, "name", "Asset Name");
     setDuplicateNameError(nftDuplicationResult);
   };
 
@@ -241,292 +231,198 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
   }, [isMetaconnected]);
 
   return (
-    <div className={styles.container}>
-      <div>
-        <Modal
-          title="Uploading NFT..."
-          visible={displayUploadModal}
-          header={null}
-          footer={null}
-          closable={false}
-          width={500}
-          height={500}
-          maskStyle={{
-            backgroundColor: "#EEEEEE",
-            opacity: 0.1,
-          }}
-          bodyStyle={{
-            height: 350,
-            display: "flex",
-            justifyContent: "center",
-            alignContent: "center",
-          }}
-        >
-          <div className={styles.modalContent}>
-            {!displayModalButtons ? (
-              <div className={styles.waitingSpiner}>
-                <div className={styles.deplyingMessage}>
-                  {"Please Be Patient It may take serveral minutes"}
-                </div>
-                <Spin size="large" />
-              </div>
-            ) : (
-              <div className={styles.modalControls}>
-                <Button
-                  type="primary"
-                  className={styles.modalButton}
-                  onClick={handleNewNft}
-                >
-                  Create New NFT
-                </Button>
-                <Link
-                  className={styles.modalButton}
-                  href={`/nft/${nftContract}?tokenId=${nftTokenId}`}
-                >
-                  <a>{"View Minted NFT"}</a>
-                </Link>
-              </div>
-            )}
-            <div>{/* <span>{uploadErrorMessage}</span> */}</div>
-          </div>
-        </Modal>
-      </div>
+    <div className="no-bottom" id="content">
+      <div id="top"></div>
 
-      <div className={styles.nftFormContainer}>
-        <h1 className={styles.header}>Create new item</h1>
-        <h4 className={styles.subHeader}>Image, Video, Audio, or 3D Model</h4>
-        <p className={styles.fileTypes}>
-          {`File types supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG,
-          GLB, GLTF. Max size: 10 MB`}
-        </p>
-        <Form
-          className={styles.uploadForm}
-          ref={formRef}
-          form={form}
-          // initialValues={{ nftImageFile: "" }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-        >
-          <div
-            className={
-              !uploadFileUrl
-                ? styles.nftFileUploadContainer
-                : [styles.nftFileUploadContainer, styles.autoHeight].join(" ")
-            }
-          >
-            {uploadFileUrl ? (
-              <div className={styles.nftMediaContainer}>
-                {nftImageFile.type.toString().includes("image") ? (
-                  <div className={styles.nftImageBox}>
-                    <img
-                      className={styles.nftImage}
-                      src={uploadFileUrl}
-                      onClick={openFileUpload}
-                    />
-                  </div>
-                ) : (
-                  <div className={styles.nftVideoBox}>
-                    <ReactPlayer
-                      width={"100%"}
-                      height={"100%"}
-                      url={uploadFileUrl}
-                      controls
-                      playing={false}
-                    />
-                  </div>
-                )}
-                <label
-                  className={styles.changeUploadedImage}
-                  style={{ cursor: "pointer" }}
-                  onClick={openFileUpload}
-                >
-                  Change
-                </label>
+      {/* <!-- section begin --> */}
+      <section id="subheader" className="text-light AssetSubheader">
+        <div className="center-y relative text-center">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-12 text-center">
+                <h1>Creating Asset</h1>
               </div>
-            ) : (
-              <div className={styles.uploadedFileButtonContainer}>
-                <div
-                  className={styles.uploadedFileButton}
-                  onClick={openFileUpload}
-                >
-                  <img width={96} height={96} src={"/icons/nftUpload.svg"} />
-                </div>
-              </div>
-            )}
-            <Form.Item style={{ display: "none" }}>
-              <input
-                type="file"
-                name="nftImageFile"
-                onChange={handleFileUpload}
-                ref={hiddenFileInput}
-              />
-            </Form.Item>
-          </div>
-          <div className={styles.nftFormErrors}>{nftImageError}</div>
-          <div className={styles.nftInputComponent}>
-            <h3 className={styles.nftSubHeader}>Name *</h3>
-            <Form.Item
-              name="name"
-              rules={[
-                { required: true, message: "Please input your Asset Name!" },
-              ]}
-              onInput={checkNftNameDuplication}
-            >
-              <Input
-                // name="name"
-                id="name"
-                placeholder="Asset Name"
-                className={styles.nftInput}
-              />
-            </Form.Item>
-            <div
-              className={
-                duplicateNameError?.message?.includes("×")
-                  ? styles.nftFormErrors
-                  : styles.nftFormValid
-              }
-            >
-              {duplicateNameError?.message}
+              <div className="clearfix"></div>
             </div>
           </div>
-          {/* <div className={styles.nftInputComponent}>
-            <h3 className={styles.nftSubHeader}>External Link</h3>
-            <p className={styles.nfgParagraph}>
-              {
-                "OpenSea will include a link to this URL on this item's detail page, so that users can click to learn more about it. You are welcome to link to your own webpage with more details."
-              }
-            </p>
-            <Form.Item
-              name="external_link"
-              rules={[
-                { required: true, message: "NFT Description is required" },
-              ]}
-            >
-              <Input
-                // name="external_link"
-                id="external_link"
-                placeholder="https://yoursite.io/item/123"
-                className={styles.nftInput}
-              />
-            </Form.Item>
-          </div> */}
-          <div className={styles.nftInputComponent}>
-            <h3 className={styles.nftSubHeader}>Description</h3>
-            <p className={styles.nfgParagraph}>
-              {
-                "The description will be included on the item's detail page underneath its image. Markdown syntax is supported."
-              }
-            </p>
-            <Form.Item
-              name="description"
-              rules={[
-                { required: true, message: "NFT Description is required" },
-              ]}
-            >
-              <Input.TextArea
-                // name="description"
-                id="description"
-                placeholder="Provide a detailed description of your item"
-                className={styles.nftInput}
-                rows={4}
-              />
-            </Form.Item>
+        </div>
+      </section>
+      {/* <!-- section close --> */}
+
+      {/* <!-- section begin --> */}
+      <section aria-label="section">
+        <div className="container">
+          <div className="row fadeIn">
+            <div className="col-lg-7 offset-lg-1">
+              <form id="form-create-item" className="form-border" method="post" action="email.php">
+                <div className="field-set">
+                  <h5>Upload file</h5>
+
+                  <div className="d-create-file">
+                    <p id="file_name">PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
+                    <input type="button" id="get_file" className="btn-main" value="Browse" />
+                    <input type="file" id="upload_file" />
+                  </div>
+
+                  <div className="spacer-single"></div>
+
+                  <h5>Select method</h5>
+                  <div className="de_tab tab_methods">
+                    <ul className="de_nav">
+                      <li className="active">
+                        <span>
+                          <i className="fa fa-tag"></i>Fixed price
+                        </span>
+                      </li>
+                      <li>
+                        <span>
+                          <i className="fa fa-hourglass-1"></i>Timed auction
+                        </span>
+                      </li>
+                      <li>
+                        <span>
+                          <i className="fa fa-users"></i>Open for bids
+                        </span>
+                      </li>
+                    </ul>
+
+                    <div className="de_tab_content">
+                      <div id="tab_opt_1">
+                        <h5>Price</h5>
+                        <input
+                          type="text"
+                          name="item_price"
+                          id="item_price"
+                          className="form-control"
+                          placeholder="enter price for one item (ETH)"
+                        />
+                      </div>
+
+                      <div id="tab_opt_2">
+                        <h5>Minimum bid</h5>
+                        <input
+                          type="text"
+                          name="item_price_bid"
+                          id="item_price_bid"
+                          className="form-control"
+                          placeholder="enter minimum bid"
+                        />
+
+                        <div className="spacer-10"></div>
+
+                        <div className="row">
+                          <div className="col-md-6">
+                            <h5>Starting date</h5>
+                            <input
+                              type="date"
+                              name="bid_starting_date"
+                              id="bid_starting_date"
+                              className="form-control"
+                              min="1997-01-01"
+                            />
+                          </div>
+                          <div className="col-md-6">
+                            <h5>Expiration date</h5>
+                            <input
+                              type="date"
+                              name="bid_expiration_date"
+                              id="bid_expiration_date"
+                              className="form-control"
+                            />
+                          </div>
+                          <div className="spacer-single"></div>
+                        </div>
+                      </div>
+
+                      <div id="tab_opt_3"></div>
+                    </div>
+                  </div>
+
+                  <h5>Title</h5>
+                  <input
+                    type="text"
+                    name="item_title"
+                    id="item_title"
+                    className="form-control"
+                    placeholder="e.g. 'Crypto Funk"
+                  />
+
+                  <div className="spacer-10"></div>
+
+                  <h5>Description</h5>
+                  <textarea
+                    data-autoresize
+                    name="item_desc"
+                    id="item_desc"
+                    className="form-control"
+                    placeholder="e.g. 'This is very limited item'"
+                  ></textarea>
+
+                  <div className="spacer-10"></div>
+
+                  <h5>Royalties</h5>
+                  <input
+                    type="text"
+                    name="item_royalties"
+                    id="item_royalties"
+                    className="form-control"
+                    placeholder="suggested: 0, 10%, 20%, 30%. Maximum is 70%"
+                  />
+
+                  <div className="spacer-single"></div>
+
+                  <input type="button" id="submit" className="btn-main" value="Create Item" />
+                  <div className="spacer-single"></div>
+                </div>
+              </form>
+            </div>
+
+            <div className="col-lg-3 col-sm-6 col-xs-12">
+              <h5>Preview item</h5>
+              <div className="nft__item">
+                <div
+                  className="de_countdown"
+                  data-year="2021"
+                  data-month="10"
+                  data-day="16"
+                  data-hour="8"
+                ></div>
+                <div className="author_list_pp">
+                  <a href="#">
+                    <img className="lazy" src="images/author/author-1.jpg" alt="" />
+                    <i className="fa fa-check"></i>
+                  </a>
+                </div>
+                <div className="nft__item_wrap">
+                  <a href="#">
+                    <img
+                      src="images/collections/coll-item-3.jpg"
+                      id="get_file_2"
+                      className="lazy nft__item_preview"
+                      alt=""
+                    />
+                  </a>
+                </div>
+                <div className="nft__item_info">
+                  <a href="#">
+                    <h4>Pinky Ocean</h4>
+                  </a>
+                  <div className="nft__item_price">
+                    0.08 ETH<span>1/20</span>
+                  </div>
+                  <div className="nft__item_action">
+                    <a href="#">Place a bid</a>
+                  </div>
+                  <div className="nft__item_like">
+                    <i className="fa fa-heart"></i>
+                    <span>50</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className={styles.nftInputComponent}>
-            <h3 className={styles.nftSubHeader}> Collection *</h3>
-            <p className={styles.nfgParagraph}>
-              {`This is the collection where your item will appear`}
-            </p>
-            {ownerCollections && (
-              <Form.Item
-                name="collections"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Select Collection of Item",
-                  },
-                ]}
-              >
-                <Select
-                  showSearch
-                  style={{ width: "100%" }}
-                  placeholder="Please select collection"
-                  onChange={(value) => getSelectedCollection(value)}
-                  filterOption={(input, option) =>
-                    option.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
-                >
-                  {ownerCollections?.map((item) => (
-                    <Select.Option
-                      value={item.id}
-                      key={item.id}
-                      style={{ height: 50, padding: 10 }}
-                    >
-                      {item.collectionName}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            )}
-          </div>
-          <div className={styles.nftInputComponent}>
-            <h3 className={styles.nftSubHeader}> Categories *</h3>
-            <p className={styles.nfgParagraph}>
-              {`This is the Category where your item will appear`}
-            </p>
-            {categories && (
-              <Form.Item
-                name="categories"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Selected At least (1) Category",
-                  },
-                ]}
-              >
-                <Select
-                  id="categories"
-                  // name="categories"
-                  mode="multiple"
-                  style={{ width: "100%" }}
-                  placeholder="Please select"
-                  onChange={(values) => getSelectedCategories(values)}
-                  showSearch
-                  filterOption={(input, option) =>
-                    option.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
-                >
-                  {categories.map((item) => (
-                    <Select.Option
-                      value={item.id}
-                      key={item.id}
-                      style={{ height: 50, padding: 10 }}
-                    >
-                      {capitalizeWord(item.category)}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            )}
-          </div>
-          <div className={styles.createButtonContainer}>
-            <Form.Item>
-              <Button
-                className={styles.createButton}
-                loading={isLoading}
-                type="primary"
-                htmlType="submit"
-              >
-                Create
-              </Button>
-            </Form.Item>
-          </div>
-        </Form>
-      </div>
+        </div>
+      </section>
     </div>
   );
 };
