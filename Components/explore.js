@@ -12,7 +12,6 @@ import { useRouter } from "next/router";
 import api from "/Components/axiosRequest";
 import request from "../Utils/axios"
 import { unixToMilSeconds } from "../Utils/utils"
-const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30; // Moment is also OK
 
 function Explore() {
     const [items, setItems] = useState();
@@ -21,7 +20,6 @@ function Explore() {
             const data = await request("nfts?_limit=8", {
                 method: "GET"
             });
-            console.log("data is", data)
             if (data.status === 200) {
                 setItems(data.data)
             }

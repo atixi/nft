@@ -49,12 +49,10 @@ function Header(props) {
     async function fetchingData() {
       const data = await api.get(`/talents/search/${e.target.value}`);
       setData(await data.data);
-      console.log("coskash", await data.data);
     }
     fetchingData();
   }
   function handleSearch(e) {
-    console.log("search handled", e.target.value);
     if (e.charCode === 13) {
       setSearch(false);
       router.push(`search?query=${e.target.value}`);
@@ -107,9 +105,9 @@ function Header(props) {
                 <div className="de-flex-col">
                   {/* <!-- logo begin --> */}
                   <div id="logo">
-                    <a href="index.html">
+                    <a href="/">
                       <img alt="" className="logo" src="/images/logo-light.png" />
-                      <img alt="" className="logo-2" src="/images/logo.png" />
+                      <img alt="" style={{ width: "250px" }} className="logo-2" src="/images/logo.svg" />
                     </a>
                   </div>
                   {/* <!-- logo close --> */}
@@ -122,44 +120,9 @@ function Header(props) {
                 {/* <!-- mainmenu begin --> */}
                 <ul id="mainmenu">
                   <li>
-                    <a href="index.html">Home<span></span></a>
+                    <a href="/explore">Explore<span></span></a>
                     <ul>
-                      <li><a href="03_grey-index.html">New: Grey Scheme</a></li>
-                      <li><a href="index.html">Homepage 1</a></li>
-                      <li><a href="index-2.html">Homepage 2</a></li>
-                      <li><a href="index-3.html">Homepage 3</a></li>
-                      <li><a href="index-4.html">Homepage 4</a></li>
-                    </ul>
-                  </li>
-                  <li>
-                    <a href="explore.html">Explore<span></span></a>
-                    <ul>
-                      <li><a href="explore.html">Explore</a></li>
-                      <li><a href="explore-2.html">Explore 2</a></li>
-                      <li><a href="collection.html">Collections</a></li>
-                      <li><a href="live-auction.html">Live Auction</a></li>
-                      <li><a href="item-details.html">Item Details</a></li>
-                    </ul>
-                  </li>
-                  <li>
-                    <a href="#">Pages<span></span></a>
-                    <ul>
-                      <li><a href="author.html">Author</a></li>
-                      <li><a href="wallet.html">Wallet</a></li>
-                      <li><a href="create.html">Create</a></li>
-                      <li><a href="news.html">News</a></li>
-                      <li><a href="gallery.html">Gallery</a></li>
-                      <li><a href="login.html">Login</a></li>
-                      <li><a href="login-2.html">Login 2</a></li>
-                      <li><a href="register.html">Register</a></li>
-                      <li><a href="contact.html">Contact Us</a></li>
-                    </ul>
-                  </li>
-                  <li>
-                    <a href="#">Stats<span></span></a>
-                    <ul>
-                      <li><a href="activity.html">Activity</a></li>
-                      <li><a href="rankings.html">Rankings</a></li>
+                      <li><a href="/explore">All Assets</a></li>
                     </ul>
                   </li>
                   <li>

@@ -1,12 +1,12 @@
+
+import { Dropdown, Spin, Tabs, Statistic } from "antd";
+const { Countdown } = Statistic
 import {
-  BioDescription,
-  BiographyContainer,
-  ProfileButton,
-  ProfileContainer,
-  ShareButton,
-  ShareProfile,
-} from "/Components/StyledComponents/talentPage-styledComponents";
-import { Dropdown, Spin, Tabs } from "antd";
+  CountDownContainer
+} from "../../Components/StyledComponents/explore-styledComponents";
+import { getAuctionPriceDetails } from "/Constants/constants";
+import { unixToMilSeconds } from "../../Utils/utils"
+import Link from "next/link"
 import {
   FacebookIcon,
   FacebookShareButton,
@@ -28,243 +28,141 @@ import Products from "/Components/nfts";
 import api from "/Components/axiosRequest";
 import { displayAddress } from "/Utils/utils";
 import { useRouter } from "next/router";
-
+import request from "../../Utils/axios"
+import UserAvatar from "@/components/userAvatar";
 const { TabPane } = Tabs;
 
 function CollectionDetails() {
   const router = useRouter();
   const { slug } = router.query;
-  const [collect, setCollect] = useState({
-    collectionName: "",
-    collectionImageURL: {
-      url: "",
-    },
-    collectionBanner: {
-      url: "",
-    },
-    talent: { walletAddress: "" },
-    assets: [],
-  });
-  const [loadMore, setLoadMore] = useState({
-    onSales: 10,
-    owned: 10,
-  });
   const [isLoad, setLoad] = useState(false);
-  const [loadMoreButton, setLoadMoreButton] = useState({
-    onSalesLoad: true,
-    ownedLoad: true,
-    onsalesLoadMoreButtonLoading: false,
-    ownedLoadMoreButtonLoading: false,
-  });
-  const [onSales, setOnsales] = useState({
-    assets: [],
-  });
-
-  const loadTabData = async (e) => {
-    if (e === "1") {
-      //loadAssets(slug);
-    } else if (e === "2") {
-      //loadCollections(slug);
-    }
-  };
-  async function LoadMoreOnsales() {
-    setLoadMoreButton({
-      ...loadMoreButton,
-      onsalesLoadMoreButtonLoading: true,
+  const [collection, setCollection] = useState()
+  const [assets, setAssets] = useState()
+  const loadCollection = async () => {
+    const col = await request(`collections/${slug}`, {
+      method: "GET"
     });
-    const moreAssets = await api.get(
-      `/collections/${collect.slug}?offset=${loadMore.onSales}`
-    );
-    const assetLength = await moreAssets.data.assets.length;
-    assetLength === 0
-      ? setLoadMoreButton({ ...loadMoreButton, onSalesLoad: false })
-      : (() => {
-          setOnsales({
-            talent: {
-              talentAvatar: { url: collect.talent.talentAvatar.url },
-            },
-            assets: [...onSales.assets, ...moreAssets.data.assets],
-          });
-          setLoadMore({
-            ...loadMore,
-            onSales: loadMore.onSales + 10,
-          });
-          setLoadMoreButton({
-            ...loadMoreButton,
-            onsalesLoadMoreButtonLoading: false,
-          });
-        })();
+    if (col.status === 200) {
+      setCollection(col.data)
+      setAssets(col.data.nfts)
+    }
   }
-  async function LoadMoreOwned() {
-    setLoadMoreButton({ ...loadMoreButton, ownedLoadMoreButtonLoading: true });
-    const moreAssets = await api.get(
-      `/collections/${collect.slug}?offset=${loadMore.owned}`
-    );
-    const assetLength = await moreAssets.data.assets.length;
-    assetLength === 0
-      ? setLoadMoreButton({ ...loadMoreButton, ownedLoad: false })
-      : (() => {
-          setCollect({
-            ...collect,
-            assets: [...collect.assets, ...moreAssets.data.assets],
-          });
-          setLoadMore({
-            ...loadMore,
-            owned: loadMore.owned + 10,
-          });
-          setLoadMoreButton({
-            ...loadMoreButton,
-            ownedLoadMoreButtonLoading: false,
-          });
-        })();
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   useEffect(() => {
     slug != undefined
-      ? (async function fetchCollection() {
-          const { data } = await api.get(
-            `${process.env.HEROKU_BASE_URL}/collections/${slug}`
-            // `${process.env.STRAPI_LOCAL_BASE_URL}/collections/${slug}`
-          );
-          console.log("came", await data);
-          setCollect(await data);
-          const sellOrders = await data.assets.filter(
-            (asset) => asset.sellOrders != null
-          );
-          setOnsales({
-            talent: {
-              talentAvatar: { url: data?.talent?.talentAvatar?.url },
-            },
-            assets: sellOrders,
-          });
-        })()
+      ? loadCollection()
       : "";
-    setLoad(true);
   }, [slug]);
 
   return (
     <>
-      <MainWrapper>
-        {isLoad === false ? <CollectionLoader /> : ""}
-        {isLoad ? (
-          <ProfileContainer>
-            <img src={collect.collectionBanner?.url} />
-            <BiographyContainer>
-              <div className={"avatar"}>
-                <img
-                  alt="userAvatar"
-                  src={collect.collectionImageURL?.url}
-                  loading="lazy"
-                />
-              </div>
-              <BioDescription>
-                <h3>
-                  <strong>{collect.collectionName}</strong>
-                </h3>
-                <h6>
-                  <strong>
-                    {displayAddress(collect.talent?.walletAddress)}
-                  </strong>
-                </h6>
-                <div className="mt-4">
-                  <ProfileButton type="button">
-                    <Dropdown
-                      trigger={["click"]}
-                      overlay={
-                        <ShareProfile>
-                          <h5>Share on social medias</h5>
-                          <div>
-                            <div>
-                              <FacebookShareButton
-                                url={`${process.env.BASE_URL}/collection/${collect.slug}`}
-                                quote={`${collect.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
-                                hashtag={"#rimentertainment"}
-                              >
-                                <FacebookIcon size={32} round />
-                              </FacebookShareButton>
-                            </div>
-                            <div>
-                              <TwitterShareButton
-                                url={`${process.env.BASE_URL}/collection/${collect.slug}`}
-                                title={`${collect.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
-                              >
-                                <TwitterIcon size={32} round />
-                              </TwitterShareButton>
-                            </div>
-                            <div>
-                              <TelegramShareButton
-                                url={`${process.env.BASE_URL}/collection/${collect.slug}`}
-                                title={`${collect.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
-                              >
-                                <TelegramIcon size={32} round />
-                              </TelegramShareButton>
-                            </div>
-                            <div>
-                              <WhatsappShareButton
-                                url={`${process.env.BASE_URL}/collection/${collect.slug}`}
-                                title={`${collect.collectionName} in Rim Entertainment. find, buy or sell your NFTs (Non Fungible Tokens) in Rim Entertainment`}
-                                separator=":: "
-                              >
-                                <WhatsappIcon size={32} round />
-                              </WhatsappShareButton>
-                            </div>
-                          </div>
-                        </ShareProfile>
-                      }
-                      placement="bottomRight"
-                    >
-                      <ShareButton />
-                    </Dropdown>
-                  </ProfileButton>
-                  <ProfileButton type="button">{"..."}</ProfileButton>
-                </div>
-              </BioDescription>
-            </BiographyContainer>
-          </ProfileContainer>
-        ) : (
-          ""
-        )}
+      <div className="no-bottom no-top" id="content">
+        <div id="top"></div>
 
-        <Tabs defaultActiveKey="1" onChange={(e) => loadTabData(e)}>
-          <TabPane tab="On Sale" key="1">
-            <Products data={onSales} />
-            {loadMoreButton.onSalesLoad ? (
-              loadMoreButton.onsalesLoadMoreButtonLoading ? (
-                <LoadMoreButton block shape={"round"} size={"large"}>
-                  <Spin></Spin>
-                </LoadMoreButton>
-              ) : (
-                <LoadMoreButton
-                  block
-                  shape={"round"}
-                  size={"large"}
-                  onClick={() => LoadMoreOnsales()}
-                >
-                  Load More
-                </LoadMoreButton>
-              )
-            ) : null}
-          </TabPane>
-          <TabPane tab="Owned" key="2">
-            <Products data={collect} />
-            {loadMoreButton.ownedLoad ? (
-              loadMoreButton.ownedLoadMoreButtonLoading ? (
-                <LoadMoreButton block shape={"round"} size={"large"}>
-                  <Spin></Spin>
-                </LoadMoreButton>
-              ) : (
-                <LoadMoreButton
-                  block
-                  shape={"round"}
-                  size={"large"}
-                  onClick={() => LoadMoreOwned()}
-                >
-                  Load More
-                </LoadMoreButton>
-              )
-            ) : null}
-          </TabPane>
-        </Tabs>
-      </MainWrapper>
+        {/* <!-- section begin --> */}
+        <section id="profile_banner" aria-label="section" className="text-light" style={{ paddingBottom: "0px", width: "100%" }}>
+          <img src={collection?.collectionBanner?.url} style={{ width: "100%", height: "250px" }} />
+        </section>
+
+        {/* <!-- section close --> */}
+
+
+        <section aria-label="section" className="d_coll no-top">
+          <div className="contentContainer">
+            <div className="row">
+              <div className="col-md-12">
+                <div className="d_profile">
+                  <div className="profile_avatar">
+                    <div className="d_profile_img">
+                      <img src={collection?.collectionImageURL?.url} alt="" />
+                      <i className="fa fa-check"></i>
+                    </div>
+
+                    <div className="profile_name">
+                      <h4>
+                        {collection?.collectionName}
+                        <div className="clearfix"></div>
+                        <span id="wallet" className="profile_wallet">DdzFFzCqrhshMSxb9oW3mRo4MJrQkusV3fGFSTwaiu4wPBqMryA9DYVJCkW9n7twCffG5f5wX2sSkoDXGiZB1HPa7K7f865Kk4LqnrME</span>
+                        <button id="btn_copy" title="Copy Text">Copy</button>
+                      </h4>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div className="col-md-12">
+                <div className="row">
+                  {/* <!-- nft item begin --> */}
+                  {assets && assets.map((item, index) => {
+                    return <div key={index} className=" col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                      <div className="nft__item style-2" style={{ border: "1px solid #e6e2e2" }}>
+                        {item?.asset?.sellOrders && item?.asset?.sellOrders?.length > 0 && item?.asset?.sellOrders[0].expirationTime !== "0" &&
+                          <CountDownContainer>
+                            <Countdown
+                              value={unixToMilSeconds(item?.asset?.sellOrders[0].expirationTime)}
+                              format={`D[d] HH[h] mm[m] ss[s]`}
+                              valueStyle={{ lineHeight: "1.1", color: "white" }}
+                            />
+                          </CountDownContainer>}
+                        <UserAvatar user={{ userName: item?.talent?.userName, avatar: item?.asset?.owner?.profile_img_url, verified: item.isInternal }} />
+                        <div className="nft__item_wrap itemImageCard">
+                          <Link
+                            href={
+                              item?.asset?.assetContract
+                                ? `/nft/${item?.tokenAddress}?tokenId=${item?.tokenId}`
+                                : `/nft/${item?.asset?.assetBundle?.maker?.address}?slug=${item?.asset?.assetBundle?.slug}`
+                            }
+                          ><a>
+                              <img src={item?.asset?.imageUrl} className="lazy nft__item_preview" alt="" />
+                            </a>
+                          </Link>
+                        </div>
+                        <div className="nft__item_info">
+                          <Link
+                            href={
+                              item?.asset?.assetContract
+                                ? `/nft/${item?.tokenAddress}?tokenId=${item?.tokenId}`
+                                : `/nft/${item?.asset?.assetBundle?.maker?.address}?slug=${item?.asset?.assetBundle?.slug}`
+                            }
+                          ><a>
+                              <h4>{item?.asset?.name ? item?.asset?.name : item?.asset?.collection?.name}</h4>
+                            </a></Link>
+
+                          <div className="nft__item_price">
+                            <span> {item?.asset?.sellOrders?.length > 0 ? `${getAuctionPriceDetails(item?.asset?.sellOrders[0]).priceBase} ${item?.asset?.sellOrders[0]?.paymentTokenContract.symbol}` : ""}
+
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+      </div>
     </>
   );
 }
