@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Search from "./search";
 import Link from "next/link";
-import { Avatar } from "antd";
+import { Avatar, Modal } from "antd";
 import CONSTANTS from "../Constants/headerConstants";
 import {
   ConnectedButton,
@@ -16,6 +16,7 @@ import {
   getMetaConnected,
   getWalletConnected,
 } from "/store/action/accountSlice";
+import LoginModal from "../Components/loginModal"
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import api from "/Components/axiosRequest";
@@ -39,7 +40,9 @@ function Header(props) {
     assets: [],
     collections: [],
   });
-  const [submit, setSubmit] = useState();
+  const [submit, setSubmit] = useState()
+  const [showLoginModal, setShowLoginModal] = useState(false)
+
   function submitClick() {
     router.push(`/search?query=${submit}`);
     setSearch(false);
@@ -95,6 +98,9 @@ function Header(props) {
       address.substring(address.length - 5, address.length)
     );
   };
+  const openLogin = () => {
+    setShowLoginModal(true)
+  }
   return (
     <header className="transparent header-light scroll-light">
       <div className="container">
@@ -120,7 +126,7 @@ function Header(props) {
                 {/* <!-- mainmenu begin --> */}
                 <ul id="mainmenu">
                   <li>
-                    <a href="/explore">Explore<span></span></a>
+                    <a href="#">Explore<span></span></a>
                     <ul>
                       <li><a href="/explore">All Assets</a></li>
                     </ul>
@@ -132,6 +138,9 @@ function Header(props) {
                       <li><Link href={"/add/asset"}><a>Add Existing Asset</a></Link></li>
 
                     </ul>
+                  </li>
+                  <li>
+                    <a onClick={openLogin}>Login</a>
                   </li>
                 </ul>
                 <div className="menu_side_area">
@@ -170,6 +179,7 @@ function Header(props) {
           </div>
         </div>
       </div>
+      {showLoginModal && <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} />}
     </header>
   );
 }
