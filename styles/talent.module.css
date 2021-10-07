@@ -34,3 +34,6 @@
   font-size: 14px;
   border: none;
 }
+.cursorPointer {
+  cursor: pointer;
+}

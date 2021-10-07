@@ -4,6 +4,8 @@ import styles from "/styles/talent.module.css";
 import { Button } from "antd";
 import { fetch } from "Utils/strapiApi";
 import Link from "next/link";
+import copy from "copy-to-clipboard";
+import { ellipseAddress } from "Utils/utils";
 
 function TalentPage({ serverAssets, query, talentData }) {
   const { accountAddress } = query;
@@ -34,14 +36,26 @@ function TalentPage({ serverAssets, query, talentData }) {
     setSelectedTab(1);
   };
 
+  const copyAddress = () => {
+    console.log("start copying...");
+    copy(accountAddress, {
+      debug: true,
+      message: "Press #{key} to copy",
+    });
+  };
   return (
-    <div className="no-bottom" id="content">
+    <div className="no-bottom " id="content">
       <div id="top"></div>
 
       {/* <!-- section begin --> */}
-      <div id="profile_banners" className={`text-lights ${styles.bannerSection}`}>
-        <img alt="Mountains" src="http://lorempixel.com/400/200/" className={styles.bannerImage} />
-      </div>
+      <section id="profile_banner" aria-label="section" className="text-light">
+        <img
+          width="100%"
+          height="300px"
+          src={talentData.talentBanner?.formats?.large?.url}
+          alt=""
+        />
+      </section>
       {/* <!-- section close --> */}
 
       <section aria-label="section">
@@ -51,22 +65,20 @@ function TalentPage({ serverAssets, query, talentData }) {
               <div className="d_profile de-flex">
                 <div className="de-flex-col">
                   <div className="profile_avatar">
-                    <img
-                      src="http://lorempixel.com/200/200/"
-                      alt=""
-                      className={styles.profileAvatarImage}
-                    />
+                    <img src={talentData.talentAvatar?.formats?.small?.url} alt="" />
                     <i className="fa fa-check"></i>
                     <div className="profile_name">
                       <h4>
                         {talentData?.talentName}
                         <span className="profile_username">@{talentData.userName}</span>
-                        <span id="wallet" className="profile_wallet" ref={addressRef}>
-                          {accountAddress}
+                        <span
+                          id="wallet"
+                          className={`profile_wallet ${styles.cursorPointer}`}
+                          ref={addressRef}
+                          onClick={copyAddress}
+                        >
+                          {ellipseAddress(accountAddress)}
                         </span>
-                        <button id="btn_copy" title="Copy Text">
-                          Copy
-                        </button>
                       </h4>
                     </div>
                   </div>
@@ -84,7 +96,6 @@ function TalentPage({ serverAssets, query, talentData }) {
                     <span>Collected</span>
                   </li>
                 </ul>
-
                 <div className="de_tab_content">
                   {selectedTab == 0 && (
                     <div className="onSaleTab">
@@ -93,13 +104,13 @@ function TalentPage({ serverAssets, query, talentData }) {
                         {onSales.map((item) => (
                           <div key={item.id} className="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                             <div className="nft__item">
-                              <div
+                              {/* <div
                                 className="de_countdown"
                                 data-year="2021"
                                 data-month="10"
                                 data-day="16"
                                 data-hour="8"
-                              ></div>
+                              ></div> */}
                               <div className="author_list_pp">
                                 <a href="author.html">
                                   <img
@@ -129,10 +140,10 @@ function TalentPage({ serverAssets, query, talentData }) {
                                 <div className="nft__item_action">
                                   <a href="#">Place a bid</a>
                                 </div>
-                                <div className="nft__item_like">
+                                {/* <div className="nft__item_like">
                                   <i className="fa fa-heart"></i>
                                   <span>50</span>
-                                </div>
+                                </div> */}
                               </div>
                             </div>
                           </div>
@@ -147,13 +158,13 @@ function TalentPage({ serverAssets, query, talentData }) {
                         {assets.map((item) => (
                           <div key={item.id} className="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                             <div className="nft__item">
-                              <div
+                              {/* <div
                                 className="de_countdown"
                                 data-year="2021"
                                 data-month="10"
                                 data-day="16"
                                 data-hour="8"
-                              ></div>
+                              ></div> */}
                               <div className="author_list_pp">
                                 <a href="author.html">
                                   <img
@@ -185,10 +196,10 @@ function TalentPage({ serverAssets, query, talentData }) {
                                 <div className="nft__item_action">
                                   <a href="#">Place a bid</a>
                                 </div>
-                                <div className="nft__item_like">
+                                {/* <div className="nft__item_like">
                                   <i className="fa fa-heart"></i>
                                   <span>50</span>
-                                </div>
+                                </div> */}
                               </div>
                             </div>
                           </div>

@@ -7,6 +7,7 @@ import { Button, Form, Input, Select, Spin } from "antd";
 import { fetch } from "Utils/strapiApi";
 import { saleBundleType, saleKindList } from "Constants/constants";
 
+const { Option } = Select;
 function Explore({ serverExplores, categories }) {
   const [searchQuery, setSearchQuery] = useState({ categorySlug: "all" });
   const [start, setStart] = useState(2);
@@ -62,9 +63,6 @@ function Explore({ serverExplores, categories }) {
     );
 
     const exploreResultwhitoutfilter = await fetch(`/nfts?_start=${start}&_limit=2`);
-    // let recentData = explores;
-    // recentData = recentData.filter((item) => item.categories[0].slug == searchQuery?.categorySlug);
-    // console.log("recend data is ", recentData);
     const dataorgin = await exploreResultwhitoutfilter.data;
     const data = await exploreResult.data;
     setExplores((prev) => [...prev, ...dataorgin]);
@@ -80,156 +78,174 @@ function Explore({ serverExplores, categories }) {
   };
 
   return (
-    <div>
-      <div className="" id="content">
-        <section id="subheader" className="text-light AssetSubheader">
-          <div className="center-y relative text-center">
-            <div className="container">
-              <div className="row">
-                <div className="col-md-12 text-center">
-                  <h1>Explore</h1>
-                </div>
-                <div className="clearfix"></div>
+    <div className="no-bottom " id="content">
+      <div id="top"></div>
+
+      {/* <!-- section begin --> */}
+      <section
+        id="subheader"
+        className="text-light AssetSubheader"
+        data-bgimage="url(images/background/subheader.jpg) top"
+      >
+        <div className="center-y relative text-center">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-12 text-center">
+                <h1>Explore</h1>
               </div>
+              <div className="clearfix"></div>
             </div>
           </div>
-        </section>
-        <section aria-label="explore" className={styles.exploreContainer}>
-          <div className={styles.filterContainer}>
-            <Form
-              className={styles.searchForm}
-              ref={searchFormRef}
-              form={searchForm}
-              // initialValues={{ nftImageFile: "" }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-            >
-              <Form.Item
-                className={styles.searchFormItem}
-                name="name"
-                // rules={[{ required: true, message: "Please input your Asset Name!" }]}
-                // onInput={checkNftNameDuplication}
+        </div>
+      </section>
+      {/* <!-- section close --> */}
+
+      {/* <!-- section begin --> */}
+      <section aria-label="section">
+        <div className="container">
+          <div className="row fadeIn">
+            <div className={styles.filterContainer}>
+              <Form
+                className={styles.searchForm}
+                ref={searchFormRef}
+                form={searchForm}
+                // initialValues={{ nftImageFile: "" }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
               >
-                <Input id="name" placeholder="search item here" className={styles.searhFormInput} />
-              </Form.Item>
-              <Form.Item className={styles.searchFormItem}>
-                <Button
-                  className={styles.searhFormInput}
-                  // loading={isLoading}
-                  type="primary"
-                  htmlType="submit"
+                <Form.Item
+                  className={styles.searhFormInputItem}
+                  name="name"
+                  // rules={[{ required: true, message: "Please input your Asset Name!" }]}
+                  // onInput={checkNftNameDuplication}
                 >
-                  Search
-                </Button>
-              </Form.Item>
-              <Form.Item
-                className={styles.searchFormItem}
-                name="categories"
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Please Selected At least (1) Category",
-                //   },
-                // ]}
-              >
-                <Select
-                  className={styles.searchFormSelect}
-                  id="categories"
-                  placeholder="Please select"
-                  onChange={(values) => getSelectedCategories(values)}
-                  showSearch
-                  filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
-                  defaultValue={categories[0].slug}
+                  <Input
+                    id="name"
+                    placeholder="search item here"
+                    className={styles.searhFormInput}
+                  />
+                </Form.Item>
+                <Form.Item className={styles.searhFormInputItem}>
+                  <Button
+                    className={styles.searhFormInput}
+                    // loading={isLoading}
+                    type="primary"
+                    htmlType="submit"
+                  >
+                    Search
+                  </Button>
+                </Form.Item>
+                <Form.Item
+                  className={styles.searchFormSelectItem}
+                  name="categories"
+                  // rules={[
+                  //   {
+                  //     required: true,
+                  //     message: "Please Selected At least (1) Category",
+                  //   },
+                  // ]}
                 >
-                  {categories?.map((item) => (
-                    <Select.Option
-                      value={item.slug}
-                      key={item.slug}
-                      style={{ height: 50, padding: 10 }}
-                    >
-                      {item.slug}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                className={styles.searchFormItem}
-                name="saleKindList"
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Please Selected At least (1) Category",
-                //   },
-                // ]}
-              >
-                <Select
-                  className={styles.searchFormSelect}
-                  id="saleKindList"
-                  placeholder="Please select"
-                  onChange={(values) => getSaleKind(values)}
-                  showSearch
-                  filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
+                  <Select
+                    size="large"
+                    className={styles.searchFormSelect}
+                    id="categories"
+                    placeholder="Please select"
+                    onChange={(values) => getSelectedCategories(values)}
+                    showSearch
+                    filterOption={(input, option) =>
+                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    defaultValue={categories[0].slug}
+                  >
+                    {categories?.map((item) => (
+                      <Select.Option
+                        value={item.slug}
+                        key={item.slug}
+                        style={{ height: 50, padding: 10 }}
+                      >
+                        {item.slug}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  className={styles.searchFormSelectItem}
+                  name="saleKindList"
+                  // rules={[
+                  //   {
+                  //     required: true,
+                  //     message: "Please Selected At least (1) Category",
+                  //   },
+                  // ]}
                 >
-                  {saleKindList.map((item) => (
-                    <Select.Option
-                      value={item.id}
-                      key={item.id}
-                      style={{ height: 60, padding: 10 }}
-                    >
-                      {item.label}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                className={styles.searchFormItem}
-                name="saleBundleType"
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Please Selected At least (1) Category",
-                //   },
-                // ]}
-              >
-                <Select
-                  className={styles.searchFormSelect}
-                  id="saleBundleType"
-                  placeholder="Please select"
-                  onChange={(type) => getSaleBundleType(type)}
-                  showSearch
-                  filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
+                  <Select
+                    size="large"
+                    className={styles.searchFormSelect}
+                    id="saleKindList"
+                    placeholder="Please select"
+                    onChange={(values) => getSaleKind(values)}
+                    showSearch
+                    filterOption={(input, option) =>
+                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
+                    {saleKindList.map((item) => (
+                      <Select.Option
+                        value={item.id}
+                        key={item.id}
+                        style={{ height: 50, padding: 10 }}
+                      >
+                        {item.label}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  className={styles.searchFormSelectItem}
+                  name="saleBundleType"
+                  // rules={[
+                  //   {
+                  //     required: true,
+                  //     message: "Please Selected At least (1) Category",
+                  //   },
+                  // ]}
                 >
-                  {saleBundleType.map((item) => (
-                    <Select.Option
-                      value={item.id}
-                      key={item.id}
-                      style={{ height: 50, padding: 10 }}
-                    >
-                      {item.label}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Form>
-          </div>
-          <div className={styles.nftListContainer}>
+                  <Select
+                    size="large"
+                    className={styles.searchFormSelect}
+                    id="saleBundleType"
+                    placeholder="Please select"
+                    onChange={(type) => getSaleBundleType(type)}
+                    showSearch
+                    filterOption={(input, option) =>
+                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
+                    {saleBundleType.map((item) => (
+                      <Select.Option
+                        value={item.id}
+                        key={item.id}
+                        style={{ height: 50, padding: 10 }}
+                      >
+                        {item.label}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Form>
+            </div>
+            {/* <!-- nft item begin --> */}
             {filterdExplores &&
               filterdExplores.map((item) => (
-                <div key={item.id} className={styles.nftItemContainer}>
-                  <div className="nft__item">
-                    <div
+                <div key={item.id} className={`col-lg-3 col-md-6 col-sm-6 col-xs-12 `}>
+                  <div className={`nft__item ${styles.nftItemContainer} `}>
+                    {/* <div
                       className="de_countdown"
                       data-year="2021"
                       data-month="10"
                       data-day="16"
                       data-hour="8"
-                    ></div>
+                    ></div> */}
                     <div className="author_list_pp">
                       <a href="author.html">
                         <img className="lazy" src={item.asset.owner.profile_img_url} alt="" />
@@ -259,12 +275,14 @@ function Explore({ serverExplores, categories }) {
                   </div>
                 </div>
               ))}
+            <div className="col-md-12 text-center">
+              <a onClick={loadMoreExplores} id="loadmore" className="btn-main  fadeInUp lead">
+                Load more
+              </a>
+            </div>
           </div>
-          <div>
-            <Button onClick={loadMoreExplores}>{`Load More`}</Button>
-          </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
   );
 }

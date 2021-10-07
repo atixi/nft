@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Spin } from "antd";
+import { Button, Form, Input, Modal, Spin, Select } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import {
   checkFileType,
@@ -7,11 +7,7 @@ import {
   validateCollectionName,
   validateCompleteCollectionName,
 } from "Utils/mintApi";
-import {
-  getMetaConnected,
-  getMetaToken,
-  getWalletConnected,
-} from "store/action/accountSlice";
+import { getMetaConnected, getMetaToken, getWalletConnected } from "store/action/accountSlice";
 
 import CustomNotification from "@/components/commons/customNotification";
 import Link from "next/link";
@@ -20,22 +16,23 @@ import { allowedImageTypes } from "Constants/constants";
 import { fetch } from "/Utils/strapiApi";
 import { signTransaction } from "Utils/utils";
 import { socket } from "config/websocket";
-import styles from "/styles/erc721.module.css";
+import styles from "/styles/collection.module.css";
 import { useSelector } from "react-redux";
-
+const { Option } = Select;
 let collectionCompleteName = {
   collectionName: "",
   collectionIdentifier: "",
 };
-const ERC721Collection = ({ serverCollections }) => {
+const ERC721Collection = ({ serverCollections, categories, talentData }) => {
+  const [form] = Form.useForm();
   const logoImageInputRef = useRef(null);
   const bannerImageInputRef = useRef(null);
+  const talentImageInputRef = useRef(null);
   const formRef = React.createRef();
   const [logoError, setLogoError] = useState();
   const [bannerError, setBannerError] = useState();
   const [collectionNameError, setCollectionNameError] = useState("");
-  const [collectionIdentifierError, setCollectionIdentifierError] =
-    useState("");
+  const [collectionIdentifierError, setCollectionIdentifierError] = useState("");
   const [duplicateIdentifierError, setDuplicateIdentifierError] = useState();
   const [logoImageUrl, setLogoImageUrl] = useState("");
   const [bannerImageUrl, setBannerImageUrl] = useState("");
@@ -55,8 +52,7 @@ const ERC721Collection = ({ serverCollections }) => {
   const metaToken = useSelector(getMetaToken);
   const [onboard, setOnboard] = useState(null);
   const [collections, setCollections] = useState(serverCollections);
-  const [completeCollectionNameError, setCompleteCollectionNameError] =
-    useState("");
+  const [completeCollectionNameError, setCompleteCollectionNameError] = useState("");
 
   const handleCollectionCompleteName = (e) => {
     const value = e.target.value;
@@ -103,10 +99,12 @@ const ERC721Collection = ({ serverCollections }) => {
     }
   };
   const openLogoFileChooser = (event) => {
+    console.log("opening logo file chooser");
     event.preventDefault();
     logoImageInputRef.current.click();
   };
-  const openFileUploadBanner = (event) => {
+  const openBannerFileChooser = (event) => {
+    console.log("opening banner file chooser");
     event.preventDefault();
     bannerImageInputRef.current.click();
   };
@@ -153,8 +151,6 @@ const ERC721Collection = ({ serverCollections }) => {
     bannerImageInputRef.current.value = null;
   };
 
-  const [form] = Form.useForm();
-
   const onFinish = (values) => {
     const collectionData = createCollectinData(values);
     if (!logoImageFile) {
@@ -187,11 +183,7 @@ const ERC721Collection = ({ serverCollections }) => {
     }
   };
 
-  const saveCollection = async (
-    logoImageFile,
-    bannerImageFile,
-    collectionData
-  ) => {
+  const saveCollection = async (logoImageFile, bannerImageFile, collectionData) => {
     const { ethereum } = window;
     if (isMetaconnected) {
       let accounts = await ethereum.request({ method: "eth_accounts" });
@@ -263,248 +255,245 @@ const ERC721Collection = ({ serverCollections }) => {
     });
   };
 
+  const submitCollection = async (values) => {
+    console.log("values ", values);
+    // setExist(false);
+    // setShowResponse(false);
+    // setLoading(true);
+    // const add = await request(`nfts/add`, {
+    //   method: "POST",
+    //   data: {
+    //     tokenId: values.tokenId,
+    //     tokenAddress: values.tokenAddress,
+    //     categories: values.categories,
+    //     collections: values.collections,
+    //     featured: values.featured,
+    //   },
+    // });
+    // if (add.status === 200) {
+    //   if (add.data === 1) {
+    //     setErrorMessage("This Asset already exist");
+    //     setShowResponse(true);
+    //     setExist(true);
+    //   } else if (add.data === 2) {
+    //     setErrorMessage("This asset is not NFT, please add NFT");
+    //     setShowResponse(true);
+    //     setExist(true);
+    //   } else if (add.data?.tokenId) {
+    //     setAddedAsset(add.data);
+    //     setShowResponse(true);
+    //   } else {
+    //     setShowResponse(false);
+    //     setLoading(false);
+    //     message.error("Error adding asset, try again!");
+    //   }
+    // }
+  };
   useEffect(() => {
     refreshData();
     isTalentRegistered();
   }, []);
 
   return (
-    <div className={styles.container}>
-      <Modal
-        title="Uploading Collection..."
-        visible={displayUploadModal}
-        header={null}
-        footer={null}
-        closable={false}
-        width={500}
-        height={500}
-        maskStyle={{
-          backgroundColor: "#EEEEEE",
-          opacity: 0.1,
-        }}
-        bodyStyle={{
-          height: 350,
-          display: "flex",
-          justifyContent: "center",
-          alignContent: "center",
-        }}
-      >
-        <div className={styles.modalContent}>
-          {!displayModalButtons ? (
-            <div className={styles.waitingSpiner}>
-              <div className={styles.deplyingMessage}>
-                {"Please Be Patient It may take serveral minutes"}
+    <div className="no-bottom" id="content">
+      <div id="top"></div>
+
+      {/* <!-- section begin --> */}
+      <section id="subheader" className="text-light AssetSubheader">
+        <div className="center-y relative text-center">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-12 text-center">
+                <h1>Creating Collection</h1>
               </div>
-              <Spin size="large" />
+              <div className="clearfix"></div>
             </div>
-          ) : (
-            <div className={styles.modalControls}>
-              <Button
-                type="primary"
-                className={styles.modalButton}
-                onClick={handleNewCollection}
-              >
-                New Collection
-              </Button>
-              <Link
-                className={styles.modalButton}
-                href={{
-                  pathname: `/collection/${newCollectionSlug}`,
-                }}
-              >
-                <a>{"View Collection"}</a>
-              </Link>
-            </div>
-          )}
-        </div>
-      </Modal>
-      <div className={styles.nftFormContainer}>
-        <h1 className={styles.header}>Create new Collection</h1>
-        <h4 className={styles.subHeader}>Collection Image</h4>
-        <p className={styles.fileTypes}>
-          {`File types supported: JPG, PNG, GIF, SVG. Max size: 10 MB`}
-        </p>
-        <Form
-          className={styles.uploadForm}
-          ref={formRef}
-          form={form}
-          initialValues={{ logoImageFile: "" }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-        >
-          {/* ------------------------------------------------------Logo------------------------ */}
-          <div className={styles.logoFileContainer}>
-            {logoImageUrl ? (
-              <div className={styles.logoImageBox}>
-                <img
-                  src={logoImageUrl}
-                  className={styles.logoImage}
-                  onClick={openLogoFileChooser}
-                />
-              </div>
-            ) : (
-              <div
-                className={styles.uploadedFileButton}
-                onClick={openLogoFileChooser}
-              >
-                <img
-                  width={96}
-                  height={96}
-                  src={"/icons/collectionUpload.svg"}
-                />
-              </div>
-            )}
-            <Form.Item rules={[{ required: true }]} style={{ display: "none" }}>
-              <input
-                rules={[{ required: true }]}
-                type="file"
-                accept={allowedImageTypes}
-                name="logoImageFile"
-                onChange={handleFileUpload}
-                ref={logoImageInputRef}
-              />
-            </Form.Item>
           </div>
-          <div className={styles.nftFormErrors}>{logoError}</div>
-          {/* ------------------------------------------------------Banner------------------------ */}
-          <h3 className={styles.nftSubHeader}>{`Banner image`}</h3>
-          <p className={styles.fileTypes}>
-            {`This image will appear at the top of your collection page. Avoid including too much text in this banner image, as the dimensions change on different devices. 1400 x 400 recommended.`}
-          </p>
-          <div className={styles.bannerFileContainer}>
-            {bannerImageUrl ? (
-              <div className={styles.bannerImageBox}>
-                <img
-                  className={styles.bannerImage}
-                  style={{ objectFit: "cover" }}
-                  src={bannerImageUrl}
-                  onClick={openFileUploadBanner}
-                />
-              </div>
-            ) : (
-              <div className={styles.uploadedFileButtonContainer}>
-                <div
-                  className={styles.uploadedFileButton}
-                  onClick={openFileUploadBanner}
-                >
-                  <img
-                    width={96}
-                    height={96}
-                    src={"/icons/collectionUpload.svg"}
-                  />
+        </div>
+      </section>
+      {/* <!-- section close --> */}
+
+      {/* <!-- section begin --> */}
+      <section aria-label="section">
+        <div className="container">
+          <div className="row fadeIn">
+            <div className="col-lg-7 offset-lg-1">
+              <Form
+                form={form}
+                onFinish={submitCollection}
+                id="form-create-item"
+                className="form-border"
+                method="post"
+              >
+                <div className="field-set">
+                  <h5>Upload Banner</h5>
+
+                  <div className="d-create-file">
+                    <p id="file_name">PNG, JPG, GIF, WEBP or MP4. Max 2mb.</p>
+                    {bannerImageUrl == "" ? (
+                      <input
+                        type="button"
+                        id="get_file"
+                        className="btn-main"
+                        value="Browse"
+                        onClick={openBannerFileChooser}
+                      />
+                    ) : (
+                      <img
+                        onClick={openBannerFileChooser}
+                        src={bannerImageUrl}
+                        id="get_file_2"
+                        className={`lazy nft__item_preview ${styles.uploadBannerImage}`}
+                        alt=""
+                        // width="500px"
+                        // height="200px"
+                      />
+                    )}
+                    <input
+                      type="file"
+                      id="upload_file"
+                      name="logoImageFile"
+                      onChange={handleFileUpload}
+                      ref={logoImageInputRef}
+                    />
+                    <input
+                      type="file"
+                      id="upload_file"
+                      name="bannerImageFile"
+                      onChange={handleFileUpload}
+                      ref={bannerImageInputRef}
+                    />
+                  </div>
+
+                  <div className="spacer-single"></div>
+                  <h5>Collection Name</h5>
+                  <Form.Item
+                    name={"collectionName"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Collection Name field is required",
+                      },
+                    ]}
+                  >
+                    <input
+                      type="text"
+                      name="collectionName"
+                      id="collectionName"
+                      className="form-control"
+                      placeholder="e.g. 'Ninja Warriors"
+                    />
+                  </Form.Item>
+                  <div className="spacer-single"></div>
+                  <h5>Collection Identifier</h5>
+                  <Form.Item
+                    name={"collectionIdentifier"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Collection identifier field is required",
+                      },
+                    ]}
+                  >
+                    <input
+                      type="text"
+                      name="collectionIdentifier"
+                      id="collectionIdentifier"
+                      className="form-control"
+                      placeholder="e.g. 'Crypto Funk"
+                    />
+                  </Form.Item>
+                  <div className="spacer-single"></div>
+
+                  <h5>Description</h5>
+                  <Form.Item
+                    name={"collectionDescription"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Collection Description field is required",
+                      },
+                    ]}
+                  >
+                    <textarea
+                      data-autoresize
+                      name="collectionDescription"
+                      id="collectionDescription"
+                      className="form-control"
+                      placeholder="e.g. 'This is very limited item'"
+                    ></textarea>
+                  </Form.Item>
+                  <div className="spacer-single"></div>
+
+                  <h5>Categories</h5>
+                  <Form.Item
+                    name={"collectionCategories"}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please select at least one category",
+                      },
+                    ]}
+                  >
+                    <Select mode="multiple" style={{ width: "100%" }} placeholder="---">
+                      {categories &&
+                        categories.map((cat) => {
+                          return (
+                            <Option key={cat.id} value={cat.id}>
+                              {cat.categoryName}
+                            </Option>
+                          );
+                        })}
+                    </Select>
+                  </Form.Item>
+
+                  <div className="spacer-single"></div>
+
+                  <input type="submit" id="submit" className="btn-main" value="Create Item" />
+                  <div className="spacer-single"></div>
+                </div>
+              </Form>
+            </div>
+
+            <div className="col-lg-3 col-sm-6 col-xs-12">
+              <h5>Upload Collection Avatar</h5>
+              <div className={`nft__item `}>
+                <div className="author_list_pp">
+                  <a href="#">
+                    <img
+                      className="lazy"
+                      src={talentData.talentAvatar.formats.thumbnail.url}
+                      alt=""
+                    />
+                    <i className="fa fa-check"></i>
+                  </a>
+                </div>
+                <div className={`nft__item_wrap`}>
+                  <a href="#" className={`nft__item_wrap ${styles.imagePreviewContainer}`}>
+                    {logoImageUrl == "" ? (
+                      <img
+                        onClick={openLogoFileChooser}
+                        src={"/icons/collectionUpload.svg"}
+                        id="iconImage"
+                        className="lazy nft__item_preview"
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        onClick={openLogoFileChooser}
+                        src={logoImageUrl}
+                        id="logoImage"
+                        className="lazy nft__item_preview"
+                        alt=""
+                      />
+                    )}
+                  </a>
                 </div>
               </div>
-            )}
-            <Form.Item rules={[{ required: true }]} style={{ display: "none" }}>
-              <input
-                rules={[{ required: true }]}
-                type="file"
-                accept={allowedImageTypes}
-                name="bannerImageFile"
-                onChange={handleFileUpload}
-                ref={bannerImageInputRef}
-              />
-            </Form.Item>
-          </div>
-          <div className={styles.nftFormErrors}>{bannerError}</div>
-          <div className={styles.nftInputComponent}>
-            <h3 className={styles.nftSubHeader}>{"Collection Name *"}</h3>
-            <Form.Item
-              name="collectionName"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your Collection Name!",
-                  // validate: (value) => {
-                  //   return value.toString().trim().match("/^[a-zA-Z ]*$/");
-                  // },
-                },
-              ]}
-              onInput={handleCollectionCompleteName}
-            >
-              <Input
-                name="collectionName"
-                id="collection"
-                placeholder="Collection Name"
-                className={styles.nftInput}
-              />
-            </Form.Item>
-            <div className={styles.nftFormErrors}>
-              {collectionNameError?.message}
             </div>
           </div>
-          <div className={styles.nftInputComponent}>
-            <h3 className={styles.nftSubHeader}>{"Collection Identifier"}</h3>
-            <p className={styles.nfgParagraph}>
-              {
-                "This will be used as last part of your collection name. It might be your brand name or some arbitrary but unique word."
-              }
-            </p>
-            <Form.Item
-              name="collectionIdentifier"
-              rules={[
-                {
-                  required: true,
-                  message: "Collection Identifier is required",
-                },
-              ]}
-              onInput={handleCollectionCompleteName}
-            >
-              <Input
-                name="collectionIdentifier"
-                id="collectionIdentifier"
-                placeholder="Please enter some uniqu value"
-                className={styles.nftInput}
-              />
-            </Form.Item>
-            <div className={styles.nftFormErrors}>
-              {collectionIdentifierError?.message}
-            </div>
-            <div
-              className={
-                completeCollectionNameError?.message?.includes("×")
-                  ? styles.nftFormErrors
-                  : styles.nftFormValid
-              }
-            >
-              {completeCollectionNameError?.message}
-            </div>
-          </div>
-          <div className={styles.nftInputComponent}>
-            <h3 className={styles.nftSubHeader}>{"Description"}</h3>
-            <p className={styles.nfgParagraph}>
-              {
-                "The description will be included on the for All Assets in this Collection"
-              }
-            </p>
-            <Form.Item
-              name="description"
-              rules={[{ required: true, message: "Description is required" }]}
-            >
-              <Input.TextArea
-                name="description"
-                id="description"
-                placeholder="Provide a detailed description of your Collection"
-                className={styles.nftInput}
-                rows={4}
-              />
-            </Form.Item>
-          </div>
-
-          <div className={styles.createButtonContainer}>
-            <Form.Item>
-              <Button
-                className={styles.createButton}
-                loading={isLoading}
-                type="primary"
-                htmlType="submit"
-              >
-                Create
-              </Button>
-            </Form.Item>
-          </div>
-        </Form>
-      </div>
+        </div>
+      </section>
     </div>
   );
 };
@@ -513,9 +502,18 @@ export default ERC721Collection;
 export const getServerSideProps = async (context) => {
   const collectionsResult = await fetch("/collections/collectionslist");
   const collections = collectionsResult.data;
+  const categoriesResult = await fetch("categories");
+  const categories = await categoriesResult.data;
+  // const talentResult = await fetch(`talents?walletAddress=${query.accountAddress}`);
+  const talentResult = await fetch(
+    `talents?walletAddress=0x8CA35f878fD14992b58a18bEB484f721b1d07A33`
+  );
+  const talent = await talentResult.data[0];
   return {
     props: {
       serverCollections: JSON.parse(JSON.stringify(collections)),
+      categories: JSON.parse(JSON.stringify(categories)),
+      talentData: JSON.parse(JSON.stringify(talent)),
     },
   };
 };

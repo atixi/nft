@@ -17,21 +17,32 @@
   display: flex;
   flex-direction: row;
 }
-.searchFormItem {
+.searchFormSelectItem {
   min-width: 200px;
   min-height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   align-content: center;
+  margin: 0px 10px;
+}
+.searhFormInputItem {
+  min-width: 200px;
+  min-height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  margin: 0px;
 }
 .searchFormSelect {
-  min-width: 250px;
-  padding: 0px 10px;
+  min-width: 200px;
+  margin: 10px 10px;
   vertical-align: middle;
 }
 .searhFormInput {
   min-height: 40px;
+  margin: 0px;
 }
 .nftListContainer {
   display: flex;
@@ -43,5 +54,6 @@
   align-content: flex-start;
 }
 .nftItemContainer {
-  margin: 20px;
+  min-width: 94%;
+  min-height: 94%;
 }

@@ -1,0 +1,8 @@
+.imagePreviewContainer {
+}
+.uploadBannerImage {
+  border-radius: 10px;
+  width: 98%;
+  height: 250px;
+  object-fit: cover;
+}
