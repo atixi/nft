@@ -112,7 +112,7 @@ function Footer() {
               <div class="de-flex">
                 <div class="de-flex-col">
                   <a href="https://thecodegiant.ca" target={"_blank"}>
-                    <img alt="" class="f-logo" src="images/logo-2-light.png" /><span class="copy">&copy; Copyright 2021 - The Code Giant</span>
+                    <img alt="" class="f-logo" style={{ width: "250px" }} src="/images/logo.svg" /><span class="copy">&copy; Copyright 2021 - The Code Giant</span>
                   </a>
                 </div>
                 <div class="de-flex-col">

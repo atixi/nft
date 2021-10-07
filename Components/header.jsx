@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Search from "./search";
 import Link from "next/link";
-import { Avatar } from "antd";
+import { Avatar, Modal } from "antd";
 import CONSTANTS from "../Constants/headerConstants";
 import {
   ConnectedButton,
@@ -16,11 +16,15 @@ import {
   getMetaConnected,
   getWalletConnected,
 } from "/store/action/accountSlice";
+import LoginModal from "../Components/loginModal"
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import api from "/Components/axiosRequest";
+import { getUser, signout } from '../store/action/accountSlice';
+
 function Header(props) {
   const router = useRouter();
+  const { jwt } = useSelector(getUser)
   const accountTokens = useSelector(getAccountTokens);
   const metaToken = useSelector(getMetaToken);
   const metaBalance = useSelector(getMetaBalance);
@@ -29,7 +33,7 @@ function Header(props) {
   const walletBalance = useSelector(getWalletBalance);
   const isMetaconnected = useSelector(getMetaConnected);
   const isWalletConnected = useSelector(getWalletConnected);
-
+  const dispatch = useDispatch();
   const [profileDetails, setProfileDetails] = useState(null);
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
@@ -39,7 +43,9 @@ function Header(props) {
     assets: [],
     collections: [],
   });
-  const [submit, setSubmit] = useState();
+  const [submit, setSubmit] = useState()
+  const [showLoginModal, setShowLoginModal] = useState(false)
+
   function submitClick() {
     router.push(`/search?query=${submit}`);
     setSearch(false);
@@ -95,6 +101,20 @@ function Header(props) {
       address.substring(address.length - 5, address.length)
     );
   };
+  const openLogin = () => {
+    setShowLoginModal(true)
+  }
+  const handleLogout = async () => {
+    try {
+      const logout = await dispatch(signout(null));
+      console.log("sign out", logout)
+      if (logout.meta?.requestStatus === "fulfilled") {
+        router.push("/")
+      }
+    } catch (err) {
+    }
+  }
+  const isLoggedIn = () => { return jwt ? true : false }
   return (
     <header className="transparent header-light scroll-light">
       <div className="container">
@@ -120,7 +140,7 @@ function Header(props) {
                 {/* <!-- mainmenu begin --> */}
                 <ul id="mainmenu">
                   <li>
-                    <a href="/explore">Explore<span></span></a>
+                    <a href="#">Explore<span></span></a>
                     <ul>
                       <li><a href="/explore">All Assets</a></li>
                     </ul>
@@ -132,6 +152,11 @@ function Header(props) {
                       <li><Link href={"/add/asset"}><a>Add Existing Asset</a></Link></li>
 
                     </ul>
+                  </li>
+                  <li>
+                    {isLoggedIn() ?
+                      <a onClick={handleLogout}>Logout</a> :
+                      <a onClick={openLogin}>Login</a>}
                   </li>
                 </ul>
                 <div className="menu_side_area">
@@ -170,6 +195,7 @@ function Header(props) {
           </div>
         </div>
       </div>
+      {showLoginModal && <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} />}
     </header>
   );
 }

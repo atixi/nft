@@ -16,7 +16,7 @@ import fromUnix from "date-fns/fromUnixTime";
 import { getAuctionPriceDetails } from "/Constants/constants";
 import { isMobileDevice } from "Constants/constants";
 import moment from "moment";
-
+import { notification } from "antd"
 const STRAPI_BASE_URL = process.env.HEROKU_BASE_URL;
 // const STRAPI_BASE_URL = process.env.HEROKU_BASE_TNC;
 // const STRAPI_BASE_URL = process.env.STRAPI_LOCAL_BASE_URL;
@@ -501,8 +501,8 @@ export const getBuyErrorMessage = (value) => {
   } else if (
     value.includes(
       "401" ||
-        value.includes("Invalid API key") ||
-        value.includes("Unauthorized")
+      value.includes("Invalid API key") ||
+      value.includes("Unauthorized")
     )
   ) {
     return "Invalid API key";
@@ -538,3 +538,10 @@ export const signTransaction = async (publicAddress, action, asset) => {
     };
   }
 };
+
+export const Notification = (message, type) => {
+  return notification[type]({
+    duration: 5,
+    message: message,
+  });
+}
