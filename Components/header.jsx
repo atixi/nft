@@ -33,7 +33,7 @@ function Header(props) {
   const walletBalance = useSelector(getWalletBalance);
   const isMetaconnected = useSelector(getMetaConnected);
   const isWalletConnected = useSelector(getWalletConnected);
-
+  const dispatch = useDispatch();
   const [profileDetails, setProfileDetails] = useState(null);
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
@@ -104,7 +104,6 @@ function Header(props) {
   const openLogin = () => {
     setShowLoginModal(true)
   }
-  const dispatch = useDispatch();
   const handleLogout = async () => {
     try {
       const logout = await dispatch(signout(null));
@@ -115,6 +114,7 @@ function Header(props) {
     } catch (err) {
     }
   }
+  const isLoggedIn = () => { return jwt ? true : false }
   return (
     <header className="transparent header-light scroll-light">
       <div className="container">
@@ -154,7 +154,7 @@ function Header(props) {
                     </ul>
                   </li>
                   <li>
-                    {jwt ?
+                    {isLoggedIn() ?
                       <a onClick={handleLogout}>Logout</a> :
                       <a onClick={openLogin}>Login</a>}
                   </li>

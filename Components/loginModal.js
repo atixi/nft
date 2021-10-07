@@ -1,45 +1,32 @@
 import react, { useState } from "react"
-import { Modal, Form, notification, Spin } from "antd"
+import { Modal, Form, Spin } from "antd"
 import { LoadingOutlined } from '@ant-design/icons';
-
 import { signin } from '../store/action/accountSlice';
 import { useDispatch } from 'react-redux';
 import { useRouter } from "next/router"
+import { Notification } from "../Utils/utils"
 const antIcon = <LoadingOutlined style={{ fontSize: 16, marginLeft: "-25px", marginRight: "20px", position: "relative", top: "-5px", color: "white" }} spin />;
 function LoginModal({ showLoginModal, setShowLoginModal }) {
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch();
     const router = useRouter()
+    const NavigateTo = (path) => {
+        return router.push(path)
+    }
     const onFinish = async (values) => {
         setLoading(true)
-        try {
-            const res = await dispatch(signin(values));
-            if (res.meta?.requestStatus === "fulfilled") {
-                setLoading(false)
-                setShowLoginModal(false)
-                router.push("/")
-            }
-            else if (res.meta?.requestStatus === "rejected") {
-                setLoading(false)
-                notification["error"]({
-                    duration: 5,
-                    message: "Username or Password is wrong",
-                });
-            }
-        } catch (e) {
-            setLoading(false)
-            notification["error"]({
-                duration: 5,
-                message: e,
-            });
+        const res = await dispatch(signin(values));
+        if (res.meta?.requestStatus === "fulfilled") {
+            setShowLoginModal(false)
+            NavigateTo("/")
         }
+        if (res.meta?.requestStatus === "rejected") {
+            Notification("Username or Password is wrong", "error")
+        }
+        setLoading(false)
     };
-
-    const handleCancel = () => {
-        setShowLoginModal(false);
-    };
-    return (<Modal visible={showLoginModal} footer={false} onCancel={handleCancel}>
-        <Form onFinish={onFinish} name="contactForm" id='contact_form' className="form-border" method="post" action='blank.php'>
+    return (<Modal visible={showLoginModal} footer={false} onCancel={() => setShowLoginModal(false)}>
+        <Form onFinish={onFinish} id='contact_form' className="form-border">
             <h3>Login to your account</h3>
             <div className="field-set">
                 <label>Email</label>
@@ -49,7 +36,7 @@ function LoginModal({ showLoginModal, setShowLoginModal }) {
                         message: 'This Field is Required',
                     },
                 ]}>
-                    <input type='text' name='name' id='name' className="form-control" placeholder="" />
+                    <input type='text' className="form-control" />
                 </Form.Item>
             </div>
             <div className="field-set">
@@ -60,11 +47,11 @@ function LoginModal({ showLoginModal, setShowLoginModal }) {
                         message: 'This Field is Required',
                     },
                 ]}>
-                    <input type='password' name='email' id='email' className="form-control" placeholder="" />
+                    <input type='password' className="form-control" />
                 </Form.Item>
             </div>
             <div id='submit'>
-                <button type='submit' id='send_message' className="btn btn-main color-2">{loading && <Spin indicator={antIcon} color={"white"} />} Login</button>
+                <button type='submit' className="btn btn-main color-2">{loading && <Spin indicator={antIcon} color={"white"} />} Login</button>
             </div>
         </Form>
     </Modal>)
