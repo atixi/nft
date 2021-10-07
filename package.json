@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@pinata/sdk": "^1.1.23",
     "@reduxjs/toolkit": "^1.6.0",
     "antd": "4.15.6",

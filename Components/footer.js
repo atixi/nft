@@ -56,10 +56,10 @@ function Footer() {
   }
   return (
     <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-3 col-sm-6 col-xs-1">
-            <div class="widget">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-3 col-sm-6 col-xs-1">
+            <div className="widget">
               <h5>Categories</h5>
               <ul>
                 <li><a href="#">All NFTs</a></li>
@@ -71,8 +71,8 @@ function Footer() {
               </ul>
             </div>
           </div>
-          <div class="col-md-3 col-sm-6 col-xs-1">
-            <div class="widget">
+          <div className="col-md-3 col-sm-6 col-xs-1">
+            <div className="widget">
               <h5>Resources</h5>
               <ul>
                 <li><a href="#">Help Center</a></li>
@@ -80,8 +80,8 @@ function Footer() {
               </ul>
             </div>
           </div>
-          <div class="col-md-3 col-sm-6 col-xs-1">
-            <div class="widget">
+          <div className="col-md-3 col-sm-6 col-xs-1">
+            <div className="widget">
               <h5>Community</h5>
               <ul>
                 <li><a href="#">Brand Assets</a></li>
@@ -89,39 +89,39 @@ function Footer() {
               </ul>
             </div>
           </div>
-          <div class="col-md-3 col-sm-6 col-xs-1">
-            <div class="widget">
+          <div className="col-md-3 col-sm-6 col-xs-1">
+            <div className="widget">
               <h5>subscribe</h5>
               <p>subscribe for to get the latest news in your inbox.</p>
-              <form action="blank.php" class="row form-dark" id="form_subscribe" method="post" name="form_subscribe">
-                <div class="col text-center">
-                  <input class="form-control" id="txt_subscribe" name="txt_subscribe" placeholder="enter your email" type="text" /> <a href="#" id="btn-subscribe"><i class="arrow_right bg-color-secondary"></i></a>
-                  <div class="clearfix"></div>
+              <form action="blank.php" className="row form-dark" id="form_subscribe" method="post" name="form_subscribe">
+                <div className="col text-center">
+                  <input className="form-control" id="txt_subscribe" name="txt_subscribe" placeholder="enter your email" type="text" /> <a href="#" id="btn-subscribe"><i className="arrow_right bg-color-secondary"></i></a>
+                  <div className="clearfix"></div>
                 </div>
               </form>
-              <div class="spacer-10"></div>
+              <div className="spacer-10"></div>
               <small>Your email is safe with us. We don't spam.</small>
             </div>
           </div>
         </div>
       </div>
-      <div class="subfooter">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="de-flex">
-                <div class="de-flex-col">
+      <div className="subfooter">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="de-flex">
+                <div className="de-flex-col">
                   <a href="https://thecodegiant.ca" target={"_blank"}>
-                    <img alt="" class="f-logo" src="images/logo-2-light.png" /><span class="copy">&copy; Copyright 2021 - The Code Giant</span>
+                    <img alt="" className="f-logo" src="images/logo-2-light.png" /><span className="copy">&copy; Copyright 2021 - The Code Giant</span>
                   </a>
                 </div>
-                <div class="de-flex-col">
-                  <div class="social-icons">
-                    {/* <a href="#"><i class="fa fa-facebook fa-lg"></i></a>
-                    <a href="#"><i class="fa fa-twitter fa-lg"></i></a> */}
-                    <a href="https://www.linkedin.com/company/the-code-giant" target={"_blank"}><i class="fa fa-linkedin fa-lg"></i></a>
-                    {/* <a href="#"><i class="fa fa-pinterest fa-lg"></i></a>
-                    <a href="#"><i class="fa fa-rss fa-lg"></i></a> */}
+                <div className="de-flex-col">
+                  <div className="social-icons">
+                    {/* <a href="#"><i className="fa fa-facebook fa-lg"></i></a>
+                    <a href="#"><i className="fa fa-twitter fa-lg"></i></a> */}
+                    <a href="https://www.linkedin.com/company/the-code-giant" target={"_blank"}><i className="fa fa-linkedin fa-lg"></i></a>
+                    {/* <a href="#"><i className="fa fa-pinterest fa-lg"></i></a>
+                    <a href="#"><i className="fa fa-rss fa-lg"></i></a> */}
                   </div>
                 </div>
               </div>
