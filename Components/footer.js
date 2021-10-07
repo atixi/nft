@@ -4,6 +4,8 @@ import { FOOTER } from "/Constants/footerConstants";
 import { FOOTER_WEBSITE_LINKS } from "/Constants/footerConstants";
 import { FOOTER_COMMUNITY } from "/Constants/footerConstants";
 import { FOOTER_LANGUAGES } from "/Constants/footerConstants";
+import { Formik, useFormik } from "formik";
+import * as Yup from "yup";
 import Link from "next/link";
 import React from "react";
 const {
@@ -16,44 +18,30 @@ const {
 } = FOOTER;
 
 import api from "/Components/axiosRequest";
+import { Loading3QuartersOutlined } from "@ant-design/icons";
+import axios from "axios";
+import { stubTrue } from "lodash-es";
+
+const subscriptionSchemea = Yup.object().shape({
+  email: Yup.string().email("Invalid email").required("Required"),
+});
 function Footer() {
-  const [email, setEmail] = useState();
-  const [validEmail, setValidEmail] = useState({
-    invalidEmail: false,
-    dublicateEntry: false,
+  const[Loading,setLoading]= useState();
+  const[duplicate,setDuplicate]=useState(false);
+  const [success, setSuccess]= useState(false);
+    const formik = useFormik({
+    initialValues: {
+      email: "",
+    },
+    validationSchema: subscriptionSchemea,
+    onSubmit: (values) => {
+      setLoading(true);
+      handleSubmission(values);
+    },
   });
-  const submitSubscribe = () => {
-    const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const validation = re.test(String(email).toLowerCase());
-    validation
-      ? (() => {
-        setValidEmail({
-          dublicateEntry: false,
-          invalidEmail: false,
-        });
-        const formData = new FormData();
-        formData.append("data", JSON.stringify({ email: email }));
-        api.post(`/subscribeds`, formData).catch(function (error) {
-          setValidEmail({
-            invalidEmail: false,
-            dublicateEntry: true,
-          });
-        });
-      })()
-      : setValidEmail({
-        dublicateEntry: false,
-        invalidEmail: true,
-      });
+  const handleSubmission = async(value) => {
+    await axios.post(`https://nft-marketplac.herokuapp.com/subscribeds`, value).then(data=>{setSuccess(true); formik.resetForm(); setDuplicate(false)}).catch(err=>{setDuplicate(true);formik.resetForm();setSuccess(false)})
   };
-  function settingEmail(e) {
-    setEmail(e.target.value);
-  }
-  function handleSubmit(e) {
-    if (e.charCode === 13) {
-      submitSubscribe();
-    }
-  }
   return (
     <footer>
       <div className="container">
@@ -93,10 +81,20 @@ function Footer() {
             <div className="widget">
               <h5>subscribe</h5>
               <p>subscribe for to get the latest news in your inbox.</p>
-              <form action="blank.php" className="row form-dark" id="form_subscribe" method="post" name="form_subscribe">
+              <form onSubmit={formik.handleSubmit} className="row form-dark" id="form_subscribe" method="post">
                 <div className="col text-center">
-                  <input className="form-control" id="txt_subscribe" name="txt_subscribe" placeholder="enter your email" type="text" /> <a href="#" id="btn-subscribe"><i className="arrow_right bg-color-secondary"></i></a>
+                  <input className="form-control" id="txt_subscribe"  type="text"
+                  name="email"
+                  placeholder="Your Email"
+                  onChange={formik.handleChange}
+                  value={formik.values.email}
+                  /> <a onClick={formik.handleSubmit} id="btn-subscribe"><i className="arrow_right bg-color-secondary"></i></a>
                   <div className="clearfix"></div>
+                  {formik.errors.email && formik.touched.email ? (
+                  <div style={{color:'red'}}>{formik.errors.email}</div>
+                ) : null}
+                {success&&<div style={{color:'green'}}>Successfully Subscribed</div>}
+                {duplicate&&<div style={{color:'red'}}>Duplicated Entry!!</div>}
                 </div>
               </form>
               <div className="spacer-10"></div>
