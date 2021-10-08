@@ -40,7 +40,17 @@ function Footer() {
     },
   });
   const handleSubmission = async(value) => {
-    await axios.post(`https://nft-marketplac.herokuapp.com/subscribeds`, value).then(data=>{setSuccess(true); formik.resetForm(); setDuplicate(false)}).catch(err=>{setDuplicate(true);formik.resetForm();setSuccess(false)})
+    axios.post(`https://nft-marketplac.herokuapp.com/subscribeds`, value)
+      .then(data=>{
+        setSuccess(true); 
+        formik.resetForm(); 
+        setDuplicate(false)
+      })  
+      .catch(err=>{
+        setDuplicate(true);
+        formik.resetForm();
+        setSuccess(false)
+      })
   };
   return (
     <footer>
