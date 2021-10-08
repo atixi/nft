@@ -180,11 +180,13 @@ export const getTalentAccount = async (account) => {
 export const allowedImageTypes =
   "image/png,image/gif,image/jpeg,image/jpeg,image/gif,image/svg+xml";
 
-export const saleKindList = [
-  { id: 0, label: "Buy Now" },
-  { id: 1, label: "Has Offer" },
+export const saleTypes = [
+  { id: 0, label: "All Type", value: "all" },
+  { id: 1, label: "On Sale", value: "onSale" },
+  { id: 2, label: "Has Offer", value: "hasOffer" },
 ];
 export const saleBundleType = [
-  { id: 0, label: "Single" },
-  { id: 1, label: "Bundle" },
+  { id: 0, label: "All Items", value: "all" },
+  { id: 1, label: "Single Items", value: "single" },
+  { id: 2, label: "Bundled Items", value: "bundle" },
 ];

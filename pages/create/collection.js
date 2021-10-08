@@ -152,9 +152,10 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
   };
 
   const onFinish = (values) => {
+    console.log("values are ", values);
     const collectionData = createCollectinData(values);
     if (!logoImageFile) {
-      setLogoError("Logo Image is Required");
+      setLogoError("Avatar Image is Required");
     }
     if (!bannerImageFile) {
       setBannerError("Banner Image is Required");
@@ -176,7 +177,7 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
 
   const onFinishFailed = (errorInfo) => {
     if (!logoImageFile) {
-      setLogoError("Logo Image is Required");
+      setLogoError("Avatar Image is Required");
     }
     if (!bannerImageFile) {
       setBannerError("Banner Image is Required");
@@ -255,40 +256,6 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
     });
   };
 
-  const submitCollection = async (values) => {
-    console.log("values ", values);
-    // setExist(false);
-    // setShowResponse(false);
-    // setLoading(true);
-    // const add = await request(`nfts/add`, {
-    //   method: "POST",
-    //   data: {
-    //     tokenId: values.tokenId,
-    //     tokenAddress: values.tokenAddress,
-    //     categories: values.categories,
-    //     collections: values.collections,
-    //     featured: values.featured,
-    //   },
-    // });
-    // if (add.status === 200) {
-    //   if (add.data === 1) {
-    //     setErrorMessage("This Asset already exist");
-    //     setShowResponse(true);
-    //     setExist(true);
-    //   } else if (add.data === 2) {
-    //     setErrorMessage("This asset is not NFT, please add NFT");
-    //     setShowResponse(true);
-    //     setExist(true);
-    //   } else if (add.data?.tokenId) {
-    //     setAddedAsset(add.data);
-    //     setShowResponse(true);
-    //   } else {
-    //     setShowResponse(false);
-    //     setLoading(false);
-    //     message.error("Error adding asset, try again!");
-    //   }
-    // }
-  };
   useEffect(() => {
     refreshData();
     isTalentRegistered();
@@ -296,6 +263,50 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
 
   return (
     <div className="no-bottom" id="content">
+      <Modal
+        title="Uploading Collection..."
+        visible={displayUploadModal}
+        header={null}
+        footer={null}
+        closable={false}
+        width={500}
+        height={500}
+        maskStyle={{
+          backgroundColor: "#EEEEEE",
+          opacity: 0.1,
+        }}
+        bodyStyle={{
+          height: 350,
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
+        <div className={styles.modalContent}>
+          {!displayModalButtons ? (
+            <div className={styles.waitingSpiner}>
+              <div className={styles.deplyingMessage}>
+                {"Please Be Patient It may take serveral minutes"}
+              </div>
+              <Spin size="large" />
+            </div>
+          ) : (
+            <div className={styles.modalControls}>
+              <Button type="primary" className={styles.modalButton} onClick={handleNewCollection}>
+                New Collection
+              </Button>
+              <Link
+                className={styles.modalButton}
+                href={{
+                  pathname: `/collection/${newCollectionSlug}`,
+                }}
+              >
+                <a>{"View Collection"}</a>
+              </Link>
+            </div>
+          )}
+        </div>
+      </Modal>
       <div id="top"></div>
 
       {/* <!-- section begin --> */}
@@ -320,7 +331,8 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
             <div className="col-lg-7 offset-lg-1">
               <Form
                 form={form}
-                onFinish={submitCollection}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
                 id="form-create-item"
                 className="form-border"
                 method="post"
@@ -364,8 +376,40 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
                       ref={bannerImageInputRef}
                     />
                   </div>
-
                   <div className="spacer-single"></div>
+                  <div className={styles.nftFormErrors}>{bannerError}</div>
+                  <div className="spacer-single"></div>
+                  <h5>Upload Collection Avatar</h5>
+                  <div className="d-create-file py-3">
+                    <p id="file_name">PNG, JPG, GIF, WEBP or MP4. Max 2mb.</p>
+                    {logoImageUrl == "" ? (
+                      <input
+                        type="button"
+                        id="avatarImagePreview"
+                        className="btn-main"
+                        value="Browse"
+                        onClick={openLogoFileChooser}
+                      />
+                    ) : (
+                      <img
+                        onClick={openLogoFileChooser}
+                        src={logoImageUrl}
+                        id="avatarImage"
+                        className={`lazy nft__item_preview ${styles.uploadAvatarImage} rounded-circle`}
+                        alt=""
+                      />
+                    )}
+                    <input
+                      type="file"
+                      id="upload_file"
+                      name="logoImageFile"
+                      onChange={handleFileUpload}
+                      ref={logoImageInputRef}
+                    />
+                  </div>
+                  <div className="spacer-single"></div>
+                  <div className={styles.nftFormErrors}>{logoError}</div>
+                  <div className="spacer-double"></div>
                   <h5>Collection Name</h5>
                   <Form.Item
                     name={"collectionName"}
@@ -453,43 +497,6 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
                   <div className="spacer-single"></div>
                 </div>
               </Form>
-            </div>
-
-            <div className="col-lg-3 col-sm-6 col-xs-12">
-              <h5>Upload Collection Avatar</h5>
-              <div className={`nft__item `}>
-                <div className="author_list_pp">
-                  <a href="#">
-                    <img
-                      className="lazy"
-                      src={talentData.talentAvatar.formats.thumbnail.url}
-                      alt=""
-                    />
-                    <i className="fa fa-check"></i>
-                  </a>
-                </div>
-                <div className={`nft__item_wrap`}>
-                  <a href="#" className={`nft__item_wrap ${styles.imagePreviewContainer}`}>
-                    {logoImageUrl == "" ? (
-                      <img
-                        onClick={openLogoFileChooser}
-                        src={"/icons/collectionUpload.svg"}
-                        id="iconImage"
-                        className="lazy nft__item_preview"
-                        alt=""
-                      />
-                    ) : (
-                      <img
-                        onClick={openLogoFileChooser}
-                        src={logoImageUrl}
-                        id="logoImage"
-                        className="lazy nft__item_preview"
-                        alt=""
-                      />
-                    )}
-                  </a>
-                </div>
-              </div>
             </div>
           </div>
         </div>
