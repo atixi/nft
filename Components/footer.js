@@ -40,16 +40,16 @@ function Footer() {
     },
   });
   const handleSubmission = async(value) => {
-    axios.post(`https://nft-marketplac.herokuapp.com/subscribeds`, value)
-      .then(data=>{
-        setSuccess(true); 
-        formik.resetForm(); 
-        setDuplicate(false)
-      })  
-      .catch(err=>{
-        setDuplicate(true);
-        formik.resetForm();
-        setSuccess(false)
+      axios.post(`https://nft-marketplac.herokuapp.com/subscribeds`, value)
+        .then(data => {
+          setSuccess(true);
+          formik.resetForm();
+          setDuplicate(false)
+        })
+        .catch(err => {
+          setDuplicate(true);
+          formik.resetForm();
+          setSuccess(false)
       })
   };
   return (
@@ -103,8 +103,8 @@ function Footer() {
                   {formik.errors.email && formik.touched.email ? (
                   <div style={{color:'red'}}>{formik.errors.email}</div>
                 ) : null}
-                {success&&<div style={{color:'green'}}>Successfully Subscribed</div>}
-                {duplicate&&<div style={{color:'red'}}>Duplicated Entry!!</div>}
+                {success && <div style={{color:'green'}}> Successfully Subscribed </div>}
+                {duplicate && <div style={{color:'red'}}> Duplicated Entry!! </div>}
                 </div>
               </form>
               <div className="spacer-10"></div>
