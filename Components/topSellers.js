@@ -26,7 +26,7 @@ function TopSellers() {
     return (
         <div className="row">
             <div className="col-lg-12">
-                <h2 className="style-2">Top Sellers</h2>
+                <h2 className="style-2">Talents</h2>
             </div>
             <div className="col-md-12  fadeIn">
                 <ol className="author_list">
@@ -40,7 +40,7 @@ function TopSellers() {
                             </div>
                             <div className="author_list_info">
                                 <a href="author.html">{seller?.talentName}</a>
-                                <span>3.2 ETH</span>
+                                {/* <span>3.2 ETH</span> */}
                             </div>
                         </li>
                     })}

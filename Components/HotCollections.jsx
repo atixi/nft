@@ -44,7 +44,7 @@ function HotCollections() {
 
         <div className="row">
             <div className="col-lg-12">
-                <h2 className="style-2">Hot Collections</h2>
+                <h2 className="style-2">Collections</h2>
             </div>
             {serverCollections && <OwlCarousel className='owl-theme  fadeIn' responsive={responsive} responsiveClass={"-"} dots={false} items={5} navClass={["owl-prev carouselPrev", "owl-next carouselNext"]} loop={false} margin={15} nav>
                 {serverCollections.map((collection, index) => {

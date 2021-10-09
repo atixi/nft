@@ -120,7 +120,7 @@ function Footer() {
               <div className="de-flex">
                 <div className="de-flex-col">
                   <a href="https://thecodegiant.ca" target={"_blank"}>
-                    <img alt="" className="f-logo" src="images/logo-2-light.png" /><span className="copy">&copy; Copyright 2021 - The Code Giant</span>
+                    <img alt="" class="f-logo" style={{ width: "250px" }} src="/images/logo.svg" /><span class="copy">&copy; Copyright 2021 - The Code Giant</span>
                   </a>
                 </div>
                 <div className="de-flex-col">
