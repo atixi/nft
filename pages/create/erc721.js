@@ -11,21 +11,7 @@ import { socket } from "config/websocket";
 import styles from "/styles/erc721.module.css";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-
-const initNft = {
-  tokenId: null,
-  tokenAddress: null,
-  name: null,
-  collections: null,
-  categories: null,
-  metadata: {
-    external_link: null,
-    description: null,
-    name: null,
-    image_url: null,
-    preview_image_url: null,
-  },
-};
+import AssetCard from "@/components/assetCard";
 
 const ERC721 = ({ serverCollections, categories, serverNfts }) => {
   const [collections, setCollections] = useState(serverCollections);
@@ -37,7 +23,6 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
   const [duplicateNameError, setDuplicateNameError] = useState();
   const [selectedCategories, setSelectedCategories] = useState();
   const [nftTalent, setNftTalent] = useState();
-  const [nftData, setNftData] = useState(initNft);
   const [uploadFileUrl, setUploadFileUrl] = useState("");
   const [nftImageFile, setNftImageFile] = useState();
   const [isLoading, setLoading] = useState(false);
@@ -49,12 +34,10 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
   const [nftTokenId, setNftTokenId] = useState();
   const [displayUploadModal, setDisplayUploadModal] = useState(false);
   const [displayModalButtons, setDisplayModalButtons] = useState();
-  const [displayUnlockModal, setDisplayUnlockModal] = useState(false);
-  const [displayRegisterModal, setDisplayRegisterModal] = useState();
   const [uploadErrorMessage, setUploadErrorMessage] = useState("");
   const [form] = Form.useForm();
   const router = useRouter();
-
+  const [selectedTab, setSelectedTab] = useState(0);
   const getSelectedCollection = (colId) => {
     const selected = collections.filter((item) => item.id === colId)[0];
     setSelectedCollection(selected);
@@ -164,15 +147,6 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
     }
   };
 
-  const checkMetamaskUnlocked = async () => {
-    const { ethereum } = window;
-    if (ethereum && ethereum.isMetaMask) {
-      if (!isMetaconnected) {
-        setDisplayUnlockModal(true);
-      }
-    }
-  };
-
   const getOwnerCollections = async () => {
     console.log("collections are ", collections);
     if (metaToken != null && metaToken[0]) {
@@ -191,15 +165,8 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
       if (talentResult.data) {
         const talentExists = talentResult.data;
         if (talentExists.success) {
-          setNftTalent({
-            id: talentExists.id,
-          });
-          setDisplayRegisterModal(false);
-        } else {
-          setDisplayRegisterModal(true);
+          setNftTalent(talentExists);
         }
-      } else {
-        setDisplayRegisterModal(true);
       }
     }
   };
@@ -224,6 +191,19 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
     });
   };
 
+  const handlefixedPrice = () => {
+    setSelectedTab(0);
+    console.log("handlefixedPrice");
+  };
+  const handleAuctionPrice = () => {
+    setSelectedTab(1);
+    console.log("handleAuctionPrice");
+  };
+  const handleOpenForBids = () => {
+    setSelectedTab(2);
+    console.log("handleOpenForBids");
+  };
+
   useEffect(() => {
     refreshData();
     isTalentRegistered();
@@ -232,6 +212,49 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
 
   return (
     <div className="no-bottom" id="content">
+      <Modal
+        title="Uploading NFT..."
+        visible={displayUploadModal}
+        header={null}
+        footer={null}
+        closable={false}
+        width={500}
+        height={500}
+        maskStyle={{
+          backgroundColor: "#EEEEEE",
+          opacity: 0.1,
+        }}
+        bodyStyle={{
+          height: 350,
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
+        <div className={styles.modalContent}>
+          {!displayModalButtons ? (
+            <div className={styles.waitingSpiner}>
+              <div className={styles.deplyingMessage}>
+                {"Please Be Patient It may take serveral minutes"}
+              </div>
+              <Spin size="large" />
+            </div>
+          ) : (
+            <div className={styles.modalControls}>
+              <Button type="primary" className={styles.modalButton} onClick={handleNewNft}>
+                Create New NFT
+              </Button>
+              <Link
+                className={styles.modalButton}
+                href={`/nft/${nftContract}?tokenId=${nftTokenId}`}
+              >
+                <a>{"View Minted NFT"}</a>
+              </Link>
+            </div>
+          )}
+          <div>{/* <span>{uploadErrorMessage}</span> */}</div>
+        </div>
+      </Modal>
       <div id="top"></div>
 
       {/* <!-- section begin --> */}
@@ -254,14 +277,31 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
         <div className="container">
           <div className="row fadeIn">
             <div className="col-lg-7 offset-lg-1">
-              <form id="form-create-item" className="form-border" method="post" action="email.php">
+              <Form
+                form={form}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                id="createAssetForm"
+                className="form-border"
+                method="post"
+              >
                 <div className="field-set">
                   <h5>Upload file</h5>
-
                   <div className="d-create-file">
                     <p id="file_name">PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
-                    <input type="button" id="get_file" className="btn-main" value="Browse" />
-                    <input type="file" id="upload_file" />
+                    <input
+                      type="button"
+                      id="get_file"
+                      className="btn-main"
+                      value="Browse"
+                      onClick={openFileUpload}
+                    />
+                    <input
+                      type="file"
+                      id="upload_file"
+                      ref={hiddenFileInput}
+                      onChange={handleFileUpload}
+                    />
                   </div>
 
                   <div className="spacer-single"></div>
@@ -269,17 +309,17 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                   <h5>Select method</h5>
                   <div className="de_tab tab_methods">
                     <ul className="de_nav">
-                      <li className="active">
+                      <li className={selectedTab == 0 ? "active" : ""} onClick={handlefixedPrice}>
                         <span>
                           <i className="fa fa-tag"></i>Fixed price
                         </span>
                       </li>
-                      <li>
+                      <li className={selectedTab == 1 ? "active" : ""} onClick={handleAuctionPrice}>
                         <span>
                           <i className="fa fa-hourglass-1"></i>Timed auction
                         </span>
                       </li>
-                      <li>
+                      <li className={selectedTab == 2 ? "active" : ""} onClick={handleOpenForBids}>
                         <span>
                           <i className="fa fa-users"></i>Open for bids
                         </span>
@@ -287,52 +327,56 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                     </ul>
 
                     <div className="de_tab_content">
-                      <div id="tab_opt_1">
-                        <h5>Price</h5>
-                        <input
-                          type="text"
-                          name="item_price"
-                          id="item_price"
-                          className="form-control"
-                          placeholder="enter price for one item (ETH)"
-                        />
-                      </div>
-
-                      <div id="tab_opt_2">
-                        <h5>Minimum bid</h5>
-                        <input
-                          type="text"
-                          name="item_price_bid"
-                          id="item_price_bid"
-                          className="form-control"
-                          placeholder="enter minimum bid"
-                        />
-
-                        <div className="spacer-10"></div>
-
-                        <div className="row">
-                          <div className="col-md-6">
-                            <h5>Starting date</h5>
-                            <input
-                              type="date"
-                              name="bid_starting_date"
-                              id="bid_starting_date"
-                              className="form-control"
-                              min="1997-01-01"
-                            />
-                          </div>
-                          <div className="col-md-6">
-                            <h5>Expiration date</h5>
-                            <input
-                              type="date"
-                              name="bid_expiration_date"
-                              id="bid_expiration_date"
-                              className="form-control"
-                            />
-                          </div>
-                          <div className="spacer-single"></div>
+                      {(selectedTab == 0 || selectedTab == 1) && (
+                        <div id="tab_opt_1">
+                          <h5>Price</h5>
+                          <input
+                            type="text"
+                            name="item_price"
+                            id="item_price"
+                            className="form-control"
+                            placeholder="enter price for one item (ETH)"
+                          />
                         </div>
-                      </div>
+                      )}
+
+                      {selectedTab == 1 && (
+                        <div id="tab_opt_2">
+                          <h5>Minimum bid</h5>
+                          <input
+                            type="text"
+                            name="item_price_bid"
+                            id="item_price_bid"
+                            className="form-control"
+                            placeholder="enter minimum bid"
+                          />
+
+                          <div className="spacer-10"></div>
+
+                          <div className="row">
+                            <div className="col-md-6">
+                              <h5>Starting date</h5>
+                              <input
+                                type="date"
+                                name="bid_starting_date"
+                                id="bid_starting_date"
+                                className="form-control"
+                                min="1997-01-01"
+                              />
+                            </div>
+                            <div className="col-md-6">
+                              <h5>Expiration date</h5>
+                              <input
+                                type="date"
+                                name="bid_expiration_date"
+                                id="bid_expiration_date"
+                                className="form-control"
+                              />
+                            </div>
+                            <div className="spacer-single"></div>
+                          </div>
+                        </div>
+                      )}
 
                       <div id="tab_opt_3"></div>
                     </div>
@@ -374,29 +418,34 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                   <input type="button" id="submit" className="btn-main" value="Create Item" />
                   <div className="spacer-single"></div>
                 </div>
-              </form>
+              </Form>
             </div>
 
             <div className="col-lg-3 col-sm-6 col-xs-12">
               <h5>Preview item</h5>
+              {/* <AssetCard asset={form.values} /> */}
               <div className="nft__item">
-                <div
+                {/* <div
                   className="de_countdown"
                   data-year="2021"
                   data-month="10"
                   data-day="16"
                   data-hour="8"
-                ></div>
+                ></div> */}
                 <div className="author_list_pp">
                   <a href="#">
-                    <img className="lazy" src="images/author/author-1.jpg" alt="" />
+                    <img
+                      className="lazy"
+                      src={nftTalent?.talentAvatar?.formats?.thumbnail?.url}
+                      alt=""
+                    />
                     <i className="fa fa-check"></i>
                   </a>
                 </div>
                 <div className="nft__item_wrap">
                   <a href="#">
                     <img
-                      src="images/collections/coll-item-3.jpg"
+                      src={uploadFileUrl}
                       id="get_file_2"
                       className="lazy nft__item_preview"
                       alt=""
@@ -413,10 +462,10 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                   <div className="nft__item_action">
                     <a href="#">Place a bid</a>
                   </div>
-                  <div className="nft__item_like">
+                  {/* <div className="nft__item_like">
                     <i className="fa fa-heart"></i>
                     <span>50</span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -434,9 +483,7 @@ export const getServerSideProps = async () => {
   const nftResult = await fetch("/nfts/nftsList");
   const nfts = nftResult.data;
   const collections = collectionsResult.data;
-
   const categories = cactegoriesResult.data;
-
   return {
     props: {
       serverCollections: JSON.parse(JSON.stringify(collections)),

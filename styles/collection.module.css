@@ -24,12 +24,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  align-content: center;
 }
 .modalControls {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  align-content: center;
 }
 .modalButton {
   margin: 10px;
@@ -40,4 +42,14 @@
   border-radius: 5px;
   background-color: #007bff;
   color: white;
+}
+.deplyingMessage {
+  padding-bottom: 20px;
+}
+.waitingSpiner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: -30px;
 }

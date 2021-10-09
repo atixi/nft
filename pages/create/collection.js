@@ -333,9 +333,8 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
                 form={form}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
-                id="form-create-item"
+                id="createCollectionForm"
                 className="form-border"
-                method="post"
               >
                 <div className="field-set">
                   <h5>Upload Banner</h5>
@@ -512,15 +511,15 @@ export const getServerSideProps = async (context) => {
   const categoriesResult = await fetch("categories");
   const categories = await categoriesResult.data;
   // const talentResult = await fetch(`talents?walletAddress=${query.accountAddress}`);
-  const talentResult = await fetch(
-    `talents?walletAddress=0x8CA35f878fD14992b58a18bEB484f721b1d07A33`
-  );
+  // const talentResult = await fetch(
+  //   `talents?walletAddress=0x8CA35f878fD14992b58a18bEB484f721b1d07A33`
+  // );
   const talent = await talentResult.data[0];
   return {
     props: {
       serverCollections: JSON.parse(JSON.stringify(collections)),
       categories: JSON.parse(JSON.stringify(categories)),
-      talentData: JSON.parse(JSON.stringify(talent)),
+      // talentData: JSON.parse(JSON.stringify(talent)),
     },
   };
 };
