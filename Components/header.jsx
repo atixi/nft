@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Search from "./search";
 import Link from "next/link";
-import { Avatar, Dropdown } from "antd";
 import { Avatar, Modal } from "antd";
 import CONSTANTS from "../Constants/headerConstants";
 import Image from 'next/image'
@@ -48,7 +47,6 @@ function Header(props) {
   const [toggle,setToggle]= useState({"0":false,"1":false});
   const [toggleMenu,setToggleMenu]= useState(false);
   const [submit, setSubmit] = useState();
-  const [submit, setSubmit] = useState()
   const [showLoginModal, setShowLoginModal] = useState(false)
   function submitClick() {
     router.push(`/search?query=${submit}`);
