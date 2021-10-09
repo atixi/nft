@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import api from "/Components/axiosRequest";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
-import { getUser, signout } from '../store/action/accountSlice';
+import { getMetaToken, getUser, signout } from '../store/action/accountSlice';
 function Header(props) {
   const router = useRouter();
   const { jwt } = useSelector(getUser)
