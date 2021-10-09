@@ -303,7 +303,9 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                       onChange={handleFileUpload}
                     />
                   </div>
-
+                  <div className="spacer-single"></div>
+                  <div className={styles.nftFormErrors}>{nftImageError}</div>
+                  <div className="spacer-double"></div>
                   <div className="spacer-single"></div>
 
                   <h5>Select method</h5>
@@ -383,15 +385,30 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                   </div>
 
                   <h5>Title</h5>
-                  <input
-                    type="text"
-                    name="item_title"
-                    id="item_title"
-                    className="form-control"
-                    placeholder="e.g. 'Crypto Funk"
-                  />
+                  <Form.Item
+                    name="name"
+                    rules={[{ required: true, message: "Please input your Asset Name!" }]}
+                    onInput={checkNftNameDuplication}
+                  >
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      className="form-control"
+                      placeholder="e.g. 'Crypto Funk"
+                    />
+                  </Form.Item>
+                  <div
+                    className={
+                      duplicateNameError?.message?.includes("×")
+                        ? styles.nftFormErrors
+                        : styles.nftFormValid
+                    }
+                  >
+                    {duplicateNameError?.message}
+                  </div>
 
-                  <div className="spacer-10"></div>
+                  <div className="spacer-single"></div>
 
                   <h5>Description</h5>
                   <textarea
@@ -415,7 +432,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
 
                   <div className="spacer-single"></div>
 
-                  <input type="button" id="submit" className="btn-main" value="Create Item" />
+                  <input type="submit" id="submit" className="btn-main" value="Create Item" />
                   <div className="spacer-single"></div>
                 </div>
               </Form>

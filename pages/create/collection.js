@@ -492,7 +492,7 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
 
                   <div className="spacer-single"></div>
 
-                  <input type="submit" id="submit" className="btn-main" value="Create Item" />
+                  <input type="submit" id="submit" className="btn-main" value="Create Collection" />
                   <div className="spacer-single"></div>
                 </div>
               </Form>
@@ -514,7 +514,7 @@ export const getServerSideProps = async (context) => {
   // const talentResult = await fetch(
   //   `talents?walletAddress=0x8CA35f878fD14992b58a18bEB484f721b1d07A33`
   // );
-  const talent = await talentResult.data[0];
+  // const talent = await talentResult.data[0];
   return {
     props: {
       serverCollections: JSON.parse(JSON.stringify(collections)),
