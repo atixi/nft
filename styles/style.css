@@ -13038,10 +13038,6 @@ a.read_more i {
     color: rgba(255, 255, 255, .6);
 }
 
-.menu_side_area {
-    margin-left: 20px;
-}
-
 .de_countdown {
     position: absolute;
     right: 20px;
@@ -13235,7 +13231,7 @@ a.read_more i {
 /* ================================================== */
 
 #quick_search {
-    margin-left: 30px;
+    /* margin-left: 30px; */
     padding: 4px 11px;
     border: none;
     border-radius: 6px;
@@ -14247,10 +14243,6 @@ img {
     #quick_search{
         width:200px;
     }
-    #quick_search{
-        position: absolute;
-        top: 30px;
-    }
 }
 
 @media only screen and (max-width: 992px) {
@@ -15095,6 +15087,9 @@ img {
     }
 
     .menu_side_area {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         margin-left: 20px;
         width: 100%;
         position: relative;
@@ -15287,7 +15282,16 @@ img {
     /* -------------------------------------------------- */
 
 @media only screen and (max-width: 480px) {
-
+    .theHeader{
+        padding: 0 !important;
+    }
+    .menu_side_area{
+        flex-grow: 1;
+        margin-left:0px;
+    }
+    .logo-2{
+        width: 170px !important;
+    }
     .pf_full_width .item {
         float: left;
         width: 100%;
@@ -15346,6 +15350,46 @@ img {
 
 }
 
+#MobileMenu{
+    display: none;
+    width:100%;
+    background: #ffffff;
+    list-style: none;
+    padding: 0;
+    overflow: hidden;
+    transition: height ease 0.3s;
+}
+.dropdownList{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding: 8px 0px;
+}
+.dropdownContent{
+ transition: height ease 0.3s;
+ margin-left: 20px;
+ height: 0px;
+ overflow: hidden;
+}
+.show{
+    height: 100px;
+}
+.dropdownContent a{
+     padding: 10px 0px;
+    display: block;
+    border-bottom: 1px solid #eee;
+}
+.ArrowIcons{
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+}
+
+/* style for the header menu and its drops downs */
+
 @media only screen and (max-width: 360px) {
     #topbar {
         display: none;
@@ -15364,6 +15408,12 @@ img {
 }
 
 @media only screen and (max-width: 992px) {
+    #MobileMenu{
+        display: block;
+    }
+    #mainmenu{
+        display: none !important;
+    }
     #subheader {
         -webkit-background-size: cover;
         -moz-background-size: cover;
@@ -15402,4 +15452,11 @@ img {
         left: 0;
         top: -21px;
     }
+}
+
+/* handling menu responsiveness */
+@media only screen and (max-width: 528px) {
+.logo-2{
+    width: 200px !important;
+}
 }
