@@ -5,6 +5,7 @@ import { FOOTER_WEBSITE_LINKS } from "/Constants/footerConstants";
 import { FOOTER_COMMUNITY } from "/Constants/footerConstants";
 import { FOOTER_LANGUAGES } from "/Constants/footerConstants";
 import { Formik, useFormik } from "formik";
+import api from "/Components/axiosRequest";
 import * as Yup from "yup";
 import Link from "next/link";
 import React from "react";
@@ -17,9 +18,7 @@ const {
   privacy,
 } = FOOTER;
 
-import api from "/Components/axiosRequest";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
-import axios from "axios";
 import { stubTrue } from "lodash-es";
 
 const subscriptionSchemea = Yup.object().shape({
@@ -40,13 +39,14 @@ function Footer() {
     },
   });
   const handleSubmission = async(value) => {
-      axios.post(`https://nft-marketplac.herokuapp.com/subscribeds`, value)
+      api.post(`/subscribeds`, value)
         .then(data => {
           setSuccess(true);
           formik.resetForm();
           setDuplicate(false)
         })
         .catch(err => {
+          console.log(err.message,"hello err")
           setDuplicate(true);
           formik.resetForm();
           setSuccess(false)
