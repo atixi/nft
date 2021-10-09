@@ -36,7 +36,6 @@ function Footer() {
     onSubmit: (values) => {
       setLoading(true);
       handleSubmission(values);
-    },
   });
   const handleSubmission = async(value) => {
       api.post(`/subscribeds`, value)
