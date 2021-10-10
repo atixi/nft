@@ -193,12 +193,12 @@ export async function sellOrder(
   fixed
 ) {
   let bounty = 0.0;
-  if (orderValue.bounty.bounty !== undefined) {
+  if (orderValue?.bounty?.bounty !== undefined) {
     bounty = orderValue.bounty.bounty;
   }
   try {
     if (fixed) {
-      if (orderValue.switch.includeEnd) {
+      if (orderValue?.switch?.includeEnd) {
         if (orderValue.date.expirationTime == undefined) return "Set the expiration time";
         var date = new Date(orderValue.date.expirationTime);
         var expirationTime = parseInt(date.getTime() / 1000);
@@ -215,7 +215,7 @@ export async function sellOrder(
         });
 
         return result;
-      } else if (orderValue.switch.futureTime) {
+      } else if (orderValue?.switch?.futureTime) {
         var date = new Date(orderValue.date.futureTime);
         var listingTime = date.getTime() / 1000;
         const result = await seaport().createSellOrder({
@@ -231,6 +231,7 @@ export async function sellOrder(
 
         return result;
       } else {
+        console.log("order value is ", orderValue);
         const result = await seaport().createSellOrder({
           asset: {
             tokenId,

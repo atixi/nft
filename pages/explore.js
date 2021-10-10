@@ -7,9 +7,13 @@ import { Button, Form, Input, Select, Spin } from "antd";
 import { fetch } from "Utils/strapiApi";
 import { saleBundleType, saleTypes } from "Constants/constants";
 import AssetCard from "@/components/assetCard";
-import { getExplores, queryExplore } from "services/explore.service";
+import { getExplores, queryExplore, querysearchExplore } from "services/explore.service";
+import { useRouter } from "next/router";
 
 function Explore({ serverExplores, categories }) {
+  const router = useRouter();
+  // const [urlQuery, setUrlQuery] = useState("http://192.168.1.251:1337/nfts?[name_contains]=The Man From UNCLE");
+  const [urlQuery, setUrlQuery] = useState();
   const [searchQuery, setSearchQuery] = useState({
     search: "",
     categorySlug: "all",
@@ -24,10 +28,6 @@ function Explore({ serverExplores, categories }) {
   const [filterdExplores, setFilteredExplores] = useState(serverExplores);
   const searchFormRef = React.createRef();
   const [searchForm] = Form.useForm();
-
-  const onFinish = (values) => {
-    console.log("values of searchfomr is ", values);
-  };
 
   const getSelectedCategories = async (category) => {
     let query = searchQuery;
@@ -48,8 +48,7 @@ function Explore({ serverExplores, categories }) {
     setSearchQuery(query);
     handleFilter();
   };
-
-  const handleFilter = async () => {
+  const filter = () => {
     setDisplayLoadMoreButton(true);
     let custom = "";
     let query = searchQuery;
@@ -60,6 +59,10 @@ function Explore({ serverExplores, categories }) {
     if (query.saleType != "all") {
       custom += `${query.saleType}=true&`;
     }
+    return custom;
+  };
+  const handleFilter = async () => {
+    let custom = filter();
     setStart(2);
     const loadedExplores = await queryExplore(custom, 0, 2);
     setFilteredExplores(loadedExplores.data);
@@ -75,10 +78,39 @@ function Explore({ serverExplores, categories }) {
     }
     setFilteredExplores((prev) => [...prev, ...loadedExplores.data]);
   };
+  const searchFilterData = async (searchText) => {
+    let custom = filter();
+    custom += `[name_contains]=${searchText}&`;
+    setStart(2);
+    const loadedExplores = await queryExplore(custom, 0, 2);
+    setFilteredExplores(loadedExplores.data);
+    console.log("custome query is ", custom);
+    setStringQuery(custom);
+  };
+  const search = async (searchText) => {
+    let totalsearch = `[name_contains]=${searchText} || categories.slug=${searchText}`;
+
+    console.log("router is ", router.query);
+    if (router.query != null) {
+      console.log("router is ", router.query?.name);
+    }
+    const loadedExplores = await querysearch(totalsearch, 0, 2);
+    setFilteredExplores(loadedExplores.data);
+    console.log("custome query is ", custom);
+    setStringQuery(custom);
+  };
+  // const onFinish = (values) => {
+  //   console.log("values of searchfomr is ", values);
+  //   searchFilterData(values.name);
+  // };
   const onFinishFailed = () => {
     console.log("failed");
   };
 
+  useEffect(() => {
+    setUrlQuery(router.query);
+    console.log("router query si", router.query);
+  }, [router]);
   return (
     <div className="no-bottom " id="content">
       <div id="top"></div>
@@ -112,7 +144,7 @@ function Explore({ serverExplores, categories }) {
                 ref={searchFormRef}
                 form={searchForm}
                 // initialValues={{ nftImageFile: "" }}
-                onFinish={onFinish}
+                onFinish={searchFilterData}
                 onFinishFailed={onFinishFailed}
               >
                 <Form.Item

@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Select, Spin } from "antd";
+import { Button, Form, Input, Modal, Select, Spin, DatePicker } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { capitalizeWord, checkAssetForDuplicate, uploadNft, validateImage } from "Utils/mintApi";
 import { fetch, post } from "/Utils/strapiApi";
@@ -12,7 +12,18 @@ import styles from "/styles/erc721.module.css";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import AssetCard from "@/components/assetCard";
+import { sellOrder, signTransaction } from "Utils/utils";
 
+const { Option } = Select;
+
+const config = {
+  rules: [
+    {
+      type: "object",
+      required: true,
+    },
+  ],
+};
 const ERC721 = ({ serverCollections, categories, serverNfts }) => {
   const [collections, setCollections] = useState(serverCollections);
   const [nfts, setNfts] = useState(serverNfts);
@@ -39,6 +50,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = useState(0);
   const getSelectedCollection = (colId) => {
+    console.log("selection is ", colId);
     const selected = collections.filter((item) => item.id === colId)[0];
     setSelectedCollection(selected);
     return selectedCollection;
@@ -94,10 +106,12 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
     nftData.collections = selectedCollection;
     nftData.talent = nftTalent;
     nftData.categories = selectedCategories;
+    console.log("nft data is ", nftData);
     return nftData;
   };
 
   const onFinish = (values) => {
+    console.log("values are ", values);
     let validationResult = validateImage(nftImageFile, 10);
     if (validationResult.status == true && !duplicateNameError.isDuplicate) {
       if (metaToken.length > 0) {
@@ -116,12 +130,22 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
         let ownerAccount = metaToken[0];
         if (ownerAccount) {
           const result = await uploadNft(nftImageFile, nftData, ownerAccount);
-          if (result.success) {
+          if (result?.success) {
             setUploadErrorMessage("");
             setNftContract(result.data.tokenAddress);
             setNftTokenId(result.data.tokenId);
-            setDisplayUploadModal(true);
-            setDisplayModalButtons(true);
+            // setDisplayUploadModal(true);
+            // setDisplayModalButtons(true);
+            let isFixed = selectedTab == 0 ? true : false;
+            let contractAddress = selectedCollection.contractAddress;
+            let sellOrderResult = await createSellOrder(
+              result.data.tokenAddress,
+              result.data.tokenId,
+              ownerAccount,
+              values,
+              contractAddress,
+              isFixed
+            );
           } else {
             CustomNotification("warn", "Metamask", result.message);
             setDisplayUploadModal(false);
@@ -137,7 +161,8 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
       }
     }
   };
-  const onFinishFailed = () => {
+  const onFinishFailed = (info) => {
+    console.log("required errors are ", info);
     setDisplayUploadModal(false);
     const validationStatus = validateImage(nftImageFile, 10);
     if (!validationStatus.status) {
@@ -199,9 +224,51 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
     setSelectedTab(1);
     console.log("handleAuctionPrice");
   };
-  const handleOpenForBids = () => {
-    setSelectedTab(2);
-    console.log("handleOpenForBids");
+
+  const createSellOrder = async (
+    tokenAddress,
+    tokenId,
+    ownerAddress,
+    formValues,
+    contractAddress,
+    isFixed
+  ) => {
+    console.log("creating sell order for the following asset");
+    console.log("tokenAddress", tokenAddress);
+    console.log("tokenId", tokenId);
+    console.log("ownerAddress", ownerAddress);
+    console.log("formValues", formValues);
+    console.log("contractAddress", contractAddress);
+    console.log("isFixed", isFixed);
+    const sellSign = await signTransaction(ownerAddress, "Request to Sell", {
+      name: formValues.name,
+    });
+    if (sellSign.success) {
+      const sell = await sellOrder(
+        tokenAddress,
+        tokenId,
+        ownerAddress,
+        contractAddress,
+        formValues,
+        isFixed
+      );
+      console.log("sell result is ", sell);
+      if (sell?.hash) {
+        setDisplayUploadModal(true);
+        setDisplayModalButtons(true);
+        console.log("Sell order is saved");
+        console.log("set the onSale true in strapi");
+        // message.success("Sell order is saved");
+        // socket.emit("userCreatedNewFixedSell", sell);
+      } else {
+        setDisplayUploadModal(false);
+        setDisplayModalButtons(false);
+        console.log("Sell order is not saved");
+        // message.error(sell.toString());
+      }
+    } else {
+      console.log("sell is not created");
+    }
   };
 
   useEffect(() => {
@@ -306,7 +373,6 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                   <div className="spacer-single"></div>
                   <div className={styles.nftFormErrors}>{nftImageError}</div>
                   <div className="spacer-double"></div>
-                  <div className="spacer-single"></div>
 
                   <h5>Select method</h5>
                   <div className="de_tab tab_methods">
@@ -321,62 +387,87 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                           <i className="fa fa-hourglass-1"></i>Timed auction
                         </span>
                       </li>
-                      <li className={selectedTab == 2 ? "active" : ""} onClick={handleOpenForBids}>
+                      {/* <li className={selectedTab == 2 ? "active" : ""} onClick={handleOpenForBids}>
                         <span>
                           <i className="fa fa-users"></i>Open for bids
                         </span>
-                      </li>
+                      </li> */}
                     </ul>
 
                     <div className="de_tab_content">
                       {(selectedTab == 0 || selectedTab == 1) && (
                         <div id="tab_opt_1">
-                          <h5>Price</h5>
-                          <input
-                            type="text"
-                            name="item_price"
-                            id="item_price"
-                            className="form-control"
-                            placeholder="enter price for one item (ETH)"
-                          />
+                          <h5>{selectedTab == 0 ? "Price" : "Starting Price"}</h5>
+                          <Form.Item
+                            name={["price", selectedTab == 0 ? "amount" : "minAmount"]}
+                            // noStyle
+                            rules={[
+                              (selectedTab == 0 || selectedTab == 1) && {
+                                required: true,
+                                message: "Starting Price is required and should be number",
+                                pattern: new RegExp(/^[+-]?\d+(\.\d+)?$/),
+                              },
+                            ]}
+                          >
+                            <input
+                              type="text"
+                              id="itemPrice"
+                              className="form-control"
+                              placeholder="enter price for one item (ETH)"
+                            />
+                          </Form.Item>
+                          <div className="spacer-single"></div>
                         </div>
                       )}
 
                       {selectedTab == 1 && (
                         <div id="tab_opt_2">
-                          <h5>Minimum bid</h5>
-                          <input
-                            type="text"
-                            name="item_price_bid"
-                            id="item_price_bid"
-                            className="form-control"
-                            placeholder="enter minimum bid"
-                          />
-
-                          <div className="spacer-10"></div>
-
-                          <div className="row">
-                            <div className="col-md-6">
-                              <h5>Starting date</h5>
-                              <input
-                                type="date"
-                                name="bid_starting_date"
-                                id="bid_starting_date"
-                                className="form-control"
-                                min="1997-01-01"
-                              />
-                            </div>
-                            <div className="col-md-6">
-                              <h5>Expiration date</h5>
-                              <input
-                                type="date"
-                                name="bid_expiration_date"
-                                id="bid_expiration_date"
-                                className="form-control"
-                              />
-                            </div>
-                            <div className="spacer-single"></div>
-                          </div>
+                          <h5>Ending price</h5>
+                          <Form.Item
+                            name={["price", "endPrice"]}
+                            // noStyle
+                            rules={[
+                              selectedTab == 1 && {
+                                required: true,
+                                message: "Ending Price is required and should be number",
+                                pattern: new RegExp(/^[+-]?\d+(\.\d+)?$/),
+                              },
+                            ]}
+                          >
+                            <input
+                              type="text"
+                              id="endPrice"
+                              className="form-control"
+                              placeholder="enter price for one item (ETH)"
+                            />
+                          </Form.Item>
+                          <div className="spacer-single"></div>
+                          <h5>Expiration date</h5>
+                          <Form.Item
+                            name={["date", "auctionExpirationTime"]}
+                            rules={[
+                              selectedTab == 1 && {
+                                required: true,
+                                message: "date required",
+                                // pattern: new RegExp(/^[+-]?\d+(\.\d+)?$/),
+                              },
+                            ]}
+                            // noStyle
+                          >
+                            <DatePicker
+                              key={"auctionExpirationTime"}
+                              style={{
+                                position: "relative",
+                                // right: "45px",
+                              }}
+                              showTime
+                              allowClear={false}
+                              format="YYYY-MM-DD HH:mm:ss"
+                              // {...config}
+                              size={"large"}
+                            />
+                          </Form.Item>
+                          <div className="spacer-single"></div>
                         </div>
                       )}
 
@@ -387,12 +478,11 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                   <h5>Title</h5>
                   <Form.Item
                     name="name"
-                    rules={[{ required: true, message: "Please input your Asset Name!" }]}
+                    rules={[{ required: true, message: "Please input your Asset Title" }]}
                     onInput={checkNftNameDuplication}
                   >
                     <input
                       type="text"
-                      name="name"
                       id="name"
                       className="form-control"
                       placeholder="e.g. 'Crypto Funk"
@@ -407,31 +497,84 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                   >
                     {duplicateNameError?.message}
                   </div>
-
                   <div className="spacer-single"></div>
 
                   <h5>Description</h5>
-                  <textarea
-                    data-autoresize
-                    name="item_desc"
-                    id="item_desc"
-                    className="form-control"
-                    placeholder="e.g. 'This is very limited item'"
-                  ></textarea>
-
-                  <div className="spacer-10"></div>
-
-                  <h5>Royalties</h5>
-                  <input
-                    type="text"
-                    name="item_royalties"
-                    id="item_royalties"
-                    className="form-control"
-                    placeholder="suggested: 0, 10%, 20%, 30%. Maximum is 70%"
-                  />
-
+                  <Form.Item
+                    name="description"
+                    rules={[{ required: true, message: "NFT Description is required" }]}
+                  >
+                    <textarea
+                      data-autoresize
+                      id="description"
+                      className="form-control"
+                      placeholder="e.g. 'This is very limited item'"
+                    ></textarea>
+                  </Form.Item>
                   <div className="spacer-single"></div>
-
+                  <h5>Collection</h5>
+                  {ownerCollections && (
+                    <Form.Item
+                      name={"collections"}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select collection",
+                        },
+                      ]}
+                    >
+                      <Select
+                        style={{ width: "100%" }}
+                        placeholder="Select collection"
+                        onChange={(value) => getSelectedCollection(value)}
+                        filterOption={(input, option) =>
+                          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                      >
+                        {ownerCollections &&
+                          ownerCollections.map((item) => {
+                            return (
+                              <Option key={item.id} value={item.id}>
+                                {item.collectionName}
+                              </Option>
+                            );
+                          })}
+                      </Select>
+                    </Form.Item>
+                  )}
+                  <div className="spacer-single"></div>
+                  <h5>Categories</h5>
+                  {categories && (
+                    <Form.Item
+                      name={"categories"}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select categories",
+                        },
+                      ]}
+                    >
+                      <Select
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="Select categories"
+                        onChange={(value) => getSelectedCategories(value)}
+                        filterOption={(input, option) =>
+                          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                      >
+                        {categories &&
+                          categories.map((item) => {
+                            return (
+                              <Option key={item.id} value={item.id}>
+                                {capitalizeWord(item.category)}
+                              </Option>
+                            );
+                          })}
+                      </Select>
+                    </Form.Item>
+                  )}
+                  <div className="spacer-single"></div>
                   <input type="submit" id="submit" className="btn-main" value="Create Item" />
                   <div className="spacer-single"></div>
                 </div>
@@ -442,15 +585,8 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
               <h5>Preview item</h5>
               {/* <AssetCard asset={form.values} /> */}
               <div className="nft__item">
-                {/* <div
-                  className="de_countdown"
-                  data-year="2021"
-                  data-month="10"
-                  data-day="16"
-                  data-hour="8"
-                ></div> */}
                 <div className="author_list_pp">
-                  <a href="#">
+                  <a>
                     <img
                       className="lazy"
                       src={nftTalent?.talentAvatar?.formats?.thumbnail?.url}
@@ -479,10 +615,6 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                   <div className="nft__item_action">
                     <a href="#">Place a bid</a>
                   </div>
-                  {/* <div className="nft__item_like">
-                    <i className="fa fa-heart"></i>
-                    <span>50</span>
-                  </div> */}
                 </div>
               </div>
             </div>
