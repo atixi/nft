@@ -127,10 +127,13 @@ function Header(props) {
                 <div className="de-flex-col">
                   {/* <!-- logo begin --> */}
                   <div id="logo">
-                    <a href="/">
+                    <Link href="/" passHref>
+                     <a href="/" >
                       <img alt="" className="logo" src="/images/logo-light.png" />
                       <img alt="" style={{ width: "250px" }} className="logo-2" src="/images/logo.svg" />
                     </a>
+                    </Link>
+                   
                   </div>
                   {/* <!-- logo close --> */}
                 </div>
@@ -144,14 +147,18 @@ function Header(props) {
                   <li>
                     <a href="#">Explore<span></span></a>
                     <ul>
-                      <li><a href="/explore">All Assets</a></li>
+                      <li>
+                        <Link href="/explore" passHref>
+                          <a href="/explore">All Assets</a>
+                        </Link>
+                      </li>
                     </ul>
                   </li>
                   <li>
                     <a href="#">Create<span></span></a>
                     <ul>
-                      <li><Link href={"/"}><a>Create Asset</a></Link></li>
-                      <li><Link href={"/add/asset"}><a>Add Existing Asset</a></Link></li>
+                      <li><Link href="/create"><a>Create Asset</a></Link></li>
+                      <li><Link href="/add/asset"><a>Add Existing Asset</a></Link></li>
 
                     </ul>
                   </li>
@@ -196,31 +203,43 @@ function Header(props) {
             </div>
           </div>
         </div>
-          <ul id="MobileMenu" style={toggleMenu?{height:"200px"}:{height:"0px"}}>
+          <ul id="MobileMenu" style={toggleMenu?{height:"300px"}:{height:"0px"}}>
              <li>
                <div className="dropdownList">
-                  <a href="/">Explore</a>
+                  <Link href="/explore" passHref>
+                          <a href="/explore">Explore</a>
+                        </Link>
                  <span className="ArrowIcons" onClick={()=>setToggle({...toggle,["0"]:!toggle[0]})} >
                  {toggle[0]?<UpOutlined style={{width:30}} />: <DownOutlined style={{width:30}} />} 
                  </span>
                </div>
                <div className="dropdownContent" style={toggle[0]?{height:"70px"}:{height:"0px"}}>
-                  <a href="/">All Assets</a>
+                   <Link href="/explore" passHref>
+                          <a href="/explore">All Assets</a>
+                        </Link>
                   
                </div>
                </li>  
               <li>
                <div className="dropdownList">
-                  <a href="/">Create</a>
+                 <Link href="/"><a>Create</a></Link>
                  <span className="ArrowIcons" onClick={()=>setToggle({...toggle,["1"]:!toggle[1]})} >
                  {toggle[1]?<UpOutlined style={{width:30}} />: <DownOutlined style={{width:30}} />} 
                  </span>
                </div>
                <div className={toggle[1]?"dropdownContent show":"dropdownContent"}>
-                  <a href="/">Create Asset</a>
-                   <a href="/">Add Existing Asset</a>
+                 <Link href="/create"><a>Create Asset</a></Link>
+                  <Link href="/add/asset"><a>Add Existing Asset</a></Link>
                </div>
                </li>  
+               <li>
+               <div className="dropdownList">
+                 {isLoggedIn() ?
+                      <a style={{color:"#F32178"}} onClick={handleLogout}>Logout</a> :
+                      <a style={{color:"#F32178"}}onClick={openLogin}>Login</a>}
+               </div>
+            
+               </li> 
           </ul>
       </div>
       {showLoginModal && <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} />}
