@@ -4,7 +4,7 @@ import {
   Input,
   Tabs,
   message,
-  Statistic, Slider, Spin
+  Statistic, Spin, Result, Button
 } from "antd";
 
 import {
@@ -29,7 +29,7 @@ import { socket } from "config/websocket";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { useSelector } from "react-redux";
 import { LoadingOutlined } from '@ant-design/icons';
-
+import { useRouter } from "next/router"
 const antIcon = <LoadingOutlined style={{ fontSize: 16, marginLeft: "-25px", marginRight: "20px", position: "relative", top: "-5px", color: "white" }} spin />;
 
 const { TabPane } = Tabs;
@@ -57,6 +57,8 @@ function SellNft() {
   const [isFixed, setIsFixed] = useState(true);
   const [posting, setPosting] = useState(false);
   const [hasOrder, setHasOrder] = useState(false);
+  const [showResult, setShowResult] = useState(false)
+  const router = useRouter()
   async function loadNft() {
     if (queryParam.sellToken != undefined && queryParam.tokenId != undefined) {
       const data = await fetchOne(queryParam.sellToken, queryParam.tokenId);
@@ -158,6 +160,7 @@ function SellNft() {
             isFixed
           );
           if (sell?.hash) {
+            setShowResult(true)
             message.success("Sell order is saved");
             socket.emit("userCreatedNewFixedSell", sell);
             setHasOrder(true);
@@ -208,97 +211,105 @@ function SellNft() {
         <SellAssetContent className="container">
           <div className="row fadeIn">
             <div className="col-lg-7 offset-lg-1">
-              <Form onFinish={onSubmitForm} className="form-border">
+              {showResult ? <Result
+                status="success"
+                title="Sell order is saved!"
+                subTitle="Your sell order is saved successfully, please click below to view"
+                extra={[
+                  <button className={"btn-main btn-sm"} onClick={() => router.back()}>
+                    View Asset
+                  </button>,
+                ]}
+              /> :
+                <Form onFinish={onSubmitForm} className="form-border">
 
-                <div className="field-set">
-                  <h5>Select method</h5>
-                  <Tabs
-                    defaultActiveKey="1"
-                    onTabClick={onTabClick}
-                    tabBarGutter={10}
-                    // style={{ height: "500px" }}
-                    // size={"large"}
-                    type={"card"}
-                  >
-                    <TabPane
-                      tab={
-                        <CustomTapBarElement>
-                          <div><i className="fa fa-tag"></i></div>
-                          <span>
-                            {"Fixed Price"}
-                          </span>
-                        </CustomTapBarElement>
-                      }
-                      key="1"
-                      style={{ height: 200 }}
+                  <div className="field-set">
+                    <h5>Select method</h5>
+                    <Tabs
+                      defaultActiveKey="1"
+                      onTabClick={onTabClick}
+                      tabBarGutter={10}
+                      type={"card"}
                     >
-                      <h5>Price</h5>
-                      <Form.Item
-                        name={["price", "amount"]}
+                      <TabPane
+                        tab={
+                          <CustomTapBarElement>
+                            <div><i className="fa fa-tag"></i></div>
+                            <span>
+                              {"Fixed Price"}
+                            </span>
+                          </CustomTapBarElement>
+                        }
+                        key="1"
+                        style={{ height: 200 }}
                       >
-                        <input type="text" name="item_price" id="item_price" className="form-control" placeholder="enter price for one item (ETH)" />
-                      </Form.Item>
-                    </TabPane>
-                    <TabPane
-                      tab={
-                        <CustomTapBarElement>
-                          <div>{<i className="fa fa-hourglass-1"></i>}</div>
-                          <span>
-                            {"Timed Auction"}
-                          </span>
-                        </CustomTapBarElement>
-                      }
-                      key="2"
-                      style={{ height: 200 }}
-                    >
-                      {!isFixed && (<>
-                        <h5>Minimum bid</h5>
+                        <h5>Price</h5>
                         <Form.Item
-                          name={["price", "minAmount"]}
-                          noStyle
-                          rules={[
-                            {
-                              required: true,
-                              message: "Amount is required",
-                            },
-                          ]}
+                          name={["price", "amount"]}
                         >
-                          <Input size={"middle"} className={"form-control"} placeholder={"Enter minimum bid"} />
-                          {/* <input type="text" name="item_price_bid" id="item_price_bid" className="form-control" placeholder="enter minimum bid" /> */}
+                          <input type="text" name="item_price" id="item_price" className="form-control" placeholder="enter price for one item (ETH)" />
                         </Form.Item>
+                      </TabPane>
+                      <TabPane
+                        tab={
+                          <CustomTapBarElement>
+                            <div>{<i className="fa fa-hourglass-1"></i>}</div>
+                            <span>
+                              {"Timed Auction"}
+                            </span>
+                          </CustomTapBarElement>
+                        }
+                        key="2"
+                        style={{ height: 200 }}
+                      >
+                        {!isFixed && (<>
+                          <h5>Minimum bid</h5>
+                          <Form.Item
+                            name={["price", "minAmount"]}
+                            noStyle
+                            rules={[
+                              {
+                                required: true,
+                                message: "Amount is required",
+                              },
+                            ]}
+                          >
+                            <Input size={"middle"} className={"form-control"} placeholder={"Enter minimum bid"} />
+                            {/* <input type="text" name="item_price_bid" id="item_price_bid" className="form-control" placeholder="enter minimum bid" /> */}
+                          </Form.Item>
 
-                        <div className="spacer-10"></div>
+                          <div className="spacer-10"></div>
 
-                        <div className="row">
-                          {/* <div className="col-md-6">
+                          <div className="row">
+                            {/* <div className="col-md-6">
                           <h5>Starting date</h5>
                           <input type="date" name="bid_starting_date" id="bid_starting_date" className="form-control" min="1997-01-01" />
                         </div> */}
-                          <div className="col-md-12">
-                            <h5>Expiration date</h5>
-                            <Form.Item
-                              name={["date", "auctionExpirationTime"]}
-                            >
-                              <DatePicker
+                            <div className="col-md-12">
+                              <h5>Expiration date</h5>
+                              <Form.Item
+                                name={["date", "auctionExpirationTime"]}
+                              >
+                                <DatePicker
 
-                                showTime
-                                allowClear={false}
-                                format="YYYY-MM-DD HH:mm:ss"
-                                {...config}
-                                className={"form-control"}
-                                size={"large"}
-                              />
-                            </Form.Item>
+                                  showTime
+                                  allowClear={false}
+                                  format="YYYY-MM-DD HH:mm:ss"
+                                  {...config}
+                                  className={"form-control"}
+                                  size={"large"}
+                                />
+                              </Form.Item>
+                            </div>
+                            <div className="spacer-single"></div>
                           </div>
-                          <div className="spacer-single"></div>
-                        </div>
-                      </>)}
-                    </TabPane>
-                  </Tabs>
-                  <button type='submit' disabled={disableBtn} className="btn btn-main color-2">{disableBtn && <Spin indicator={antIcon} color={"white"} />} Add Sell</button>
-                  <div className="spacer-single"></div>
-                </div>
-              </Form>
+                        </>)}
+                      </TabPane>
+                    </Tabs>
+                    <button type='submit' disabled={disableBtn} className="btn btn-main color-2">{disableBtn && <Spin indicator={antIcon} color={"white"} />} Add Sell</button>
+                    <div className="spacer-single"></div>
+                  </div>
+                </Form>}
             </div>
 
             <div className="col-lg-3 col-sm-6 col-xs-12">

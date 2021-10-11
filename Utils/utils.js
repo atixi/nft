@@ -25,7 +25,7 @@ export const seaportProvider = new Web3.providers.HttpProvider(
 export function seaport() {
   const provider = window.ethereum;
   return new OpenSeaPort(provider, {
-    networkName: process.env.MAIN ? Network.Main : Network.Rinkeby,
+    networkName: process.env.MAIN === true ? Network.Main : Network.Rinkeby,
     // apiKey: "2e7ef0ac679f4860bbe49a34a98cf5ac",
   });
 }

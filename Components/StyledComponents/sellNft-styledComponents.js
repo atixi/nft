@@ -76,4 +76,13 @@ export const SellAssetContent = styled.div`
 .ant-tabs-ink-bar{
     display: none !important;
 };
+.ant-result-icon{
+    span{
+        svg{
+            width: 60px;
+            height: 60px;
+        }
+    }
+    
+}
 `
