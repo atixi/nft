@@ -150,7 +150,7 @@ function SellNft() {
             </div>
           </div>
         </div>
-      </section>that
+      </section>
       <section aria-label="section">
         <SellAssetContent className="container">
           <div className="row fadeIn">
