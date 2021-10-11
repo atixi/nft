@@ -39,6 +39,22 @@ export const Content = styled.div`
 }
 .ant-tabs-ink-bar{
     display: none !important;
+};
+.p_list {
+    margin-bottom: 15px;
+}
+.listContainer
+{
+    max-height: 400px;
+    overflow: scroll;
+};
+.userAvatar{
+    position: relative;
+    display: inline-block;
+}
+.orderInfo{
+    display: inline-block;
+    padding-left: 10px;
 }
 
 `;

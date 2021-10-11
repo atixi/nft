@@ -1,14 +1,12 @@
 import request from "./axios";
 
 export const fetchOne = (tokenAddress, tokenId) => {
-  console.log("feching single nft");
   return request(`nfts/${tokenId}/${tokenAddress}`, {
     method: "GET",
   });
 };
 
 export const fetchBundle = async (maker, slug) => {
-  console.log("feching bundle");
   return await request(`nfts/bundle/single/${maker}/${slug}`, {
     method: "GET",
   }).catch(function (error) {
