@@ -1,12 +1,10 @@
-import React, { useRef, useState } from "react";
-import Image from "next/image";
-import styles from "/styles/talent.module.css";
-import { Button } from "antd";
-import { fetch } from "Utils/strapiApi";
-import Link from "next/link";
-import copy from "copy-to-clipboard";
-import { ellipseAddress } from "Utils/utils";
 import AssetCard from "@/components/assetCard";
+import copy from "copy-to-clipboard";
+import Link from "next/link";
+import React, { useRef, useState } from "react";
+import { fetch } from "Utils/strapiApi";
+import { ellipseAddress } from "Utils/utils";
+import styles from "/styles/talent.module.css";
 
 function TalentPage({ talentAssets, talent, accountAddress }) {
   const [start, setStart] = useState(2);
