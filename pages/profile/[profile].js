@@ -1,48 +1,26 @@
-import { Tabs, Spin, Menu, Dropdown } from "antd";
-import React, { useEffect, useState } from "react";
+import CollectionLoader from "@/components/collectionLoader";
+import { Dropdown, Spin, Tabs } from "antd";
 import {
-  ProfileContainer,
-  ShareButton,
-  BiographyContainer,
-  BioDescription,
-  ProfileButton,
-  ShareProfile,
-  EditProfile,
-} from "/Components/StyledComponents/talentPage-styledComponents";
-import Products from "/Components/nfts";
+  FacebookIcon, FacebookShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton
+} from "next-share";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import api from "/Components/axiosRequest";
+import Products from "/Components/nfts";
 import {
   LoadMoreButton,
-  MainWrapper,
+  MainWrapper
 } from "/Components/StyledComponents/globalStyledComponents";
-import CollectionLoader from "@/components/collectionLoader";
-import { useRouter } from "next/router";
 import {
-  FacebookShareButton,
-  FacebookIcon,
-  TwitterShareButton,
-  TwitterIcon,
-  TelegramShareButton,
-  TelegramIcon,
-  WhatsappShareButton,
-  WhatsappIcon,
-} from "next-share";
-import { displayAddress, randomAvatar } from "/Utils/utils";
-import api from "/Components/axiosRequest";
+  BioDescription, BiographyContainer, EditProfile, ProfileButton, ProfileContainer,
+  ShareButton, ShareProfile
+} from "/Components/StyledComponents/talentPage-styledComponents";
 import {
-  setAccountTokens,
-  setMetaToken,
-  setWalletToken,
-  setWalletBalance,
-  setMetaConnected,
-  setWalletConnected,
-  getAccountTokens,
-  getMetaToken,
-  getWalletToken,
-  getMetaConnected,
-  getWalletConnected,
+  getAccountTokens
 } from "/store/action/accountSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { displayAddress, randomAvatar } from "/Utils/utils";
 
 const { TabPane } = Tabs;
 function Profile() {

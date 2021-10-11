@@ -1,52 +1,15 @@
-// import {
-//   FacebookIcon,
-//   FacebookShareButton,
-//   TelegramIcon,
-//   TelegramShareButton,
-//   TwitterIcon,
-//   TwitterShareButton,
-//   WhatsappIcon,
-//   WhatsappShareButton,
-// } from "next-share";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import AssetCard from "../../Components/assetCard";
+import request from "../../Utils/axios";
 
-import CollectionLoader from "@/components/collectionLoader";
-import { displayAddress } from "/Utils/utils";
-import { useRouter } from "next/router";
-import request from "../../Utils/axios"
-import AssetCard from "../../Components/assetCard"
-function CollectionDetails() {
-  const router = useRouter();
-  const { slug } = router.query;
-  const [collection, setCollection] = useState()
-  const [assets, setAssets] = useState()
-  const loadCollection = async () => {
-    const col = await request(`collections/${slug}`, {
-      method: "GET"
-    });
-    if (col.status === 200) {
-      setCollection(col.data)
-      setAssets(col.data.nfts)
-    }
-  }
-
-
-  useEffect(() => {
-    slug != undefined
-      ? loadCollection()
-      : "";
-  }, [slug]);
-
+function CollectionDetails({ collection, assets }) {
   return (
     <>
       <div className="no-bottom no-top" id="content">
         <div id="top"></div>
-
-        {/* <!-- section begin --> */}
         <section id="profile_banner" aria-label="section" className="text-light" style={{ paddingBottom: "0px", width: "100%" }}>
           <img src={collection?.collectionBanner?.url} style={{ width: "100%", height: "250px" }} />
         </section>
-        {/* <!-- section close --> */}
         <section aria-label="section" className="d_coll no-top">
           <div className="contentContainer">
             <div className="row">
@@ -63,7 +26,6 @@ function CollectionDetails() {
                         {collection?.collectionName}
                         <div className="clearfix"></div>
                         <span id="wallet" className="profile_wallet">DdzFFzCqrhshMSxb9oW3mRo4MJrQkusV3fGFSTwaiu4wPBqMryA9DYVJCkW9n7twCffG5f5wX2sSkoDXGiZB1HPa7K7f865Kk4LqnrME</span>
-                        {/* <button id="btn_copy" title="Copy Text">Copy</button> */}
                       </h4>
                     </div>
                   </div>
@@ -81,10 +43,19 @@ function CollectionDetails() {
             </div>
           </div>
         </section>
-
-
       </div>
     </>
   );
+}
+export const getServerSideProps = async ({ query }) => {
+  const { data } = await request(`collections/${query.slug}`, {
+    method: "GET"
+  });
+  return {
+    props: {
+      collection: data,
+      assets: data.nfts
+    }
+  }
 }
 export default CollectionDetails;

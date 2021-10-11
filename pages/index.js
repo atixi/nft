@@ -1,27 +1,23 @@
-import { useEffect, useState } from "react";
-
+import request from "../Utils/axios";
 import Explore from "/Components/explore";
-import FixedSells from "@/components/fixedSells";
 import HotCollections from "/Components/HotCollections";
-import LiveAuctions from "/Components/liveAuctions";
-import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 import Slide from "/Components/slider/slide";
 import TopSellers from "/Components/topSellers";
 import { fetch } from "Utils/strapiApi";
 
-function Home({ fixPricesData, acutionPricesData }) {
+function Home({ featuredAsset, exploreAssets, talents, collections }) {
   return (
     <div className="no-bottom" id="content">
       <div id="top"></div>
-      <Slide />
+      <Slide assets={featuredAsset} />
       <div id={"section-collections"} className={"mb-5 pt-30"}>
         <div className={"container mb-5"}>
+          <div className="spacer-single" />
+          <Explore assets={exploreAssets} />
           <div className="spacer-single"></div>
-          <Explore />
-          <div className="spacer-single"></div>
-          <HotCollections />
-          <div className="spacer-single"></div>
-          <TopSellers />
+          <HotCollections collections={collections}/>
+          <div className="spacer-single" />
+          <TopSellers talents={talents}/>
         </div>
       </div>
     </div>
@@ -29,14 +25,22 @@ function Home({ fixPricesData, acutionPricesData }) {
 }
 
 export const getServerSideProps = async () => {
-  // const auctionResult = await fetch("/auctions");
-  // const fixedResult = await fetch("/fixeds");
-  // const acutions = auctionResult.data[0].data;
-  // const fixeds = fixedResult.data[0].data;
+  const [featuredAsset, exploreAssets, collections, talents] = await Promise.all([
+    request("nfts/featured", {
+      method: "GET"
+    }),
+    request("nfts?_limit=8", {
+      method: "GET"
+    }),
+    fetch("/collections"),
+    fetch("/talents")
+  ]);
   return {
     props: {
-      // fixPricesData: JSON.parse(JSON.stringify(fixeds)),
-      // acutionPricesData: JSON.parse(JSON.stringify(acutions)),
+      featuredAsset: featuredAsset.data,
+      exploreAssets: exploreAssets.data,
+      collections: collections.data,
+      talents: talents.data,
     },
   };
 };
