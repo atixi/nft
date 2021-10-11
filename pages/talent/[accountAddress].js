@@ -5,7 +5,7 @@ import React, { useRef, useState } from "react";
 import { fetch } from "Utils/strapiApi";
 import { ellipseAddress } from "Utils/utils";
 import styles from "/styles/talent.module.css";
-const offset = 2;
+const offset = 20;
 function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
   const [start, setStart] = useState(offset);
   const [onSaleStart, setOnSaleStart] = useState(offset);
