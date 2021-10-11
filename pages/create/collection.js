@@ -7,13 +7,19 @@ import { useSelector } from "react-redux";
 import { getMetaConnected, getMetaToken } from "store/action/accountSlice";
 import {
   checkFileType,
-  deployCollection
+  deployCollection,
+  validateCollectionIdetifier,
+  validateCollectionName,
+  validateCompleteCollectionName,
 } from "Utils/mintApi";
 import styles from "/styles/collection.module.css";
 import { fetch } from "/Utils/strapiApi";
 
 const { Option } = Select;
-
+let collectionCompleteName = {
+  collectionName: "",
+  collectionIdentifier: "",
+};
 const ERC721Collection = ({ serverCollections, categories, talentData }) => {
   const [form] = Form.useForm();
   const logoImageInputRef = useRef(null);
@@ -74,6 +80,51 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
     }
   };
 
+  const handleCollectionCompleteName = (e) => {
+    const value = e.target.value;
+
+    collectionCompleteName = {
+      ...collectionCompleteName,
+      [e.target.name]: value,
+    };
+
+    const nameResult = validateCollectionName(
+      collectionCompleteName.collectionName,
+      "Collection Name"
+    );
+    if (collectionCompleteName.collectionName != "") {
+      setCollectionNameError(nameResult);
+    } else {
+      setCollectionNameError("");
+    }
+
+    const identifierResult = validateCollectionIdetifier(
+      collectionCompleteName.collectionIdentifier,
+      "Identifier"
+    );
+
+    if (collectionCompleteName.collectionIdentifier != "") {
+      setCollectionIdentifierError(identifierResult);
+    } else {
+      setCollectionIdentifierError("");
+    }
+
+    const result = validateCompleteCollectionName(
+      collections,
+      collectionCompleteName.collectionName,
+      collectionCompleteName.collectionIdentifier
+    );
+
+    if (
+      collectionCompleteName.collectionName != "" &&
+      collectionCompleteName.collectionIdentifier != ""
+    ) {
+      setCompleteCollectionNameError(result);
+    } else {
+      setCompleteCollectionNameError("");
+    }
+  };
+
   const clearForm = () => {
     setLogoImageUrl(null);
     setBannerImageUrl(null);
@@ -88,7 +139,7 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
   };
 
   const onFinish = (values) => {
-    const collectionData = Object.assign(values, { talent: collectionTalent })
+    const collectionData = Object.assign(values, { talent: collectionTalent });
     if (!logoImageFile) {
       setLogoError("Avatar Image is Required");
     }
@@ -169,8 +220,8 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
           });
         }
       }
-    };
-  }
+    }
+  };
 
   const refreshData = () => {
     socket.on("serverBroadCastNewCollection", (data) => {
@@ -264,7 +315,7 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
                   <h5>Upload Banner</h5>
 
                   <div className="d-create-file">
-                    <p id="file_name">PNG, JPG, GIF, WEBP or MP4. Max 2mb.</p>
+                    <p id="file_name">PNG, JPG, GIF, WEBP or MP4. Max 10mb.</p>
                     {bannerImageUrl == "" ? (
                       <input
                         type="button"
@@ -280,8 +331,8 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
                         id="get_file_2"
                         className={`lazy nft__item_preview ${styles.uploadBannerImage}`}
                         alt=""
-                      // width="500px"
-                      // height="200px"
+                        // width="500px"
+                        // height="200px"
                       />
                     )}
                     <input
@@ -304,7 +355,7 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
                   <div className="spacer-single"></div>
                   <h5>Upload Collection Avatar</h5>
                   <div className="d-create-file py-3">
-                    <p id="file_name">PNG, JPG, GIF, WEBP or MP4. Max 2mb.</p>
+                    <p id="file_name">PNG, JPG, GIF, WEBP or MP4. Max 10mb.</p>
                     {logoImageUrl == "" ? (
                       <input
                         type="button"
@@ -349,8 +400,10 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
                       id="collectionName"
                       className="form-control"
                       placeholder="e.g. 'Ninja Warriors"
+                      onInput={handleCollectionCompleteName}
                     />
                   </Form.Item>
+                  <div className={styles.nftFormErrors}>{collectionNameError?.message}</div>
                   <div className="spacer-single"></div>
                   <h5>Collection Identifier</h5>
                   <Form.Item
@@ -367,9 +420,11 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
                       name="collectionIdentifier"
                       id="collectionIdentifier"
                       className="form-control"
-                      placeholder="e.g. 'Crypto Funk"
+                      placeholder="e.g. 'Media"
+                      onInput={handleCollectionCompleteName}
                     />
                   </Form.Item>
+                  <div className={styles.nftFormErrors}>{collectionIdentifierError?.message}</div>
                   <div className="spacer-single"></div>
 
                   <h5>Description</h5>
@@ -433,7 +488,7 @@ export const getServerSideProps = async (context) => {
   const collections = collectionsResult.data;
   const categoriesResult = await fetch("categories");
   const categories = await categoriesResult.data;
-  
+
   return {
     props: {
       serverCollections: JSON.parse(JSON.stringify(collections)),
@@ -442,4 +497,3 @@ export const getServerSideProps = async (context) => {
   };
 };
 export default ERC721Collection;
-

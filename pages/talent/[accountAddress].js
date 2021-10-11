@@ -6,6 +6,7 @@ import { fetch } from "Utils/strapiApi";
 import { ellipseAddress } from "Utils/utils";
 import styles from "/styles/talent.module.css";
 import gradients from "/styles/gradients.module.css";
+import CustomNotification from "@/components/commons/customNotification";
 const offset = 20;
 function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
   const [start, setStart] = useState(offset);
@@ -59,6 +60,7 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
       debug: true,
       message: "Press #{key} to copy",
     });
+    CustomNotification("info", "", "Wallet address is copied", "topRight");
   };
 
   const getRandomBanner = () => {
