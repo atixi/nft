@@ -150,28 +150,28 @@ function SellNft() {
             </div>
           </div>
         </div>
-      </section>
+      </section>that
       <section aria-label="section">
         <SellAssetContent className="container">
           <div className="row fadeIn">
-            {notFound ? <Result
+            {notFound ? <Result key={"1"}
               status="404"
               style={{ margin: "auto" }}
               title="Asset Not Found"
               subTitle="Please make sure your asset is exist"
               extra={[
-                <button className={"btn-main btn-sm"} onClick={() => router.back()}>
+                <button key={"backBtn"} className={"btn-main btn-sm"} onClick={() => router.back()}>
                   Back
                   </button>,
               ]}
             /> : (<>
               <div className="col-lg-7 offset-lg-1">
-                {showResult ? <Result
+                {showResult ? <Result key={"2"}
                   status="success"
                   title="Sell order is saved!"
                   subTitle="Your sell order is saved successfully, please click below to view"
                   extra={[
-                    <button className={"btn-main btn-sm"} onClick={() => router.back()}>
+                    <button key={"viewAssetBtn"} className={"btn-main btn-sm"} onClick={() => router.back()}>
                       View Asset
                   </button>,
                   ]}
