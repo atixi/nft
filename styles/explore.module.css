@@ -1,0 +1,59 @@
+.exploreContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  align-content: center;
+  padding: 5%;
+}
+.filterContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin: 20px;
+}
+.searchForm {
+  display: flex;
+  flex-direction: row;
+}
+.searchFormSelectItem {
+  min-width: 200px;
+  min-height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  margin: 0px 10px;
+}
+.searhFormInputItem {
+  min-width: 200px;
+  min-height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  margin: 0px;
+}
+.searchFormSelect {
+  min-width: 200px;
+  margin: 10px 10px;
+  vertical-align: middle;
+}
+.searhFormInput {
+  min-height: 40px;
+  margin: 0px;
+}
+.nftListContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-content: flex-start;
+}
+.nftItemContainer {
+  min-width: 94%;
+  min-height: 94%;
+}

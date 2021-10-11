@@ -1,19 +1,24 @@
-const webpack = require('webpack');
+const webpack = require("webpack");
 module.exports = {
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    config.plugins.push(new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      'window.jQuery': 'jquery'
-    }))
+    config.plugins.push(
+      new webpack.ProvidePlugin({
+        $: "jquery",
+        jQuery: "jquery",
+        "window.jQuery": "jquery",
+      })
+    );
     return config;
   },
   module: {
-    loaders: [{ test: /\.scss$/, loaders: ["style", "css", "sass"] },
-    { test: /\.css$/, loader: "style-loader!css-loader" },
-    {
-      test: /\.woff|\.woff2|\.svg|.eot|\.ttf|\.png/, loader: 'url?prefix=font/&limit=10000&name=/assets/fonts/[name].[ext]'
-    }]
+    loaders: [
+      { test: /\.scss$/, loaders: ["style", "css", "sass"] },
+      { test: /\.css$/, loader: "style-loader!css-loader" },
+      {
+        test: /\.woff|\.woff2|\.svg|.eot|\.ttf|\.png/,
+        loader: "url?prefix=font/&limit=10000&name=/assets/fonts/[name].[ext]",
+      },
+    ],
   },
   mocha: {
     enableTimeouts: false,
@@ -21,7 +26,7 @@ module.exports = {
   },
   webpack5: true,
   images: {
-    domains: ["res.cloudinary.com"],
+    domains: ["res.cloudinary.com", "lorempixel.com"],
   },
   env: {
     BASE_URL: process.env.BASE_URL,
@@ -46,6 +51,6 @@ module.exports = {
     PINATA_SECRET_KEY: process.env.PINATA_SECRET_KEY,
     PINTA_JWT: process.env.PINTA_JWT,
     REF_ADDRESS: process.env.REF_ADDRESS,
-    NETWORK_NAME: process.env.NETWORK_NAME
+    NETWORK_NAME: process.env.NETWORK_NAME,
   },
 };

@@ -38,9 +38,7 @@ export async function connectWallet() {
 
 export function toUnitAmount(baseAmount, tokenContract = null) {
   const decimals =
-    tokenContract && tokenContract.decimals != null
-      ? tokenContract.decimals
-      : DEFAULT_DECIMALS;
+    tokenContract && tokenContract.decimals != null ? tokenContract.decimals : DEFAULT_DECIMALS;
 
   const amountBN = new BigNumber(baseAmount.toString());
   return amountBN.div(new BigNumber(10).pow(decimals));
@@ -48,9 +46,7 @@ export function toUnitAmount(baseAmount, tokenContract = null) {
 
 export function toBaseUnitAmount(unitAmount, tokenContract = null) {
   const decimals =
-    tokenContract && tokenContract.decimals != null
-      ? tokenContract.decimals
-      : DEFAULT_DECIMALS;
+    tokenContract && tokenContract.decimals != null ? tokenContract.decimals : DEFAULT_DECIMALS;
 
   const amountBN = new BigNumber(unitAmount.toString());
   return amountBN.times(new BigNumber(10).pow(decimals));
@@ -157,14 +153,7 @@ export const providerOptions = {
       infuraId: "7ca37bed6f77481eb889a45bc8520e6c", // required
       qrcode: true,
       qrcodeModalOptions: {
-        mobileLinks: [
-          "rainbow",
-          "metamask",
-          "argent",
-          "trust",
-          "imtoken",
-          "pillar",
-        ],
+        mobileLinks: ["rainbow", "metamask", "argent", "trust", "imtoken", "pillar"],
       },
     },
   },
@@ -190,3 +179,14 @@ export const getTalentAccount = async (account) => {
 
 export const allowedImageTypes =
   "image/png,image/gif,image/jpeg,image/jpeg,image/gif,image/svg+xml";
+
+export const saleTypes = [
+  { id: 0, label: "All Type", value: "all" },
+  { id: 1, label: "On Sale", value: "onSale" },
+  { id: 2, label: "Has Offer", value: "hasOffer" },
+];
+export const saleBundleType = [
+  { id: 0, label: "All Items", value: "all" },
+  { id: 1, label: "Single Items", value: "single" },
+  { id: 2, label: "Bundled Items", value: "bundle" },
+];

@@ -1,11 +1,7 @@
 import * as Web3 from "web3";
 
 import { EventType, Network, OpenSeaPort } from "opensea-js";
-import {
-  differenceInSeconds,
-  intervalToDuration,
-  secondsToMilliseconds,
-} from "date-fns";
+import { differenceInSeconds, intervalToDuration, secondsToMilliseconds } from "date-fns";
 import { fetch, post } from "./strapiApi";
 
 import CustomNotification from "@/components/commons/customNotification";
@@ -16,7 +12,7 @@ import fromUnix from "date-fns/fromUnixTime";
 import { getAuctionPriceDetails } from "/Constants/constants";
 import { isMobileDevice } from "Constants/constants";
 import moment from "moment";
-import { notification } from "antd"
+import { notification } from "antd";
 const STRAPI_BASE_URL = process.env.HEROKU_BASE_URL;
 // const STRAPI_BASE_URL = process.env.HEROKU_BASE_TNC;
 // const STRAPI_BASE_URL = process.env.STRAPI_LOCAL_BASE_URL;
@@ -29,17 +25,11 @@ export const seaportProvider = new Web3.providers.HttpProvider(
 export function seaport() {
   const provider = window.ethereum;
   return new OpenSeaPort(provider, {
-    networkName: Network.Main,
-    apiKey: "2e7ef0ac679f4860bbe49a34a98cf5ac",
+    networkName: Network.Rinkeby,
+    // apiKey: "2e7ef0ac679f4860bbe49a34a98cf5ac",
   });
 }
-export async function makeOffer(
-  offerData,
-  asset,
-  isBundle,
-  assets,
-  accountAddress
-) {
+export async function makeOffer(offerData, asset, isBundle, assets, accountAddress) {
   const { tokenId, tokenAddress } = asset;
   let err = false;
   if (isBundle) {
@@ -49,10 +39,7 @@ export async function makeOffer(
       expirationTime = date.getTime() / 1000;
     } else {
       let time = moment(offerData.dateTime.time).format("HH:mm:ss");
-      let timeInSeconds = moment(t, "HH:mm:ss:").diff(
-        moment().startOf("day"),
-        "seconds"
-      );
+      let timeInSeconds = moment(t, "HH:mm:ss:").diff(moment().startOf("day"), "seconds");
       expirationTime = Math.round(
         Date.now() / 1000 + (offerData.dateTime.days * 24 * 60 * 60 + time)
       );
@@ -206,14 +193,13 @@ export async function sellOrder(
   fixed
 ) {
   let bounty = 0.0;
-  if (orderValue.bounty.bounty !== undefined) {
+  if (orderValue?.bounty?.bounty !== undefined) {
     bounty = orderValue.bounty.bounty;
   }
   try {
     if (fixed) {
-      if (orderValue.switch.includeEnd) {
-        if (orderValue.date.expirationTime == undefined)
-          return "Set the expiration time";
+      if (orderValue?.switch?.includeEnd) {
+        if (orderValue.date.expirationTime == undefined) return "Set the expiration time";
         var date = new Date(orderValue.date.expirationTime);
         var expirationTime = parseInt(date.getTime() / 1000);
         var result = await seaport().createSellOrder({
@@ -229,7 +215,7 @@ export async function sellOrder(
         });
 
         return result;
-      } else if (orderValue.switch.futureTime) {
+      } else if (orderValue?.switch?.futureTime) {
         var date = new Date(orderValue.date.futureTime);
         var listingTime = date.getTime() / 1000;
         const result = await seaport().createSellOrder({
@@ -245,6 +231,7 @@ export async function sellOrder(
 
         return result;
       } else {
+        console.log("order value is ", orderValue);
         const result = await seaport().createSellOrder({
           asset: {
             tokenId,
@@ -260,9 +247,7 @@ export async function sellOrder(
     } else {
       const paymentTokenAddress = "0xc778417e063141139fce010982780140aa0cd5ab";
       var date = new Date(orderValue.date.auctionExpirationTime);
-      var expirationTime = parseInt(
-        moment.duration(date).asMilliseconds() / 1000
-      );
+      var expirationTime = parseInt(moment.duration(date).asMilliseconds() / 1000);
       console.log(expirationTime);
 
       const result = await seaport().createSellOrder({
@@ -334,9 +319,7 @@ export function findHighestOffer(orders) {
 export function displayAddress(address) {
   return (
     address &&
-    address
-      .toString()
-      .replace(address.toString().substring(10, address.length - 10), ".....")
+    address.toString().replace(address.toString().substring(10, address.length - 10), ".....")
   );
 }
 export function detectVideo(url) {
@@ -414,8 +397,7 @@ export function initOnboard(subscriptions) {
       wallets: [
         {
           walletName: "metamask",
-          rpcUrl:
-            "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31",
+          rpcUrl: "https://rinkeby.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31",
         },
         // {
         //   walletName: 'walletConnect',
@@ -446,11 +428,7 @@ export const getCurrentAccount = async () => {
 
 export function randomAvatar() {
   let randomNumber = Math.floor(Math.random() * 33 + 1);
-  return (
-    "https://storage.googleapis.com/opensea-static/opensea-profile/" +
-    randomNumber +
-    ".png"
-  );
+  return "https://storage.googleapis.com/opensea-static/opensea-profile/" + randomNumber + ".png";
 }
 
 export const detectMetamaskInstalled = () => {
@@ -495,15 +473,9 @@ export const getBuyErrorMessage = (value) => {
 
   if (value.includes("insufficient")) {
     errorMessage = value.split("err: ")[1].toString();
-    errorMessage =
-      capitalizeWord(errorMessage.substring(0, errorMessage.length - 4)) +
-      " gas fees";
+    errorMessage = capitalizeWord(errorMessage.substring(0, errorMessage.length - 4)) + " gas fees";
   } else if (
-    value.includes(
-      "401" ||
-      value.includes("Invalid API key") ||
-      value.includes("Unauthorized")
-    )
+    value.includes("401" || value.includes("Invalid API key") || value.includes("Unauthorized"))
   ) {
     return "Invalid API key";
   } else {
@@ -544,4 +516,11 @@ export const Notification = (message, type) => {
     duration: 5,
     message: message,
   });
+};
+
+export function ellipseAddress(address = "", width = 10) {
+  if (!address) {
+    return "";
+  }
+  return `${address.slice(0, width)}...${address.slice(-width)}`;
 }

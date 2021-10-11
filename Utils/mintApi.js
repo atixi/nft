@@ -39,9 +39,7 @@ export const checkForDuplicate = (array, input, searchField, label) => {
   ) {
     return {
       isDuplicate: true,
-      message: `× ${capitalizeWord(
-        label
-      )} Must contain Only Alphabet Characters`,
+      message: `× ${capitalizeWord(label)} Must contain Only Alphabet Characters`,
     };
   }
   if (!input != null && input != "") {
@@ -54,9 +52,7 @@ export const checkForDuplicate = (array, input, searchField, label) => {
       };
     }
     const isDuplicate = array.some(
-      (item) =>
-        item[searchField].toLowerCase() ==
-        input?.toString().trim().toLowerCase()
+      (item) => item[searchField].toLowerCase() == input?.toString().trim().toLowerCase()
     );
     if (isDuplicate) {
       return {
@@ -96,9 +92,7 @@ export const validateCollectionIdetifier = (input, label) => {
   ) {
     return {
       isDuplicate: true,
-      message: `× ${capitalizeWord(
-        label
-      )} Must contain Only Alphabet Characters`,
+      message: `× ${capitalizeWord(label)} Must contain Only Alphabet Characters`,
     };
   }
   if (!input != null && input != "") {
@@ -127,9 +121,7 @@ export const checkAssetForDuplicate = (array, input, searchField, label) => {
         )} can not be only whitespace (ie. spaces, tabs or line breaks)`,
       };
     }
-    const isDuplicate = array.some(
-      (item) => item[searchField] == input.toString().trim()
-    );
+    const isDuplicate = array.some((item) => item[searchField] == input.toString().trim());
     if (isDuplicate) {
       return {
         isDuplicate,
@@ -160,9 +152,7 @@ export const validateCompleteCollectionName = (array, name, identifier) => {
   }
 
   let isDuplicate = array.some(
-    (item) =>
-      item.collectionName.toLowerCase() ==
-      input?.toString().trim().toLowerCase()
+    (item) => item.collectionName.toLowerCase() == input?.toString().trim().toLowerCase()
   );
   if (isDuplicate) {
     return {
@@ -258,14 +248,9 @@ export const validateImage = (file, limitSize) => {
 
 export const checkFileType = (file) => {
   if (
-    [
-      "image/jpeg",
-      "image/png",
-      "image/svg",
-      "image/jpg",
-      "image/gif",
-      "image/svg+xml",
-    ].includes(file.type)
+    ["image/jpeg", "image/png", "image/svg", "image/jpg", "image/gif", "image/svg+xml"].includes(
+      file.type
+    )
   ) {
     return { mediaType: "image", message: null, isTypeValid: true };
   } else if (
@@ -390,26 +375,16 @@ export const deployCollection = async (logo, banner, values, ownerAddress) => {
         external_link: EXTERNAL_LINK,
       };
 
-      const collectionMetadataResult = await pinJSONToIPFS(
-        metadata,
-        "collection"
-      );
+      const collectionMetadataResult = await pinJSONToIPFS(metadata, "collection");
       if (collectionMetadataResult.success == true) {
         const collectionUri = collectionMetadataResult.pinataUrl;
-        const proxyAddress = web3.utils.toChecksumAddress(
-          RINKEBY_PROXY_ADDRESS
-        );
+        const proxyAddress = web3.utils.toChecksumAddress(RINKEBY_PROXY_ADDRESS);
 
         const deployResult = await new web3.eth.Contract(collectionArtifact.abi)
           .deploy({
             name: metadata.name,
             data: collectionArtifact.bytecode,
-            arguments: [
-              proxyAddress,
-              metadata.name,
-              metadata.name.toUpperCase(),
-              collectionUri,
-            ],
+            arguments: [proxyAddress, metadata.name, metadata.name.toUpperCase(), collectionUri],
           })
           .send({
             // type: "0x2",
@@ -467,8 +442,7 @@ export const deployCollection = async (logo, banner, values, ownerAddress) => {
           collectionData.contractAddress = deployResult._address;
           collectionData.talentAddress = ownerAddress;
           collectionData.talent = values.talent;
-          collectionData.collectionName =
-            values.collectionName + " " + values.collectionIdentifier;
+          collectionData.collectionName = values.collectionName + " " + values.collectionIdentifier;
           collectionData.slug = slugify(
             values.collectionName.toString() + " " + values.collectionIdentifier
           );
@@ -526,9 +500,7 @@ export const uploadNft = async (file, values, ownerAddress) => {
         );
 
         if (nftMintingResult.transactionHash) {
-          const tokenIdResult = await getTokenId(
-            nftMintingResult.transactionHash
-          );
+          const tokenIdResult = await getTokenId(nftMintingResult.transactionHash);
           if (tokenIdResult.tokenId) {
             nftData.tokenId = tokenIdResult.tokenId.toString();
             nftData.tokenAddress = values.collections.contractAddress;
@@ -564,10 +536,7 @@ export const uploadNft = async (file, values, ownerAddress) => {
 
 export const mintNft = async (contractAddress, ownerAddress, metadataUri) => {
   const web3 = new Web3(window.ethereum);
-  const nftContract = new web3.eth.Contract(
-    collectionArtifact.abi,
-    contractAddress
-  );
+  const nftContract = new web3.eth.Contract(collectionArtifact.abi, contractAddress);
   const owner = web3.utils.toChecksumAddress(ownerAddress);
   const nonceValue = await web3.eth.getTransactionCount(owner);
 
@@ -626,11 +595,7 @@ export const mintNft = async (contractAddress, ownerAddress, metadataUri) => {
   return nftResult;
 };
 
-export const uploadCollectionToStrapi = async (
-  logo,
-  banner,
-  collectionData
-) => {
+export const uploadCollectionToStrapi = async (logo, banner, collectionData) => {
   let formData = new FormData();
   formData.append("files.collectionImageURL", logo);
   formData.append("files.collectionBanner", banner);
@@ -638,15 +603,11 @@ export const uploadCollectionToStrapi = async (
   console.log("uploading to strapi...");
 
   try {
-    const response = await axios.post(
-      `${STRAPI_BASE_URL}/collections`,
-      formData,
-      {
-        headers: {
-          "Content-Type": `multipart/form-data`,
-        },
-      }
-    );
+    const response = await axios.post(`${STRAPI_BASE_URL}/collections`, formData, {
+      headers: {
+        "Content-Type": `multipart/form-data`,
+      },
+    });
     return {
       success: true,
       data: response.data,

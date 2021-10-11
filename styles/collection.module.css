@@ -1,0 +1,55 @@
+.imagePreviewContainer {
+}
+.uploadBannerImage {
+  border-radius: 10px;
+  width: 98%;
+  height: 250px;
+  object-fit: cover;
+}
+.uploadAvatarImage {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.nftFormErrors {
+  margin-top: -10px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 900;
+  color: red;
+}
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.modalControls {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.modalButton {
+  margin: 10px;
+}
+.linkButton {
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+}
+.deplyingMessage {
+  padding-bottom: 20px;
+}
+.waitingSpiner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: -30px;
+}

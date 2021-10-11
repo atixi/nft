@@ -1,7 +1,4 @@
-import {
-  getDisplayWalletModal,
-  setDisplayWalletModal,
-} from "store/action/accountSlice";
+import { getDisplayWalletModal, setDisplayWalletModal } from "store/action/accountSlice";
 import {
   getMetaConnected,
   getMetaToken,
@@ -42,9 +39,7 @@ const Layout = ({ children }) => {
   const [displayMematamaskModal, setDisplayMetaMaskModal] = useState(false);
   const displayWalletModal = useSelector(getDisplayWalletModal);
 
-  const showHeader = router.pathname.toString().includes("wallet")
-    ? false
-    : true;
+  const showHeader = router.pathname.toString().includes("wallet") ? false : true;
   const subscribeMetamaskProvider = async () => {
     const { ethereum } = window;
     if (ethereum) {
@@ -69,9 +64,7 @@ const Layout = ({ children }) => {
     } else {
       await dispatchMetaConnected(setMetaConnected(true));
       await dispatch(setDisplayWalletModal(false));
-      accounts = accounts.map((account) =>
-        web3.utils.toChecksumAddress(account)
-      );
+      accounts = accounts.map((account) => web3.utils.toChecksumAddress(account));
 
       await registerTalent(accounts[0]);
       await dispatchMetaToken(setMetaToken(accounts));
@@ -79,9 +72,7 @@ const Layout = ({ children }) => {
         if (err) {
           console.log(err);
         } else {
-          await dipsatchMetaBalance(
-            setMetaBalance(web3.utils.fromWei(result, "ether"))
-          );
+          await dipsatchMetaBalance(setMetaBalance(web3.utils.fromWei(result, "ether")));
         }
       });
       setDisplayMetaMaskModal(false);
@@ -131,29 +122,27 @@ const Layout = ({ children }) => {
         <meta name="description" content="Rim Entertainment inc" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {showHeader == false ? (
-        <div style={{ marginBottom: "-90px" }}></div>
-      ) : (
-          <Header />
-        )}
-      {children}
-      {isWrongNet ? DisplayWrongNetModal() : ""}
+      <div className="wrapper">
+        {showHeader == false ? <div style={{ marginBottom: "-90px" }}></div> : <Header />}
+        {children}
+        {isWrongNet ? DisplayWrongNetModal() : ""}
 
-      <Footer />
+        <Footer />
 
-      {((ethereum &&
-        router.pathname.includes("create") &&
-        !isMetaconnected &&
-        displayWalletModal) ||
-        (ethereum &&
-          router.pathname.includes("sell") &&
+        {((ethereum &&
+          router.pathname.includes("create") &&
           !isMetaconnected &&
-          displayWalletModal)) && <ConnectWalletModal displayModal={true} />}
+          displayWalletModal) ||
+          (ethereum &&
+            router.pathname.includes("sell") &&
+            !isMetaconnected &&
+            displayWalletModal)) && <ConnectWalletModal displayModal={true} />}
 
-      {((!ethereum && router.pathname.includes("create")) ||
-        (!ethereum && router.pathname.includes("sell"))) && (
+        {((!ethereum && router.pathname.includes("create")) ||
+          (!ethereum && router.pathname.includes("sell"))) && (
           <ConnectMobileWalletModal displayModal={true} />
         )}
+      </div>
     </>
   );
   async function detectNetwork() {
@@ -172,11 +161,7 @@ const Layout = ({ children }) => {
       " and reload the page";
 
     return (
-      <Modal
-        title={<strong>{"Wrong Network!"}</strong>}
-        footer={false}
-        visible={true}
-      >
+      <Modal title={<strong>{"Wrong Network!"}</strong>} footer={false} visible={true}>
         {message}
       </Modal>
     );

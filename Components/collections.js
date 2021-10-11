@@ -25,10 +25,7 @@ export default function Collections({ data }) {
                   }}
                 >
                   <a>
-                    <img
-                      style={{ width: "100%" }}
-                      src={item.collectionBanner.url}
-                    />
+                    <img style={{ width: "100%" }} src={item.collectionBanner.url} />
                   </a>
                 </Link>
               </CardImageContainer>
@@ -40,10 +37,7 @@ export default function Collections({ data }) {
                     }}
                   >
                     <a>
-                      <img
-                        style={{ width: "auto" }}
-                        src={item.collectionImageURL.url}
-                      />
+                      <img style={{ width: "auto" }} src={item.collectionImageURL.url} />
                     </a>
                   </Link>
                 </ProfileAvatarContainer>
