@@ -4,7 +4,7 @@ import {
   Input,
   Tabs,
   message,
-  Statistic, Slider
+  Statistic, Slider, Spin
 } from "antd";
 
 import {
@@ -28,6 +28,9 @@ import { sellOrder, signTransaction, unixToMilSeconds } from "Utils/utils";
 import { socket } from "config/websocket";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { useSelector } from "react-redux";
+import { LoadingOutlined } from '@ant-design/icons';
+
+const antIcon = <LoadingOutlined style={{ fontSize: 16, marginLeft: "-25px", marginRight: "20px", position: "relative", top: "-5px", color: "white" }} spin />;
 
 const { TabPane } = Tabs;
 const { Countdown } = Statistic
@@ -37,6 +40,7 @@ function SellNft() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [futureTime, setFutureTime] = useState(false);
+  const [disableBtn, setDisableBtn] = useState(false)
   const [formText, setFormText] = useState({
     price: "Price",
     priceDesc: "Will be on sale until you transfer this item or cancel it",
@@ -134,6 +138,7 @@ function SellNft() {
     setBountyValue(value);
   };
   const onSubmitForm = async (values) => {
+    setDisableBtn(true)
     const enableAccount = await ethereum.enable();
     if (enableAccount) {
       if (enableAccount.length > 0) {
@@ -163,6 +168,7 @@ function SellNft() {
         }
       }
     }
+    setDisableBtn(false)
   };
   const onTabClick = (e) => {
     if (e == 2) {
@@ -289,7 +295,7 @@ function SellNft() {
                       </>)}
                     </TabPane>
                   </Tabs>
-                  <input type="submit" id="submit" className="btn-main" value="Create Item" />
+                  <button type='submit' disabled={disableBtn} className="btn btn-main color-2">{disableBtn && <Spin indicator={antIcon} color={"white"} />} Add Sell</button>
                   <div className="spacer-single"></div>
                 </div>
               </Form>
