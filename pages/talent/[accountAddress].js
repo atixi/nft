@@ -131,7 +131,7 @@ function TalentPage({ talentAssets, talent, accountAddress }) {
                                 <Link href={`/nft/${item.tokenAddress}?tokenId=${item.tokenId}`}>
                                   <a>
                                     <img
-                                      src={item.asset.imageUrl}
+                                      src={item.asset?.imageUrl}
                                       className="lazy nft__item_preview"
                                       alt=""
                                     />

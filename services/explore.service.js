@@ -23,7 +23,7 @@ export function queryExplore(query, start, limit) {
  * filter data function by combobox value
  * @param query query that search by name
  */
-export function querysearch(query, start, limit) {
+export function querySearch(query, start, limit) {
   console.log(
     "serach filter data in serivce is ",
     `${apiEndpoint}?_start=${start}&_limit=${limit}&${query}`

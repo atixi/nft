@@ -7,11 +7,17 @@ import { Button, Form, Input, Select, Spin } from "antd";
 import { fetch } from "Utils/strapiApi";
 import { saleBundleType, saleTypes } from "Constants/constants";
 import AssetCard from "@/components/assetCard";
-import { getExplores, queryExplore, querysearchExplore } from "services/explore.service";
-import { useRouter } from "next/router";
+import {
+  getExplores,
+  queryExplore,
+  querySearch,
+  querysearchExplore,
+} from "services/explore.service";
+// import { useRouter } from "next/router";
+import router from "next/router";
 
 function Explore({ serverExplores, categories }) {
-  const router = useRouter();
+  const { search } = router.query;
   // const [urlQuery, setUrlQuery] = useState("http://192.168.1.251:1337/nfts?[name_contains]=The Man From UNCLE");
   const [urlQuery, setUrlQuery] = useState();
   const [searchQuery, setSearchQuery] = useState({
@@ -42,12 +48,12 @@ function Explore({ serverExplores, categories }) {
     handleFilter();
   };
 
-  const getSaleBundleType = (bundleType) => {
-    let query = searchQuery;
-    query.bundleType = bundleType;
-    setSearchQuery(query);
-    handleFilter();
-  };
+  // const getSaleBundleType = (bundleType) => {
+  //   let query = searchQuery;
+  //   query.bundleType = bundleType;
+  //   setSearchQuery(query);
+  //   handleFilter();
+  // };
   const filter = () => {
     setDisplayLoadMoreButton(true);
     let custom = "";
@@ -80,37 +86,35 @@ function Explore({ serverExplores, categories }) {
   };
   const searchFilterData = async (searchText) => {
     let custom = filter();
-    custom += `[name_contains]=${searchText}&`;
+    console.log("in start custom filter is ", custom);
+    custom += `[name_contains]=${searchText.name}&`;
     setStart(2);
     const loadedExplores = await queryExplore(custom, 0, 2);
     setFilteredExplores(loadedExplores.data);
     console.log("custome query is ", custom);
     setStringQuery(custom);
   };
-  const search = async (searchText) => {
-    let totalsearch = `[name_contains]=${searchText} || categories.slug=${searchText}`;
+  const handleSearch = async (searchText) => {
+    console.log("searching ", searchText);
+    let totalsearch = `[name_contains]=${searchText}`;
 
-    console.log("router is ", router.query);
-    if (router.query != null) {
-      console.log("router is ", router.query?.name);
-    }
-    const loadedExplores = await querysearch(totalsearch, 0, 2);
+    const loadedExplores = await queryExplore(totalsearch, 0, 2);
+    setStart(2);
     setFilteredExplores(loadedExplores.data);
-    console.log("custome query is ", custom);
-    setStringQuery(custom);
+    console.log("custome query is ", totalsearch);
+    console.log("befreString query is ", stringQuery);
+    setStringQuery(totalsearch);
+    console.log("after String query is ", stringQuery);
   };
-  // const onFinish = (values) => {
-  //   console.log("values of searchfomr is ", values);
-  //   searchFilterData(values.name);
-  // };
   const onFinishFailed = () => {
     console.log("failed");
   };
 
   useEffect(() => {
     setUrlQuery(router.query);
-    console.log("router query si", router.query);
-  }, [router]);
+    if (!search) return;
+    handleSearch(router.query.search);
+  }, [search]);
   return (
     <div className="no-bottom " id="content">
       <div id="top"></div>

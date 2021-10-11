@@ -13,6 +13,9 @@ import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import AssetCard from "@/components/assetCard";
 import { sellOrder, signTransaction } from "Utils/utils";
+import { getAsset, updateAsset } from "services/asset.service";
+import Web3 from "web3";
+import { fetchOne } from "Utils/strapiApi";
 
 const { Option } = Select;
 
@@ -134,8 +137,6 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
             setUploadErrorMessage("");
             setNftContract(result.data.tokenAddress);
             setNftTokenId(result.data.tokenId);
-            // setDisplayUploadModal(true);
-            // setDisplayModalButtons(true);
             let isFixed = selectedTab == 0 ? true : false;
             let contractAddress = selectedCollection.contractAddress;
             let sellOrderResult = await createSellOrder(
@@ -233,13 +234,6 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
     contractAddress,
     isFixed
   ) => {
-    console.log("creating sell order for the following asset");
-    console.log("tokenAddress", tokenAddress);
-    console.log("tokenId", tokenId);
-    console.log("ownerAddress", ownerAddress);
-    console.log("formValues", formValues);
-    console.log("contractAddress", contractAddress);
-    console.log("isFixed", isFixed);
     const sellSign = await signTransaction(ownerAddress, "Request to Sell", {
       name: formValues.name,
     });
@@ -256,6 +250,8 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
       if (sell?.hash) {
         setDisplayUploadModal(true);
         setDisplayModalButtons(true);
+        handleUpdateAsset(tokenAddress, tokenId);
+
         console.log("Sell order is saved");
         console.log("set the onSale true in strapi");
         // message.success("Sell order is saved");
@@ -271,6 +267,20 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
     }
   };
 
+  const handleUpdateAsset = async (tokenAddress, tokenId) => {
+    console.log("updating asset in strapi ....");
+    const assetResult = await getAsset(tokenAddress, tokenId);
+    let asset = assetResult.data[0];
+    let openseaAsset = await fetchOne(asset.tokenAddress, asset.tokenId);
+    if (openseaAsset.data) {
+      asset.asset = openseaAsset.data;
+      asset.onSale = true;
+    }
+    console.log("opensea asset", openseaAsset);
+    console.log("updated  asset", asset);
+    let updateResult = await updateAsset(asset.id, asset);
+    console.log("updaing finished", updateResult);
+  };
   useEffect(() => {
     refreshData();
     isTalentRegistered();
@@ -596,14 +606,28 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                   </a>
                 </div>
                 <div className="nft__item_wrap">
-                  <a href="#">
-                    <img
-                      src={uploadFileUrl}
-                      id="get_file_2"
-                      className="lazy nft__item_preview"
-                      alt=""
-                    />
-                  </a>
+                  {
+                    <a href="#">
+                      {uploadFileUrl && nftImageFile?.type.toString().includes("image") ? (
+                        <img
+                          src={uploadFileUrl}
+                          id="get_file_2"
+                          className="lazy nft__item_preview"
+                          alt=""
+                        />
+                      ) : (
+                        <div className={styles.nftVideoBox}>
+                          <ReactPlayer
+                            width={"100%"}
+                            height={"100%"}
+                            url={uploadFileUrl}
+                            controls
+                            playing={false}
+                          />
+                        </div>
+                      )}
+                    </a>
+                  }
                 </div>
                 <div className="nft__item_info">
                   <a href="#">
