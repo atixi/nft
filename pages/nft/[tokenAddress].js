@@ -359,7 +359,7 @@ function ProductPage() {
                                   passHref
                                 >
                                   <a style={{ display: "flex", flex: "1" }}>
-                                    <button className={"bnt-main"}>{"Sell"}</button>
+                                    <button className={"btn-main"}>{"Sell"}</button>
                                   </a>
                                 </Link>
                               ) : (
@@ -385,45 +385,36 @@ function ProductPage() {
                           }
                         >
                           <TabPane key="1" tab={<span>{"Listing"}</span>}>
-                            {sellOrders &&
-                              sellOrders.map((order, i) => (
-                                <div className="p_list" key={i}>
-                                  <div className="p_list_pp">
-                                    <Link href={`/profile/${order?.makerAccount?.address}`} passHref>
-                                      <a>
-                                        <img
-                                          className="lazy"
-                                          src={order.makerAccount?.profile_img_url}
-                                          alt=""
-                                        />
-                                        <i className="fa fa-check"></i>
-                                      </a>
-                                    </Link>
+                            <div className={"listContainer"}>
+                              {sellOrders &&
+                                sellOrders.map((order, i) => (
+                                  <div className="p_list" key={i}>
+                                    <UserAvatar user={{ address: order?.makerAccount?.address, isVerified: false, avatar: order.makerAccount?.profile_img_url }} />
+                                    <div className="p_list_info orderInfo">
+                                      Listed{" "}
+                                      <b>{`${getAuctionPriceDetails(order).priceBase} ${order?.paymentTokenContract?.symbol
+                                        }`}</b>
+                                      <span>
+                                        by <b>{checkName(order.makerAccount?.user?.username)}</b>
+                                        {` at ${unixToHumanDate(order?.createdTime)}`}
+                                      </span>
+                                      <span>
+                                        {order.makerAccount.address == address ? (
+                                          <Button
+                                            onClick={() => cancelOffer(order, address)}
+                                            shape="round"
+                                            size="small"
+                                          >
+                                            {"Cancel"}
+                                          </Button>
+                                        ) : (
+                                            ""
+                                          )}
+                                      </span>
+                                    </div>
                                   </div>
-                                  <div className="p_list_info">
-                                    Listed{" "}
-                                    <b>{`${getAuctionPriceDetails(order).priceBase} ${order?.paymentTokenContract?.symbol
-                                      }`}</b>
-                                    <span>
-                                      by <b>{checkName(order.makerAccount?.user?.username)}</b>
-                                      {` at ${unixToHumanDate(order?.createdTime)}`}
-                                    </span>
-                                    <span>
-                                      {order.makerAccount.address == address ? (
-                                        <Button
-                                          onClick={() => cancelOffer(order, address)}
-                                          shape="round"
-                                          size="small"
-                                        >
-                                          {"Cancel"}
-                                        </Button>
-                                      ) : (
-                                          ""
-                                        )}
-                                    </span>
-                                  </div>
-                                </div>
-                              ))}
+                                ))}
+                            </div>
                           </TabPane>
                           <TabPane key="2" tab={<span>{"Bids"}</span>}>
                             <div className={"listContainer"}>
