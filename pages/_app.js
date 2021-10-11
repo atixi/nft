@@ -17,6 +17,7 @@ import "/styles/owl.transitions.css";
 import "/styles/animate.css";
 import "/styles/style.css";
 import "/styles/colors/scheme-03.css";
+import "react-multi-carousel/lib/styles.css";
 import "/styles/coloring.css";
 import "/styles/custom.css";
 Router.events.on("routeChangeStart", () => NProgress.start());
