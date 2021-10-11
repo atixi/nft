@@ -1,27 +1,27 @@
-import { useEffect, useState } from "react";
-import Search from "./search";
-import Link from "next/link";
-import { Avatar, Modal } from "antd";
-import CONSTANTS from "../Constants/headerConstants";
-import { ConnectedButton, BalanceLabel } from "./StyledComponents/header-styledComponents.js";
-import {
-  getAccountTokens,
-  getMetaBalance,
-  getWalletToken,
-  getWalletBalance,
-  getMetaConnected,
-  getWalletConnected,
-} from "/store/action/accountSlice";
-import LoginModal from "../Components/loginModal";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
-import api from "/Components/axiosRequest";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
+import { Avatar } from "antd";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import LoginModal from "../Components/loginModal";
+import CONSTANTS from "../Constants/headerConstants";
 import { getMetaToken, getUser, signout } from "../store/action/accountSlice";
+import {
+  BalanceLabel,
+  ConnectedButton,
+} from "./StyledComponents/header-styledComponents.js";
+import api from "/Components/axiosRequest";
+import {
+  getMetaBalance,
+  getMetaConnected,
+  getWalletBalance,
+  getWalletConnected,
+  getWalletToken,
+} from "/store/action/accountSlice";
 function Header(props) {
   const router = useRouter();
   const { jwt } = useSelector(getUser);
-  const accountTokens = useSelector(getAccountTokens);
   const metaToken = useSelector(getMetaToken);
   const metaBalance = useSelector(getMetaBalance);
   const walletToken = useSelector(getWalletToken);
@@ -30,7 +30,6 @@ function Header(props) {
   const isMetaconnected = useSelector(getMetaConnected);
   const isWalletConnected = useSelector(getWalletConnected);
   const dispatch = useDispatch();
-  const [profileDetails, setProfileDetails] = useState(null);
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
   const [connected, setConnected] = useState(false);
@@ -93,7 +92,11 @@ function Header(props) {
   };
   const displayAddress = (token) => {
     const address = token[0];
-    return address.substring(1, 4) + "..." + address.substring(address.length - 5, address.length);
+    return (
+      address.substring(1, 4) +
+      "..." +
+      address.substring(address.length - 5, address.length)
+    );
   };
   const openLogin = () => {
     setShowLoginModal(true);
@@ -107,9 +110,8 @@ function Header(props) {
       }
     } catch (err) {}
   };
-  const isLoggedIn = () => {
-    return jwt ? true : false;
-  };
+
+  const isLoggedIn = jwt ? true : false;
   return (
     <header className="transparent header-light scroll-light">
       <div className="container">
@@ -122,7 +124,11 @@ function Header(props) {
                   <div id="logo">
                     <Link href="/" passHref>
                       <a href="/">
-                        <img alt="" className="logo" src="/images/logo-light.png" />
+                        <img
+                          alt=""
+                          className="logo"
+                          src="/images/logo-light.png"
+                        />
                         <img
                           alt=""
                           style={{ width: "250px" }}
@@ -159,30 +165,32 @@ function Header(props) {
                       </li>
                     </ul>
                   </li>
+                  {isLoggedIn && (
+                    <li>
+                      <a href="#">
+                        Create<span></span>
+                      </a>
+                      <ul>
+                        <li>
+                          <Link href={"/create/collection"}>
+                            <a>Create Collection</a>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href={"/create/erc721"}>
+                            <a>Create Asset</a>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href={"/add/asset"}>
+                            <a>Add Existing Asset</a>
+                          </Link>
+                        </li>
+                      </ul>
+                    </li>
+                  )}
                   <li>
-                    <a href="#">
-                      Create<span></span>
-                    </a>
-                    <ul>
-                      <li>
-                        <Link href={"/create/collection"}>
-                          <a>Create Collection</a>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href={"/create/erc721"}>
-                          <a>Create Asset</a>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href={"/add/asset"}>
-                          <a>Add Existing Asset</a>
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    {isLoggedIn() ? (
+                    {isLoggedIn ? (
                       <a onClick={handleLogout}>Logout</a>
                     ) : (
                       <a onClick={openLogin}>Login</a>
@@ -197,12 +205,20 @@ function Header(props) {
                           <BalanceLabel>
                             {parseFloat(walletBalance).toFixed(4) + " Eth"}
                           </BalanceLabel>
-                          <Avatar size={36} src={"/images/walletIcons/walletIcon.svg"} />{" "}
+                          <Avatar
+                            size={36}
+                            src={"/images/walletIcons/walletIcon.svg"}
+                          />{" "}
                         </>
                       ) : (
                         <>
-                          <BalanceLabel>{parseFloat(metaBalance).toFixed(4) + " Eth"}</BalanceLabel>
-                          <Avatar size={36} src={"/images/walletIcons/metaIcon.svg"} />
+                          <BalanceLabel>
+                            {parseFloat(metaBalance).toFixed(4) + " Eth"}
+                          </BalanceLabel>
+                          <Avatar
+                            size={36}
+                            src={"/images/walletIcons/metaIcon.svg"}
+                          />
                         </>
                       )}
                     </ConnectedButton>
@@ -222,7 +238,10 @@ function Header(props) {
             </div>
           </div>
         </div>
-        <ul id="MobileMenu" style={toggleMenu ? { height: "300px" } : { height: "0px" }}>
+        <ul
+          id="MobileMenu"
+          style={toggleMenu ? { height: "300px" } : { height: "0px" }}
+        >
           <li>
             <div className="dropdownList">
               <Link href="/explore" passHref>
@@ -264,7 +283,9 @@ function Header(props) {
                 )}
               </span>
             </div>
-            <div className={toggle[1] ? "dropdownContent show" : "dropdownContent"}>
+            <div
+              className={toggle[1] ? "dropdownContent show" : "dropdownContent"}
+            >
               <Link href="/create">
                 <a>Create Asset</a>
               </Link>
@@ -275,7 +296,7 @@ function Header(props) {
           </li>
           <li>
             <div className="dropdownList">
-              {isLoggedIn() ? (
+              {isLoggedIn ? (
                 <a style={{ color: "#F32178" }} onClick={handleLogout}>
                   Logout
                 </a>
@@ -289,7 +310,10 @@ function Header(props) {
         </ul>
       </div>
       {showLoginModal && (
-        <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} />
+        <LoginModal
+          showLoginModal={showLoginModal}
+          setShowLoginModal={setShowLoginModal}
+        />
       )}
     </header>
   );

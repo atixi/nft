@@ -1,103 +1,40 @@
-import { Button, Form, Input, Modal, Spin, Select } from "antd";
+import CustomNotification from "@/components/commons/customNotification";
+import { Button, Form, Modal, Select, Spin } from "antd";
+import { socket } from "config/websocket";
+import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { getMetaConnected, getMetaToken } from "store/action/accountSlice";
 import {
   checkFileType,
-  deployCollection,
-  validateCollectionIdetifier,
-  validateCollectionName,
-  validateCompleteCollectionName,
+  deployCollection
 } from "Utils/mintApi";
-import { getMetaConnected, getMetaToken, getWalletConnected } from "store/action/accountSlice";
-
-import CustomNotification from "@/components/commons/customNotification";
-import Link from "next/link";
-import Web3 from "web3";
-import { allowedImageTypes } from "Constants/constants";
-import { fetch } from "/Utils/strapiApi";
-import { signTransaction } from "Utils/utils";
-import { socket } from "config/websocket";
 import styles from "/styles/collection.module.css";
-import { useSelector } from "react-redux";
+import { fetch } from "/Utils/strapiApi";
+
 const { Option } = Select;
-let collectionCompleteName = {
-  collectionName: "",
-  collectionIdentifier: "",
-};
+
 const ERC721Collection = ({ serverCollections, categories, talentData }) => {
   const [form] = Form.useForm();
   const logoImageInputRef = useRef(null);
   const bannerImageInputRef = useRef(null);
-  const talentImageInputRef = useRef(null);
-  const formRef = React.createRef();
   const [logoError, setLogoError] = useState();
   const [bannerError, setBannerError] = useState();
   const [collectionNameError, setCollectionNameError] = useState("");
   const [collectionIdentifierError, setCollectionIdentifierError] = useState("");
-  const [duplicateIdentifierError, setDuplicateIdentifierError] = useState();
   const [logoImageUrl, setLogoImageUrl] = useState("");
   const [bannerImageUrl, setBannerImageUrl] = useState("");
   const [logoImageFile, setLogoImageFile] = useState();
   const [bannerImageFile, setBannerImageFile] = useState();
-  const [isLoading, setLoading] = useState(false);
-  const [uploadPrecentage, setUploadPrecentage] = useState(0);
   const [displayUploadModal, setDisplayUploadModal] = useState(false);
   const [displayModalButtons, setDisplayModalButtons] = useState();
   const [newCollectionSlug, setNewCollectionSlug] = useState();
   const [collectionTalent, setCollectionTalent] = useState();
-  const [displayUnlockModal, setDisplayUnlockModal] = useState(false);
-  const [mobileModal, setMobileModal] = useState(null);
-  const [displayRegisterModal, setDisplayRegisterModal] = useState();
   const isMetaconnected = useSelector(getMetaConnected);
-  const isWalletConnected = useSelector(getWalletConnected);
   const metaToken = useSelector(getMetaToken);
-  const [onboard, setOnboard] = useState(null);
   const [collections, setCollections] = useState(serverCollections);
   const [completeCollectionNameError, setCompleteCollectionNameError] = useState("");
 
-  const handleCollectionCompleteName = (e) => {
-    const value = e.target.value;
-
-    collectionCompleteName = {
-      ...collectionCompleteName,
-      [e.target.name]: value,
-    };
-
-    const nameResult = validateCollectionName(
-      collectionCompleteName.collectionName,
-      "Collection Name"
-    );
-    if (collectionCompleteName.collectionName != "") {
-      setCollectionNameError(nameResult);
-    } else {
-      setCollectionNameError("");
-    }
-
-    const identifierResult = validateCollectionIdetifier(
-      collectionCompleteName.collectionIdentifier,
-      "Identifier"
-    );
-
-    if (collectionCompleteName.collectionIdentifier != "") {
-      setCollectionIdentifierError(identifierResult);
-    } else {
-      setCollectionIdentifierError("");
-    }
-
-    const result = validateCompleteCollectionName(
-      collections,
-      collectionCompleteName.collectionName,
-      collectionCompleteName.collectionIdentifier
-    );
-
-    if (
-      collectionCompleteName.collectionName != "" &&
-      collectionCompleteName.collectionIdentifier != ""
-    ) {
-      setCompleteCollectionNameError(result);
-    } else {
-      setCompleteCollectionNameError("");
-    }
-  };
   const openLogoFileChooser = (event) => {
     console.log("opening logo file chooser");
     event.preventDefault();
@@ -142,7 +79,6 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
     setBannerImageUrl(null);
     setLogoImageFile(null);
     setBannerImageFile(null);
-    setUploadPrecentage(0);
     setCollectionIdentifierError("");
     setCollectionNameError("");
     setCompleteCollectionNameError("");
@@ -152,8 +88,7 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
   };
 
   const onFinish = (values) => {
-    console.log("values are ", values);
-    const collectionData = createCollectinData(values);
+    const collectionData = Object.assign(values, { talent: collectionTalent })
     if (!logoImageFile) {
       setLogoError("Avatar Image is Required");
     }
@@ -232,21 +167,10 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
           setCollectionTalent({
             id: talentExists.id,
           });
-          setDisplayRegisterModal(false);
-        } else {
-          setDisplayRegisterModal(true);
         }
-      } else {
-        setDisplayRegisterModal(true);
       }
-    }
-  };
-
-  const createCollectinData = (values) => {
-    let collectionData = values;
-    collectionData.talent = collectionTalent;
-    return collectionData;
-  };
+    };
+  }
 
   const refreshData = () => {
     socket.on("serverBroadCastNewCollection", (data) => {
@@ -356,8 +280,8 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
                         id="get_file_2"
                         className={`lazy nft__item_preview ${styles.uploadBannerImage}`}
                         alt=""
-                        // width="500px"
-                        // height="200px"
+                      // width="500px"
+                      // height="200px"
                       />
                     )}
                     <input
@@ -503,23 +427,19 @@ const ERC721Collection = ({ serverCollections, categories, talentData }) => {
     </div>
   );
 };
-export default ERC721Collection;
 
 export const getServerSideProps = async (context) => {
   const collectionsResult = await fetch("/collections/collectionslist");
   const collections = collectionsResult.data;
   const categoriesResult = await fetch("categories");
   const categories = await categoriesResult.data;
-  // const talentResult = await fetch(`talents?walletAddress=${query.accountAddress}`);
-  // const talentResult = await fetch(
-  //   `talents?walletAddress=0x8CA35f878fD14992b58a18bEB484f721b1d07A33`
-  // );
-  // const talent = await talentResult.data[0];
+  
   return {
     props: {
       serverCollections: JSON.parse(JSON.stringify(collections)),
       categories: JSON.parse(JSON.stringify(categories)),
-      // talentData: JSON.parse(JSON.stringify(talent)),
     },
   };
 };
+export default ERC721Collection;
+

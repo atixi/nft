@@ -29,6 +29,7 @@ module.exports = {
     domains: ["res.cloudinary.com", "lorempixel.com"],
   },
   env: {
+    SECRET_COOKIE_PASSWORD: process.env.SECRET_COOKIE_PASSWORD,
     BASE_URL: process.env.BASE_URL,
     STRAPI_LOCAL_BASE_URL: process.env.STRAPI_LOCAL_BASE_URL,
     HEROKU_BASE_URL: process.env.HEROKU_BASE_URL,

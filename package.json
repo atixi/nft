@@ -27,6 +27,7 @@
     "logger": "^0.0.1",
     "multi-token-standard": "^0.8.13",
     "next": "^11.0.0",
+    "next-iron-session": "^4.2.0",
     "next-share": "^0.7.0",
     "next-videos": "^1.4.0",
     "nextjs-progressbar": "0.0.11",
