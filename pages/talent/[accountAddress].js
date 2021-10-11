@@ -8,12 +8,10 @@ import copy from "copy-to-clipboard";
 import { ellipseAddress } from "Utils/utils";
 import AssetCard from "@/components/assetCard";
 
-function TalentPage({ serverAssets, query, talentData }) {
-  const { accountAddress } = query;
+function TalentPage({ talentAssets, talent, accountAddress }) {
   const [start, setStart] = useState(2);
-  const [assets, setAssets] = useState(serverAssets);
+  const [assets, setAssets] = useState(talentAssets);
   const [onSales, setOnSales] = useState([]);
-
   const [selectedTab, setSelectedTab] = useState(1);
 
   const addressRef = useRef(null);
@@ -38,7 +36,6 @@ function TalentPage({ serverAssets, query, talentData }) {
   };
 
   const copyAddress = () => {
-    console.log("start copying...");
     copy(accountAddress, {
       debug: true,
       message: "Press #{key} to copy",
@@ -53,7 +50,7 @@ function TalentPage({ serverAssets, query, talentData }) {
         <img
           width="100%"
           height="300px"
-          src={talentData.talentBanner?.formats?.large?.url}
+          src={talent.talentBanner?.formats?.large?.url}
           alt=""
         />
       </section>
@@ -66,12 +63,12 @@ function TalentPage({ serverAssets, query, talentData }) {
               <div className="d_profile de-flex">
                 <div className="de-flex-col">
                   <div className="profile_avatar">
-                    <img src={talentData.talentAvatar?.formats?.small?.url} alt="" />
+                    <img src={talent.talentAvatar?.formats?.small?.url} alt="" />
                     <i className="fa fa-check"></i>
                     <div className="profile_name">
                       <h4>
-                        {talentData?.talentName}
-                        <span className="profile_username">@{talentData.userName}</span>
+                        {talent?.talentName}
+                        <span className="profile_username">@{talent.userName}</span>
                         <span
                           id="wallet"
                           className={`profile_wallet ${styles.cursorPointer}`}
@@ -188,19 +185,20 @@ function TalentPage({ serverAssets, query, talentData }) {
 
 export default TalentPage;
 
-export const getServerSideProps = async (context) => {
-  const query = context.query;
-  const assetResult = await fetch(
-    `nfts?_start=0&_limit=2&talent.walletAddress=${query.accountAddress}`
-  );
-  const talentResult = await fetch(`talents?walletAddress=${query.accountAddress}`);
-  const talent = await talentResult.data[0];
-  const nfts = await assetResult.data;
+export const getServerSideProps = async ({ query }) => {
+  const [talentAssets, talent] = await Promise.all([
+    fetch(
+      `nfts?_start=0&_limit=2&talent.walletAddress=${query.accountAddress}`
+    ),
+    fetch(
+      `nfts?_start=0&_limit=2&talent.walletAddress=${query.accountAddress}`
+    )
+  ]);
   return {
     props: {
-      serverAssets: JSON.parse(JSON.stringify(nfts)),
-      talentData: JSON.parse(JSON.stringify(talent)),
-      query: JSON.parse(JSON.stringify(query)),
+      talentAssets: talentAssets.data,
+      talent: talent.data,
+      accountAddress: query.accountAddress,
     },
   };
 };

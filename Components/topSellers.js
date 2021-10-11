@@ -1,5 +1,5 @@
 import React from "react";
-
+import Link from 'next/link'
 function TopSellers({ talents }) {
     return (
         <div className="row">
@@ -8,17 +8,21 @@ function TopSellers({ talents }) {
             </div>
             <div className="col-md-12  fadeIn">
                 <ol className="author_list">
-                    {talents?.length > 0 && talents.map((seller) => {
+                    {talents?.length > 0 && talents.map((talent) => {
                         return (
                             <li>
                                 <div className="author_list_pp">
-                                    <a href="author.html">
-                                        <img className="lazy" src={seller?.talentAvatar?.url} alt="" />
-                                        <i className="fa fa-check"></i>
-                                    </a>
+                                    <Link href={`/talent/${talent.walletAddress}`}>
+                                        <a>
+                                            <img className="lazy" src={talent?.talentAvatar?.url} alt="" />
+                                            <i className="fa fa-check"></i>
+                                        </a>
+                                    </Link>
                                 </div>
                                 <div className="author_list_info">
-                                    <a href="author.html">{seller?.talentName}</a>
+                                    <Link href={`/talent/${talent.walletAddress}`}>
+                                        <a>{talent?.talentName}</a>
+                                    </Link>
                                     {/* <span>3.2 ETH</span> */}
                                 </div>
                             </li>
