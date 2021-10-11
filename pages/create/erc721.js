@@ -1,59 +1,49 @@
-import { Button, Form, Input, Modal, Select, Spin, DatePicker } from "antd";
+import { Button, Form, Modal, Select, Spin, DatePicker } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { capitalizeWord, checkAssetForDuplicate, uploadNft, validateImage } from "Utils/mintApi";
-import { fetch, post } from "/Utils/strapiApi";
+import { fetch } from "/Utils/strapiApi";
 import { getMetaConnected, getMetaToken } from "store/action/accountSlice";
-
+import styles from "/styles/erc721.module.css";
 import CustomNotification from "@/components/commons/customNotification";
 import Link from "next/link";
 import ReactPlayer from "react-player";
 import { socket } from "config/websocket";
-import styles from "/styles/erc721.module.css";
-import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import AssetCard from "@/components/assetCard";
 import { sellOrder, signTransaction } from "Utils/utils";
 import { getAsset, updateAsset } from "services/asset.service";
-import Web3 from "web3";
 import { fetchOne } from "Utils/strapiApi";
 
 const { Option } = Select;
 
-const config = {
-  rules: [
-    {
-      type: "object",
-      required: true,
-    },
-  ],
-};
 const ERC721 = ({ serverCollections, categories, serverNfts }) => {
   const [collections, setCollections] = useState(serverCollections);
   const [nfts, setNfts] = useState(serverNfts);
-  const hiddenFileInput = useRef(null);
-  const formRef = React.createRef();
+  const [ownerCollections, setOwnerCollections] = useState();
+  const [selectedCategories, setSelectedCategories] = useState();
   const [selectedCollection, setSelectedCollection] = useState();
   const [nftImageError, setNftImageError] = useState();
-  const [duplicateNameError, setDuplicateNameError] = useState();
-  const [selectedCategories, setSelectedCategories] = useState();
   const [nftTalent, setNftTalent] = useState();
   const [uploadFileUrl, setUploadFileUrl] = useState("");
-  const [nftImageFile, setNftImageFile] = useState();
-  const [isLoading, setLoading] = useState(false);
-  const [uploadPrecentage, setUploadPrecentage] = useState(0);
-  const [ownerCollections, setOwnerCollections] = useState();
-  const isMetaconnected = useSelector(getMetaConnected);
-  const metaToken = useSelector(getMetaToken);
+  const [sellOrderErrorMessage, setSellOrderErrorMessage] = useState("");
+  const [duplicateNameError, setDuplicateNameError] = useState();
   const [nftContract, setNftContract] = useState();
   const [nftTokenId, setNftTokenId] = useState();
-  const [displayUploadModal, setDisplayUploadModal] = useState(false);
-  const [displayModalButtons, setDisplayModalButtons] = useState();
-  const [uploadErrorMessage, setUploadErrorMessage] = useState("");
-  const [form] = Form.useForm();
-  const router = useRouter();
   const [selectedTab, setSelectedTab] = useState(0);
+  const [uploadPrecentage, setUploadPrecentage] = useState(0);
+
+  const [nftImageFile, setNftImageFile] = useState();
+
+  const [displayUploadModal, setDisplayUploadModal] = useState(false);
+  const [displayModalButtons, setDisplayModalButtons] = useState(false);
+  const [displaySellOrderLabel, setDisplaySellOrderLabel] = useState(true);
+
+  const isMetaconnected = useSelector(getMetaConnected);
+  const metaToken = useSelector(getMetaToken);
+
+  const hiddenFileInput = useRef(null);
+  const [form] = Form.useForm();
+
   const getSelectedCollection = (colId) => {
-    console.log("selection is ", colId);
     const selected = collections.filter((item) => item.id === colId)[0];
     setSelectedCollection(selected);
     return selectedCollection;
@@ -89,7 +79,6 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
   };
 
   const checkNftNameDuplication = (e) => {
-    console.log("nfts are", nfts);
     let input = e.target.value;
     const nftDuplicationResult = checkAssetForDuplicate(nfts, input, "name", "Asset Name");
     setDuplicateNameError(nftDuplicationResult);
@@ -115,12 +104,12 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
 
   const onFinish = (values) => {
     console.log("values are ", values);
-    // let validationResult = validateImage(nftImageFile, 10);
-    // if (validationResult.status == true && !duplicateNameError.isDuplicate) {
-    //   if (metaToken.length > 0) {
-    //     saveNFT(nftImageFile, values);
-    //   }
-    // }
+    let validationResult = validateImage(nftImageFile, 10);
+    if (validationResult.status == true && !duplicateNameError.isDuplicate) {
+      if (metaToken.length > 0) {
+        saveNFT(nftImageFile, values);
+      }
+    }
   };
 
   const saveNFT = async (nftImageFile, values) => {
@@ -136,7 +125,6 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
           if (result?.success) {
             CustomNotification("success", "Creating Asset", "Your Asset is created", "topLeft");
 
-            setUploadErrorMessage("");
             setNftContract(result.data.tokenAddress);
             setNftTokenId(result.data.tokenId);
             let isFixed = selectedTab == 0 ? true : false;
@@ -176,7 +164,6 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
   };
 
   const getOwnerCollections = async () => {
-    console.log("collections are ", collections);
     if (metaToken != null && metaToken[0]) {
       const ownerAccount = await metaToken[0];
       const cols = collections.filter((item) => {
@@ -221,11 +208,9 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
 
   const handlefixedPrice = () => {
     setSelectedTab(0);
-    console.log("handlefixedPrice");
   };
   const handleAuctionPrice = () => {
     setSelectedTab(1);
-    console.log("handleAuctionPrice");
   };
 
   const createSellOrder = async (
@@ -248,18 +233,21 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
         formValues,
         isFixed
       );
+      setDisplayUploadModal(true);
+      setDisplayModalButtons(true);
       if (sell?.hash) {
-        setDisplayUploadModal(true);
-        setDisplayModalButtons(true);
         handleUpdateAsset(tokenAddress, tokenId);
         CustomNotification("success", "Sell Order", "Sell order is placed", "topLeft");
+        setDisplaySellOrderLabel(false);
       } else {
-        setDisplayUploadModal(false);
-        setDisplayModalButtons(false);
+        setDisplaySellOrderLabel(true);
+        setSellOrderErrorMessage("Sell order is not saved !!!");
         CustomNotification("warning", "Sell Order", "Sell order is not saved", "topLeft");
       }
     } else {
-      console.log("sell is not created");
+      setDisplayUploadModal(true);
+      setDisplayModalButtons(true);
+      setSellOrderErrorMessage(sellSign.message);
     }
   };
 
@@ -325,7 +313,9 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
               </Link>
             </div>
           )}
-          <div>{/* <span>{uploadErrorMessage}</span> */}</div>
+          {displaySellOrderLabel && (
+            <div className={styles.nftSellOrderError}>{<span>{sellOrderErrorMessage}</span>}</div>
+          )}
         </div>
       </Modal>
       <div id="top"></div>
@@ -361,7 +351,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                 <div className="field-set">
                   <h5>Upload file</h5>
                   <div className="d-create-file">
-                    <p id="file_name">PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
+                    <p id="file_name">PNG, JPG, GIF, WEBP or MP4. Max 10mb.</p>
                     <input
                       type="button"
                       id="get_file"

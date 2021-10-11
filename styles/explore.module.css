@@ -11,6 +11,8 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
   margin: 20px;
 }
 .searchForm {
@@ -26,8 +28,15 @@
   align-content: center;
   margin: 0px 10px;
 }
-.searhFormInputItem {
+
+.searchFormSelect {
   min-width: 200px;
+  margin: 10px 10px;
+  vertical-align: middle;
+}
+
+.searhFormInputItem {
+  min-width: 180px;
   min-height: 40px;
   display: flex;
   justify-content: center;
@@ -35,15 +44,31 @@
   align-content: center;
   margin: 0px;
 }
-.searchFormSelect {
-  min-width: 200px;
-  margin: 10px 10px;
-  vertical-align: middle;
-}
 .searhFormInput {
+  min-width: 185px;
   min-height: 40px;
   margin: 0px;
 }
+.searhFormButtonItem {
+  min-width: 80px;
+  min-height: 40px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: center;
+  margin: 0px;
+}
+.searhFormButton {
+  min-height: 40px;
+  margin: 0px;
+  background-color: #f32178;
+  background: #f32178;
+  border-color: #f32178;
+  color: white;
+  border-end-end-radius: 5px;
+  border-start-end-radius: 5px;
+}
+
 .nftListContainer {
   display: flex;
   flex-direction: row;
