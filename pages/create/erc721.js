@@ -115,12 +115,12 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
 
   const onFinish = (values) => {
     console.log("values are ", values);
-    let validationResult = validateImage(nftImageFile, 10);
-    if (validationResult.status == true && !duplicateNameError.isDuplicate) {
-      if (metaToken.length > 0) {
-        saveNFT(nftImageFile, values);
-      }
-    }
+    // let validationResult = validateImage(nftImageFile, 10);
+    // if (validationResult.status == true && !duplicateNameError.isDuplicate) {
+    //   if (metaToken.length > 0) {
+    //     saveNFT(nftImageFile, values);
+    //   }
+    // }
   };
 
   const saveNFT = async (nftImageFile, values) => {
@@ -134,6 +134,8 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
         if (ownerAccount) {
           const result = await uploadNft(nftImageFile, nftData, ownerAccount);
           if (result?.success) {
+            CustomNotification("success", "Creating Asset", "Your Asset is created", "topLeft");
+
             setUploadErrorMessage("");
             setNftContract(result.data.tokenAddress);
             setNftTokenId(result.data.tokenId);
@@ -246,21 +248,15 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
         formValues,
         isFixed
       );
-      console.log("sell result is ", sell);
       if (sell?.hash) {
         setDisplayUploadModal(true);
         setDisplayModalButtons(true);
         handleUpdateAsset(tokenAddress, tokenId);
-
-        console.log("Sell order is saved");
-        console.log("set the onSale true in strapi");
-        // message.success("Sell order is saved");
-        // socket.emit("userCreatedNewFixedSell", sell);
+        CustomNotification("success", "Sell Order", "Sell order is placed", "topLeft");
       } else {
         setDisplayUploadModal(false);
         setDisplayModalButtons(false);
-        console.log("Sell order is not saved");
-        // message.error(sell.toString());
+        CustomNotification("warning", "Sell Order", "Sell order is not saved", "topLeft");
       }
     } else {
       console.log("sell is not created");
@@ -397,11 +393,6 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                           <i className="fa fa-hourglass-1"></i>Timed auction
                         </span>
                       </li>
-                      {/* <li className={selectedTab == 2 ? "active" : ""} onClick={handleOpenForBids}>
-                        <span>
-                          <i className="fa fa-users"></i>Open for bids
-                        </span>
-                      </li> */}
                     </ul>
 
                     <div className="de_tab_content">
@@ -631,10 +622,13 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                 </div>
                 <div className="nft__item_info">
                   <a href="#">
-                    <h4>Pinky Ocean</h4>
+                    <h4>{form.getFieldValue("name")}</h4>
                   </a>
                   <div className="nft__item_price">
-                    0.08 ETH<span>1/20</span>
+                    {selectedTab == 0
+                      ? form.getFieldValue(["price", "amount"])
+                      : form.getFieldValue(["price", "minAmount"])}
+                    ETH
                   </div>
                   <div className="nft__item_action">
                     <a href="#">Place a bid</a>

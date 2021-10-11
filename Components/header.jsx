@@ -7,10 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import LoginModal from "../Components/loginModal";
 import CONSTANTS from "../Constants/headerConstants";
 import { getMetaToken, getUser, signout } from "../store/action/accountSlice";
-import {
-  BalanceLabel,
-  ConnectedButton,
-} from "./StyledComponents/header-styledComponents.js";
+import { BalanceLabel, ConnectedButton } from "./StyledComponents/header-styledComponents.js";
 import api from "/Components/axiosRequest";
 import {
   getMetaBalance,
@@ -100,11 +97,7 @@ function Header(props) {
   };
   const displayAddress = (token) => {
     const address = token[0];
-    return (
-      address.substring(1, 4) +
-      "..." +
-      address.substring(address.length - 5, address.length)
-    );
+    return address.substring(1, 4) + "..." + address.substring(address.length - 5, address.length);
   };
   const openLogin = () => {
     setShowLoginModal(true);
@@ -132,11 +125,7 @@ function Header(props) {
                   <div id="logo">
                     <Link href="/" passHref>
                       <a href="/">
-                        <img
-                          alt=""
-                          className="logo"
-                          src="/images/logo-light.png"
-                        />
+                        <img alt="" className="logo" src="/images/logo-light.png" />
                         <img
                           alt=""
                           style={{ width: "250px" }}
@@ -214,20 +203,12 @@ function Header(props) {
                           <BalanceLabel>
                             {parseFloat(walletBalance).toFixed(4) + " Eth"}
                           </BalanceLabel>
-                          <Avatar
-                            size={36}
-                            src={"/images/walletIcons/walletIcon.svg"}
-                          />{" "}
+                          <Avatar size={36} src={"/images/walletIcons/walletIcon.svg"} />{" "}
                         </>
                       ) : (
                         <>
-                          <BalanceLabel>
-                            {parseFloat(metaBalance).toFixed(4) + " Eth"}
-                          </BalanceLabel>
-                          <Avatar
-                            size={36}
-                            src={"/images/walletIcons/metaIcon.svg"}
-                          />
+                          <BalanceLabel>{parseFloat(metaBalance).toFixed(4) + " Eth"}</BalanceLabel>
+                          <Avatar size={36} src={"/images/walletIcons/metaIcon.svg"} />
                         </>
                       )}
                     </ConnectedButton>
@@ -247,10 +228,7 @@ function Header(props) {
             </div>
           </div>
         </div>
-        <ul
-          id="MobileMenu"
-          style={toggleMenu ? { height: "300px" } : { height: "0px" }}
-        >
+        <ul id="MobileMenu" style={toggleMenu ? { height: "300px" } : { height: "0px" }}>
           <li>
             <div className="dropdownList">
               <Link href="/explore" passHref>
@@ -292,9 +270,7 @@ function Header(props) {
                 )}
               </span>
             </div>
-            <div
-              className={toggle[1] ? "dropdownContent show" : "dropdownContent"}
-            >
+            <div className={toggle[1] ? "dropdownContent show" : "dropdownContent"}>
               <Link href="/create">
                 <a>Create Asset</a>
               </Link>
@@ -319,10 +295,7 @@ function Header(props) {
         </ul>
       </div>
       {showLoginModal && (
-        <LoginModal
-          showLoginModal={showLoginModal}
-          setShowLoginModal={setShowLoginModal}
-        />
+        <LoginModal showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} />
       )}
     </header>
   );

@@ -1,43 +1,28 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import styles from "/styles/explore.module.css";
-import { Button, Form, Input, Select, Spin } from "antd";
+import { Button, Form, Input, Select } from "antd";
 import { fetch } from "Utils/strapiApi";
-import { saleBundleType, saleTypes } from "Constants/constants";
+import { saleTypes } from "Constants/constants";
 import AssetCard from "@/components/assetCard";
-import {
-  getExplores,
-  queryExplore,
-  querySearch,
-  querysearchExplore,
-} from "services/explore.service";
-// import { useRouter } from "next/router";
+import { getExplores, queryExplore } from "services/explore.service";
 import router from "next/router";
 
+const searchInitialValue = { search: "", categories: "all", saleTypes: "all" };
+const offset = 20;
 function Explore({ serverExplores, categories }) {
   const { search } = router.query;
-  // const [urlQuery, setUrlQuery] = useState("http://192.168.1.251:1337/nfts?[name_contains]=The Man From UNCLE");
-  const [urlQuery, setUrlQuery] = useState();
-  const [searchQuery, setSearchQuery] = useState({
-    search: "",
-    categorySlug: "all",
-    saleType: "all",
-    bundleType: "all",
-  });
+  const [searchQuery, setSearchQuery] = useState(searchInitialValue);
   const [stringQuery, setStringQuery] = useState(``);
 
-  const [start, setStart] = useState(2);
+  const [start, setStart] = useState(offset);
   const [displayLoadMoreButton, setDisplayLoadMoreButton] = useState(true);
-  const [explores, setExplores] = useState(serverExplores);
   const [filterdExplores, setFilteredExplores] = useState(serverExplores);
   const searchFormRef = React.createRef();
   const [searchForm] = Form.useForm();
 
   const getSelectedCategories = async (category) => {
     let query = searchQuery;
-    query.categorySlug = category;
+    query.categories = category;
     setSearchQuery(query);
     handleFilter();
   };
@@ -48,73 +33,58 @@ function Explore({ serverExplores, categories }) {
     handleFilter();
   };
 
-  // const getSaleBundleType = (bundleType) => {
-  //   let query = searchQuery;
-  //   query.bundleType = bundleType;
-  //   setSearchQuery(query);
-  //   handleFilter();
-  // };
   const filter = () => {
     setDisplayLoadMoreButton(true);
     let custom = "";
     let query = searchQuery;
-    if (query.categorySlug != "all") {
-      custom += `categories.slug=${query.categorySlug}&`;
+    if (query.categories != "all") {
+      custom += `categories.slug=${query.categories}&`;
     }
 
     if (query.saleType != "all") {
       custom += `${query.saleType}=true&`;
     }
+
     return custom;
   };
   const handleFilter = async () => {
     let custom = filter();
-    setStart(2);
-    const loadedExplores = await queryExplore(custom, 0, 2);
-    setFilteredExplores(loadedExplores.data);
+    setStart(offset);
+    const { data } = await queryExplore(custom, 0, offset);
+    setFilteredExplores(data);
     console.log("custome query is ", custom);
     setStringQuery(custom);
   };
   const loadMoreExplores = async () => {
-    const loadedExplores = await queryExplore(stringQuery, start, 2);
-    if (loadedExplores.data.length > 0) {
-      setStart(start + 2);
+    const { data } = await queryExplore(stringQuery, start, offset);
+    if (data.length > 0) {
+      setStart(start + offset);
     } else {
       setDisplayLoadMoreButton(false);
     }
-    setFilteredExplores((prev) => [...prev, ...loadedExplores.data]);
+    setFilteredExplores((prev) => [...prev, ...data]);
   };
   const searchFilterData = async (searchText) => {
     let custom = filter();
-    console.log("in start custom filter is ", custom);
-    custom += `[name_contains]=${searchText.name}&`;
-    setStart(2);
-    const loadedExplores = await queryExplore(custom, 0, 2);
-    setFilteredExplores(loadedExplores.data);
-    console.log("custome query is ", custom);
+    custom += `[name_contains]=${searchText.search}&`;
+    setStart(offset);
+    const { data } = await queryExplore(custom, 0, offset);
+    setFilteredExplores(data);
     setStringQuery(custom);
   };
-  const handleSearch = async (searchText) => {
-    console.log("searching ", searchText);
-    let totalsearch = `[name_contains]=${searchText}`;
-
-    const loadedExplores = await queryExplore(totalsearch, 0, 2);
-    setStart(2);
-    setFilteredExplores(loadedExplores.data);
-    console.log("custome query is ", totalsearch);
-    console.log("befreString query is ", stringQuery);
+  const handleSearch = async (search) => {
+    let totalsearch = `[name_contains]=${search}`;
+    const { data } = await queryExplore(totalsearch, 0, offset);
+    setStart(offset);
+    setFilteredExplores(data);
+    searchForm.setFieldsValue({ search });
     setStringQuery(totalsearch);
-    console.log("after String query is ", stringQuery);
-  };
-  const onFinishFailed = () => {
-    console.log("failed");
   };
 
   useEffect(() => {
-    setUrlQuery(router.query);
     if (!search) return;
     handleSearch(router.query.search);
-  }, [search]);
+  }, []);
   return (
     <div className="no-bottom " id="content">
       <div id="top"></div>
@@ -147,16 +117,10 @@ function Explore({ serverExplores, categories }) {
                 className={styles.searchForm}
                 ref={searchFormRef}
                 form={searchForm}
-                // initialValues={{ nftImageFile: "" }}
+                initialValues={searchInitialValue}
                 onFinish={searchFilterData}
-                onFinishFailed={onFinishFailed}
               >
-                <Form.Item
-                  className={styles.searhFormInputItem}
-                  name="name"
-                  // rules={[{ required: true, message: "Please input your Asset Name!" }]}
-                  // onInput={checkNftNameDuplication}
-                >
+                <Form.Item className={styles.searhFormInputItem} name="search">
                   <Input
                     id="name"
                     placeholder="search item here"
@@ -164,25 +128,11 @@ function Explore({ serverExplores, categories }) {
                   />
                 </Form.Item>
                 <Form.Item className={styles.searhFormInputItem}>
-                  <Button
-                    className={styles.searhFormInput}
-                    // loading={isLoading}
-                    type="primary"
-                    htmlType="submit"
-                  >
+                  <Button className={styles.searhFormInput} type="primary" htmlType="submit">
                     Search
                   </Button>
                 </Form.Item>
-                <Form.Item
-                  className={styles.searchFormSelectItem}
-                  name="categories"
-                  // rules={[
-                  //   {
-                  //     required: true,
-                  //     message: "Please Selected At least (1) Category",
-                  //   },
-                  // ]}
-                >
+                <Form.Item className={styles.searchFormSelectItem} name="categories">
                   <Select
                     size="large"
                     className={styles.searchFormSelect}
@@ -230,30 +180,6 @@ function Explore({ serverExplores, categories }) {
                     ))}
                   </Select>
                 </Form.Item>
-                {/* <Form.Item className={styles.searchFormSelectItem} name="bundleType">
-                  <Select
-                    size="large"
-                    className={styles.searchFormSelect}
-                    id="bundleType"
-                    placeholder="Please select"
-                    onChange={(values) => getSaleBundleType(values)}
-                    showSearch
-                    filterOption={(input, option) =>
-                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                    defaultValue={saleBundleType[0].value}
-                  >
-                    {saleBundleType.map((item) => (
-                      <Select.Option
-                        key={item.id}
-                        value={item.value}
-                        style={{ height: 50, padding: 10 }}
-                      >
-                        {item.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item> */}
               </Form>
             </div>
             {/* <!-- nft item begin --> */}
@@ -275,11 +201,10 @@ function Explore({ serverExplores, categories }) {
 export default Explore;
 
 export const getServerSideProps = async () => {
-  const exploreResult = await getExplores(0, 2);
+  const exploreResult = await getExplores(0, offset);
   const explores = exploreResult.data;
   const categoriesResult = await fetch("/categories");
   const cats = await categoriesResult.data;
-
   return {
     props: {
       serverExplores: JSON.parse(JSON.stringify(explores)),
