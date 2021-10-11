@@ -229,6 +229,15 @@
   font-weight: 900;
   color: red;
 }
+.nftSellOrderError {
+  margin-top: 20px !important;
+  padding: 20px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 900;
+  color: red;
+  text-align: center;
+}
 .nftFormValid {
   margin-top: -10px;
   margin-bottom: 10px;
