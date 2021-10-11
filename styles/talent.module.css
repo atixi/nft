@@ -37,3 +37,8 @@
 .cursorPointer {
   cursor: pointer;
 }
+.backgroundAvatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}

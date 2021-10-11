@@ -1,17 +1,19 @@
 import AssetCard from "@/components/assetCard";
 import copy from "copy-to-clipboard";
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { fetch } from "Utils/strapiApi";
 import { ellipseAddress } from "Utils/utils";
 import styles from "/styles/talent.module.css";
+import gradients from "/styles/gradients.module.css";
 const offset = 20;
 function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
   const [start, setStart] = useState(offset);
   const [onSaleStart, setOnSaleStart] = useState(offset);
   const [assets, setAssets] = useState(collectedAsset);
   const [onSales, setOnSales] = useState(onSaleAsset);
-
+  const [backgroundBanner, setBackgroundBanner] = useState("");
+  const [backgroundAvatar, setBackgroundAvatar] = useState("");
   const [selectedTab, setSelectedTab] = useState(1);
   const [displayOnSaleButton, setDisplayOnSaleButton] = useState(true);
   const [displayCollectedButton, setDisplayCollectedButton] = useState(true);
@@ -58,14 +60,33 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
       message: "Press #{key} to copy",
     });
   };
+
+  const getRandomBanner = () => {
+    let index = Math.floor(Math.random() * 10);
+    let index_2 = Math.floor(Math.random() * 10);
+    setBackgroundBanner(`gradientBackground_${index}`);
+    setBackgroundAvatar(`gradientBackground_${index_2}`);
+  };
+  useEffect(() => {
+    getRandomBanner();
+  }, []);
+
   return (
     <div className="no-bottom " id="content">
       <div id="top"></div>
 
       {/* <!-- section begin --> */}
-      <section id="profile_banner" aria-label="section" className="text-light">
-        <img width="100%" height="300px" src={talent.talentBanner?.formats?.large?.url} alt="" />
-      </section>
+      {talent.talentBanner?.formats?.large?.url ? (
+        <section id="profile_banner" aria-label="section" className={`text-light `}>
+          <img width="100%" height="300px" src={talent.talentBanner?.formats?.large?.url} alt="" />
+        </section>
+      ) : (
+        <section
+          id="profile_banner"
+          aria-label="section"
+          className={`text-light ` + gradients[backgroundBanner]}
+        ></section>
+      )}
       {/* <!-- section close --> */}
 
       <section aria-label="section">
@@ -74,13 +95,22 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
             <div className="col-md-12">
               <div className="d_profile de-flex">
                 <div className="de-flex-col">
-                  <div className="profile_avatar">
-                    <img src={talent.talentAvatar?.formats?.small?.url} alt="" />
+                  <div className={`profile_avatar `}>
+                    {!talent.talentAvatar?.formats?.small?.url ? (
+                      <div
+                        className={`${styles.backgroundAvatar} ${gradients[backgroundAvatar]}`}
+                      ></div>
+                    ) : (
+                      <img src={talent.talentAvatar?.formats?.small?.url} alt="" />
+                    )}
+
                     <i className="fa fa-check"></i>
                     <div className="profile_name">
                       <h4>
-                        {talent?.talentName}
-                        <span className="profile_username">@{talent.userName}</span>
+                        {talent?.talentName ? talent.talentName : "Anonymous"}
+                        <span className="profile_username">
+                          {talent?.userName && `@${talent.userName}`}
+                        </span>
                         <span
                           id="wallet"
                           className={`profile_wallet ${styles.cursorPointer}`}
