@@ -20,7 +20,7 @@ let collectionCompleteName = {
   collectionName: "",
   collectionIdentifier: "",
 };
-const ERC721Collection = ({ serverCollections, categories, talentData }) => {
+const ERC721Collection = ({ serverCollections, categories }) => {
   const [form] = Form.useForm();
   const logoImageInputRef = useRef(null);
   const bannerImageInputRef = useRef(null);

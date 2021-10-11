@@ -1,6 +1,5 @@
 import AssetCard from "@/components/assetCard";
 import copy from "copy-to-clipboard";
-import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { fetch } from "Utils/strapiApi";
 import { ellipseAddress } from "Utils/utils";
