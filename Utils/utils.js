@@ -25,7 +25,7 @@ export const seaportProvider = new Web3.providers.HttpProvider(
 export function seaport() {
   const provider = window.ethereum;
   return new OpenSeaPort(provider, {
-    networkName: Network.Rinkeby,
+    networkName: process.env.MAIN ? Network.Main : Network.Rinkeby,
     // apiKey: "2e7ef0ac679f4860bbe49a34a98cf5ac",
   });
 }
@@ -192,64 +192,25 @@ export async function sellOrder(
   orderValue,
   fixed
 ) {
-  let bounty = 0.0;
-  if (orderValue?.bounty?.bounty !== undefined) {
-    bounty = orderValue.bounty.bounty;
-  }
   try {
     if (fixed) {
-      if (orderValue?.switch?.includeEnd) {
-        if (orderValue.date.expirationTime == undefined) return "Set the expiration time";
-        var date = new Date(orderValue.date.expirationTime);
-        var expirationTime = parseInt(date.getTime() / 1000);
-        var result = await seaport().createSellOrder({
-          asset: {
-            tokenId,
-            tokenAddress,
-          },
-          accountAddress: address,
-          startAmount: orderValue.price.amount,
-          endAmount: orderValue.price.endPrice,
-          expirationTime,
-          extraBountyBasisPoints: bounty * 100,
-        });
 
-        return result;
-      } else if (orderValue?.switch?.futureTime) {
-        var date = new Date(orderValue.date.futureTime);
-        var listingTime = date.getTime() / 1000;
-        const result = await seaport().createSellOrder({
-          asset: {
-            tokenId,
-            tokenAddress,
-          },
-          accountAddress: address,
-          startAmount: orderValue.price.amount,
-          listingTime: listingTime,
-          extraBountyBasisPoints: bounty * 100,
-        });
+      const result = await seaport().createSellOrder({
+        asset: {
+          tokenId,
+          tokenAddress,
+        },
+        accountAddress: address,
+        startAmount: orderValue.price.amount,
+        extraBountyBasisPoints: process.env.BOUNTY * 100,
+      });
 
-        return result;
-      } else {
-        console.log("order value is ", orderValue);
-        const result = await seaport().createSellOrder({
-          asset: {
-            tokenId,
-            tokenAddress,
-          },
-          accountAddress: address,
-          startAmount: orderValue.price.amount,
-          extraBountyBasisPoints: bounty * 100,
-        });
+      return result;
 
-        return result;
-      }
     } else {
       const paymentTokenAddress = "0xc778417e063141139fce010982780140aa0cd5ab";
       var date = new Date(orderValue.date.auctionExpirationTime);
       var expirationTime = parseInt(moment.duration(date).asMilliseconds() / 1000);
-      console.log(expirationTime);
-
       const result = await seaport().createSellOrder({
         asset: {
           tokenId,
@@ -260,7 +221,7 @@ export async function sellOrder(
         expirationTime,
         paymentTokenAddress,
         waitForHighestBid: true,
-        extraBountyBasisPoints: bounty * 100,
+        extraBountyBasisPoints: process.env.BOUNTY * 100,
       });
 
       return result;

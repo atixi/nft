@@ -1,11 +1,11 @@
 import styled from "styled-components"
 
 export const CustomTapBarElement = styled.div`
-    width: 200px;
+    width: 130px;
     text-align: center;
     div{
         text-align: center;
-        font-size: 14px;
+        font-size: 30px;
         font-weight: 900;
     }
     span{
@@ -40,4 +40,40 @@ export const SummarySection = styled.div`
     span,p{
         font-weight: 500;
     }
+`
+export const SellAssetContent = styled.div`
+.ant-tabs-tab-active{
+    border: 1px solid #F32178 !important;
+    min-width: 80px;
+    text-align: center;
+    border-radius: 10px !important;
+
+};
+.ant-tabs-tab{
+    border-radius: 10px !important;
+};
+.ant-tabs-tab-active div span{
+    color: black !important;
+};
+.ant-tabs-tab-active div i{
+    color: #F32178 !important;
+};
+.ant-tabs-tab {
+    background-color: #EEE;
+    min-width: 80px;
+    padding: 10px 0px;
+    display: inline;
+    border-radius: 3px;
+    margin-left: 0px !important;
+};
+.ant-tabs-tab .ant-tabs-tab-btn{
+    text-align: center !important;
+    color: #666666 !important;
+};
+.ant-tabs-nav::before{
+    border: none !important;
+};
+.ant-tabs-ink-bar{
+    display: none !important;
+};
 `

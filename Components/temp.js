@@ -1,193 +1,85 @@
-import * as Web3 from "web3";
-
-import {
-    Auction,
-    AuctionLabel,
-    AuctionTimer,
-    AvatarContainer,
-    BidCountdown,
-    BidOwner,
-    BidOwnerContainer,
-    BidOwnerProfile,
-    BidPrice,
-    BidPriceValue,
-    ButtonContainer,
-    Content,
-    DetailTabDiv,
-    DropdownMenu,
-    FooterButton,
-    ImageCon,
-    ImageListContainer,
-    ItemDescriptionText,
-    ItemDetails,
-    ItemDetailsHeader,
-    ItemFooter,
-    ItemImageContainer,
-    ItemInfo,
-    ItemLink,
-    ItemName,
-    ItemTopButtonContainer,
-    LastBidder,
-    PriceInCryptoContainer,
-    PriceInDollarContainer,
-    SaleEnd,
-    Wrapper,
-} from "../../Components/StyledComponents/productDetails-styledComponents";
 import {
     Avatar,
     Button,
-    Dropdown,
-    Image,
-    Menu,
-    Modal,
+    Card,
+    Col,
+    DatePicker,
+    Form,
+    Input,
+    List,
     Result,
+    Row,
+    Slider,
     Spin,
-    Statistic,
+    Switch,
     Tabs,
     message,
 } from "antd";
+import { CheckCircleTwoTone, UnorderedListOutlined } from "@ant-design/icons";
 import {
-    acceptThisOffer,
-    buyOrder,
-    cancelThisOffer,
-    checkName,
-    convertToUsd,
-    detectVideo,
-    displayAddress,
-    findHighestOffer,
-    prevImage,
-    unixToHumanDate,
-    unixToMilSeconds,
-} from "/Utils/utils";
+    Content,
+    Wrapper,
+} from "../../Components/StyledComponents/productDetails-styledComponents";
+import {
+    CustomTapBarElement,
+    ListDescription,
+    ListTile,
+    SummarySection,
+    SwitchContainer,
+} from "../../Components/StyledComponents/sellNft-styledComponents";
+import React, { useEffect, useState } from "react";
 import { fetchBundle, fetchOne } from "/Utils/strapiApi";
 import {
     getAccountTokens,
     getMetaConnected,
     getWalletConnected,
 } from "store/action/accountSlice";
-import { useEffect, useState } from "react";
 
-import BuyNftModal from "/Components/buyNftModal";
-import CONSTANTS from "/Constants/productDetailsConstants";
-import { FieldTimeOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import MakeOfferModal from "/Components/makeOfferModal";
-import ReactPlayer from "react-player";
+import { MainWrapper } from "/Components/StyledComponents/globalStyledComponents";
 import { getAuctionPriceDetails } from "/Constants/constants";
+import { sellOrder } from "/Utils/utils";
+import { signTransaction } from "Utils/utils";
 import { socket } from "config/websocket";
 import { useQueryParam } from "/Components/hooks/useQueryParam";
-import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 
 const { TabPane } = Tabs;
 
-
-
-
-
-
-
-
-const { Countdown } = Statistic;
-function ProductPage() {
-    const { ethereum } = window;
-    let web3 = new Web3(ethereum);
-    const router = useRouter();
+function SellNft() {
     const queryParam = useQueryParam();
-    const [asset, setAsset] = useState({});
-    const [offers, setOffers] = useState([]);
+    const [asset, setAsset] = useState(null);
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
-    const [priceDetails, setPriceDetails] = useState(null);
-    const [highestOffer, setHighestOffer] = useState(null);
-    const [previewImage, setPreviewImage] = useState(null);
-    const [sellOrders, setSellOrders] = useState(null);
-    const [isVideo, setIsVideo] = useState(false);
-    const [refresh, setRefresh] = useState(true);
-
+    const [futureTime, setFutureTime] = useState(false);
+    const [formText, setFormText] = useState({
+        price: "Price",
+        priceDesc: "Will be on sale until you transfer this item or cancel it",
+        includeEnding: "Include ending price",
+        includeEndingDesc:
+            "Adding an ending price will allow this listing to expire, or for the price to be reduced until a buyer is found.",
+    });
     const isWalletConnected = useSelector(getWalletConnected);
     const isMetaConnected = useSelector(getMetaConnected);
     const tokenAddresses = useSelector(getAccountTokens);
     const [address, setAddress] = useState(null);
     const [balance, setBalance] = useState(null);
-    const [imageList, setImageList] = useState(null);
-    const [isBundle, setIsBundle] = useState(false);
-    const [mainImage, setMainImage] = useState(null);
-    const [assets, setAssets] = useState(null);
-    const [order, setOrder] = useState(null);
-
-    const loadAgain = () => {
-        setLoading(true);
-        loadNft();
-    };
-    const loadNft = async () => {
-        if (queryParam.slug) {
-            setIsBundle(true);
-            const bundle = await fetchBundle(
-                queryParam.tokenAddress,
-                queryParam.slug
-            );
-            if (bundle) {
-                setLoading(false);
-            }
-
-            if (bundle.status == 200) {
-                setOrder(bundle.data);
-                const nft = bundle.data;
-                setAssets(nft.assetBundle.assets);
-                let owner = nft?.assetBundle?.maker;
-                owner.makerAccount.address = web3.utils.toChecksumAddress(
-                    owner.makerAccount.address
-                );
-                let imgUrl = [nft.assetBundle.assets];
-                nft.assetBundle.assets.map((asset, index) => {
-                    imgUrl[index] = {
-                        thumbnail: asset.imageUrlThumbnail,
-                        imageUrl: asset.imageUrl,
-                    };
-                });
-                setImageList(imgUrl);
-                setAsset({
-                    name: nft?.assetBundle.name,
-                    slug: nft?.assetBundle.slug,
-                    description: nft?.assetBundle.description,
-                    owner: owner,
-                    creator: owner, // this part needs to be changed
-                    image: nft.assetBundle?.assets[0].imageUrl,
-                    contractAddress: nft?.assetBundle?.assetContract?.address,
-                    tokenId: nft?.tokenId,
-                    tokenAddress: nft?.tokenAddress,
-                    collection: nft?.collection,
-                    isPresale: nft?.isPresale,
-                    thumbnail: nft.assetBundle?.assets[0].imageUrlThumbnail,
-                    sellOrder: nft,
-                    numOfSales: nft?.numSales,
-                });
-                setIsVideo(detectVideo(nft.assetBundle?.assets[0].imageUrl));
-                nft.assetBundle?.assets[0].imageUrl &&
-                    setPreviewImage(prevImage(nft.assetBundle?.assets[0].imageUrl));
-                setMainImage(nft.assetBundle?.assets[0].imageUrl);
-                setOffers(nft?.buyOrders);
-                nft?.buyOrders && setHighestOffer(findHighestOffer(nft?.buyOrders));
-                setSellOrders(nft?.sellOrders);
-            } else if (bundle == "error") {
-                setNotFound(true);
-            }
-        } else if (
-            queryParam.tokenAddress != undefined &&
-            queryParam.tokenId != undefined
-        ) {
-            const data = await fetchOne(
-                queryParam?.tokenAddress,
-                queryParam?.tokenId
-            );
+    const [endingPrice, setEndingPrice] = useState(false);
+    const [isFixed, setIsFixed] = useState(true);
+    const [posting, setPosting] = useState(false);
+    const [hasOrder, setHasOrder] = useState(false);
+    async function loadNft() {
+        if (queryParam.sellToken != undefined && queryParam.tokenId != undefined) {
+            const data = await fetchOne(queryParam.sellToken, queryParam.tokenId);
             if (data) {
                 setLoading(false);
             }
 
             if (data.status == 200) {
+                console.log(data);
                 const nft = data.data;
-                nft.owner.address = web3.utils.toChecksumAddress(nft.owner.address);
+                if (nft.sellOrder) setHasOrder(false); // console.log
+
                 setAsset({
                     name: nft.name,
                     description: nft.description,
@@ -203,57 +95,101 @@ function ProductPage() {
                     sellOrder: nft.sellOrder,
                     numOfSales: nft.numSales,
                 });
-                setIsVideo(detectVideo(nft.imageUrl));
-                setMainImage(nft.imageUrl);
-                nft.imageUrl && setPreviewImage(prevImage(nft.imageUrl));
-                setOffers(nft?.buyOrders);
-                nft?.buyOrders && setHighestOffer(findHighestOffer(nft?.buyOrders));
-                setSellOrders(nft?.sellOrders);
             } else if (data == "error") {
                 setNotFound(true);
             }
         }
+    }
+    const data = [
+        {
+            title: "Nft info",
+        },
+    ];
+    function handleIncludeEndPrice(checked) {
+        if (checked) {
+            setFormText({
+                ...formText,
+                price: "Starting Price",
+                priceDesc: "Set an initial price",
+                includeEndingDesc: "",
+            });
+            setEndingPrice(true);
+        } else {
+            setFormText({
+                ...formText,
+                price: "Price",
+                priceDesc: "Will be on sale until you transfer this item or cancel it",
+                includeEnding: "Include ending price",
+                includeEndingDesc:
+                    "Adding an ending price will allow this listing to expire, or for the price to be reduced until a buyer is found.",
+            });
+            setEndingPrice(false);
+        }
+    }
+    function handleFutureListing(checked) {
+        if (checked) {
+            setFutureTime(true);
+        } else {
+            setFutureTime(false);
+        }
+    }
+    const config = {
+        rules: [
+            {
+                type: "object",
+                required: true,
+            },
+        ],
     };
-    async function cancelOffer(order, address) {
-        const cancel = await cancelThisOffer(order, address);
-        if (cancel == undefined) {
-            message.success("Offer Canceled");
-            loadAgain();
-        } else {
-            message.error("Offer not canceled");
+    const [bountyValue, setBountyValue] = useState(parseFloat(1).toFixed(2));
+    const onChange = (value) => {
+        if (isNaN(value)) {
+            return;
         }
-    }
-    async function acceptOffer(order, address) {
-        const accept = await acceptThisOffer(order, address);
-        if (accept != undefined) {
-            message.success("Offer is accepted");
-            loadAgain();
-        } else {
-            message.error("Offer is not accepted");
-            message.error("accept");
-        }
-    }
-
-    const refreshData = () => {
-        socket.on("serverBroadCaseNewFixedPriceSell", (data) => {
-            console.log("user receive new sell from server", data);
-            if (typeof window !== "undefined") {
-                router.replace({
-                    pathname: router.pathname,
-                    query: {
-                        tokenAddress: queryParam?.tokenAddress,
-                        tokenId: queryParam?.tokenId,
-                    },
-                });
-                console.log("router is ", router);
+        setBountyValue(value);
+    };
+    const onSubmitForm = async (values) => {
+        const enableAccount = await ethereum.enable();
+        if (enableAccount) {
+            if (enableAccount.length > 0) {
+                const buySign = await signTransaction(
+                    enableAccount[0],
+                    "Request to Sell",
+                    asset
+                );
+                if (buySign.success) {
+                    setPosting(true);
+                    const sell = await sellOrder(
+                        queryParam.sellToken,
+                        queryParam.tokenId,
+                        address,
+                        asset?.contractAddress,
+                        values,
+                        isFixed
+                    );
+                    if (sell?.hash) {
+                        message.success("Sell order is saved");
+                        socket.emit("userCreatedNewFixedSell", sell);
+                        setHasOrder(true);
+                    } else {
+                        message.error(sell.toString());
+                        setPosting(false);
+                    }
+                }
             }
-        });
+        }
+    };
+    const onTabClick = (e) => {
+        if (e == 2) {
+            setIsFixed(false);
+        } else if (e == 1) {
+            setIsFixed(true);
+        }
     };
     useEffect(() => {
         if (!queryParam) {
             return null;
         }
-        refreshData();
         if (isWalletConnected) {
             setAddress(tokenAddresses.walletToken[0]);
             setBalance(tokenAddresses.walletBalance);
@@ -261,20 +197,10 @@ function ProductPage() {
             setAddress(tokenAddresses.metaToken[0]);
             setBalance(tokenAddresses.metaBalance);
         }
-
-        refresh && loadNft();
+        loadNft();
     }, [queryParam]);
-
-    function changeImage(url) {
-        setIsVideo(detectVideo(url));
-        if (!isVideo) {
-            setMainImage(url);
-            setPreviewImage(url);
-        }
-    }
-
     return (
-        <>
+        <MainWrapper>
             <Wrapper>
                 {loading ? (
                     <Spin style={{ marginTop: "200px" }} />
@@ -292,399 +218,573 @@ function ProductPage() {
                         ]}
                     />
                 ) : (
-                            <Content className={`d-sm-flex`}>
-                                <ItemImageContainer className=" text-center">
-                                    <ImageCon>
-                                        {isVideo ? (
-                                            <ReactPlayer
-                                                url={asset?.image}
-                                                playing={true}
-                                                width={"auto"}
-                                                loop={true}
-                                                controls={true}
-                                            />
-                                        ) : (
-                                                <Image
-                                                    src={mainImage}
-                                                    preview={{
-                                                        src: `${previewImage}`,
-                                                    }}
-                                                />
-                                            )}
-                                    </ImageCon>{" "}
-                                    <br />
-                                    <ImageListContainer>
-                                        {imageList &&
-                                            imageList.map((image, index) => {
-                                                return (
-                                                    <div key={index}>
-                                                        <img
-                                                            src={image.thumbnail}
-                                                            onClick={() => changeImage(image.imageUrl)}
-                                                        />
-                                                    </div>
-                                                );
-                                            })}
-                                    </ImageListContainer>
-                                </ItemImageContainer>
-                                <ItemInfo className={"float-none float-sm-left"}>
-                                    <ItemDetails>
-                                        <ItemDetailsHeader>
-                                            <ItemName>
-                                                {asset.name ? asset.name : asset.collection?.name}
-                                            </ItemName>
-                                        </ItemDetailsHeader>
-                                        <div>
-                                            <span className="text-gradient">
-                                                {asset?.sellOrder &&
-                                                    getAuctionPriceDetails(asset?.sellOrder).priceBase}
-                                                {asset?.sellOrder &&
-                                                    asset?.sellOrder.paymentTokenContract &&
-                                                    asset?.sellOrder?.paymentTokenContract.symbol}
-                                            </span>
-                                            <span style={{ color: "#ccc" }}>
-                                                {/* {isBundle && ` 1 of  ${assets.length()}`} */}
-                                            </span>
-                                        </div>
-                                        {/* <div>
-                <button>{item.category}</button>
-              </div> */}
-                                        <ItemDescriptionText>{asset?.description}</ItemDescriptionText>
-                                        {sellOrders &&
-                                            sellOrders.length > 0 &&
-                                            sellOrders[0].expirationTime !== "0" && (
-                                                <SaleEnd>
-                                                    <FieldTimeOutlined style={{ marginRight: "5px" }} />
-                                                    {`Sale ends on ${unixToHumanDate(
-                                                        sellOrders[0].expirationTime,
-                                                        true
-                                                    )}`}
-                                                </SaleEnd>
-                                            )}
-                                        <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
-                                        <br />
-                                        <Link href={`/profile/${asset?.owner?.address}`} passHref>
-                                            <a>
-                                                <AvatarContainer>
-                                                    <Avatar
-                                                        size={"small"}
-                                                        icon={<img src={asset?.owner?.profile_img_url} />}
-                                                    />
-                                                    <span style={{ flex: "1" }}>
-                                                        {checkName(asset?.owner?.user?.username)}
-                                                    </span>
-                                                </AvatarContainer>
-                                            </a>
-                                        </Link>
-                                        <Tabs defaultActiveKey="4">
-                                            <TabPane key="1" tab={<span>{CONSTANTS.details}</span>}>
-                                                <DetailTabDiv>
-                                                    <span>{"Contract Address"}</span>
-                                                    <span className="float-right">
-                                                        {asset?.contractAddress &&
-                                                            displayAddress(asset?.contractAddress)}
-                                                    </span>
-                                                </DetailTabDiv>
-                                                <DetailTabDiv>
-                                                    <span>{"Token ID"}</span>
-                                                    <span className="float-right">
-                                                        {asset?.tokenId && asset.tokenId.length > 15
-                                                            ? displayAddress(asset?.tokenId)
-                                                            : asset?.tokenId}
-                                                    </span>
-                                                </DetailTabDiv>
-                                                <DetailTabDiv>
-                                                    <span>{"Blockchain"}</span>
-                                                    <span className="float-right">
-                                                        {sellOrders && sellOrders[0]?.paymentTokenContract.name}
-                                                    </span>
-                                                </DetailTabDiv>
-                                            </TabPane>
-                                            <TabPane key="2" tab={<span>{CONSTANTS.offers}</span>}>
-                                                {offers &&
-                                                    offers.map((order, i) => (
-                                                        <LastBidder key={i} id={order.owner?.address}>
-                                                            <div className={"content"}>
-                                                                <span className="avatarContainer">
-                                                                    <Link
-                                                                        href={`/profile/${order?.makerAccount?.address}`}
-                                                                        passHref
-                                                                    >
-                                                                        <a>
-                                                                            <Avatar
-                                                                                size={"small"}
-                                                                                icon={
-                                                                                    <img
-                                                                                        src={
-                                                                                            order.makerAccount?.profile_img_url
-                                                                                        }
-                                                                                    />
-                                                                                }
-                                                                            />
-                                                                        </a>
-                                                                    </Link>
-                                                                </span>
-                                                                <span className={"bidInfo"}>
-                                                                    <span className={"bidedPriceContainer"}>
-                                                                        <span className={"bidedPriceText"}>
-                                                                            <span className={"bidValue"}>{`${getAuctionPriceDetails(order).priceBase
-                                                                                } ${order?.paymentTokenContract?.symbol
-                                                                                }`}</span>
-                                                                            {" by "}
-                                                                            <Link
-                                                                                href={`/profile/${order?.makerAccount?.address}`}
-                                                                                passHref
-                                                                            >
-                                                                                <a className={"bidderLink"}>
-                                                                                    {checkName(
-                                                                                        order.makerAccount?.user?.username
-                                                                                    )}
-                                                                                </a>
-                                                                            </Link>
-                                                                        </span>
-                                                                    </span>
-                                                                    <span className={"bidOwnerAndDateContainer"}>
-                                                                        <span className={"bidDate"}>
-                                                                            {unixToHumanDate(order?.createdTime)}
-                                                                        </span>
-                                                                        <span>
-                                                                            {order.makerAccount.address == address ? (
-                                                                                <Button
-                                                                                    onClick={() =>
-                                                                                        cancelOffer(order, address)
-                                                                                    }
-                                                                                    shape="round"
-                                                                                    size="small"
-                                                                                >
-                                                                                    {"Cancel"}
-                                                                                </Button>
-                                                                            ) : (
-                                                                                    ""
-                                                                                )}
-                                                                        </span>
-                                                                        <span>
-                                                                            {asset?.owner.address == address ? (
-                                                                                <Button
-                                                                                    onClick={() =>
-                                                                                        acceptOffer(order, address)
-                                                                                    }
-                                                                                    shape="round"
-                                                                                    size="small"
-                                                                                >
-                                                                                    {"Accept"}
-                                                                                </Button>
-                                                                            ) : (
-                                                                                    ""
-                                                                                )}
-                                                                        </span>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </LastBidder>
-                                                    ))}
-                                            </TabPane>
-                                            <TabPane key="4" tab={<span>{"Listing"}</span>}>
-                                                {sellOrders &&
-                                                    sellOrders.map((order, i) => (
-                                                        <LastBidder key={i} id={order.owner?.address}>
-                                                            <div className={"content"}>
-                                                                <span className="avatarContainer">
-                                                                    <Link
-                                                                        href={`/profile/${order?.makerAccount?.address}`}
-                                                                        passHref
-                                                                    >
-                                                                        <a>
-                                                                            <Avatar
-                                                                                size={"small"}
-                                                                                icon={
-                                                                                    <img
-                                                                                        src={
-                                                                                            order.makerAccount?.profile_img_url
-                                                                                        }
-                                                                                    />
-                                                                                }
-                                                                            />
-                                                                        </a>
-                                                                    </Link>
-                                                                </span>
-                                                                <span className={"bidInfo"}>
-                                                                    <span className={"bidedPriceContainer"}>
-                                                                        <span className={"bidedPriceText"}>
-                                                                            <span className={"bidValue"}>{`${getAuctionPriceDetails(order).priceBase
-                                                                                } ${order?.paymentTokenContract?.symbol
-                                                                                }`}</span>
-                                                                            {" by "}
-                                                                            <Link
-                                                                                href={`/profile/${order?.makerAccount?.address}`}
-                                                                                passHref
-                                                                            >
-                                                                                <a className={"bidderLink"}>
-                                                                                    {checkName(
-                                                                                        order.makerAccount?.user?.username
-                                                                                    )}
-                                                                                </a>
-                                                                            </Link>
-                                                                        </span>
-                                                                    </span>
-                                                                    <span className={"bidOwnerAndDateContainer"}>
-                                                                        <span className={"bidDate"}>
-                                                                            {unixToHumanDate(order?.createdTime)}
-                                                                        </span>
-                                                                        <span>
-                                                                            {order.makerAccount.address == address ? (
-                                                                                <Button
-                                                                                    onClick={() =>
-                                                                                        cancelOffer(order, address)
-                                                                                    }
-                                                                                    shape="round"
-                                                                                    size="small"
-                                                                                >
-                                                                                    {"Cancel"}
-                                                                                </Button>
-                                                                            ) : (
-                                                                                    ""
-                                                                                )}
-                                                                        </span>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </LastBidder>
-                                                    ))}
-                                            </TabPane>
-                                            <TabPane key="3" tab={<span>{CONSTANTS.owners}</span>}>
-                                                <span style={{ color: "#ccc" }}>{CONSTANTS.owner}</span>
-                                                <br />
-                                                <Link href={`/profile/${asset?.owner?.address}`} passHref>
-                                                    <a>
-                                                        <AvatarContainer>
+                            asset && (
+                                <Content>
+                                    {" "}
+                                    {!hasOrder ? (
+                                        <Form onFinish={onSubmitForm}>
+                                            <div
+                                                style={{
+                                                    paddingTop: "5px",
+                                                    borderBottom: "1px solid gray",
+                                                    marginBottom: "20px",
+                                                }}
+                                            >
+                                                <List
+                                                    itemLayout="horizontal"
+                                                // dataSource={data}
+                                                >
+                                                    <List.Item.Meta
+                                                        avatar={
                                                             <Avatar
-                                                                size={"small"}
-                                                                icon={<img src={asset?.owner?.profile_img_url} />}
+                                                                shape={"square"}
+                                                                src={asset.thumbnail}
+                                                                size={"large"}
                                                             />
-                                                            <span style={{ flex: "1" }}>
-                                                                {checkName(asset?.owner?.user?.username)}
-                                                            </span>
-                                                        </AvatarContainer>
-                                                    </a>
-                                                </Link>
-                                            </TabPane>
-                                        </Tabs>
-                                    </ItemDetails>
-                                    <ItemFooter>
-                                        {sellOrders && (
-                                            <BidCountdown>
-                                                {highestOffer && (
-                                                    <BidOwnerContainer className={"border-right pr-2 pl-2"}>
-                                                        <BidOwner className={"float-left"}>
-                                                            {CONSTANTS.highestOffer}{" "}
-                                                            <Link
-                                                                href={`/profile/${highestOffer?.makerAccount?.address}`}
-                                                                passHref
-                                                            >
-                                                                <a>
-                                                                    {checkName(
-                                                                        highestOffer?.makerAccount?.user?.username
-                                                                    )}
-                                                                </a>
-                                                            </Link>
-                                                        </BidOwner>
-                                                        <BidPrice>
-                                                            <Link
-                                                                href={`/profile/${highestOffer?.makerAccount?.address}`}
-                                                                passHref
-                                                            >
-                                                                <a>
-                                                                    <BidOwnerProfile className={"mr-3"}>
-                                                                        <Avatar
-                                                                            size={"large"}
-                                                                            icon={
-                                                                                <img
-                                                                                    src={
-                                                                                        highestOffer?.makerAccount
-                                                                                            ?.profile_img_url
+                                                        }
+                                                        title={<strong>{asset.name}</strong>}
+                                                        description={asset.collection?.name}
+                                                    >
+                                                        <div className={"border-bottom"}>
+                                                            {asset.sellOrder != null &&
+                                                                `${getAuctionPriceDetails(asset.sellOrder).priceBase
+                                                                } ${asset.sellOrder.paymentTokenContract.symbol}`}
+                                                        </div>
+                                                    </List.Item.Meta>
+                                                </List>
+                                            </div>
+                                            <Row>
+                                                <Col lg={16} md={16}>
+                                                    <Tabs
+                                                        defaultActiveKey="1"
+                                                        onTabClick={onTabClick}
+                                                        tabBarGutter={10}
+                                                        style={{ height: "500px" }}
+                                                        size={"large"}
+                                                        type={"card"}
+                                                    >
+                                                        <TabPane
+                                                            tab={
+                                                                <CustomTapBarElement>
+                                                                    <div>{"Set Price"}</div>
+                                                                    <span>
+                                                                        {"Sell at a fixed or declining price"}
+                                                                    </span>
+                                                                </CustomTapBarElement>
+                                                            }
+                                                            key="1"
+                                                            style={{ height: 200 }}
+                                                        >
+                                                            {isFixed && (
+                                                                <List itemLayout="horizontal">
+                                                                    <List.Item
+                                                                        extra={
+                                                                            <Form.Item style={{ width: "300px" }}>
+                                                                                <Input.Group compact>
+                                                                                    <Form.Item
+                                                                                        name={["price", "blockchain"]}
+                                                                                        noStyle
+                                                                                    >
+                                                                                        <Input
+                                                                                            prefix={
+                                                                                                <img
+                                                                                                    src={
+                                                                                                        "https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"
+                                                                                                    }
+                                                                                                    width={"25"}
+                                                                                                    height={"25"}
+                                                                                                />
+                                                                                            }
+                                                                                            disabled
+                                                                                            style={{
+                                                                                                width: "20%",
+                                                                                                textAlign: "center",
+                                                                                            }}
+                                                                                            size={"large"}
+                                                                                        />
+                                                                                    </Form.Item>
+                                                                                    <Form.Item
+                                                                                        name={["price", "amount"]}
+                                                                                        noStyle
+                                                                                        rules={[
+                                                                                            {
+                                                                                                required: true,
+                                                                                                message: "Amount is required",
+                                                                                            },
+                                                                                        ]}
+                                                                                    >
+                                                                                        <Input
+                                                                                            style={{ width: "65%" }}
+                                                                                            size={"large"}
+                                                                                            placeholder="Amount"
+                                                                                        />
+                                                                                    </Form.Item>
+                                                                                </Input.Group>
+                                                                            </Form.Item>
+                                                                        }
+                                                                    >
+                                                                        <List.Item.Meta
+                                                                            title={<ListTile>{formText.price}</ListTile>}
+                                                                            description={
+                                                                                <ListDescription>
+                                                                                    {formText.priceDesc}
+                                                                                </ListDescription>
+                                                                            }
+                                                                        >
+                                                                            <div></div>
+                                                                        </List.Item.Meta>
+                                                                    </List.Item>
+                                                                    <List.Item
+                                                                        extra={
+                                                                            <SwitchContainer>
+                                                                                <Form.Item
+                                                                                    name={["switch", "includeEnd"]}
+                                                                                    noStyle
+                                                                                >
+                                                                                    <Switch
+                                                                                        onChange={handleIncludeEndPrice}
+                                                                                    />
+                                                                                </Form.Item>
+                                                                            </SwitchContainer>
+                                                                        }
+                                                                    >
+                                                                        <List.Item.Meta
+                                                                            title={
+                                                                                <ListTile>
+                                                                                    {formText.includeEnding}
+                                                                                </ListTile>
+                                                                            }
+                                                                            description={
+                                                                                <ListDescription>
+                                                                                    {formText.includeEndingDesc}
+                                                                                </ListDescription>
+                                                                            }
+                                                                        ></List.Item.Meta>
+                                                                    </List.Item>
+                                                                    {endingPrice ? (
+                                                                        <>
+                                                                            <List.Item
+                                                                                extra={
+                                                                                    <Form.Item style={{ width: "300px" }}>
+                                                                                        <Input.Group compact>
+                                                                                            <Form.Item
+                                                                                                name={["price", "blockchainEnd"]}
+                                                                                                noStyle
+                                                                                            >
+                                                                                                <Input
+                                                                                                    prefix={
+                                                                                                        <img
+                                                                                                            src={
+                                                                                                                "https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"
+                                                                                                            }
+                                                                                                            width={"25"}
+                                                                                                            height={"25"}
+                                                                                                        />
+                                                                                                    }
+                                                                                                    disabled
+                                                                                                    style={{
+                                                                                                        width: "20%",
+                                                                                                        textAlign: "center",
+                                                                                                    }}
+                                                                                                    size={"large"}
+                                                                                                />
+                                                                                            </Form.Item>
+                                                                                            <Form.Item
+                                                                                                name={["price", "endPrice"]}
+                                                                                                noStyle
+                                                                                                rules={[
+                                                                                                    {
+                                                                                                        required: true,
+                                                                                                        message: "Amount is required",
+                                                                                                    },
+                                                                                                ]}
+                                                                                            >
+                                                                                                <Input
+                                                                                                    style={{ width: "65%" }}
+                                                                                                    size={"large"}
+                                                                                                    placeholder="Amount"
+                                                                                                />
+                                                                                            </Form.Item>
+                                                                                        </Input.Group>
+                                                                                    </Form.Item>
+                                                                                }
+                                                                            >
+                                                                                <List.Item.Meta
+                                                                                    title={
+                                                                                        <ListTile>{"Ending Price"}</ListTile>
+                                                                                    }
+                                                                                    description={
+                                                                                        <ListDescription>
+                                                                                            {
+                                                                                                "Must be less than or equal to the starting price. The price will progress linearly to this amount until the expiration date."
+                                                                                            }
+                                                                                        </ListDescription>
                                                                                     }
                                                                                 />
+                                                                            </List.Item>
+                                                                            <List.Item
+                                                                                extra={
+                                                                                    <Form.Item
+                                                                                        name={["date", "expirationTime"]}
+                                                                                        noStyle
+                                                                                    >
+                                                                                        <DatePicker
+                                                                                            key={"expirationTime"}
+                                                                                            style={{
+                                                                                                position: "relative",
+                                                                                                right: "45px",
+                                                                                            }}
+                                                                                            showTime
+                                                                                            allowClear={false}
+                                                                                            format="YYYY-MM-DD HH:mm:ss"
+                                                                                            {...config}
+                                                                                            size={"large"}
+                                                                                        />
+                                                                                    </Form.Item>
+                                                                                }
+                                                                            >
+                                                                                <List.Item.Meta
+                                                                                    title={
+                                                                                        <ListTile>{"Expiration Time"}</ListTile>
+                                                                                    }
+                                                                                    description={
+                                                                                        <ListDescription>
+                                                                                            {
+                                                                                                "Your listing will automatically end at this time. No need to cancel it!"
+                                                                                            }
+                                                                                        </ListDescription>
+                                                                                    }
+                                                                                />
+                                                                            </List.Item>
+                                                                        </>
+                                                                    ) : (
+                                                                            <List.Item
+                                                                                extra={
+                                                                                    <>
+                                                                                        {futureTime && (
+                                                                                            <Form.Item
+                                                                                                name={["date", "endFutureTime"]}
+                                                                                                rules={[
+                                                                                                    {
+                                                                                                        required: true,
+                                                                                                        message:
+                                                                                                            "Future Time is required",
+                                                                                                    },
+                                                                                                ]}
+                                                                                                noStyle
+                                                                                            >
+                                                                                                <DatePicker
+                                                                                                    key={"futureExpirationTime"}
+                                                                                                    style={{
+                                                                                                        position: "relative",
+                                                                                                        right: "15px",
+                                                                                                    }}
+                                                                                                    showTime
+                                                                                                    allowClear={false}
+                                                                                                    format="YYYY-MM-DD HH:mm:ss"
+                                                                                                    {...config}
+                                                                                                    size={"large"}
+                                                                                                />
+                                                                                            </Form.Item>
+                                                                                        )}
+                                                                                        <SwitchContainer>
+                                                                                            <Form.Item
+                                                                                                name={["switch", "futureTime"]}
+                                                                                                noStyle
+                                                                                            >
+                                                                                                <Switch
+                                                                                                    onChange={handleFutureListing}
+                                                                                                />
+                                                                                            </Form.Item>
+                                                                                        </SwitchContainer>
+                                                                                    </>
+                                                                                }
+                                                                            >
+                                                                                <List.Item.Meta
+                                                                                    title={
+                                                                                        <ListTile>
+                                                                                            {"Schedule for a future time"}
+                                                                                        </ListTile>
+                                                                                    }
+                                                                                    description={
+                                                                                        <ListDescription>
+                                                                                            {
+                                                                                                "You can schedule this listing to only be buyable at a future date"
+                                                                                            }
+                                                                                        </ListDescription>
+                                                                                    }
+                                                                                />
+                                                                            </List.Item>
+                                                                        )}
+                                                                </List>
+                                                            )}
+                                                        </TabPane>
+                                                        <TabPane
+                                                            tab={
+                                                                <CustomTapBarElement>
+                                                                    <div>{"Highest Bid"}</div>
+                                                                    <span>{"Auction to the highest bidder"}</span>
+                                                                </CustomTapBarElement>
+                                                            }
+                                                            key="2"
+                                                        >
+                                                            {!isFixed && (
+                                                                <List itemLayout="horizontal">
+                                                                    <List.Item
+                                                                        extra={
+                                                                            <Form.Item style={{ width: "300px" }}>
+                                                                                <Input.Group compact>
+                                                                                    <Form.Item
+                                                                                        name={["price", "blockchain"]}
+                                                                                        noStyle
+                                                                                    >
+                                                                                        <Input
+                                                                                            prefix={
+                                                                                                <img
+                                                                                                    src={
+                                                                                                        "https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"
+                                                                                                    }
+                                                                                                    width={"25"}
+                                                                                                    height={"25"}
+                                                                                                />
+                                                                                            }
+                                                                                            disabled
+                                                                                            style={{
+                                                                                                width: "20%",
+                                                                                                textAlign: "center",
+                                                                                            }}
+                                                                                            size={"large"}
+                                                                                        />
+                                                                                    </Form.Item>
+                                                                                    <Form.Item
+                                                                                        name={["price", "minAmount"]}
+                                                                                        noStyle
+                                                                                        rules={[
+                                                                                            {
+                                                                                                required: true,
+                                                                                                message: "Amount is required",
+                                                                                            },
+                                                                                        ]}
+                                                                                    >
+                                                                                        <Input
+                                                                                            style={{ width: "65%" }}
+                                                                                            size={"large"}
+                                                                                            placeholder="Amount"
+                                                                                        />
+                                                                                    </Form.Item>
+                                                                                </Input.Group>
+                                                                            </Form.Item>
+                                                                        }
+                                                                    >
+                                                                        <List.Item.Meta
+                                                                            title={<ListTile>{"Minimum Bid"}</ListTile>}
+                                                                            description={
+                                                                                <ListDescription>
+                                                                                    {"Set your starting bid price"}
+                                                                                </ListDescription>
+                                                                            }
+                                                                        >
+                                                                            <div></div>
+                                                                        </List.Item.Meta>
+                                                                    </List.Item>
+                                                                    <List.Item
+                                                                        extra={
+                                                                            <Form.Item style={{ width: "300px" }}>
+                                                                                <Input.Group compact>
+                                                                                    <Form.Item
+                                                                                        name={["price", "blockchain"]}
+                                                                                        noStyle
+                                                                                    >
+                                                                                        <Input
+                                                                                            prefix={
+                                                                                                <img
+                                                                                                    src={
+                                                                                                        "https://storage.opensea.io/files/6f8e2979d428180222796ff4a33ab929.svg"
+                                                                                                    }
+                                                                                                    width={"25"}
+                                                                                                    height={"25"}
+                                                                                                />
+                                                                                            }
+                                                                                            disabled
+                                                                                            style={{
+                                                                                                width: "20%",
+                                                                                                textAlign: "center",
+                                                                                            }}
+                                                                                            size={"large"}
+                                                                                        />
+                                                                                    </Form.Item>
+                                                                                    <Form.Item
+                                                                                        name={["price", "reserveAmount"]}
+                                                                                        noStyle
+                                                                                        rules={[
+                                                                                            {
+                                                                                                required: true,
+                                                                                                message: "Amount is required",
+                                                                                            },
+                                                                                        ]}
+                                                                                    >
+                                                                                        <Input
+                                                                                            style={{ width: "65%" }}
+                                                                                            size={"large"}
+                                                                                            placeholder="Amount"
+                                                                                        />
+                                                                                    </Form.Item>
+                                                                                </Input.Group>
+                                                                            </Form.Item>
+                                                                        }
+                                                                    >
+                                                                        <List.Item.Meta
+                                                                            title={<ListTile>{"Reserve Price"}</ListTile>}
+                                                                            description={
+                                                                                <ListDescription>
+                                                                                    {
+                                                                                        "Create a hidden limit by setting a reserve price."
+                                                                                    }
+                                                                                </ListDescription>
+                                                                            }
+                                                                        >
+                                                                            <div></div>
+                                                                        </List.Item.Meta>
+                                                                    </List.Item>
+                                                                    <List.Item
+                                                                        extra={
+                                                                            <Form.Item
+                                                                                name={["date", "auctionExpirationTime"]}
+                                                                            >
+                                                                                <DatePicker
+                                                                                    style={{
+                                                                                        position: "relative",
+                                                                                        right: "45px",
+                                                                                    }}
+                                                                                    showTime
+                                                                                    allowClear={false}
+                                                                                    format="YYYY-MM-DD HH:mm:ss"
+                                                                                    {...config}
+                                                                                    size={"large"}
+                                                                                />
+                                                                            </Form.Item>
+                                                                        }
+                                                                    >
+                                                                        <List.Item.Meta
+                                                                            title={
+                                                                                <ListTile>{"Expiration Time"}</ListTile>
+                                                                            }
+                                                                            description={
+                                                                                <ListDescription>
+                                                                                    {
+                                                                                        "Your listing will automatically end at this time. No need to cancel it!"
+                                                                                    }
+                                                                                </ListDescription>
                                                                             }
                                                                         />
-                                                                    </BidOwnerProfile>
-                                                                </a>
-                                                            </Link>
-                                                            <BidPriceValue>
-                                                                <PriceInCryptoContainer>
-                                                                    <span className={"bidValue"}>{`${getAuctionPriceDetails(highestOffer).priceBase
-                                                                        } ${highestOffer?.paymentTokenContract?.symbol
-                                                                        }`}</span>
-                                                                </PriceInCryptoContainer>
-                                                                <PriceInDollarContainer>
-                                                                    {/* <span>{`~$ ${convertToUsd(highestOffer)}`}</span> */}
-                                                                </PriceInDollarContainer>
-                                                            </BidPriceValue>
-                                                        </BidPrice>
-                                                    </BidOwnerContainer>
-                                                )}
-                                                {sellOrders !== undefined &&
-                                                    sellOrders[0]?.expirationTime !== "0" &&
-                                                    sellOrders[0]?.expirationTime != undefined && (
-                                                        <Auction>
-                                                            <div className={"auctionDiv"}>
-                                                                <AuctionLabel>
-                                                                    {CONSTANTS.auctionLabel}
-                                                                </AuctionLabel>
-                                                                <AuctionTimer>
-                                                                    <Countdown
-                                                                        value={unixToMilSeconds(
-                                                                            sellOrders[0]?.expirationTime
-                                                                        )}
-                                                                        format={`D[d] HH[h] mm[m] ss[s]`}
-                                                                    />
-                                                                </AuctionTimer>
-                                                            </div>
-                                                        </Auction>
-                                                    )}
-                                            </BidCountdown>
-                                        )}
-                                        <ButtonContainer>
-                                            {address && asset?.owner?.address == address ? (
-                                                <Link
-                                                    href={`/sell/${queryParam?.tokenAddress}?tokenId=${queryParam?.tokenId}`}
-                                                    passHref
-                                                >
-                                                    <a style={{ display: "flex", flex: "1" }}>
-                                                        <FooterButton
-                                                            color={"white"}
-                                                            style={{ background: "#0066ff" }}
-                                                        >
-                                                            {"Sell"}
-                                                        </FooterButton>
-                                                    </a>
-                                                </Link>
-                                            ) : (
-                                                    <>
-                                                        {sellOrders &&
-                                                            sellOrders[0] != null &&
-                                                            !sellOrders[0]?.waitingForBestCounterOrder && (
-                                                                <BuyNftModal
-                                                                    asset={asset}
-                                                                    isBundle={isBundle}
-                                                                    loadAgain={loadAgain}
-                                                                />
+                                                                    </List.Item>
+                                                                </List>
                                                             )}
-                                                        <MakeOfferModal
-                                                            asset={asset}
-                                                            assets={assets}
-                                                            isBundle={isBundle}
-                                                            loadAgain={loadAgain}
-                                                        />
-                                                    </>
-                                                )}
-                                        </ButtonContainer>
-                                    </ItemFooter>
-                                </ItemInfo>
-                            </Content>
+                                                        </TabPane>
+                                                    </Tabs>
+                                                </Col>
+                                                <Col lg={8} md={8}>
+                                                    <SummarySection>
+                                                        <Card
+                                                            title={
+                                                                <>
+                                                                    <UnorderedListOutlined
+                                                                        style={{
+                                                                            position: "relative",
+                                                                            top: -2,
+                                                                            marginRight: "10px",
+                                                                        }}
+                                                                    />
+                                                                    <span>{"Summary"}</span>
+                                                                </>
+                                                            }
+                                                            style={{ width: "100%", marginTop: 3 }}
+                                                        >
+                                                            <Form.Item>
+                                                                <Button
+                                                                    type="secondary"
+                                                                    key={"submit"}
+                                                                    htmlType={"submit"}
+                                                                    style={{ background: "#0066ff", color: "white" }}
+                                                                    loading={posting}
+                                                                    size={"large"}
+                                                                >
+                                                                    Post your listing
+                              </Button>
+                                                            </Form.Item>
+                                                            <hr />
+                                                            <h5>{"Bounties"}</h5>
+                                                            <Form.Item name={["bounty", "bounty"]}>
+                                                                <Slider
+                                                                    min={1.0}
+                                                                    max={2.5}
+                                                                    onChange={onChange}
+                                                                    value={
+                                                                        typeof bountyValue === "number"
+                                                                            ? bountyValue
+                                                                            : 0
+                                                                    }
+                                                                    step={0.01}
+                                                                />
+                                                            </Form.Item>
+                                                            <span>{`Referral bounty ....................................................... ${bountyValue}%`}</span>
+                                                            <p style={{ marginTop: "20px" }}>
+                                                                {
+                                                                    "You can increase your bounty from the 1% default up to the OpenSea fee (2.5%). OpenSea rewards this amount to registered affiliates who refer your buyer."
+                                                                }
+                                                            </p>
+                                                            <hr />
+                                                            <h5>{"Fees"}</h5>
+                                                            <p style={{ marginTop: "20px" }}>
+                                                                {
+                                                                    "Listing Fee will be deducted at the time of listing"
+                                                                }
+                                                            </p>
+                                                        </Card>
+                                                    </SummarySection>
+                                                </Col>
+                                            </Row>
+                                        </Form>
+                                    ) : (
+                                            <Result
+                                                icon={
+                                                    <img
+                                                        src={"/images/checkMark.svg"}
+                                                        style={{ height: "100px", width: "100px" }}
+                                                    />
+                                                }
+                                                title="Your order is listed!"
+                                                subTitle="Please click below to to see latest updates on your token"
+                                                extra={[
+                                                    <Link
+                                                        key={"vieTokenLink"}
+                                                        href={`/nft/${queryParam.sellToken}?tokenId=${queryParam.tokenId}`}
+                                                    >
+                                                        <a>
+                                                            <Button
+                                                                type="primary"
+                                                                style={{ background: "#0066ff", color: "white" }}
+                                                                size={"large"}
+                                                                key="1"
+                                                            >
+                                                                View my Token
+                          </Button>
+                                                        </a>
+                                                    </Link>,
+                                                    <Link key={"goHomeLink"} href={"/"}>
+                                                        <a>
+                                                            <Button size={"large"}>Go Home</Button>
+                                                        </a>
+                                                    </Link>,
+                                                ]}
+                                            />
+                                        )}
+                                </Content>
+                            )
                         )}
             </Wrapper>
-        </>
+        </MainWrapper>
     );
 }
 
-export default ProductPage;
+export default SellNft;
