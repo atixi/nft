@@ -5,32 +5,51 @@ import React, { useRef, useState } from "react";
 import { fetch } from "Utils/strapiApi";
 import { ellipseAddress } from "Utils/utils";
 import styles from "/styles/talent.module.css";
+const offset = 20;
+function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
+  const [start, setStart] = useState(offset);
+  const [onSaleStart, setOnSaleStart] = useState(offset);
+  const [assets, setAssets] = useState(collectedAsset);
+  const [onSales, setOnSales] = useState(onSaleAsset);
 
-function TalentPage({ talentAssets, talent, accountAddress }) {
-  const [start, setStart] = useState(2);
-  const [assets, setAssets] = useState(talentAssets);
-  const [onSales, setOnSales] = useState([]);
   const [selectedTab, setSelectedTab] = useState(1);
+  const [displayOnSaleButton, setDisplayOnSaleButton] = useState(true);
+  const [displayCollectedButton, setDisplayCollectedButton] = useState(true);
 
   const addressRef = useRef(null);
 
   const loadMoreAsset = async () => {
     const assetResult = await fetch(
-      `nfts?_start=${start}&_limit=2&talent.walletAddress=${accountAddress}`
+      `nfts?_start=${start}&_limit=${offset}&talent.walletAddress=${accountAddress}`
     );
     const assets = await assetResult.data;
     if (assets.length > 0) {
-      setStart(start + 2);
+      setStart(start + offset);
+    } else {
+      setDisplayCollectedButton(false);
     }
     setAssets((prev) => [...prev, ...assets]);
   };
+  const loadMoreOnSale = async () => {
+    const assetResult = await fetch(
+      `nfts?_start=${onSaleStart}&_limit=${offset}&talent.walletAddress=${accountAddress}&onSale=${true}`
+    );
+    const assets = await assetResult.data;
+    if (assets.length > 0) {
+      setOnSaleStart(onSaleStart + offset);
+    } else {
+      setDisplayOnSaleButton(false);
+    }
+    setOnSales((prev) => [...prev, ...assets]);
+  };
+
   const loadOnSale = async () => {
     setSelectedTab(0);
-    let onSales = assets.filter((item) => item.asset.sellOrders?.length > 0);
-    setOnSales(onSales);
+    setDisplayOnSaleButton(true);
   };
   const loadCollected = async () => {
     setSelectedTab(1);
+    setDisplayCollectedButton(true);
   };
 
   const copyAddress = () => {
@@ -45,12 +64,7 @@ function TalentPage({ talentAssets, talent, accountAddress }) {
 
       {/* <!-- section begin --> */}
       <section id="profile_banner" aria-label="section" className="text-light">
-        <img
-          width="100%"
-          height="300px"
-          src={talent.talentBanner?.formats?.large?.url}
-          alt=""
-        />
+        <img width="100%" height="300px" src={talent.talentBanner?.formats?.large?.url} alt="" />
       </section>
       {/* <!-- section close --> */}
 
@@ -108,70 +122,34 @@ function TalentPage({ talentAssets, talent, accountAddress }) {
                       <div className="row">
                         {/* <!-- nft item begin --> */}
                         {assets.map((item) => (
-                          <div key={item.id} className="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                            <div className="nft__item">
-                              {/* <div
-                                className="de_countdown"
-                                data-year="2021"
-                                data-month="10"
-                                data-day="16"
-                                data-hour="8"
-                              ></div> */}
-                              <div className="author_list_pp">
-                                <a href="author.html">
-                                  <img
-                                    className="lazy"
-                                    src="http://lorempixel.com/200/200/"
-                                    alt=""
-                                  />
-                                  <i className="fa fa-check"></i>
-                                </a>
-                              </div>
-                              <div className="nft__item_wrap">
-                                <Link href={`/nft/${item.tokenAddress}?tokenId=${item.tokenId}`}>
-                                  <a>
-                                    <img
-                                      src={item.asset.imageUrl}
-                                      className="lazy nft__item_preview"
-                                      alt=""
-                                    />
-                                  </a>
-                                </Link>
-                              </div>
-                              <div className="nft__item_info">
-                                <a href="item-details.html">
-                                  <h4>Pinky Ocean</h4>
-                                </a>
-                                <div className="nft__item_price">
-                                  0.08 ETH<span>1/20</span>
-                                </div>
-                                <div className="nft__item_action">
-                                  <a href="#">Place a bid</a>
-                                </div>
-                                {/* <div className="nft__item_like">
-                                  <i className="fa fa-heart"></i>
-                                  <span>50</span>
-                                </div> */}
-                              </div>
-                            </div>
-                          </div>
+                          <AssetCard key={item.id} asset={item} />
                         ))}
                       </div>
-                      {/* <div className={`row ${styles.loadMoreAssetButtonContainer}`}>
-                        <button
-                          className={styles.loadMoreAssetButton}
-                          onClick={loadMoreAsset}
-                        >{`Load More`}</button>
-                      </div> */}
+                    </div>
+                  )}
+                  {selectedTab == 0 && displayOnSaleButton && (
+                    <div className={`row ${styles.loadMoreAssetButtonContainer}`}>
+                      <button
+                        className={styles.loadMoreAssetButton}
+                        onClick={loadMoreOnSale}
+                      >{`Load More`}</button>
+                    </div>
+                  )}
+                  {selectedTab == 1 && displayCollectedButton && (
+                    <div className={`row ${styles.loadMoreAssetButtonContainer}`}>
+                      <button
+                        className={styles.loadMoreAssetButton}
+                        onClick={loadMoreAsset}
+                      >{`Load More`}</button>
                     </div>
                   )}
                 </div>
-                <div className={`row ${styles.loadMoreAssetButtonContainer}`}>
+                {/* <div className={`row ${styles.loadMoreAssetButtonContainer}`}>
                   <button
                     className={styles.loadMoreAssetButton}
                     onClick={loadMoreAsset}
                   >{`Load More`}</button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -184,18 +162,20 @@ function TalentPage({ talentAssets, talent, accountAddress }) {
 export default TalentPage;
 
 export const getServerSideProps = async ({ query }) => {
-  const [talentAssets, talent] = await Promise.all([
+  const [collectedAsset, onSaleAsset, talent] = await Promise.all([
+    fetch(`nfts?_start=${0}&_limit=${offset}&talent.walletAddress=${query.accountAddress}`),
     fetch(
-      `nfts?_start=0&_limit=2&talent.walletAddress=${query.accountAddress}`
+      `nfts?_start=${0}&_limit=${offset}&talent.walletAddress=${
+        query.accountAddress
+      }&onSale=${true}`
     ),
-    fetch(
-      `nfts?_start=0&_limit=2&talent.walletAddress=${query.accountAddress}`
-    )
+    fetch(`talents?walletAddress=${query.accountAddress}`),
   ]);
   return {
     props: {
-      talentAssets: talentAssets.data,
-      talent: talent.data,
+      collectedAsset: collectedAsset.data,
+      onSaleAsset: onSaleAsset.data,
+      talent: talent.data[0],
       accountAddress: query.accountAddress,
     },
   };

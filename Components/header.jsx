@@ -62,6 +62,14 @@ function Header(props) {
     }
   }
 
+  const searchExplore = (e) => {
+    if (e.key === "Enter" || e.keyCode === 13) {
+      router.push({
+        pathname: "/explore",
+        query: { search: e.target.value },
+      });
+    }
+  };
   useEffect(() => {
     isConnectedToAnyWallet();
   }, [isMetaconnected]);
@@ -147,6 +155,7 @@ function Header(props) {
                     name="quick_search"
                     placeholder="search item here..."
                     type="text"
+                    onKeyUp={searchExplore}
                   />
                 </div>
               </div>
