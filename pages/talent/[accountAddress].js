@@ -122,53 +122,7 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
                       <div className="row">
                         {/* <!-- nft item begin --> */}
                         {assets.map((item) => (
-                          <div key={item.id} className="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                            <div className="nft__item">
-                              {/* <div
-                                className="de_countdown"
-                                data-year="2021"
-                                data-month="10"
-                                data-day="16"
-                                data-hour="8"
-                              ></div> */}
-                              <div className="author_list_pp">
-                                <a href="author.html">
-                                  <img
-                                    className="lazy"
-                                    src="http://lorempixel.com/200/200/"
-                                    alt=""
-                                  />
-                                  <i className="fa fa-check"></i>
-                                </a>
-                              </div>
-                              <div className="nft__item_wrap">
-                                <Link href={`/nft/${item.tokenAddress}?tokenId=${item.tokenId}`}>
-                                  <a>
-                                    <img
-                                      src={item.asset?.imageUrl}
-                                      className="lazy nft__item_preview"
-                                      alt=""
-                                    />
-                                  </a>
-                                </Link>
-                              </div>
-                              <div className="nft__item_info">
-                                <a href="item-details.html">
-                                  <h4>Pinky Ocean</h4>
-                                </a>
-                                <div className="nft__item_price">
-                                  0.08 ETH<span>1/20</span>
-                                </div>
-                                <div className="nft__item_action">
-                                  <a href="#">Place a bid</a>
-                                </div>
-                                {/* <div className="nft__item_like">
-                                  <i className="fa fa-heart"></i>
-                                  <span>50</span>
-                                </div> */}
-                              </div>
-                            </div>
-                          </div>
+                          <AssetCard key={item.id} asset={item} />
                         ))}
                       </div>
                     </div>
