@@ -9,30 +9,38 @@ export const Wrapper = styled.div`
     }
 `;
 export const Content = styled.div`
-    flex:1;
-    height: 100%;
-    display: block;
-    button{
-        border-radius: 24px;
-        padding:6px 20px;
-        flex:1;
-        border:1px solid #00000040;
-        margin:5px;
-        background-color: #fff;
-        box-sizing: border-box;
-    };
-    .itemImage{
-        max-height: 70vh;
-        max-width: 90%;
-        display: block;
-        margin: auto;
-        border-radius: 8px;
+.ant-tabs-tab-active{
+    background-color: #331B69 !important;
+    border-bottom: none;
 
-        @media (max-width:575px) {
-            margin-top: 20px;
-            margin-bottom: 10px;
-        };
-    };
+    min-width: 80px;
+    text-align: center;
+    border-radius: 3px;
+
+}
+.ant-tabs-tab-active div span{
+    color: #ffffff !important;
+}
+.ant-tabs-tab {
+    background-color: #EEE;
+    min-width: 80px;
+    padding: 10px 0px;
+    display: inline;
+    border-radius: 3px;
+    margin-left: 0px !important;
+
+}
+.ant-tabs-tab .ant-tabs-tab-btn{
+    text-align: center !important;
+    color: #F32178 !important;
+}
+.ant-tabs-nav::before{
+    border: none !important
+}
+.ant-tabs-ink-bar{
+    display: none !important;
+}
+
 `;
 export const ImageCon = styled.div`
 position: relative;

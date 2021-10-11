@@ -6,12 +6,13 @@ import _ from "lodash";
 import client from "./openSeaClient";
 
 export const seaportProvider = new Web3.providers.HttpProvider(
-  "https://mainnet.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
+  // "https://mainnet.infura.io/v3/c2dde5d7c0a0465a8e994f711a3a3c31"
   // 'https://rinkeby-api.opensea.io/api/v1/'
 );
 
+
 const seaport = new OpenSeaPort(seaportProvider, {
-  networkName: Network.Rinkeby,
+  networkName: process.env.MAIN ? Network.Main : Network.Rinkeby,
   // apiKey: "2e7ef0ac679f4860bbe49a34a98cf5ac",
 });
 export const getAccount = async () => {

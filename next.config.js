@@ -53,5 +53,7 @@ module.exports = {
     PINTA_JWT: process.env.PINTA_JWT,
     REF_ADDRESS: process.env.REF_ADDRESS,
     NETWORK_NAME: process.env.NETWORK_NAME,
+    MAIN: process.env.MAIN,
+    BOUNTY: process.env.BOUNTY
   },
 };
