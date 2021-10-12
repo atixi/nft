@@ -146,10 +146,10 @@ function MakeOfferModal({ asset, assets, isBundle, loadAgain }) {
   };
   useEffect(() => {
     if (isWalletConnected) {
-      setAddress(tokenAddresses.walletToken[0].toString());
+      setAddress(tokenAddresses.walletToken[0]?.toString());
       setBalance(tokenAddresses.walletBalance);
     } else if (isMetaConnected) {
-      setAddress(tokenAddresses.metaToken[0].toString());
+      setAddress(tokenAddresses.metaToken[0]?.toString());
       setBalance(tokenAddresses.metaBalance);
     }
   }, [asset, assets]);

@@ -1,5 +1,5 @@
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
-import { Avatar } from "antd";
+import { Avatar, Dropdown } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -8,6 +8,8 @@ import LoginModal from "../Components/loginModal";
 import CONSTANTS from "../Constants/headerConstants";
 import { getMetaToken, getUser, signout } from "../store/action/accountSlice";
 import { BalanceLabel, ConnectedButton } from "./StyledComponents/header-styledComponents.js";
+import WalletInfoDropdown from "./connectedWalletDropdown";
+
 import api from "/Components/axiosRequest";
 import {
   getMetaBalance,
@@ -109,7 +111,7 @@ function Header(props) {
       if (logout.meta?.requestStatus === "fulfilled") {
         router.push("/");
       }
-    } catch (err) {}
+    } catch (err) { }
   };
 
   const isLoggedIn = jwt ? true : false;
@@ -191,38 +193,53 @@ function Header(props) {
                     {isLoggedIn ? (
                       <a onClick={handleLogout}>Logout</a>
                     ) : (
-                      <a onClick={openLogin}>Login</a>
-                    )}
+                        <a onClick={openLogin}>Login</a>
+                      )}
                   </li>
                 </ul>
                 <div className="menu_side_area">
                   {connected == true ? (
-                    <ConnectedButton className={`d-lg-block`}>
-                      {walletBalance !== null && isWalletConnected == true ? (
-                        <>
-                          <BalanceLabel>
-                            {parseFloat(walletBalance).toFixed(4) + " Eth"}
-                          </BalanceLabel>
-                          <Avatar size={36} src={"/images/walletIcons/walletIcon.svg"} />{" "}
-                        </>
-                      ) : (
-                        <>
-                          <BalanceLabel>{parseFloat(metaBalance).toFixed(4) + " Eth"}</BalanceLabel>
-                          <Avatar size={36} src={"/images/walletIcons/metaIcon.svg"} />
-                        </>
-                      )}
-                    </ConnectedButton>
+                    <Dropdown
+                      overlay={
+                        <WalletInfoDropdown
+                          data={
+                            walletToken != null && isWalletConnected == true
+                              ? walletToken
+                              : metaToken != null && metaToken
+                          }
+                        />
+                      }
+                      overlayStyle={{ boxShadow: "0px 1px 2px grey" }}
+                      placement="bottomRight"
+                      trigger={["click"]}
+                    >
+                      <ConnectedButton className={`d-lg-block`}>
+                        {walletBalance !== null && isWalletConnected == true ? (
+                          <>
+                            <BalanceLabel>
+                              {parseFloat(walletBalance).toFixed(4) + " Eth"}
+                            </BalanceLabel>
+                            <Avatar size={36} src={"/images/walletIcons/walletIcon.svg"} />{" "}
+                          </>
+                        ) : (
+                            <>
+                              <BalanceLabel>{parseFloat(metaBalance).toFixed(4) + " Eth"}</BalanceLabel>
+                              <Avatar size={36} src={"/images/walletIcons/metaIcon.svg"} />
+                            </>
+                          )}
+                      </ConnectedButton>
+                    </Dropdown>
                   ) : (
-                    <>
-                      <Link href={"/wallet"} passHref>
-                        <a className="btn-main">
-                          <i className="icon_wallet_alt"></i>
-                          <span>{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</span>
-                        </a>
-                      </Link>
-                      <span id="menu-btn"></span>
-                    </>
-                  )}
+                      <>
+                        <Link href={"/wallet"} passHref>
+                          <a className="btn-main">
+                            <i className="icon_wallet_alt"></i>
+                            <span>{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</span>
+                          </a>
+                        </Link>
+                        <span id="menu-btn"></span>
+                      </>
+                    )}
                 </div>
               </div>
             </div>
@@ -241,8 +258,8 @@ function Header(props) {
                 {toggle[0] ? (
                   <UpOutlined style={{ width: 30 }} />
                 ) : (
-                  <DownOutlined style={{ width: 30 }} />
-                )}
+                    <DownOutlined style={{ width: 30 }} />
+                  )}
               </span>
             </div>
             <div
@@ -266,8 +283,8 @@ function Header(props) {
                 {toggle[1] ? (
                   <UpOutlined style={{ width: 30 }} />
                 ) : (
-                  <DownOutlined style={{ width: 30 }} />
-                )}
+                    <DownOutlined style={{ width: 30 }} />
+                  )}
               </span>
             </div>
             <div className={toggle[1] ? "dropdownContent show" : "dropdownContent"}>
@@ -286,10 +303,10 @@ function Header(props) {
                   Logout
                 </a>
               ) : (
-                <a style={{ color: "#F32178" }} onClick={openLogin}>
-                  Login
-                </a>
-              )}
+                  <a style={{ color: "#F32178" }} onClick={openLogin}>
+                    Login
+                  </a>
+                )}
             </div>
           </li>
         </ul>
