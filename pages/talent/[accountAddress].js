@@ -17,7 +17,8 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
   const [selectedTab, setSelectedTab] = useState(1);
   const [displayOnSaleButton, setDisplayOnSaleButton] = useState(true);
   const [displayCollectedButton, setDisplayCollectedButton] = useState(true);
-
+  const [collectedSearchResult, setCollectedSearchResult] = useState("");
+  const [onSaleSearchResult, setOnsaleSearchResult] = useState("");
   const addressRef = useRef(null);
 
   const loadMoreAsset = async () => {
@@ -25,10 +26,21 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
       `nfts?_start=${start}&_limit=${offset}&talent.walletAddress=${accountAddress}`
     );
     const assets = await assetResult.data;
+
+    if (assets.length == 0) {
+      setCollectedSearchResult("No Results Found");
+      setDisplayCollectedButton(false);
+    } else {
+      setCollectedSearchResult("");
+      if (assets.length < offset) {
+        setDisplayCollectedButton(false);
+      } else {
+        setDisplayCollectedButton(true);
+      }
+    }
+
     if (assets.length > 0) {
       setStart(start + offset);
-    } else {
-      setDisplayCollectedButton(false);
     }
     setAssets((prev) => [...prev, ...assets]);
   };
@@ -37,21 +49,31 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
       `nfts?_start=${onSaleStart}&_limit=${offset}&talent.walletAddress=${accountAddress}&onSale=${true}`
     );
     const assets = await assetResult.data;
+    if (assets.length == 0) {
+      setOnsaleSearchResult("No Results Found");
+      setDisplayOnSaleButton(false);
+    } else {
+      setOnsaleSearchResult("");
+      if (assets.length < offset) {
+        setDisplayOnSaleButton(false);
+      } else {
+        setDisplayOnSaleButton(true);
+      }
+    }
+
     if (assets.length > 0) {
       setOnSaleStart(onSaleStart + offset);
-    } else {
-      setDisplayOnSaleButton(false);
     }
     setOnSales((prev) => [...prev, ...assets]);
   };
 
   const loadOnSale = async () => {
     setSelectedTab(0);
-    setDisplayOnSaleButton(true);
+    // setDisplayOnSaleButton(true);
   };
   const loadCollected = async () => {
     setSelectedTab(1);
-    setDisplayCollectedButton(true);
+    // setDisplayCollectedButton(true);
   };
 
   const copyAddress = () => {
@@ -68,8 +90,32 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
     setBackgroundBanner(`gradientBackground_${index}`);
     setBackgroundAvatar(`gradientBackground_${index_2}`);
   };
+
   useEffect(() => {
     getRandomBanner();
+    if (assets.length == 0) {
+      setCollectedSearchResult("No Results Found");
+      setDisplayCollectedButton(false);
+    } else {
+      setCollectedSearchResult("");
+      if (assets.length < offset) {
+        setDisplayCollectedButton(false);
+      } else {
+        setDisplayCollectedButton(true);
+      }
+    }
+    //-----------------------
+    if (onSales.length == 0) {
+      setOnsaleSearchResult("No Results Found 2");
+      setDisplayOnSaleButton(false);
+    } else {
+      setOnsaleSearchResult("");
+      if (onSales.length < offset) {
+        setDisplayOnSaleButton(false);
+      } else {
+        setDisplayOnSaleButton(true);
+      }
+    }
   }, []);
 
   return (
@@ -77,9 +123,9 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
       <div id="top"></div>
 
       {/* <!-- section begin --> */}
-      {talent.talentBanner?.formats?.large?.url ? (
+      {talent?.talentBanner?.formats?.large?.url ? (
         <section id="profile_banner" aria-label="section" className={`text-light `}>
-          <img width="100%" height="300px" src={talent.talentBanner?.formats?.large?.url} alt="" />
+          <img width="100%" height="300px" src={talent?.talentBanner?.formats?.large?.url} alt="" />
         </section>
       ) : (
         <section
@@ -97,12 +143,12 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
               <div className="d_profile de-flex">
                 <div className="de-flex-col">
                   <div className={`profile_avatar `}>
-                    {!talent.talentAvatar?.formats?.small?.url ? (
+                    {!talent?.talentAvatar?.formats?.small?.url ? (
                       <div
                         className={`${styles.backgroundAvatar} ${gradients[backgroundAvatar]}`}
                       ></div>
                     ) : (
-                      <img src={talent.talentAvatar?.formats?.small?.url} alt="" />
+                      <img src={talent?.talentAvatar?.formats?.small?.url} alt="" />
                     )}
 
                     <i className="fa fa-check"></i>
@@ -146,6 +192,7 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
                           <AssetCard key={item.id} asset={item} />
                         ))}
                       </div>
+                      <div className={styles.notFoundContainer}>{onSaleSearchResult}</div>
                     </div>
                   )}
                   {selectedTab == 1 && (
@@ -156,6 +203,7 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
                           <AssetCard key={item.id} asset={item} />
                         ))}
                       </div>
+                      <div className={styles.notFoundContainer}>{collectedSearchResult}</div>
                     </div>
                   )}
                   {selectedTab == 0 && displayOnSaleButton && (
@@ -175,6 +223,7 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
                     </div>
                   )}
                 </div>
+
                 {/* <div className={`row ${styles.loadMoreAssetButtonContainer}`}>
                   <button
                     className={styles.loadMoreAssetButton}
@@ -206,7 +255,8 @@ export const getServerSideProps = async ({ query }) => {
     props: {
       collectedAsset: collectedAsset.data,
       onSaleAsset: onSaleAsset.data,
-      talent: talent.data[0],
+      talent:
+        typeof talent.data[0] == undefined ? JSON.parse(JSON.stringify(talent.data[0])) : null,
       accountAddress: query.accountAddress,
     },
   };
