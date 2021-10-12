@@ -41,11 +41,7 @@ const Wallet = () => {
             .then(handleNewAccounts)
             .catch((error) => {
               if (error.code === 4001) {
-                CustomNotification(
-                  "warning",
-                  "Metamask",
-                  "You must accept wallet connection "
-                );
+                CustomNotification("warning", "Metamask", "You must accept wallet connection ");
               } else {
                 console.error(error);
               }
@@ -63,10 +59,8 @@ const Wallet = () => {
       dappId: process.env.ONBOARD_API_KEY, // [String] The API key created by step one above
       networkId: 4, // [Integer] The Ethereum network ID your Dapp uses.
       subscriptions: {
-        wallet: (wallet) => {
-        },
-        address: (addres) => {
-        },
+        wallet: (wallet) => {},
+        address: (addres) => {},
       },
       walletSelect: {
         wallets: [{ walletName: "metamask" }],
@@ -80,7 +74,7 @@ const Wallet = () => {
     }
   };
 
-  useEffect(() => { }, []);
+  useEffect(() => {}, []);
 
   const presisMetamask = async (accounts) => {
     let web3 = new Web3(window.ethereum);
@@ -94,9 +88,7 @@ const Wallet = () => {
       if (err) {
         console.log(err);
       } else {
-        await dipsatchMetaBalance(
-          setMetaBalance(web3.utils.fromWei(result, "ether"))
-        );
+        await dipsatchMetaBalance(setMetaBalance(web3.utils.fromWei(result, "ether")));
       }
     });
     router.push("/");
@@ -107,12 +99,16 @@ const Wallet = () => {
       presisMetamask(newAccounts);
     }
   };
-  <InstallMetamaskModal displayModal={displayInstallModal} />
+  <InstallMetamaskModal displayModal={displayInstallModal} />;
 
   return (
     <div className="no-bottom" id="content">
       {/* <div id="top"></div> */}
-      <section id="subheader" className="text-light AssetSubheader" data-bgimage="url(images/background/subheader.jpg) top">
+      <section
+        id="subheader"
+        className="text-light AssetSubheader"
+        data-bgimage="url(images/background/subheader.jpg) top"
+      >
         <div className="center-y relative text-center">
           <div className="container">
             <div className="row">
@@ -127,22 +123,28 @@ const Wallet = () => {
       <section aria-label="section">
         <div className="contentContainer">
           <div className="row">
-            <div className="col-lg-3 mb30">
+            <div className={`col-lg-3 mb30 `}>
               <a className="box-url" onClick={onDesktopConnect}>
                 <span className="box-url-label">Most Popular</span>
                 <img src="images/wallet/1.png" alt="" className="mb20" />
                 <h4>Metamask</h4>
-                <p>Start exploring blockchain applications in seconds.  Trusted by over 1 million users worldwide.</p>
+                <p>
+                  Start exploring blockchain applications in seconds. Trusted by over 1 million
+                  users worldwide.
+                </p>
               </a>
             </div>
-            <div className="col-lg-3 mb30">
+            <div className={`col-lg-3 mb30 ${styles.disabledWallet}`}>
               <a className="box-url" aria-disabled={true} href={null}>
                 <img src="images/wallet/2.png" alt="" className="mb20" />
                 <h4>Bitski</h4>
-                <p>Bitski connects communities, creators and brands through unique, ownable digital content.</p>
+                <p>
+                  Bitski connects communities, creators and brands through unique, ownable digital
+                  content.
+                </p>
               </a>
             </div>
-            <div className="col-lg-3 mb30 disable">
+            <div className={`col-lg-3 mb30 ${styles.disabledWallet}`}>
               <a className="box-url" href={null}>
                 <img src="images/wallet/3.png" alt="" className="mb20" />
                 <h4>Fortmatic</h4>
@@ -150,24 +152,25 @@ const Wallet = () => {
               </a>
             </div>
 
-            <div className="col-lg-3 mb30">
+            <div className={`col-lg-3 mb30 ${styles.disabledWallet}`}>
               <a className="box-url" href={null}>
                 <img src="images/wallet/4.png" alt="" className="mb20" />
                 <h4>WalletConnect</h4>
-                <p>Open source protocol for connecting decentralised applications to mobile wallets.</p>
+                <p>
+                  Open source protocol for connecting decentralised applications to mobile wallets.
+                </p>
               </a>
             </div>
 
-            <div className="col-lg-3 mb30">
+            <div className={`col-lg-3 mb30 ${styles.disabledWallet}`}>
               <a className="box-url" href={null}>
                 <img src="images/wallet/5.png" alt="" className="mb20" />
                 <h4>Coinbase Wallet</h4>
-                <p>The easiest and most secure crypto wallet. ... No Coinbase account required.
-                                </p>
+                <p>The easiest and most secure crypto wallet. ... No Coinbase account required.</p>
               </a>
             </div>
 
-            <div className="col-lg-3 mb30">
+            <div className={`col-lg-3 mb30 ${styles.disabledWallet}`}>
               <a className="box-url" href={null}>
                 <img src="images/wallet/6.png" alt="" className="mb20" />
                 <h4>Arkane</h4>
@@ -175,7 +178,7 @@ const Wallet = () => {
               </a>
             </div>
 
-            <div className="col-lg-3 mb30">
+            <div className={`col-lg-3 mb30 ${styles.disabledWallet}`}>
               <a className="box-url" href={null}>
                 <img src="images/wallet/7.png" alt="" className="mb20" />
                 <h4>Authereum</h4>
@@ -183,12 +186,14 @@ const Wallet = () => {
               </a>
             </div>
 
-            <div className="col-lg-3 mb30">
+            <div className={`col-lg-3 mb30 ${styles.disabledWallet}`}>
               <a className="box-url" href={null}>
                 <span className="box-url-label">Most Simple</span>
                 <img src="images/wallet/8.png" alt="" className="mb20" />
                 <h4>Torus</h4>
-                <p>Open source protocol for connecting decentralised applications to mobile wallets.</p>
+                <p>
+                  Open source protocol for connecting decentralised applications to mobile wallets.
+                </p>
               </a>
             </div>
           </div>

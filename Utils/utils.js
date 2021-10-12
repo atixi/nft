@@ -194,7 +194,6 @@ export async function sellOrder(
 ) {
   try {
     if (fixed) {
-
       const result = await seaport().createSellOrder({
         asset: {
           tokenId,
@@ -206,7 +205,6 @@ export async function sellOrder(
       });
 
       return result;
-
     } else {
       const paymentTokenAddress = "0xc778417e063141139fce010982780140aa0cd5ab";
       var date = new Date(orderValue.date.auctionExpirationTime);
