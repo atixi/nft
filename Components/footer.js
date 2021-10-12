@@ -11,8 +11,9 @@ import Link from "next/link";
 import React from "react";
 import { getPageInfo } from "services/pageInfo.service";
 import { fetch } from "Utils/strapiApi";
+import request from "Utils/axios";
 const { updatesMessage, searchPlaceHolder, searchSubmitMessage, terms, policy, privacy } = FOOTER;
-
+import { Notification } from "Utils/utils"
 const subscriptionSchemea = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
 });
@@ -33,19 +34,24 @@ function Footer() {
     },
   });
   const handleSubmission = async (value) => {
-    api
-      .post(`/subscribeds`, value)
-      .then((data) => {
+    console.log("sdfsf", value)
+    try {
+      const send = await request("subscribeds", {
+        method: "POST",
+        data: value
+      })
+      if (send.status === 200) {
+        Notification("Thank you for you subscription", "success")
         setSuccess(true);
         formik.resetForm();
         setDuplicate(false);
-      })
-      .catch((err) => {
-        console.log(err.message, "hello err");
-        setDuplicate(true);
-        formik.resetForm();
-        setSuccess(false);
-      });
+      }
+    }
+    catch (e) {
+      formik.resetForm();
+      Notification("Subscription was not successful, try again!", "error")
+
+    }
   };
 
   const loadCategories = async () => {
