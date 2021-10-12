@@ -124,7 +124,7 @@ const Layout = ({ children }) => {
       </Head>
       <div className="wrapper">
         {showHeader == false ? <div style={{ marginBottom: "-90px" }}></div> : <Header />}
-        {children}
+        {/* {children} */}
         {isWrongNet ? DisplayWrongNetModal() : ""}
 
         <Footer />

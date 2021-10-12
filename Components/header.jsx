@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import axios from 'axios';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getPageInfo } from "services/pageInfo.service";
 import LoginModal from "../Components/loginModal";
 import CONSTANTS from "../Constants/headerConstants";
 import { getMetaToken, getUser, signout } from "../store/action/accountSlice";
@@ -36,6 +37,7 @@ function Header(props) {
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
   const [connected, setConnected] = useState(false);
+  const [pageInfo, setPageInfo] = useState();
   const [data, setData] = useState({
     talents: [],
     assets: [],
@@ -73,6 +75,15 @@ function Header(props) {
       });
     }
   };
+  const loadPageInfo = async () => {
+    let pageInfoResult = await getPageInfo();
+    if (pageInfoResult.data) {
+      setPageInfo(pageInfoResult.data);
+    }
+  };
+  useEffect(() => {
+    loadPageInfo();
+  }, []);
   useEffect(() => {
     isConnectedToAnyWallet();
   }, [isMetaconnected]);
@@ -126,12 +137,12 @@ function Header(props) {
                   <div id="logo">
                     <Link href="/" passHref>
                       <a href="/">
-                        <img alt="" className="logo" src="/images/logo-light.png" />
+                        <img alt="" className="logo" src={pageInfo?.HeaderLogo?.LogoImage.url} />
                         <img
                           alt=""
-                          style={{ width: "250px" }}
-                          className="logo-2"
-                          src="/images/logo.svg"
+                          style={{ maxWidth: "auto", height: "45px" }}
+                          className="f-logo"
+                          src={pageInfo?.HeaderLogo?.LogoImage.url}
                         />
                       </a>
                     </Link>

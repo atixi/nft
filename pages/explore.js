@@ -6,12 +6,14 @@ import { saleTypes } from "Constants/constants";
 import AssetCard from "@/components/assetCard";
 import { getExplores, queryExplore } from "services/explore.service";
 import router from "next/router";
+import { capitalizeWord } from "Utils/mintApi";
 
 const searchInitialValue = { search: "", categories: "all", saleTypes: "all" };
 const offset = 20;
 function Explore({ serverExplores, categories }) {
-  const { search } = router.query;
+  const { search, cat } = router.query;
   const [searchQuery, setSearchQuery] = useState(searchInitialValue);
+  const [searchResult, setSearchResult] = useState("");
   const [stringQuery, setStringQuery] = useState(``);
 
   const [start, setStart] = useState(offset);
@@ -20,6 +22,7 @@ function Explore({ serverExplores, categories }) {
   const searchFormRef = React.createRef();
   const [searchForm] = Form.useForm();
 
+  // it is require for filter link of footer and setvalue.
   const getSelectedCategories = async (category) => {
     let query = searchQuery;
     query.categories = category;
@@ -34,7 +37,6 @@ function Explore({ serverExplores, categories }) {
   };
 
   const filter = () => {
-    setDisplayLoadMoreButton(true);
     let custom = "";
     let query = searchQuery;
     if (query.categories !== "all") {
@@ -44,51 +46,100 @@ function Explore({ serverExplores, categories }) {
     if (query.saleTypes !== "all") {
       custom += `${query.saleTypes}=true&`;
     }
-
-    console.log("custom is ", custom);
-    console.log("query is ", query);
+    if (custom != "") {
+      setDisplayLoadMoreButton(true);
+    }
     return custom;
   };
   const handleFilter = async () => {
     let custom = filter();
+    if (searchForm.getFieldValue("search") != "") {
+      custom += `[name_contains]=${searchForm.getFieldValue("search")}&`;
+    }
     setStart(offset);
     const { data } = await queryExplore(custom, 0, offset);
+    // change this
+    checkResult(data);
     setFilteredExplores(data);
-    console.log("custome query is ", custom);
+
     setStringQuery(custom);
   };
   const loadMoreExplores = async () => {
     const { data } = await queryExplore(stringQuery, start, offset);
     if (data.length > 0) {
       setStart(start + offset);
-    } else {
+    }
+    console.log("data lenght ::: ", data.length);
+    // change this
+    if (data.length < offset) {
       setDisplayLoadMoreButton(false);
     }
     setFilteredExplores((prev) => [...prev, ...data]);
   };
   const searchFilterData = async (searchFormValues) => {
-    console.log("form value is ", searchFormValues);
     let custom = filter();
     custom += `[name_contains]=${searchFormValues.search}&`;
     setStart(offset);
     const { data } = await queryExplore(custom, 0, offset);
+    checkResult(data);
     setFilteredExplores(data);
     setStringQuery(custom);
   };
-  const handleSearch = async (search) => {
-    console.log("form value is ", search);
-    let totalsearch = `[name_contains]=${search}`;
-    const { data } = await queryExplore(totalsearch, 0, offset);
-    setStart(offset);
-    setFilteredExplores(data);
-    searchForm.setFieldsValue({ search });
-    setStringQuery(totalsearch);
+  const handleSearch = async () => {
+    if (search) {
+      let totalsearch = `[name_contains]=${search}`;
+      const { data } = await queryExplore(totalsearch, 0, offset);
+      checkResult(data);
+      setStart(offset);
+      setFilteredExplores(data);
+
+      searchForm.setFieldsValue({ search });
+      setStringQuery(totalsearch);
+    } else {
+      searchForm.setFieldsValue({ search: "" });
+      setFilteredExplores(serverExplores);
+    }
+    if (cat) {
+      if (cat != "all") {
+        let query = searchQuery;
+
+        searchForm.setFieldsValue({ categories: cat });
+        let custom = "";
+        custom += `categories.slug=${cat}&`;
+        query.categories = cat;
+
+        setStart(offset);
+        const { data } = await queryExplore(custom, 0, offset);
+        checkResult(data);
+        setFilteredExplores(data);
+        setStringQuery(query);
+      } else {
+        searchForm.setFieldsValue({ categories: "all" });
+        setSearchResult("");
+      }
+    }
   };
 
+  const checkResult = (data) => {
+    if (data.length == 0) {
+      setSearchResult("No Results Found");
+      setDisplayLoadMoreButton(false);
+    } else {
+      setSearchResult("");
+      if (data.length < offset) {
+        setDisplayLoadMoreButton(false);
+      } else {
+        setDisplayLoadMoreButton(true);
+      }
+    }
+  };
   useEffect(() => {
-    if (!search) return;
-    handleSearch(router.query.search);
-  }, []);
+    if (search || cat) {
+      handleSearch(router.query);
+    } else {
+      return;
+    }
+  }, [router.query]);
   return (
     <div className="no-bottom " id="content">
       <div id="top"></div>
@@ -149,15 +200,19 @@ function Explore({ serverExplores, categories }) {
                       filterOption={(input, option) =>
                         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                       }
-                      defaultValue={categories[0].slug}
+                      // options={{ label: "hello", value: "hi" }}
+                      // defaultValue={categories[0].slug}
                     >
+                      <Select.Option value={"all"} style={{ height: 50, padding: 10 }}>
+                        {"All"}
+                      </Select.Option>
                       {categories?.map((item) => (
                         <Select.Option
                           value={item.slug}
                           key={item.slug}
                           style={{ height: 50, padding: 10 }}
                         >
-                          {item.slug}
+                          {capitalizeWord(item.categoryName)}
                         </Select.Option>
                       ))}
                     </Select>
@@ -173,7 +228,7 @@ function Explore({ serverExplores, categories }) {
                       filterOption={(input, option) =>
                         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                       }
-                      defaultValue={saleTypes[0].value}
+                      // defaultValue={saleTypes[0].value}
                     >
                       {saleTypes.map((item) => (
                         <Select.Option
@@ -192,6 +247,7 @@ function Explore({ serverExplores, categories }) {
             {/* <!-- nft item begin --> */}
             {filterdExplores &&
               filterdExplores.map((item) => <AssetCard key={item.id} asset={item} />)}
+            <div className={styles.notFoundContainer}>{searchResult}</div>
             {displayLoadMoreButton && (
               <div className="col-md-12 text-center">
                 <a onClick={loadMoreExplores} id="loadmore" className="btn-main  fadeInUp lead">
