@@ -254,8 +254,8 @@ export const getServerSideProps = async ({ query }) => {
       collectedAsset: collectedAsset.data,
       onSaleAsset: onSaleAsset.data,
       talent:
-        typeof talent.data[0] == undefined
-          ? JSON.parse(JSON.stringify(talent.data[0]))
+        typeof talent.data[0] == "undefined" || typeof talent.data[0] == undefined
+          ? null
           : talent.data[0],
       accountAddress: query.accountAddress,
     },
