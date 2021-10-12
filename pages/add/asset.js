@@ -217,4 +217,15 @@ function AddAsset() {
         </section>
     </div>
 }
+
+export const getServerSideProps = withSession(async ({ req, res }) => {
+    const user = req.session.get("user");
+    if (user === undefined) {
+        res.setHeader("location", "/");
+        res.statusCode = 302;
+        res.end();
+        return { props: {} };
+    }
+    return { props: { user } }
+})
 export default AddAsset;

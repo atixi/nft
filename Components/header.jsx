@@ -2,6 +2,7 @@ import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import axios from 'axios';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LoginModal from "../Components/loginModal";
@@ -9,7 +10,7 @@ import CONSTANTS from "../Constants/headerConstants";
 import { getMetaToken, getUser, signout } from "../store/action/accountSlice";
 import { BalanceLabel, ConnectedButton } from "./StyledComponents/header-styledComponents.js";
 import WalletInfoDropdown from "./connectedWalletDropdown";
-
+import useUser from '../Utils/useUser'
 import api from "/Components/axiosRequest";
 import {
   getMetaBalance,
@@ -20,7 +21,10 @@ import {
 } from "/store/action/accountSlice";
 function Header(props) {
   const router = useRouter();
-  const { jwt } = useSelector(getUser);
+ const { user  } = useUser({
+    redirectTo: "/",
+    redirectIfFound: false,
+  });
   const metaToken = useSelector(getMetaToken);
   const metaBalance = useSelector(getMetaBalance);
   const walletToken = useSelector(getWalletToken);
@@ -104,17 +108,12 @@ function Header(props) {
   const openLogin = () => {
     setShowLoginModal(true);
   };
-  const handleLogout = async () => {
-    try {
-      const logout = await dispatch(signout(null));
-      console.log("sign out", logout);
-      if (logout.meta?.requestStatus === "fulfilled") {
-        router.push("/");
-      }
-    } catch (err) { }
-  };
-
-  const isLoggedIn = jwt ? true : false;
+  const handleLogout = async () => { 
+    await  axios.post('/api/logout') 
+    router.reload('/')
+  }
+  
+  const isLoggedIn = user && user.jwt ? true : false;
   return (
     <header className="transparent header-light scroll-light">
       <div className="container">
