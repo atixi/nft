@@ -389,7 +389,7 @@ function ProductPage() {
                             <div className={"listContainer"}>
                               {sellOrders &&
                                 sellOrders.map((order, i) => (
-                                  <div className="p_list" key={i}>
+                                  <div className="p_list mt-3" key={i}>
                                     <UserAvatar user={{ address: order?.makerAccount?.address, isVerified: false, avatar: order.makerAccount?.profile_img_url }} />
                                     {console.log("maker", order.makerAccount.address, address)}
                                     <div className="p_list_info orderInfo">
@@ -422,46 +422,44 @@ function ProductPage() {
                             <div className={"listContainer"}>
                               {offers &&
                                 offers.map((order, i) => (
-                                  <>
-                                    <div className="p_list" key={i}>
-                                      <UserAvatar user={{ address: order?.makerAccount?.address, isVerified: false, avatar: order.makerAccount?.profile_img_url }} />
-                                      <div className="p_list_info orderInfo">
-                                        Bid{" "}
-                                        <b>{`${getAuctionPriceDetails(order).priceBase} ${order?.paymentTokenContract?.symbol
-                                          }`}</b>
-                                        <span>
-                                          by <b>{checkName(order.makerAccount?.user?.username)}</b>
-                                          {` at ${unixToHumanDate(order?.createdTime)}`}
-                                        </span>
-                                        <span>
-                                          {web3.utils.toChecksumAddress(order.makerAccount.address) === address ? (
-                                            <Button
-                                              onClick={() => cancelOffer(order, address)}
-                                              shape="round"
-                                              size="small"
-                                            >
-                                              {"Cancel"}
-                                            </Button>
-                                          ) : (
-                                              ""
-                                            )}
-                                        </span>
-                                        <span>
-                                          {web3.utils.toChecksumAddress(asset?.owner.address) === address ? (
-                                            <Button
-                                              onClick={() => acceptOffer(order, address)}
-                                              shape="round"
-                                              size="small"
-                                            >
-                                              {"Accept"}
-                                            </Button>
-                                          ) : (
-                                              ""
-                                            )}
-                                        </span>
-                                      </div>
+                                  <div className="p_list mt-3" key={i}>
+                                    <UserAvatar user={{ address: order?.makerAccount?.address, isVerified: false, avatar: order.makerAccount?.profile_img_url }} />
+                                    <div className="p_list_info orderInfo">
+                                      Bid{" "}
+                                      <b>{`${getAuctionPriceDetails(order).priceBase} ${order?.paymentTokenContract?.symbol
+                                        }`}</b>
+                                      <span>
+                                        by <b>{checkName(order.makerAccount?.user?.username)}</b>
+                                        {` at ${unixToHumanDate(order?.createdTime)}`}
+                                      </span>
+                                      <span>
+                                        {web3.utils.toChecksumAddress(order.makerAccount.address) === address ? (
+                                          <Button
+                                            onClick={() => cancelOffer(order, address)}
+                                            shape="round"
+                                            size="small"
+                                          >
+                                            {"Cancel"}
+                                          </Button>
+                                        ) : (
+                                            ""
+                                          )}
+                                      </span>
+                                      <span>
+                                        {web3.utils.toChecksumAddress(asset?.owner.address) === address ? (
+                                          <Button
+                                            onClick={() => acceptOffer(order, address)}
+                                            shape="round"
+                                            size="small"
+                                          >
+                                            {"Accept"}
+                                          </Button>
+                                        ) : (
+                                            ""
+                                          )}
+                                      </span>
                                     </div>
-                                  </>
+                                  </div>
                                 ))}
                             </div>
                           </TabPane>
