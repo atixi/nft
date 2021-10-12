@@ -5,6 +5,8 @@ import { signin } from '../store/action/accountSlice';
 import { useDispatch } from 'react-redux';
 import { useRouter } from "next/router"
 import { Notification } from "../Utils/utils"
+import request from "../Utils/axios"
+import useUser from "../Utils/useUser"
 const antIcon = <LoadingOutlined style={{ fontSize: 16, marginLeft: "-25px", marginRight: "20px", position: "relative", top: "-5px", color: "white" }} spin />;
 function LoginModal({ showLoginModal, setShowLoginModal }) {
     const [loading, setLoading] = useState(false)
@@ -13,18 +15,45 @@ function LoginModal({ showLoginModal, setShowLoginModal }) {
     const NavigateTo = (path) => {
         return router.push(path)
     }
-    const onFinish = async (values) => {
-        setLoading(true)
-        const res = await dispatch(signin(values));
-        if (res.meta?.requestStatus === "fulfilled") {
-            setShowLoginModal(false)
-            NavigateTo("/")
-        }
-        if (res.meta?.requestStatus === "rejected") {
+    // const onFinish = async (values) => {
+    //     setLoading(true)
+    //     const res = await dispatch(signin(values));
+    //     if (res.meta?.requestStatus === "fulfilled") {
+    //         setShowLoginModal(false)
+    //         NavigateTo("/")
+    //     }
+    //     if (res.meta?.requestStatus === "rejected") {
+    //         Notification("Username or Password is wrong", "error")
+    //     }
+    //     setLoading(false)
+    // };
+
+    const { mutateUser } = useUser({
+        redirectTo: "/",
+        redirectIfFound: true,
+    });
+
+    const [errorMsg, setErrorMsg] = useState("");
+
+    async function onFinish(values) {
+        try {
+            mutateUser(
+                await request("auth/local", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    data: { identifier: values.username, password: values.password },
+                }),
+            );
+        } catch (error) {
+            console.error("An unexpected error happened:", error);
+            //   setErrorMsg(error.data.message);
             Notification("Username or Password is wrong", "error")
+
         }
-        setLoading(false)
-    };
+    }
+
+
+
     return (<Modal visible={showLoginModal} footer={false} onCancel={() => setShowLoginModal(false)}>
         <Form onFinish={onFinish} id='contact_form' className="form-border">
             <h3>Login to your account</h3>

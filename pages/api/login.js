@@ -1,15 +1,19 @@
 
+import request from "../../Utils/axios"
 export default withSession(async (req, res) => {
-  const { username } = await req.body;
-  const url = `https://api.github.com/users/${username}`;
-
+  const { username, password } = await req.body;
   try {
-    // we check that the user exists on GitHub and store some data in session
-    const { login, avatar_url: avatarUrl } = await fetchJson(url);
-    const user = { isLoggedIn: true, login, avatarUrl };
-    req.session.set("user", user);
-    await req.session.save();
-    res.json(user);
+    // const { username, password } = params;
+    const { data } = await request("auth/local", {
+      method: "POST",
+      data: { identifier: username, password },
+    });
+    if (data && data.user && data.user.id) {
+      const user = { isLoggedIn: true, jwt: data.jwt };
+      req.session.set("user", user);
+      await req.session.save();
+      res.json(user);
+    }
   } catch (error) {
     const { response: fetchResponse } = error;
     res.status(fetchResponse?.status || 500).json(error.data);
