@@ -67,6 +67,13 @@
 {
     background: url("/images/background/subheader.jpg");
 }
+.assetCard{
+    height: 250px;
+    max-height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .hotCollectionListDiv{
     height: 130px;
     display: flex;

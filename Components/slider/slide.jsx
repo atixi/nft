@@ -38,10 +38,9 @@ function Slide({ assets }) {
               ]}
               nav
             >
-              {assets.map((asset) => {
-                console.log(asset)
+              {assets.map((asset, index) => {
                 return (
-                  <div className="nft_pic" style={{ maxWidth: "610px", maxHeight: "610px" }}>
+                  <div className="nft_pic" key={index} style={{ maxWidth: "610px", maxHeight: "610px" }}>
                     <Link
                       href={`/nft/${asset?.tokenAddress}?tokenId=${asset?.tokenId}`}
                     >

@@ -29,7 +29,7 @@ function AssetCard({ asset }) {
             verified: asset?.isInternal,
           }}
         />
-        <div className="nft__item_wrap itemImageCard">
+        <div className="nft__item_wrap itemImageCard assetCard">
           <Link
             href={
               asset?.asset?.assetContract
@@ -38,7 +38,7 @@ function AssetCard({ asset }) {
             }
           >
             <a>
-              <img src={asset?.asset?.imageUrl} style={{ width: "auto" }} className="lazy nft__item_preview" alt="" />
+              <img src={asset?.asset?.imageUrl} style={{ width: "auto" }} className="lazy nft__item_preview img-fluid" alt="" />
             </a>
           </Link>
         </div>
