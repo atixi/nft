@@ -67,3 +67,16 @@
 {
     background: url("/images/background/subheader.jpg");
 }
+.hotCollectionListDiv{
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.hotCollectionListImg {
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
