@@ -162,6 +162,7 @@ function MakeOfferModal({ asset, assets, isBundle, loadAgain }) {
       >Offer</button>
       {isModalVisible && (
         <Modal
+          centered
           title="Make an Offer"
           visible={isModalVisible}
           onCancel={handleCancel}

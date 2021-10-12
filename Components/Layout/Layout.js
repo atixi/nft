@@ -140,8 +140,8 @@ const Layout = ({ children }) => {
 
         {((!ethereum && router.pathname.includes("create")) ||
           (!ethereum && router.pathname.includes("sell"))) && (
-          <ConnectMobileWalletModal displayModal={true} />
-        )}
+            <ConnectMobileWalletModal displayModal={true} />
+          )}
       </div>
     </>
   );
@@ -161,7 +161,7 @@ const Layout = ({ children }) => {
       " and reload the page";
 
     return (
-      <Modal title={<strong>{"Wrong Network!"}</strong>} footer={false} visible={true}>
+      <Modal centered title={<strong>{"Wrong Network!"}</strong>} footer={false} visible={true}>
         {message}
       </Modal>
     );

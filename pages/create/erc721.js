@@ -275,6 +275,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
     <div className="no-bottom" id="content">
       <Modal
         title="Uploading NFT..."
+        centered
         visible={displayUploadModal}
         header={null}
         footer={null}
@@ -301,18 +302,18 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
               <Spin size="large" />
             </div>
           ) : (
-            <div className={styles.modalControls}>
-              <Button type="primary" className={styles.modalButton} onClick={handleNewNft}>
-                Create New NFT
+              <div className={styles.modalControls}>
+                <Button type="primary" className={styles.modalButton} onClick={handleNewNft}>
+                  Create New NFT
               </Button>
-              <Link
-                className={styles.modalButton}
-                href={`/nft/${nftContract}?tokenId=${nftTokenId}`}
-              >
-                <a>{"View Minted NFT"}</a>
-              </Link>
-            </div>
-          )}
+                <Link
+                  className={styles.modalButton}
+                  href={`/nft/${nftContract}?tokenId=${nftTokenId}`}
+                >
+                  <a>{"View Minted NFT"}</a>
+                </Link>
+              </div>
+            )}
           {displaySellOrderLabel && (
             <div className={styles.nftSellOrderError}>{<span>{sellOrderErrorMessage}</span>}</div>
           )}
@@ -443,7 +444,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                                 // pattern: new RegExp(/^[+-]?\d+(\.\d+)?$/),
                               },
                             ]}
-                            // noStyle
+                          // noStyle
                           >
                             <DatePicker
                               key={"auctionExpirationTime"}
@@ -597,16 +598,16 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                           alt=""
                         />
                       ) : (
-                        <div className={styles.nftVideoBox}>
-                          <ReactPlayer
-                            width={"100%"}
-                            height={"100%"}
-                            url={uploadFileUrl}
-                            controls
-                            playing={false}
-                          />
-                        </div>
-                      )}
+                          <div className={styles.nftVideoBox}>
+                            <ReactPlayer
+                              width={"100%"}
+                              height={"100%"}
+                              url={uploadFileUrl}
+                              controls
+                              playing={false}
+                            />
+                          </div>
+                        )}
                     </a>
                   }
                 </div>

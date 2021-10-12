@@ -156,6 +156,7 @@ function BuyNftModal({ asset, isBundle, order, loadAgain }) {
       </button>
       {isModalVisible && (
         <Modal
+          centered
           title="Buy this token "
           visible={isModalVisible}
           onCancel={handleCancel}
@@ -166,6 +167,7 @@ function BuyNftModal({ asset, isBundle, order, loadAgain }) {
       )}
       {/* <ConnectWalletModal displayModal={isDisplayWalletModal} /> */}
       <Modal
+        centered
         title={<strong>{"You are not connect to any wallet!"}</strong>}
         footer={false}
         visible={notConnected}

@@ -43,7 +43,7 @@ function LoginModal({ showLoginModal, setShowLoginModal }) {
 
 
 
-    return (<Modal visible={showLoginModal} footer={false} onCancel={() => setShowLoginModal(false)}>
+    return (<Modal centered visible={showLoginModal} footer={false} onCancel={() => setShowLoginModal(false)}>
         <Form onFinish={onFinish} id='contact_form' className="form-border">
             <h3>Login to your account</h3>
             <div className="field-set">

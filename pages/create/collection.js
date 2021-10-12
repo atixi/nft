@@ -241,6 +241,7 @@ const ERC721Collection = ({ serverCollections, categories }) => {
     <div className="no-bottom" id="content">
       <Modal
         title="Uploading Collection..."
+        centered
         visible={displayUploadModal}
         header={null}
         footer={null}
