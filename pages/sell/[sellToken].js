@@ -56,7 +56,6 @@ function SellNft() {
       }
 
       if (data.status == 200) {
-        console.log(data);
         const nft = data.data;
         setAsset({
           name: nft.name,

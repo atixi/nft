@@ -47,19 +47,19 @@ function HotCollections({ collections }) {
         >
           {serverCollections.map((collection, index) => {
             return (
-              <Link href={`/collection/${collection?.slug}`} passHref>
+              <Link key={index} href={`/collection/${collection?.slug}`} passHref>
                 <a>
-                  <div key={index} className="nft_coll style-2">
-                    <div className="nft_wrap">
+                  <div className="nft_coll style-2">
+                    <div className="nft_wrap hotCollectionListDiv">
                       <img
                         src={collection?.collectionBanner?.url}
-                        className="lazy img-fluid"
+                        className="lazy img-fluid rounded hotCollectionListImg"
                         alt=""
                       />
                     </div>
                     <div className="nft_coll_pp">
                       <img
-                        className="lazy"
+                        className="lazy img-fluid hotCollectionAvatar"
                         src={collection?.collectionImageURL?.url}
                         alt=""
                       />

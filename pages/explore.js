@@ -69,7 +69,6 @@ function Explore({ serverExplores, categories }) {
     if (data.length > 0) {
       setStart(start + offset);
     }
-    console.log("data lenght ::: ", data.length);
     // change this
     if (data.length < offset) {
       setDisplayLoadMoreButton(false);
@@ -200,8 +199,8 @@ function Explore({ serverExplores, categories }) {
                       filterOption={(input, option) =>
                         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                       }
-                      // options={{ label: "hello", value: "hi" }}
-                      // defaultValue={categories[0].slug}
+                    // options={{ label: "hello", value: "hi" }}
+                    // defaultValue={categories[0].slug}
                     >
                       <Select.Option value={"all"} style={{ height: 50, padding: 10 }}>
                         {"All"}
@@ -228,7 +227,7 @@ function Explore({ serverExplores, categories }) {
                       filterOption={(input, option) =>
                         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                       }
-                      // defaultValue={saleTypes[0].value}
+                    // defaultValue={saleTypes[0].value}
                     >
                       {saleTypes.map((item) => (
                         <Select.Option

@@ -28,15 +28,15 @@ function TopSellers({ talents }) {
                       <a>
                         {talent?.talentAvatar?.url ? (
                           <img
-                            className={`lazy  ${gradients.topSellerAvatarBox}`}
+                            className={`lazy  ${gradients.topSellerAvatarBox} talentListAvatar`}
                             src={talent?.talentAvatar?.url}
                             alt=""
                           />
                         ) : (
-                          <div
-                            className={`lazy ${gradients[backgroundAvatar]} ${gradients.topSellerAvatarBox}`}
-                          ></div>
-                        )}
+                            <div
+                              className={`lazy ${gradients[backgroundAvatar]} ${gradients.topSellerAvatarBox}`}
+                            ></div>
+                          )}
                         <i className="fa fa-check"></i>
                       </a>
                     </Link>
