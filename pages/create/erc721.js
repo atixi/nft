@@ -656,5 +656,5 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
       categories: JSON.parse(JSON.stringify(categories)),
       serverNfts: JSON.parse(JSON.stringify(nfts)),
     },
-  };
-};
+  }
+})
