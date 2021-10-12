@@ -238,7 +238,7 @@ function ProductPage() {
       setAddress(tokenAddresses.metaToken[0]);
       setBalance(tokenAddresses.metaBalance);
     }
-    console.log("address", address)
+    console.log("address", address && address)
     refresh && loadNft();
   }, [queryParam]);
 
