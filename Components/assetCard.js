@@ -38,7 +38,7 @@ function AssetCard({ asset }) {
             }
           >
             <a>
-              <img src={asset?.asset?.imageUrl} className="lazy nft__item_preview" alt="" />
+              <img src={asset?.asset?.imageUrl} style={{ width: "auto" }} className="lazy nft__item_preview" alt="" />
             </a>
           </Link>
         </div>
@@ -59,9 +59,8 @@ function AssetCard({ asset }) {
             <span>
               {" "}
               {asset?.asset?.sellOrders?.length > 0
-                ? `${getAuctionPriceDetails(asset?.asset?.sellOrders[0]).priceBase} ${
-                    asset?.asset?.sellOrders[0]?.paymentTokenContract.symbol
-                  }`
+                ? `${getAuctionPriceDetails(asset?.asset?.sellOrders[0]).priceBase} ${asset?.asset?.sellOrders[0]?.paymentTokenContract.symbol
+                }`
                 : ""}
             </span>
           </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import request from "../../Utils/axios";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { prevImage } from "../../Utils/utils"
 const OwlCarousel = dynamic(import("react-owl-carousel"), { ssr: false });
 
 function Slide({ assets }) {
@@ -38,8 +39,9 @@ function Slide({ assets }) {
               nav
             >
               {assets.map((asset) => {
+                console.log(asset)
                 return (
-                  <div className="nft_pic">
+                  <div className="nft_pic" style={{ maxWidth: "610px", maxHeight: "610px" }}>
                     <Link
                       href={`/nft/${asset?.tokenAddress}?tokenId=${asset?.tokenId}`}
                     >
@@ -56,7 +58,7 @@ function Slide({ assets }) {
                     </Link>
                     <div className="nft_pic_wrap">
                       <img
-                        src={asset.asset?.imageUrlOriginal}
+                        src={asset.asset?.imageUrlOriginal ? asset.asset?.imageUrlOriginal : prevImage(asset.asset?.imageUrl)}
                         className="lazy img-fluid"
                         alt=""
                       />
