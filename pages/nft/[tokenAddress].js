@@ -58,6 +58,7 @@ import {
   prevImage,
   unixToHumanDate,
   unixToMilSeconds,
+  seaportProvider
 } from "/Utils/utils";
 import { fetchBundle, fetchOne } from "/Utils/strapiApi";
 import { getAccountTokens, getMetaConnected, getWalletConnected } from "store/action/accountSlice";
@@ -75,8 +76,8 @@ import { useQueryParam } from "/Components/hooks/useQueryParam";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 
+const web3 = new Web3(seaportProvider)
 const { TabPane } = Tabs;
-
 const { Countdown } = Statistic;
 function ProductPage() {
   const { ethereum } = window;
@@ -238,7 +239,7 @@ function ProductPage() {
       setAddress(tokenAddresses.metaToken[0]);
       setBalance(tokenAddresses.metaBalance);
     }
-
+    console.log("address", address && address)
     refresh && loadNft();
   }, [queryParam]);
 
@@ -390,6 +391,7 @@ function ProductPage() {
                                 sellOrders.map((order, i) => (
                                   <div className="p_list" key={i}>
                                     <UserAvatar user={{ address: order?.makerAccount?.address, isVerified: false, avatar: order.makerAccount?.profile_img_url }} />
+                                    {console.log("maker", order.makerAccount.address, address)}
                                     <div className="p_list_info orderInfo">
                                       Listed{" "}
                                       <b>{`${getAuctionPriceDetails(order).priceBase} ${order?.paymentTokenContract?.symbol
@@ -399,7 +401,7 @@ function ProductPage() {
                                         {` at ${unixToHumanDate(order?.createdTime)}`}
                                       </span>
                                       <span>
-                                        {order.makerAccount.address == address ? (
+                                        {web3.utils.toChecksumAddress(order.makerAccount.address) === address ? (
                                           <Button
                                             onClick={() => cancelOffer(order, address)}
                                             shape="round"
@@ -432,7 +434,7 @@ function ProductPage() {
                                           {` at ${unixToHumanDate(order?.createdTime)}`}
                                         </span>
                                         <span>
-                                          {order.makerAccount.address == address ? (
+                                          {web3.utils.toChecksumAddress(order.makerAccount.address) === address ? (
                                             <Button
                                               onClick={() => cancelOffer(order, address)}
                                               shape="round"
@@ -445,7 +447,7 @@ function ProductPage() {
                                             )}
                                         </span>
                                         <span>
-                                          {asset?.owner.address == address ? (
+                                          {web3.utils.toChecksumAddress(asset?.owner.address) === address ? (
                                             <Button
                                               onClick={() => acceptOffer(order, address)}
                                               shape="round"

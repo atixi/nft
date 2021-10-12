@@ -126,6 +126,7 @@ const ConnectWalletModal = ({ displayModal }) => {
   return (
     <Modal
       title="Please Connect your wallet"
+      centered
       visible={displayWalletModal}
       header={null}
       footer={null}

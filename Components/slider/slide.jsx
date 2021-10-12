@@ -5,6 +5,17 @@ import Link from "next/link";
 const OwlCarousel = dynamic(import("react-owl-carousel"), { ssr: false });
 
 function Slide({ assets }) {
+  const responsive = {
+    0: {
+      items: 1,
+    },
+    600: {
+      items: 2,
+    },
+    1000: {
+      items: 3,
+    },
+  };
   return (
     <>
       <section
@@ -15,6 +26,7 @@ function Slide({ assets }) {
         <div className="d-carousel">
           {assets && assets?.length > 0 && (
             <OwlCarousel
+              responsive={responsive}
               margin={15}
               dots={false}
               id="item-carousel-big"

@@ -5,6 +5,7 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { getMetaConnected, getMetaToken } from "store/action/accountSlice";
+import withSession from "../../lib/session"
 import {
   checkFileType,
   deployCollection,
@@ -240,6 +241,7 @@ const ERC721Collection = ({ serverCollections, categories }) => {
     <div className="no-bottom" id="content">
       <Modal
         title="Uploading Collection..."
+        centered
         visible={displayUploadModal}
         header={null}
         footer={null}
@@ -266,20 +268,20 @@ const ERC721Collection = ({ serverCollections, categories }) => {
               <Spin size="large" />
             </div>
           ) : (
-            <div className={styles.modalControls}>
-              <Button type="primary" className={styles.modalButton} onClick={handleNewCollection}>
-                New Collection
+              <div className={styles.modalControls}>
+                <Button type="primary" className={styles.modalButton} onClick={handleNewCollection}>
+                  New Collection
               </Button>
-              <Link
-                className={styles.modalButton}
-                href={{
-                  pathname: `/collection/${newCollectionSlug}`,
-                }}
-              >
-                <a>{"View Collection"}</a>
-              </Link>
-            </div>
-          )}
+                <Link
+                  className={styles.modalButton}
+                  href={{
+                    pathname: `/collection/${newCollectionSlug}`,
+                  }}
+                >
+                  <a>{"View Collection"}</a>
+                </Link>
+              </div>
+            )}
         </div>
       </Modal>
       <div id="top"></div>
@@ -325,16 +327,16 @@ const ERC721Collection = ({ serverCollections, categories }) => {
                         onClick={openBannerFileChooser}
                       />
                     ) : (
-                      <img
-                        onClick={openBannerFileChooser}
-                        src={bannerImageUrl}
-                        id="get_file_2"
-                        className={`lazy nft__item_preview ${styles.uploadBannerImage}`}
-                        alt=""
+                        <img
+                          onClick={openBannerFileChooser}
+                          src={bannerImageUrl}
+                          id="get_file_2"
+                          className={`lazy nft__item_preview ${styles.uploadBannerImage}`}
+                          alt=""
                         // width="500px"
                         // height="200px"
-                      />
-                    )}
+                        />
+                      )}
                     <input
                       type="file"
                       id="upload_file"
@@ -365,14 +367,14 @@ const ERC721Collection = ({ serverCollections, categories }) => {
                         onClick={openLogoFileChooser}
                       />
                     ) : (
-                      <img
-                        onClick={openLogoFileChooser}
-                        src={logoImageUrl}
-                        id="avatarImage"
-                        className={`lazy nft__item_preview ${styles.uploadAvatarImage} rounded-circle`}
-                        alt=""
-                      />
-                    )}
+                        <img
+                          onClick={openLogoFileChooser}
+                          src={logoImageUrl}
+                          id="avatarImage"
+                          className={`lazy nft__item_preview ${styles.uploadAvatarImage} rounded-circle`}
+                          alt=""
+                        />
+                      )}
                     <input
                       type="file"
                       id="upload_file"
@@ -483,7 +485,15 @@ const ERC721Collection = ({ serverCollections, categories }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const user = req.session.get("user");
+
+  if (user === undefined) {
+    res.setHeader("location", "/");
+    res.statusCode = 302;
+    res.end();
+    return { props: {} };
+  }
   const collectionsResult = await fetch("/collections/collectionslist");
   const collections = collectionsResult.data;
   const categoriesResult = await fetch("categories");
@@ -493,7 +503,8 @@ export const getServerSideProps = async (context) => {
     props: {
       serverCollections: JSON.parse(JSON.stringify(collections)),
       categories: JSON.parse(JSON.stringify(categories)),
+      user
     },
   };
-};
+})
 export default ERC721Collection;

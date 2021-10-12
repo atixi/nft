@@ -7,6 +7,7 @@ const InstallMetamaskModal = ({ displayModal }) => {
   return (
     <Modal
       title="Pleas Install Metamask"
+      centered
       visible={displayModal}
       header={null}
       footer={null}
