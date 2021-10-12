@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { sellOrder, signTransaction } from "Utils/utils";
 import { getAsset, updateAsset } from "services/asset.service";
 import { fetchOne } from "Utils/strapiApi";
-
+import withSession from "../../lib/session"
 const { Option } = Select;
 
 const ERC721 = ({ serverCollections, categories, serverNfts }) => {
