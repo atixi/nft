@@ -9,6 +9,7 @@ import { unixToMilSeconds } from "../../Utils/utils"
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { getUser } from '../../store/action/accountSlice';
+import withSession from "../../lib/session"
 
 const { Countdown } = Statistic
 const { Option } = Select

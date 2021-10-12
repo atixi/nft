@@ -51,6 +51,7 @@ export const Content = styled.div`
 .userAvatar{
     position: relative;
     display: inline-block;
+    top: -20px;
 }
 .orderInfo{
     display: inline-block;

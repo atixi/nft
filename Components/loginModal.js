@@ -27,7 +27,7 @@ function LoginModal({ showLoginModal, setShowLoginModal }) {
     async function onFinish(values) {
         setLoading(true)
         try {
-            await axios('http://localhost:3000/api/login', {
+            await axios('/api/login', {
                 method: "POST",
                 data: { identifier: values.username, password: values.password }
             })
