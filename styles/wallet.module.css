@@ -99,3 +99,9 @@
     width: 100%;
   }
 }
+
+.disabledWallet {
+  cursor: no-drop;
+  filter: grayscale(100%);
+  cursor: not-allowed;
+}
