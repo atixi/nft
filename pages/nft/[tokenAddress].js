@@ -238,7 +238,7 @@ function ProductPage() {
       setAddress(tokenAddresses.metaToken[0]);
       setBalance(tokenAddresses.metaBalance);
     }
-
+    console.log("address", address)
     refresh && loadNft();
   }, [queryParam]);
 
@@ -390,6 +390,7 @@ function ProductPage() {
                                 sellOrders.map((order, i) => (
                                   <div className="p_list" key={i}>
                                     <UserAvatar user={{ address: order?.makerAccount?.address, isVerified: false, avatar: order.makerAccount?.profile_img_url }} />
+                                    {console.log("maker", order.makerAccount.address)}
                                     <div className="p_list_info orderInfo">
                                       Listed{" "}
                                       <b>{`${getAuctionPriceDetails(order).priceBase} ${order?.paymentTokenContract?.symbol
