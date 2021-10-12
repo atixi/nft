@@ -59,7 +59,7 @@ function HotCollections({ collections }) {
                     </div>
                     <div className="nft_coll_pp">
                       <img
-                        className="lazy"
+                        className="lazy img-fluid hotCollectionAvatar"
                         src={collection?.collectionImageURL?.url}
                         alt=""
                       />

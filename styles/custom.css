@@ -76,7 +76,11 @@
 .hotCollectionListImg {
     margin: auto;
     position: absolute;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
+}
+.hotCollectionAvatar{
+    max-height: 60px;
+}
+.talentListAvatar{
+    height: 50px !important;
+    width: 50px !important;
 }
