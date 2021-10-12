@@ -124,7 +124,7 @@ const Layout = ({ children }) => {
       </Head>
       <div className="wrapper">
         {showHeader == false ? <div style={{ marginBottom: "-90px" }}></div> : <Header />}
-        {/* {children} */}
+        {children}
         {isWrongNet ? DisplayWrongNetModal() : ""}
 
         <Footer />
@@ -140,8 +140,8 @@ const Layout = ({ children }) => {
 
         {((!ethereum && router.pathname.includes("create")) ||
           (!ethereum && router.pathname.includes("sell"))) && (
-            <ConnectMobileWalletModal displayModal={true} />
-          )}
+          <ConnectMobileWalletModal displayModal={true} />
+        )}
       </div>
     </>
   );
