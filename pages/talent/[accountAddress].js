@@ -69,11 +69,9 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
 
   const loadOnSale = async () => {
     setSelectedTab(0);
-    // setDisplayOnSaleButton(true);
   };
   const loadCollected = async () => {
     setSelectedTab(1);
-    // setDisplayCollectedButton(true);
   };
 
   const copyAddress = () => {
@@ -106,7 +104,7 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
     }
     //-----------------------
     if (onSales.length == 0) {
-      setOnsaleSearchResult("No Results Found 2");
+      setOnsaleSearchResult("No Results Found");
       setDisplayOnSaleButton(false);
     } else {
       setOnsaleSearchResult("");
