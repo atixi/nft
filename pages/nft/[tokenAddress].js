@@ -166,7 +166,6 @@ function ProductPage() {
 
       if (data.status == 200) {
         const nft = data.data;
-        console.log("nft is ", nft);
         nft.owner.address = web3.utils.toChecksumAddress(nft.owner.address);
         setAsset({
           name: nft.name,
@@ -239,7 +238,6 @@ function ProductPage() {
       setAddress(tokenAddresses.metaToken[0]);
       setBalance(tokenAddresses.metaBalance);
     }
-    console.log("address", address && address)
     refresh && loadNft();
   }, [queryParam]);
 
@@ -391,7 +389,6 @@ function ProductPage() {
                                 sellOrders.map((order, i) => (
                                   <div className="p_list mt-3" key={i}>
                                     <UserAvatar user={{ address: order?.makerAccount?.address, isVerified: false, avatar: order.makerAccount?.profile_img_url }} />
-                                    {console.log("maker", order.makerAccount.address, address)}
                                     <div className="p_list_info orderInfo">
                                       Listed{" "}
                                       <b>{`${getAuctionPriceDetails(order).priceBase} ${order?.paymentTokenContract?.symbol

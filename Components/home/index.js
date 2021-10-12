@@ -52,7 +52,6 @@ function Home() {
     try {
       const { orders } = await OpenSeaAPI.getTopSellers();
       const topSellers = OpenSeaAPI.getTopSellersDetails(orders);
-      console.log("Top sellers : ", topSellers);
       setTopSellers(topSellers);
     } catch (e) {
       CustomNotification("error", e.message, "Server Is Not Available");

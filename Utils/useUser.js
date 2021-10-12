@@ -6,7 +6,6 @@ export default function useUser({
     redirectTo = false,
     redirectIfFound = false,
 } = {}) {
-    console.log("redirect", redirectTo)
     const fetcher = url => console.log(url) || fetch(url).then(r => r.json())
     const { data: user, mutate: mutateUser } = useSWR("http://localhost:3000/api/user", fetcher);
     useEffect(() => {

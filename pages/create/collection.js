@@ -43,12 +43,10 @@ const ERC721Collection = ({ serverCollections, categories }) => {
   const [completeCollectionNameError, setCompleteCollectionNameError] = useState("");
 
   const openLogoFileChooser = (event) => {
-    console.log("opening logo file chooser");
     event.preventDefault();
     logoImageInputRef.current.click();
   };
   const openBannerFileChooser = (event) => {
-    console.log("opening banner file chooser");
     event.preventDefault();
     bannerImageInputRef.current.click();
   };

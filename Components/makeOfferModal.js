@@ -83,7 +83,6 @@ function MakeOfferModal({ asset, assets, isBundle, loadAgain }) {
   const dispatch = useDispatch();
   const isDisplayWalletModal = useSelector(getDisplayWalletModal);
   const showModal = () => {
-    console.log("calling show modal");
     isWalletConnected || isMetaConnected
       ? setIsModalVisible(true)
       : setNotConnected(true);
