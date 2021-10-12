@@ -634,7 +634,15 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
 };
 export default ERC721;
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = withSession(async ({ req, res }) => {
+  const user = req.session.get("user");
+
+  if (user === undefined) {
+    res.setHeader("location", "/");
+    res.statusCode = 302;
+    res.end();
+    return { props: {} };
+  }
   const collectionsResult = await fetch("/collections/collectionslist");
   const cactegoriesResult = await fetch("/categories/categoriesList");
   const nftResult = await fetch("/nfts/nftsList");

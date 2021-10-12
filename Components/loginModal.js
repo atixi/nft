@@ -1,19 +1,16 @@
-import react, { useState } from "react"
-import { Modal, Form, Spin } from "antd"
 import { LoadingOutlined } from '@ant-design/icons';
-import { signin } from '../store/action/accountSlice';
-import { useDispatch } from 'react-redux';
-import { useRouter } from "next/router"
-import { Notification } from "../Utils/utils"
-import request from "../Utils/axios"
-import useUser from "../Utils/useUser"
+import { Form, Modal, Spin } from "antd";
+import axios from 'axios';
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { Notification } from "../Utils/utils";
+
 const antIcon = <LoadingOutlined style={{ fontSize: 16, marginLeft: "-25px", marginRight: "20px", position: "relative", top: "-5px", color: "white" }} spin />;
 function LoginModal({ showLoginModal, setShowLoginModal }) {
     const [loading, setLoading] = useState(false)
-    const dispatch = useDispatch();
     const router = useRouter()
     const NavigateTo = (path) => {
-        return router.push(path)
+        return router.replace(path)
     }
     // const onFinish = async (values) => {
     //     setLoading(true)
@@ -27,29 +24,21 @@ function LoginModal({ showLoginModal, setShowLoginModal }) {
     //     }
     //     setLoading(false)
     // };
-
-    const { mutateUser } = useUser({
-        redirectTo: "/",
-        redirectIfFound: true,
-    });
-
-    const [errorMsg, setErrorMsg] = useState("");
-
     async function onFinish(values) {
+        setLoading(true)
         try {
-            mutateUser(
-                await request("auth/local", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    data: { identifier: values.username, password: values.password },
-                }),
-            );
+            await axios('http://localhost:3000/api/login', {
+                method: "POST",
+                data: { identifier: values.username, password: values.password }
+            })
+            setShowLoginModal(false)
+            router.reload(window.location.pathname)
         } catch (error) {
             console.error("An unexpected error happened:", error);
             //   setErrorMsg(error.data.message);
             Notification("Username or Password is wrong", "error")
-
         }
+        setLoading(false)
     }
 
 
