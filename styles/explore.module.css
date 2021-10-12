@@ -82,3 +82,9 @@
   min-width: 94%;
   min-height: 94%;
 }
+.notFoundContainer {
+  font-size: larger;
+  color: #f32178;
+  width: 100%;
+  padding-left: 20px;
+}
