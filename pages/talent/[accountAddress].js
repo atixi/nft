@@ -140,7 +140,7 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
             <div className="col-md-12">
               <div className="d_profile de-flex">
                 <div className="de-flex-col">
-                  <div className={`profile_avatar `}>
+                  <div className={`profile_avatar ${styles.talentAvatar} `}>
                     {!talent?.talentAvatar?.formats?.small?.url ? (
                       <div
                         className={`${styles.backgroundAvatar} ${gradients[backgroundAvatar]}`}
