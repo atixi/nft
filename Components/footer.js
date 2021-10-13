@@ -18,6 +18,7 @@ const subscriptionSchemea = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
 });
 function Footer() {
+  // const baseURL = process.env.HEROKU_BASE_URL;
   const [pageInfo, setPageInfo] = useState();
   const [categories, setCategories] = useState();
   const [Loading, setLoading] = useState();
