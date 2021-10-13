@@ -7,10 +7,7 @@ export default function useUser({
   redirectIfFound = false,
 } = {}) {
   const fetcher = (url) => console.log(url) || fetch(url).then((r) => r.json());
-  const { data: user, mutate: mutateUser } = useSWR(
-    "https://rim-nft-platform.herokuapp.com/auth/local",
-    fetcher
-  );
+  const { data: user, mutate: mutateUser } = useSWR("/api/user", fetcher);
   useEffect(() => {
     // if no redirect needed, just return (example: already on /dashboard)
     // if user data not yet there (fetch in progress, logged in or not) then don't do anything yet
