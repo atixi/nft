@@ -271,43 +271,45 @@ function ProductPage() {
             ]}
           />
         ) : (
-              <section aria-label="section" className=" sm-mt-0">
+              <section aria-label="section" className="sm-mt-0">
                 <Content className="container">
                   <div className="row">
-                    <ItemImageContainer className=" text-center">
-                      <ImageCon>
-                        {isVideo ? (
-                          <ReactPlayer
-                            url={asset?.image}
-                            playing={true}
-                            width={"auto"}
-                            loop={true}
-                            controls={true}
-                          />
-                        ) : (
-                            <Image
-                              src={mainImage}
-                              preview={{
-                                src: `${previewImage}`,
-                              }}
+                    <div className="col-md-6">
+                      <ItemImageContainer className=" text-center">
+                        <ImageCon>
+                          {isVideo ? (
+                            <ReactPlayer
+                              url={asset?.image}
+                              playing={true}
+                              width={"auto"}
+                              loop={true}
+                              controls={true}
                             />
-                          )}
-                      </ImageCon>{" "}
-                      <br />
-                      <ImageListContainer>
-                        {imageList &&
-                          imageList.map((image, index) => {
-                            return (
-                              <div key={index}>
-                                <img
-                                  src={image.thumbnail}
-                                  onClick={() => changeImage(image.imageUrl)}
-                                />
-                              </div>
-                            );
-                          })}
-                      </ImageListContainer>
-                    </ItemImageContainer>
+                          ) : (
+                              <Image
+                                src={mainImage}
+                                preview={{
+                                  src: `${previewImage}`,
+                                }}
+                              />
+                            )}
+                        </ImageCon>{" "}
+                        <br />
+                        <ImageListContainer>
+                          {imageList &&
+                            imageList.map((image, index) => {
+                              return (
+                                <div key={index}>
+                                  <img
+                                    src={image.thumbnail}
+                                    onClick={() => changeImage(image.imageUrl)}
+                                  />
+                                </div>
+                              );
+                            })}
+                        </ImageListContainer>
+                      </ItemImageContainer>
+                    </div>
                     <div className="col-md-6">
                       <div className="item_info">
                         {sellOrders?.length > 0 &&
