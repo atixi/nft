@@ -22,7 +22,7 @@ function TopSellers({ talents }) {
           {talents?.length > 0 &&
             talents.map((talent) => {
               return (
-                <li key={talent.id}>
+                <li key={talent.id} className={"pt-2"}>
                   <div className="author_list_pp">
                     <Link href={`/talent/${talent.walletAddress}`}>
                       <a>

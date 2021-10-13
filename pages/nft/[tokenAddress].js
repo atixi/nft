@@ -333,22 +333,16 @@ function ProductPage() {
 
                         <h6>Owner</h6>
                         <div className="item_author">
-                          <div className="author_list_pp">
-                            <Link href={`/profile/${asset?.owner?.address}`} passHref>
-                              <a>
-                                <img className="lazy" src={asset?.owner?.profile_img_url} alt="" />
-                                <i className="fa fa-check"></i>
-                              </a>
-                            </Link>
-                          </div>
-                          <div className="author_list_info">
-                            <a href="author.html">{checkName(asset?.owner?.user?.username)}</a>
-                          </div>
+                          <UserAvatar user={{ avatar: asset?.owner?.profile_img_url, isVerified: false }} />
+                          <span className="author_list_info pl-5">
+                            <a>{checkName(asset?.owner?.user?.username)}</a>
+                          </span>
                         </div>
 
                         <div className="spacer-40"></div>
                         <Tabs
                           defaultActiveKey="2"
+                          className={"ordersTab"}
                           tabBarGutter={10}
                           tabBarExtraContent={
                             <ButtonContainer>

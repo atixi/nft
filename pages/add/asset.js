@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { getUser } from '../../store/action/accountSlice';
 import withSession from "../../lib/session"
+import UserAvatar from "@/components/userAvatar";
 
 const { Countdown } = Statistic
 const { Option } = Select
@@ -178,12 +179,7 @@ function AddAsset() {
                                                 valueStyle={{ lineHeight: "1.1", color: "white" }}
                                             />
                                         </CountDownContainer>}
-                                    <div className="author_list_pp">
-                                        <a href="#">
-                                            <img className="lazy" src={addedAsset?.owner?.profile_img_url} alt="" />
-                                            <i className="fa fa-check"></i>
-                                        </a>
-                                    </div>
+                                    <UserAvatar user={{ avatar: addedAsset?.owner?.profile_img_url, isVerified: false }} />
                                     <div className="nft__item_wrap">
                                         <Link href={`/nft/${addedAsset?.tokenAddress}?tokenId=${addedAsset?.tokenId}`}>
                                             <a><img src={addedAsset.imageUrlThumbnail} id="get_file_2" className="lazy nft__item_preview" alt="" />

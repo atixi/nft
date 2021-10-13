@@ -4,6 +4,8 @@
   }
 .topCarouselSection{
     padding-top: 0px !important;
+    max-width: 1800px;
+    margin: auto;
 }
 .topCarouselPrev{
     border: none;
@@ -90,4 +92,7 @@
 .talentListAvatar{
     height: 50px !important;
     width: 50px !important;
+}
+.userAvatar{
+    width: 35px;
 }

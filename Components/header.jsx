@@ -22,7 +22,7 @@ import {
 } from "/store/action/accountSlice";
 function Header(props) {
   const router = useRouter();
- const { user  } = useUser({
+  const { user } = useUser({
     redirectTo: "/",
     redirectIfFound: false,
   });
@@ -119,11 +119,10 @@ function Header(props) {
   const openLogin = () => {
     setShowLoginModal(true);
   };
-  const handleLogout = async () => { 
-    await  axios.post('/api/logout') 
+  const handleLogout = async () => {
+    await axios.post('/api/logout')
     router.reload('/')
   }
-  
   const isLoggedIn = user && user.jwt ? true : false;
   return (
     <header className="transparent header-light scroll-light">
@@ -164,9 +163,9 @@ function Header(props) {
                 {/* <!-- mainmenu begin --> */}
                 <ul id="mainmenu">
                   <li>
-                  <Link href="/explore" passHref>
-                          <a>Explore</a>
-                        </Link>
+                    <Link href="/explore" passHref>
+                      <a>Explore</a>
+                    </Link>
                     {/* <ul>
                       <li>
                         <Link href="/explore" passHref>
@@ -201,7 +200,7 @@ function Header(props) {
                   )}
                   <li>
                     {isLoggedIn ? (
-                      <a  className="LoginLogout"onClick={handleLogout}>Logout</a>
+                      <a className="LoginLogout" onClick={handleLogout}>Logout</a>
                     ) : (
                         <a className="LoginLogout" onClick={openLogin}>Login</a>
                       )}
@@ -247,7 +246,7 @@ function Header(props) {
                             <span>{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</span>
                           </a>
                         </Link>
-                        <span id="menu-btn" onClick={()=>setToggleMenu(!toggleMenu)}></span>
+                        <span id="menu-btn" onClick={() => setToggleMenu(!toggleMenu)}></span>
                       </>
                     )}
                 </div>
@@ -281,7 +280,7 @@ function Header(props) {
               </Link>
             </div>
           </li>
-          <li>
+          {isLoggedIn && <li>
             <div className="dropdownList">
               <Link href="/">
                 <a>Create</a>
@@ -305,7 +304,7 @@ function Header(props) {
                 <a>Add Existing Asset</a>
               </Link>
             </div>
-          </li>
+          </li>}
           <li>
             <div className="dropdownList">
               {isLoggedIn ? (
