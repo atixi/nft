@@ -176,19 +176,18 @@ function Explore({ serverExplores, categories }) {
                   initialValues={searchInitialValue}
                   onFinish={searchFilterData}
                 >
-                  <Form.Item className={`${styles.searhFormInputItem} text-center`} name="search">
+                  <Form.Item className={`${styles.searhFormInputItem}  text-center`} name="search">
                     <Input
                       id="search"
                       placeholder="search item here"
                       className={`${styles.searhFormInput} form-control`}
                     />
-                  </Form.Item>
-                  <Form.Item className={styles.searhFormButtonItem}>
-                    <Button className={styles.searhFormButton} htmlType="submit">
+                      <Button className={styles.searhFormButton} htmlType="submit">
                       Search
                     </Button>
                   </Form.Item>
-                  <Form.Item className={`${styles.searchFormSelectItem}`} name="categories">
+                
+                  <Form.Item className={`${styles.searchFormSelectItem} myformItem `} name="categories">
                     <Select
                       size="large"
                       className={`${styles.searchFormSelect}`}
@@ -216,7 +215,7 @@ function Explore({ serverExplores, categories }) {
                       ))}
                     </Select>
                   </Form.Item>
-                  <Form.Item className={styles.searchFormSelectItem} name="saleTypes">
+                  <Form.Item className={`${styles.searchFormSelectItem} myformItem`} name="saleTypes">
                     <Select
                       size="large"
                       className={`${styles.searchFormSelect} dropdown`}

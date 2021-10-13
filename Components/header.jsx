@@ -164,16 +164,16 @@ function Header(props) {
                 {/* <!-- mainmenu begin --> */}
                 <ul id="mainmenu">
                   <li>
-                    <a href="#">
-                      Explore<span></span>
-                    </a>
-                    <ul>
+                  <Link href="/explore" passHref>
+                          <a>Explore</a>
+                        </Link>
+                    {/* <ul>
                       <li>
                         <Link href="/explore" passHref>
                           <a>All Assets</a>
                         </Link>
                       </li>
-                    </ul>
+                    </ul> */}
                   </li>
                   {isLoggedIn && (
                     <li>
@@ -201,9 +201,9 @@ function Header(props) {
                   )}
                   <li>
                     {isLoggedIn ? (
-                      <a onClick={handleLogout}>Logout</a>
+                      <a  className="LoginLogout"onClick={handleLogout}>Logout</a>
                     ) : (
-                        <a onClick={openLogin}>Login</a>
+                        <a className="LoginLogout" onClick={openLogin}>Login</a>
                       )}
                   </li>
                 </ul>
@@ -261,7 +261,7 @@ function Header(props) {
               <Link href="/explore" passHref>
                 <a href="/explore">Explore</a>
               </Link>
-              <span
+              {/* <span
                 className="ArrowIcons"
                 onClick={() => setToggle({ ...toggle, ["0"]: !toggle[0] })}
               >
@@ -270,7 +270,7 @@ function Header(props) {
                 ) : (
                     <DownOutlined style={{ width: 30 }} />
                   )}
-              </span>
+              </span> */}
             </div>
             <div
               className="dropdownContent"
