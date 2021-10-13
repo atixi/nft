@@ -104,7 +104,7 @@ function Footer() {
                   {item.FooterMenuTitle==='Resources'?(
                     item.FooterMenuItem?.map((subMenu) => (
                     <li key={subMenu.id}>
-                        <a href={subMenu.subMenuLink} target="_blank">{subMenu?.subMenuLabel}</a>
+                        <a href={subMenu.subMenuLink} target={"_blank"} rel="noreferrer">{subMenu?.subMenuLabel}</a>
                     </li>
                   ))):(
                     item.FooterMenuItem?.map((subMenu) => (
@@ -166,15 +166,17 @@ function Footer() {
             <div className="col-md-12">
               <div className="de-flex">
                 <div className="de-flex-col">
-                  <a href="https://thecodegiant.ca" target={"_blank"} rel="noreferrer">
+                  <Link href="/" passHref>
+                    <a href="/" >
                     <img
                       alt=""
                       className="f-logo"
                       style={{ maxWidth: "250px", height: "45px" }}
                       src={pageInfo?.FooterLogo?.LogoImage?.url}
                     />
-                    <span className="copy">{pageInfo?.Copyright}</span>
-                  </a>
+                    </a>
+                  </Link>
+                  <span className="copy">{pageInfo?.Copyright}</span>
                 </div>
                 <div className="de-flex-col">
                   <div className="social-icons">
