@@ -335,7 +335,7 @@ function ProductPage() {
                         <div className="item_author">
                           <UserAvatar user={{ avatar: asset?.owner?.profile_img_url, isVerified: false }} />
                           <span className="author_list_info pl-5">
-                            <a href="author.html">{checkName(asset?.owner?.user?.username)}</a>
+                            <a>{checkName(asset?.owner?.user?.username)}</a>
                           </span>
                         </div>
 
