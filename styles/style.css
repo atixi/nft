@@ -15387,6 +15387,9 @@ img {
     display: inline-block;
     position: relative;
 }
+.LoginLogout{
+    margin-right: 20px;
+}
 
 /* style for the header menu and its drops downs */
 
