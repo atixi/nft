@@ -261,7 +261,7 @@ function Header(props) {
               <Link href="/explore" passHref>
                 <a href="/explore">Explore</a>
               </Link>
-              <span
+              {/* <span
                 className="ArrowIcons"
                 onClick={() => setToggle({ ...toggle, ["0"]: !toggle[0] })}
               >
@@ -270,7 +270,7 @@ function Header(props) {
                 ) : (
                     <DownOutlined style={{ width: 30 }} />
                   )}
-              </span>
+              </span> */}
             </div>
             <div
               className="dropdownContent"
