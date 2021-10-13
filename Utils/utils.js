@@ -14,8 +14,6 @@ import { isMobileDevice } from "Constants/constants";
 import moment from "moment";
 import { notification } from "antd";
 const STRAPI_BASE_URL = process.env.HEROKU_BASE_URL;
-// const STRAPI_BASE_URL = process.env.HEROKU_BASE_TNC;
-// const STRAPI_BASE_URL = process.env.STRAPI_LOCAL_BASE_URL;
 const referrerAddress = process.env.REF_ADDRESS;
 const NETWORK_NAME = process.env.NETWORK_NAME; //here
 export const seaportProvider = new Web3.providers.HttpProvider(
@@ -26,7 +24,9 @@ export function seaport() {
   const provider = window.ethereum;
   return new OpenSeaPort(provider, {
     networkName: process.env.MAIN === true ? Network.Main : Network.Rinkeby,
-    // apiKey: "2e7ef0ac679f4860bbe49a34a98cf5ac",
+    ...(process.env.MAIN === true && {
+      apiKey: "2e7ef0ac679f4860bbe49a34a98cf5ac",
+    }),
   });
 }
 export async function makeOffer(offerData, asset, isBundle, assets, accountAddress) {
@@ -313,9 +313,7 @@ export const isMetaMaskInstalled = () => {
 
 export const requestUnlockMetamask = async (action) => {
   if (isMobileDevice()) {
-    console.log("mobie");
   } else {
-    console.log("not mobile");
   }
   const { ethereum } = window;
   if (Boolean(ethereum)) {
@@ -323,7 +321,6 @@ export const requestUnlockMetamask = async (action) => {
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
-      console.log("accounts are account", accounts);
       if (accounts.length > 0) {
         return {
           unlockAccepted: true,
@@ -414,7 +411,6 @@ export const registerTalent = async (account) => {
   if (talentResult.data) {
     const talentExists = await talentResult.data.success;
     if (!talentExists) {
-      console.log("registreing user to backend", account);
       let talentData = new FormData();
       talentData.append("data", JSON.stringify({ walletAddress: account }));
       return post(`${STRAPI_BASE_URL}/talents`, talentData, {
@@ -439,7 +435,6 @@ export const getBuyErrorMessage = (value) => {
     return "Invalid API key";
   } else {
     errorMessage = value;
-    console.log("error is ", value);
   }
   return errorMessage;
 };
@@ -461,7 +456,6 @@ export const signTransaction = async (publicAddress, action, asset) => {
     if (e.code == 4001) {
       CustomNotification("warning", "Metamask", e.message);
     } else {
-      console.log("some shit error has happened");
     }
     return {
       success: false,

@@ -37,7 +37,6 @@ const ConnectWalletModal = ({ displayModal }) => {
     const { ethereum } = window;
 
     if (ethereum) {
-      console.log("wallet is connected from walled modal");
       let web3 = new Web3(ethereum);
       const accounts = await web3.eth.getAccounts();
       if (accounts.length > 0) {
@@ -49,11 +48,7 @@ const ConnectWalletModal = ({ displayModal }) => {
             .then(handleNewAccounts)
             .catch((error) => {
               if (error.code === 4001) {
-                CustomNotification(
-                  "warning",
-                  "Metamask",
-                  "User must accept wallet connection "
-                );
+                CustomNotification("warning", "Metamask", "User must accept wallet connection ");
               } else {
                 console.error(error);
               }
@@ -80,9 +75,7 @@ const ConnectWalletModal = ({ displayModal }) => {
       if (err) {
         console.log(err);
       } else {
-        await dipsatchMetaBalance(
-          setMetaBalance(web3.utils.fromWei(result, "ether"))
-        );
+        await dipsatchMetaBalance(setMetaBalance(web3.utils.fromWei(result, "ether")));
       }
     });
     if (router.pathname.toString().includes("nft")) {
@@ -101,12 +94,8 @@ const ConnectWalletModal = ({ displayModal }) => {
       dappId: process.env.ONBOARD_API_KEY, // [String] The API key created by step one above
       networkId: 4, // [Integer] The Ethereum network ID your Dapp uses.
       subscriptions: {
-        wallet: (wallet) => {
-          console.log("wallet is ", wallet);
-        },
-        address: (addres) => {
-          console.log("adddres is ", address);
-        },
+        wallet: (wallet) => {},
+        address: (addres) => {},
       },
       walletSelect: {
         wallets: [{ walletName: "metamask" }],
@@ -117,8 +106,6 @@ const ConnectWalletModal = ({ displayModal }) => {
       const data = await onboard.walletSelect();
       if (data) {
         const walletCheck = await onboard.walletCheck();
-        console.log("walletselct is ", data);
-        console.log("wallet checi is ", walletCheck);
       }
     }
   };

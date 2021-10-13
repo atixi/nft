@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { sellOrder, signTransaction } from "Utils/utils";
 import { getAsset, updateAsset } from "services/asset.service";
 import { fetchOne } from "Utils/strapiApi";
-import withSession from "../../lib/session"
+import withSession from "../../lib/session";
 const { Option } = Select;
 
 const ERC721 = ({ serverCollections, categories, serverNfts }) => {
@@ -98,12 +98,10 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
     nftData.collections = selectedCollection;
     nftData.talent = nftTalent;
     nftData.categories = selectedCategories;
-    console.log("nft data is ", nftData);
     return nftData;
   };
 
   const onFinish = (values) => {
-    console.log("values are ", values);
     let validationResult = validateImage(nftImageFile, 10);
     if (validationResult.status == true && !duplicateNameError.isDuplicate) {
       if (metaToken.length > 0) {
@@ -153,7 +151,6 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
     }
   };
   const onFinishFailed = (info) => {
-    console.log("required errors are ", info);
     setDisplayUploadModal(false);
     const validationStatus = validateImage(nftImageFile, 10);
     if (!validationStatus.status) {
@@ -252,7 +249,6 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
   };
 
   const handleUpdateAsset = async (tokenAddress, tokenId) => {
-    console.log("updating asset in strapi ....");
     const assetResult = await getAsset(tokenAddress, tokenId);
     let asset = assetResult.data[0];
     let openseaAsset = await fetchOne(asset.tokenAddress, asset.tokenId);
@@ -260,10 +256,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
       asset.asset = openseaAsset.data;
       asset.onSale = true;
     }
-    console.log("opensea asset", openseaAsset);
-    console.log("updated  asset", asset);
     let updateResult = await updateAsset(asset.id, asset);
-    console.log("updaing finished", updateResult);
   };
   useEffect(() => {
     refreshData();
@@ -302,18 +295,18 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
               <Spin size="large" />
             </div>
           ) : (
-              <div className={styles.modalControls}>
-                <Button type="primary" className={styles.modalButton} onClick={handleNewNft}>
-                  Create New NFT
+            <div className={styles.modalControls}>
+              <Button type="primary" className={styles.modalButton} onClick={handleNewNft}>
+                Create New NFT
               </Button>
-                <Link
-                  className={styles.modalButton}
-                  href={`/nft/${nftContract}?tokenId=${nftTokenId}`}
-                >
-                  <a>{"View Minted NFT"}</a>
-                </Link>
-              </div>
-            )}
+              <Link
+                className={styles.modalButton}
+                href={`/nft/${nftContract}?tokenId=${nftTokenId}`}
+              >
+                <a>{"View Minted NFT"}</a>
+              </Link>
+            </div>
+          )}
           {displaySellOrderLabel && (
             <div className={styles.nftSellOrderError}>{<span>{sellOrderErrorMessage}</span>}</div>
           )}
@@ -444,7 +437,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                                 // pattern: new RegExp(/^[+-]?\d+(\.\d+)?$/),
                               },
                             ]}
-                          // noStyle
+                            // noStyle
                           >
                             <DatePicker
                               key={"auctionExpirationTime"}
@@ -598,16 +591,16 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                           alt=""
                         />
                       ) : (
-                          <div className={styles.nftVideoBox}>
-                            <ReactPlayer
-                              width={"100%"}
-                              height={"100%"}
-                              url={uploadFileUrl}
-                              controls
-                              playing={false}
-                            />
-                          </div>
-                        )}
+                        <div className={styles.nftVideoBox}>
+                          <ReactPlayer
+                            width={"100%"}
+                            height={"100%"}
+                            url={uploadFileUrl}
+                            controls
+                            playing={false}
+                          />
+                        </div>
+                      )}
                     </a>
                   }
                 </div>
@@ -656,5 +649,5 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
       categories: JSON.parse(JSON.stringify(categories)),
       serverNfts: JSON.parse(JSON.stringify(nfts)),
     },
-  }
-})
+  };
+});
