@@ -48,16 +48,17 @@ export const Content = styled.div`
     max-height: 400px;
     overflow: scroll;
 };
-.userAvatar{
-    position: relative;
-    display: inline-block;
-    top: -10px;
-}
+.ordersTab{
+    .userAvatar{
+        position: relative;
+        display: inline-block;
+        top: -10px;
+    };
+};
 .orderInfo{
     display: inline-block;
     padding-left: 10px;
 }
-
 `;
 export const ImageCon = styled.div`
 position: relative;
