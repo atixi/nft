@@ -247,7 +247,7 @@ function Header(props) {
                             <span>{`${CONSTANTS.connect} ${CONSTANTS.wallet}`}</span>
                           </a>
                         </Link>
-                        <span id="menu-btn"></span>
+                        <span id="menu-btn" onClick={()=>setToggleMenu(!toggleMenu)}></span>
                       </>
                     )}
                 </div>
