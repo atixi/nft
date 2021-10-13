@@ -28,12 +28,8 @@ const ConnectMobileWalletModal = ({ displayModal }) => {
       dappId: process.env.ONBOARD_API_KEY, // [String] The API key created by step one above
       networkId: 4, // [Integer] The Ethereum network ID your Dapp uses.
       subscriptions: {
-        wallet: (wallet) => {
-          console.log("wallet is ", wallet);
-        },
-        address: (addres) => {
-          console.log("adddres is ", address);
-        },
+        wallet: (wallet) => {},
+        address: (addres) => {},
       },
       walletSelect: {
         wallets: [{ walletName: "metamask" }],

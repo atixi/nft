@@ -9,8 +9,6 @@ const apiEndpoint = "/nfts";
  * @param tokenId tokenId of asset
  */
 export async function getAsset(tokenAddress, tokenId) {
-  console.log("fetcihng data from ...", tokenAddress, tokenId);
-  console.log(`${apiEndpoint}?tokenAddress=${tokenAddress}&tokenId=${tokenId}`);
   return fetch(`${apiEndpoint}?tokenAddress=${tokenAddress}&tokenId=${tokenId}`);
 }
 
@@ -22,7 +20,6 @@ export async function getAsset(tokenAddress, tokenId) {
 export async function updateAsset(id, data) {
   let formData = new FormData();
   formData.append("data", JSON.stringify(data));
-  console.log("uploading to strapi...", `${STRAPI_BASE_URL}/nfts/${id}`);
   return axios.put(`${STRAPI_BASE_URL}/nfts/${id}`, formData, {
     headers: {
       "Content-Type": `multipart/form-data`,

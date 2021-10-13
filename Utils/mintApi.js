@@ -4,13 +4,8 @@ import collectionArtifact from "./../build/contracts/Rimable.json";
 import { slugify } from "./utils";
 
 const STRAPI_BASE_URL = process.env.HEROKU_BASE_URL;
-// const STRAPI_BASE_URL = process.env.HEROKU_BASE_TNC;
-// const STRAPI_BASE_URL = process.env.STRAPI_LOCAL_BASE_URL;
 const EXTERNAL_LINK = process.env.EXTERNAL_LINK;
 const RINKEBY_PROXY_ADDRESS = process.env.RINKEBY_PROXY_ADDRESS;
-const RINKEBY_API_KEY = process.env.RINKEBY_API_KEY;
-const RINKEBY_NODE_URL_WSS = process.env.RINKEBY_NODE_URL_WSS;
-const RINKEBY_NODE = `${RINKEBY_NODE_URL_WSS}${RINKEBY_API_KEY}`;
 const PINATA_API_KEY = process.env.PINATA_API_KEY;
 const PINATA_SECRET_KEY = process.env.PINATA_SECRET_KEY;
 
@@ -415,7 +410,6 @@ export const deployCollection = async (logo, banner, values, ownerAddress) => {
                 message: "Metamask Internal error",
               };
             } else {
-              console.log("in try error ", error);
               return {
                 success: false,
                 rejected: false,
@@ -600,7 +594,6 @@ export const uploadCollectionToStrapi = async (logo, banner, collectionData) => 
   formData.append("files.collectionImageURL", logo);
   formData.append("files.collectionBanner", banner);
   formData.append("data", JSON.stringify(collectionData));
-  console.log("uploading to strapi...");
 
   try {
     const response = await axios.post(`${STRAPI_BASE_URL}/collections`, formData, {

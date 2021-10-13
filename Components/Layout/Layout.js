@@ -48,9 +48,7 @@ const Layout = ({ children }) => {
         return;
       }
       ethereum.on("accountsChanged", handleMetaAccount);
-      ethereum.on("chainChanged", (chainId) => {
-        console.log("chain changed in layout", chainId);
-      });
+      ethereum.on("chainChanged", (chainId) => {});
     }
   };
   const handleMetaAccount = async (accounts) => {
@@ -123,7 +121,8 @@ const Layout = ({ children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="wrapper">
-        {showHeader == false ? <div style={{ marginBottom: "-90px" }}></div> : <Header />}
+        {/* {showHeader == false ? <div style={{ marginBottom: "-90px" }}></div> : <Header />} */}
+        <Header />
         {children}
         {isWrongNet ? DisplayWrongNetModal() : ""}
 

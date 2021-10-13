@@ -113,7 +113,7 @@ const Wallet = () => {
           <div className="container">
             <div className="row">
               <div className="col-md-12 text-center">
-                <h1>Connect your Wallet</h1>
+                <h1>{`Connect your Wallet`}</h1>
               </div>
               <div className="clearfix"></div>
             </div>
@@ -122,19 +122,19 @@ const Wallet = () => {
       </section>
       <section aria-label="section">
         <div className="contentContainer">
-          <div className="row">
-            <div className={`col-lg-3 mb30 `}>
+          <div className="row px-3">
+            <div className={`col-md-6 col-xl-3 col-lg-3 col-12 mb30 `}>
               <a className="box-url" onClick={onDesktopConnect}>
                 <span className="box-url-label">Most Popular</span>
                 <img src="images/wallet/1.png" alt="" className="mb20" />
-                <h4>Metamask</h4>
+                <h4>{`Metamask`}</h4>
                 <p>
-                  Start exploring blockchain applications in seconds. Trusted by over 1 million
-                  users worldwide.
+                  {` Start exploring blockchain applications in seconds. Trusted by over 1 million
+                  users worldwide.`}
                 </p>
               </a>
             </div>
-            <div className={`col-lg-3 mb30 ${styles.disabledWallet}`}>
+            {/* <div className={`col-lg-3 mb30 ${styles.disabledWallet}`}>
               <a className="box-url" aria-disabled={true} href={null}>
                 <img src="images/wallet/2.png" alt="" className="mb20" />
                 <h4>Bitski</h4>
@@ -195,7 +195,7 @@ const Wallet = () => {
                   Open source protocol for connecting decentralised applications to mobile wallets.
                 </p>
               </a>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
