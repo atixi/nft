@@ -4,6 +4,8 @@
   }
 .topCarouselSection{
     padding-top: 0px !important;
+    max-width: 1800px;
+    margin: auto;
 }
 .topCarouselPrev{
     border: none;
