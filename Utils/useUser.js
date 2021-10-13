@@ -8,7 +8,7 @@ export default function useUser({
 } = {}) {
   const fetcher = (url) => console.log(url) || fetch(url).then((r) => r.json());
   const { data: user, mutate: mutateUser } = useSWR(
-    "https://rim-nft-platform.herokuapp.com/api/user",
+    "https://rim-nft-platform.herokuapp.com/auth/local",
     fetcher
   );
   useEffect(() => {
