@@ -101,7 +101,13 @@ function Footer() {
               <div className="widget">
                 <h5>{item.FooterMenuTitle}</h5>
                 <ul>
-                  {item.FooterMenuItem?.map((subMenu) => (
+                  {item.FooterMenuTitle==='Resources'?(
+                    item.FooterMenuItem?.map((subMenu) => (
+                    <li key={subMenu.id}>
+                        <a href={subMenu.subMenuLink} target="_blank">{subMenu?.subMenuLabel}</a>
+                    </li>
+                  ))):(
+                    item.FooterMenuItem?.map((subMenu) => (
                     <li key={subMenu.id}>
                       <Link
                         href={{
@@ -111,7 +117,8 @@ function Footer() {
                         <a href={subMenu.subMenuLink}>{subMenu?.subMenuLabel}</a>
                       </Link>
                     </li>
-                  ))}
+                  )))}
+                  
                 </ul>
               </div>
             </div>
