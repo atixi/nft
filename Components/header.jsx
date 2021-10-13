@@ -305,7 +305,7 @@ function Header(props) {
               </Link>
             </div>
           </li>}
-          <li>
+          <li className={"pr-2"}>
             <div className="dropdownList">
               {isLoggedIn ? (
                 <a style={{ color: "#F32178" }} onClick={handleLogout}>
