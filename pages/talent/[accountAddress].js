@@ -134,9 +134,9 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
       )}
       {/* <!-- section close --> */}
 
-      <section aria-label="section">
-        <div className="container">
-          <div className="row p-0">
+      <section aria-label="section ">
+        <div className="container ">
+          <div className="row ">
             <div className="col-md-12">
               <div className="d_profile de-flex">
                 <div className="de-flex-col">

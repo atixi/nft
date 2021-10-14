@@ -519,6 +519,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                       ]}
                     >
                       <Select
+                        showSearch
                         style={{ width: "100%" }}
                         placeholder="Select collection"
                         onChange={(value) => getSelectedCollection(value)}
