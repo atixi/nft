@@ -315,7 +315,7 @@ const ERC721Collection = ({ serverCollections, categories }) => {
                   <h5>Upload Banner</h5>
 
                   <div className="d-create-file">
-                    <p id="file_name">PNG, JPG, Max 10mb.</p>
+                    <p id="file_name">{`PNG, JPG, Max 10mb. Dimenssion should be 1300 * 300`}</p>
                     {bannerImageUrl == "" ? (
                       <input
                         type="button"

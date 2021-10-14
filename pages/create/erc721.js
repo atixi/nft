@@ -131,6 +131,9 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
 
             setNftContract(result.data.tokenAddress);
             setNftTokenId(result.data.tokenId);
+
+            handleUpdateAsset(result.data.tokenAddress, result.data.tokenId, false);
+
             let isFixed = selectedTab == 0 ? true : false;
             let contractAddress = selectedCollection.contractAddress;
             let sellOrderResult = await createSellOrder(
@@ -239,7 +242,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
       setDisplayUploadModal(true);
       setDisplayModalButtons(true);
       if (sell?.hash) {
-        handleUpdateAsset(tokenAddress, tokenId);
+        handleUpdateAsset(tokenAddress, tokenId, true);
         CustomNotification("success", "Sell Order", "Sell order is placed", "topLeft");
         setDisplaySellOrderLabel(false);
       } else {
@@ -254,15 +257,14 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
     }
   };
 
-  const handleUpdateAsset = async (tokenAddress, tokenId) => {
-    const assetResult = await getAsset(tokenAddress, tokenId);
-    console.log("asset from strapi si", assetResult.data[0]);
-    let asset = assetResult.data[0];
+  const handleUpdateAsset = async (tokenAddress, tokenId, onSale = false) => {
+    const strapiAssetResult = await getAsset(tokenAddress, tokenId);
+    console.log("asset from strapi si", strapiAssetResult.data[0]);
+    let asset = strapiAssetResult.data[0];
     let openseaAsset = await fetchOne(asset.tokenAddress, asset.tokenId);
-    console.log("asst from open sea is ", openseaAsset);
     if (openseaAsset.data) {
       asset.asset = openseaAsset.data;
-      asset.onSale = true;
+      asset.onSale = onSale;
     }
     let updateResult = await updateAsset(asset.id, asset);
   };
@@ -353,7 +355,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                 <div className="field-set">
                   <h5>Upload file</h5>
                   <div className="d-create-file">
-                    <p id="file_name">PNG, JPG, GIF, WEBP or MP4. Max 10mb.</p>
+                    <p id="file_name">{`PNG, JPG, GIF, WEBM or MP4, MP3, WAV, OGG Max 10mb.`}</p>
                     <input
                       type="button"
                       id="get_file"
@@ -441,13 +443,13 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                             rules={[
                               selectedTab == 1 && {
                                 required: true,
-                                message: "date required",
-                                // pattern: new RegExp(/^[+-]?\d+(\.\d+)?$/),
+                                message: "Auction date is required",
                               },
                             ]}
                             // noStyle
                           >
                             <DatePicker
+                              className={`form-control`}
                               key={"auctionExpirationTime"}
                               style={{
                                 position: "relative",
@@ -590,7 +592,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                 </div>
                 <div className="nft__item_wrap">
                   {
-                    <a href="#">
+                    <a>
                       {uploadFileUrl && nftImageFile?.type.toString().includes("image") ? (
                         <img
                           src={uploadFileUrl}
@@ -613,7 +615,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                   }
                 </div>
                 <div className="nft__item_info">
-                  <a href="#">
+                  <a>
                     <h4>{form.getFieldValue("name")}</h4>
                   </a>
                   <div className="nft__item_price">
@@ -623,7 +625,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                     ETH
                   </div>
                   <div className="nft__item_action">
-                    <a href="#">Place a bid</a>
+                    <a>{`Place a bid`}</a>
                   </div>
                 </div>
               </div>
