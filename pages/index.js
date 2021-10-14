@@ -4,6 +4,7 @@ import HotCollections from "/Components/HotCollections";
 import Slide from "/Components/slider/slide";
 import TopSellers from "/Components/topSellers";
 import { fetch } from "Utils/strapiApi";
+import CreateSellNow from "@/components/createSellNow";
 
 function Home({ featuredAsset, exploreAssets, talents, collections }) {
   return (
@@ -15,9 +16,11 @@ function Home({ featuredAsset, exploreAssets, talents, collections }) {
           <div className="spacer-single" />
           <Explore assets={exploreAssets} />
           <div className="spacer-single"></div>
-          <HotCollections collections={collections}/>
+          <HotCollections collections={collections} />
           <div className="spacer-single" />
-          <TopSellers talents={talents}/>
+          <TopSellers talents={talents} />
+          <div className="spacer-single" />
+          <CreateSellNow />
         </div>
       </div>
     </div>
@@ -27,13 +30,13 @@ function Home({ featuredAsset, exploreAssets, talents, collections }) {
 export const getServerSideProps = async () => {
   const [featuredAsset, exploreAssets, collections, talents] = await Promise.all([
     request("nfts/featured", {
-      method: "GET"
+      method: "GET",
     }),
     request("nfts?_limit=8", {
-      method: "GET"
+      method: "GET",
     }),
     fetch("/collections"),
-    fetch("/talents")
+    fetch("/talents"),
   ]);
   return {
     props: {

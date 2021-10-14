@@ -103,6 +103,12 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
 
   const onFinish = (values) => {
     let validationResult = validateImage(nftImageFile, 10);
+    if (!validationResult.status) {
+      console.log("image is req");
+      setNftImageError(validationResult.message);
+    } else {
+      setNftImageError(null);
+    }
     if (validationResult.status == true && !duplicateNameError.isDuplicate) {
       if (metaToken.length > 0) {
         saveNFT(nftImageFile, values);
@@ -250,8 +256,10 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
 
   const handleUpdateAsset = async (tokenAddress, tokenId) => {
     const assetResult = await getAsset(tokenAddress, tokenId);
+    console.log("asset from strapi si", assetResult.data[0]);
     let asset = assetResult.data[0];
     let openseaAsset = await fetchOne(asset.tokenAddress, asset.tokenId);
+    console.log("asst from open sea is ", openseaAsset);
     if (openseaAsset.data) {
       asset.asset = openseaAsset.data;
       asset.onSale = true;
