@@ -4,7 +4,7 @@ import HotCollections from "/Components/HotCollections";
 import Slide from "/Components/slider/slide";
 import TopSellers from "/Components/topSellers";
 import { fetch } from "Utils/strapiApi";
-import CreateSellNow from "@/components/createSellNow";
+// import CreateSellNow from "@/components/createSellNow";
 
 function Home({ featuredAsset, exploreAssets, talents, collections }) {
   return (
