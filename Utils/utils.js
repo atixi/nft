@@ -252,7 +252,7 @@ export function checkName(name) {
   else return "Anonymous";
 }
 export function prevImage(url) {
-  return url.replace(url.substring(url.length - 3), "0");
+  return url.replace(url.substring(url.length - 3), "1000");
 }
 export function convertToUsd(offer) {
   let usd = null;

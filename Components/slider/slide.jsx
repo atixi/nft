@@ -57,7 +57,7 @@ function Slide({ assets }) {
                     </Link>
                     <div className="nft_pic_wrap">
                       <img
-                        src={asset.asset?.imageUrlOriginal ? asset.asset?.imageUrlOriginal : asset.asset?.imageUrl}
+                        src={asset.asset?.imageUrlOriginal ? asset.asset?.imageUrlOriginal : prevImage(asset.asset?.imageUrl)}
                         className="lazy img-fluid"
                         alt=""
                       />
