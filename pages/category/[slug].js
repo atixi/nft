@@ -86,11 +86,7 @@ function Profile() {
             <img src={data.categoryBanner?.url} />
             <BiographyContainer>
               <div className={"avatar"}>
-                <img
-                  alt="userAvatar"
-                  src={data.categoryImage?.url}
-                  loading="lazy"
-                />
+                <img alt="userAvatar" src={data.categoryImage?.url} loading="lazy" />
               </div>
               <BioDescription>
                 <h3>

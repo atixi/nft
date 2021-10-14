@@ -7,6 +7,7 @@ import AssetCard from "@/components/assetCard";
 import { getExplores, queryExplore } from "services/explore.service";
 import router from "next/router";
 import { capitalizeWord } from "Utils/mintApi";
+import NProgress from "nprogress";
 
 const searchInitialValue = { search: "", categories: "all", saleTypes: "all" };
 const offset = 20;
@@ -52,6 +53,7 @@ function Explore({ serverExplores, categories }) {
     return custom;
   };
   const handleFilter = async () => {
+    NProgress.start();
     let custom = filter();
     if (searchForm.getFieldValue("search") != "") {
       custom += `[name_contains]=${searchForm.getFieldValue("search")}&`;
@@ -61,10 +63,11 @@ function Explore({ serverExplores, categories }) {
     // change this
     checkResult(data);
     setFilteredExplores(data);
-
+    NProgress.done();
     setStringQuery(custom);
   };
   const loadMoreExplores = async () => {
+    NProgress.start();
     const { data } = await queryExplore(stringQuery, start, offset);
     if (data.length > 0) {
       setStart(start + offset);
@@ -74,8 +77,10 @@ function Explore({ serverExplores, categories }) {
       setDisplayLoadMoreButton(false);
     }
     setFilteredExplores((prev) => [...prev, ...data]);
+    NProgress.done();
   };
   const searchFilterData = async (searchFormValues) => {
+    NProgress.start();
     let custom = filter();
     custom += `[name_contains]=${searchFormValues.search}&`;
     setStart(offset);
@@ -83,6 +88,7 @@ function Explore({ serverExplores, categories }) {
     checkResult(data);
     setFilteredExplores(data);
     setStringQuery(custom);
+    NProgress.done();
   };
   const handleSearch = async () => {
     if (search) {
@@ -167,30 +173,39 @@ function Explore({ serverExplores, categories }) {
         <div className="container">
           <div className="row fadeIn">
             <div className="col-lg-12">
-              <div className={`${styles.filterContainer} items_filter`}>
+              <div className={`items_filter `}>
                 <Form
-                  // id="form_quick_search"
-                  className={`${styles.searchForm} row form-dark`}
+                  className={`row justify-content-start`}
                   ref={searchFormRef}
                   form={searchForm}
                   initialValues={searchInitialValue}
                   onFinish={searchFilterData}
                 >
-                  <Form.Item className={`${styles.searhFormInputItem}  text-center`} name="search">
-                    <Input
-                      id="search"
-                      placeholder="search item here"
-                      className={`${styles.searhFormInput} form-control`}
-                    />
-                      <Button className={styles.searhFormButton} htmlType="submit">
-                      Search
-                    </Button>
+                  <Form.Item
+                    className={`col-6 col-lg-6 col-md-12 col-sm-12 col-xs-12`}
+                    name="search"
+                    size="large"
+                  >
+                    <div className={`input-group `}>
+                      <input
+                        type="search"
+                        className={`form-control ${styles.searhFormInput}`}
+                        placeholder="search item here"
+                        aria-label="search item here"
+                      />
+                      <div className="input-group-append">
+                        <button
+                          className={`btn btn-outline-secondary ${styles.searhFormButton}`}
+                          type="submit"
+                        >
+                          Search
+                        </button>
+                      </div>
+                    </div>
                   </Form.Item>
-                
-                  <Form.Item className={`${styles.searchFormSelectItem} myformItem `} name="categories">
+                  <Form.Item name="categories" className={`col-lg-3 col-md-4 col-sm-6 col-xs-12`}>
                     <Select
                       size="large"
-                      className={`${styles.searchFormSelect}`}
                       id="categories"
                       placeholder="Please select"
                       onChange={(values) => getSelectedCategories(values)}
@@ -198,8 +213,6 @@ function Explore({ serverExplores, categories }) {
                       filterOption={(input, option) =>
                         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                       }
-                    // options={{ label: "hello", value: "hi" }}
-                    // defaultValue={categories[0].slug}
                     >
                       <Select.Option value={"all"} style={{ height: 50, padding: 10 }}>
                         {"All"}
@@ -215,10 +228,9 @@ function Explore({ serverExplores, categories }) {
                       ))}
                     </Select>
                   </Form.Item>
-                  <Form.Item className={`${styles.searchFormSelectItem} myformItem`} name="saleTypes">
+                  <Form.Item name="saleTypes" className={`col-lg-3 col-md-4 col-sm-6 col-xs-12`}>
                     <Select
                       size="large"
-                      className={`${styles.searchFormSelect} dropdown`}
                       id="saleTypes"
                       placeholder="Please select"
                       onChange={(values) => getSaleType(values)}
@@ -226,7 +238,7 @@ function Explore({ serverExplores, categories }) {
                       filterOption={(input, option) =>
                         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                       }
-                    // defaultValue={saleTypes[0].value}
+                      // defaultValue={saleTypes[0].value}
                     >
                       {saleTypes.map((item) => (
                         <Select.Option

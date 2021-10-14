@@ -122,21 +122,21 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
 
       {/* <!-- section begin --> */}
       {talent?.talentBanner?.formats?.large?.url ? (
-        <section id="profile_banner" aria-label="section" className={`text-light `}>
+        <section id="profile_banner" aria-label="section" className={`text-light p-0`}>
           <img width="100%" height="300px" src={talent?.talentBanner?.formats?.large?.url} alt="" />
         </section>
       ) : (
         <section
           id="profile_banner"
           aria-label="section"
-          className={`text-light ` + gradients[backgroundBanner]}
+          className={`text-light p-0 ` + gradients[backgroundBanner]}
         ></section>
       )}
       {/* <!-- section close --> */}
 
-      <section aria-label="section">
-        <div className="container">
-          <div className="row">
+      <section aria-label="section ">
+        <div className="container ">
+          <div className="row ">
             <div className="col-md-12">
               <div className="d_profile de-flex">
                 <div className="de-flex-col">

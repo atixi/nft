@@ -5,7 +5,7 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { getMetaConnected, getMetaToken } from "store/action/accountSlice";
-import withSession from "../../lib/session"
+import withSession from "../../lib/session";
 import {
   checkFileType,
   deployCollection,
@@ -125,8 +125,8 @@ const ERC721Collection = ({ serverCollections, categories }) => {
   };
 
   const clearForm = () => {
-    setLogoImageUrl(null);
-    setBannerImageUrl(null);
+    setLogoImageUrl("");
+    setBannerImageUrl("");
     setLogoImageFile(null);
     setBannerImageFile(null);
     setCollectionIdentifierError("");
@@ -266,20 +266,20 @@ const ERC721Collection = ({ serverCollections, categories }) => {
               <Spin size="large" />
             </div>
           ) : (
-              <div className={styles.modalControls}>
-                <Button type="primary" className={styles.modalButton} onClick={handleNewCollection}>
-                  New Collection
+            <div className={styles.modalControls}>
+              <Button type="primary" className={styles.modalButton} onClick={handleNewCollection}>
+                New Collection
               </Button>
-                <Link
-                  className={styles.modalButton}
-                  href={{
-                    pathname: `/collection/${newCollectionSlug}`,
-                  }}
-                >
-                  <a>{"View Collection"}</a>
-                </Link>
-              </div>
-            )}
+              <Link
+                className={styles.modalButton}
+                href={{
+                  pathname: `/collection/${newCollectionSlug}`,
+                }}
+              >
+                <a>{"View Collection"}</a>
+              </Link>
+            </div>
+          )}
         </div>
       </Modal>
       <div id="top"></div>
@@ -315,7 +315,7 @@ const ERC721Collection = ({ serverCollections, categories }) => {
                   <h5>Upload Banner</h5>
 
                   <div className="d-create-file">
-                    <p id="file_name">PNG, JPG, GIF, WEBP or MP4. Max 10mb.</p>
+                    <p id="file_name">{`PNG, JPG, Max 10mb. Dimenssion should be 1300 * 300`}</p>
                     {bannerImageUrl == "" ? (
                       <input
                         type="button"
@@ -325,16 +325,16 @@ const ERC721Collection = ({ serverCollections, categories }) => {
                         onClick={openBannerFileChooser}
                       />
                     ) : (
-                        <img
-                          onClick={openBannerFileChooser}
-                          src={bannerImageUrl}
-                          id="get_file_2"
-                          className={`lazy nft__item_preview ${styles.uploadBannerImage}`}
-                          alt=""
+                      <img
+                        onClick={openBannerFileChooser}
+                        src={bannerImageUrl}
+                        id="get_file_2"
+                        className={`lazy nft__item_preview ${styles.uploadBannerImage}`}
+                        alt=""
                         // width="500px"
                         // height="200px"
-                        />
-                      )}
+                      />
+                    )}
                     <input
                       type="file"
                       id="upload_file"
@@ -355,7 +355,7 @@ const ERC721Collection = ({ serverCollections, categories }) => {
                   <div className="spacer-single"></div>
                   <h5>Upload Collection Avatar</h5>
                   <div className="d-create-file py-3">
-                    <p id="file_name">PNG, JPG, GIF, WEBP or MP4. Max 10mb.</p>
+                    <p id="file_name">PNG, JPG, Max 10mb.</p>
                     {logoImageUrl == "" ? (
                       <input
                         type="button"
@@ -365,14 +365,14 @@ const ERC721Collection = ({ serverCollections, categories }) => {
                         onClick={openLogoFileChooser}
                       />
                     ) : (
-                        <img
-                          onClick={openLogoFileChooser}
-                          src={logoImageUrl}
-                          id="avatarImage"
-                          className={`lazy nft__item_preview ${styles.uploadAvatarImage} rounded-circle`}
-                          alt=""
-                        />
-                      )}
+                      <img
+                        onClick={openLogoFileChooser}
+                        src={logoImageUrl}
+                        id="avatarImage"
+                        className={`lazy nft__item_preview ${styles.uploadAvatarImage} rounded-circle`}
+                        alt=""
+                      />
+                    )}
                     <input
                       type="file"
                       id="upload_file"
@@ -429,7 +429,7 @@ const ERC721Collection = ({ serverCollections, categories }) => {
 
                   <h5>Description</h5>
                   <Form.Item
-                    name={"collectionDescription"}
+                    name={"description"}
                     rules={[
                       {
                         required: true,
@@ -439,8 +439,8 @@ const ERC721Collection = ({ serverCollections, categories }) => {
                   >
                     <textarea
                       data-autoresize
-                      name="collectionDescription"
-                      id="collectionDescription"
+                      // name="description"
+                      // id="collectionDescription"
                       className="form-control"
                       placeholder="e.g. 'This is very limited item'"
                     ></textarea>
@@ -501,8 +501,8 @@ export const getServerSideProps = withSession(async ({ req, res }) => {
     props: {
       serverCollections: JSON.parse(JSON.stringify(collections)),
       categories: JSON.parse(JSON.stringify(categories)),
-      user
+      user,
     },
   };
-})
+});
 export default ERC721Collection;
