@@ -19,8 +19,8 @@ function Home({ featuredAsset, exploreAssets, talents, collections }) {
           <HotCollections collections={collections} />
           <div className="spacer-single" />
           <TopSellers talents={talents} />
-          <div className="spacer-single" />
-          <CreateSellNow />
+          {/* <div className="spacer-single" /> */}
+          {/* <CreateSellNow /> */}
         </div>
       </div>
     </div>
