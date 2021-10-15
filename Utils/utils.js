@@ -407,20 +407,14 @@ export const checkTalentRegistered = async (wallet) => {
 };
 
 export const registerTalent = async (account) => {
-  const talentResult = await fetch(`/talents/talentexists/${account}`);
-  if (talentResult.data) {
-    const talentExists = await talentResult.data.success;
-    if (!talentExists) {
-      let talentData = new FormData();
-      talentData.append("data", JSON.stringify({ walletAddress: account }));
-      return post(`${STRAPI_BASE_URL}/talents`, talentData, {
-        headers: {
-          "Content-Type": `multipart/form-data`,
-          "Content-Type": "application/json",
-        },
-      });
-    }
-  }
+  let talentData = new FormData();
+  talentData.append("data", JSON.stringify({ walletAddress: account }));
+  return post(`${STRAPI_BASE_URL}/talents`, talentData, {
+    headers: {
+      "Content-Type": `multipart/form-data`,
+      "Content-Type": "application/json",
+    },
+  });
 };
 
 export const getBuyErrorMessage = (value) => {

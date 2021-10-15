@@ -9,7 +9,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import CustomNotification from "/Components/commons/customNotification";
-import InstallMetamaskModal from "/Components/commons/InstallMetamaskModal";
 import Link from "next/link";
 import Onboard from "bnc-onboard";
 import Web3 from "web3";
@@ -17,6 +16,8 @@ import { getMetaConnected } from "store/action/accountSlice";
 import { isMobile } from "react-device-detect";
 import styles from "/styles/wallet.module.css";
 import { useRouter } from "next/router";
+import nProgress from "nprogress";
+import { fetch } from "Utils/strapiApi";
 
 const Wallet = () => {
   const router = useRouter();
@@ -25,9 +26,9 @@ const Wallet = () => {
   const dipsatchMetaBalance = useDispatch();
   const metaToken = useSelector(getMetaToken);
   const isMetaconnected = useSelector(getMetaConnected);
-  const [displayInstallModal, setDisplayInstallModal] = useState();
 
   const onDesktopConnect = async () => {
+    nProgress.start();
     const { ethereum } = window;
     if (ethereum) {
       let web3 = new Web3(ethereum);
@@ -35,18 +36,19 @@ const Wallet = () => {
       if (accounts.length > 0) {
         presisMetamask(accounts);
       } else {
-        if (ethereum && ethereum.isMetaMask) {
-          ethereum
-            .request({ method: "eth_requestAccounts" })
-            .then(handleNewAccounts)
-            .catch((error) => {
-              if (error.code === 4001) {
-                CustomNotification("warning", "Metamask", "You must accept wallet connection ");
-              } else {
-                console.error(error);
-              }
-            });
-          ethereum.on("accountsChanged", handleNewAccounts);
+        try {
+          const accountPermission = await ethereum.request({ method: "eth_requestAccounts" });
+          if (accountPermission.length > 0) {
+            presisMetamask(accountPermission);
+            nProgress.done();
+          }
+        } catch (error) {
+          nProgress.done();
+          if (error.code === 4001) {
+            CustomNotification("warning", "Metamask", "You must accept wallet connection ");
+          } else {
+            console.error(error);
+          }
         }
       }
     } else {
@@ -77,21 +79,45 @@ const Wallet = () => {
   useEffect(() => {}, []);
 
   const presisMetamask = async (accounts) => {
+    console.log("persisinging...");
     let web3 = new Web3(window.ethereum);
-    await dispatchMetaConnected(setMetaConnected(true));
     accounts = accounts.map((account) => web3.utils.toChecksumAddress(account));
 
-    await registerTalent(accounts[0]);
+    const talentExists = await fetch(`/talents/talentexists/${accounts[0]}`);
 
-    await dispatchMetaToken(setMetaToken(accounts));
-    web3.eth.getBalance(accounts[0], async (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        await dipsatchMetaBalance(setMetaBalance(web3.utils.fromWei(result, "ether")));
+    if (talentExists.data) {
+      const { success } = talentExists.data;
+
+      if (!success) {
+        const registerResult = await registerTalent(accounts[0]);
+        if (registerResult) {
+          console.log("account is registered ", registerResult);
+          CustomNotification("success", "Your wallet address is registered");
+        }
       }
-    });
-    router.push("/");
+
+      web3.eth.getBalance(accounts[0], async (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          await dipsatchMetaBalance(setMetaBalance(web3.utils.fromWei(result, "ether")));
+        }
+      });
+
+      const [metaTokenResult, metaConnnectedResult] = await Promise.all([
+        dispatchMetaToken(setMetaToken(accounts)),
+        dispatchMetaConnected(setMetaConnected(true)),
+      ]);
+
+      if (metaTokenResult && metaConnnectedResult) {
+        nProgress.done();
+        router.push("/");
+      }
+    } else {
+      CustomNotification("warning", "Server Error");
+      nProgress.done();
+      router.push("/");
+    }
   };
 
   const handleNewAccounts = (newAccounts) => {
@@ -99,7 +125,7 @@ const Wallet = () => {
       presisMetamask(newAccounts);
     }
   };
-  <InstallMetamaskModal displayModal={displayInstallModal} />;
+  // <InstallMetamaskModal displayModal={displayInstallModal} />;
 
   return (
     <div className="no-bottom" id="content">

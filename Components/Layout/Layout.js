@@ -19,7 +19,6 @@ import Web3 from "web3";
 import { isMobile } from "react-device-detect";
 import { isMobileDevice } from "Constants/constants";
 import { providers } from "/Constants/constants";
-import { registerTalent } from "Utils/utils";
 import { useIdleTimer } from "react-idle-timer";
 import { useRouter } from "next/router";
 
@@ -41,6 +40,7 @@ const Layout = ({ children }) => {
 
   const showHeader = router.pathname.toString().includes("wallet") ? false : true;
   const subscribeMetamaskProvider = async () => {
+    console.log("metamask is connected or changed");
     const { ethereum } = window;
     if (ethereum) {
       const provider = await ethereum;
@@ -64,7 +64,6 @@ const Layout = ({ children }) => {
       await dispatch(setDisplayWalletModal(false));
       accounts = accounts.map((account) => web3.utils.toChecksumAddress(account));
 
-      await registerTalent(accounts[0]);
       await dispatchMetaToken(setMetaToken(accounts));
       web3.eth.getBalance(accounts[0], async (err, result) => {
         if (err) {
@@ -110,7 +109,7 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     subscribeMetamaskProvider();
-  }, [isMetaconnected, metaToken]);
+  }, []);
 
   return (
     <>
