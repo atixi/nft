@@ -6,6 +6,9 @@ import { ellipseAddress } from "Utils/utils";
 import styles from "/styles/talent.module.css";
 import gradients from "/styles/gradients.module.css";
 import CustomNotification from "@/components/commons/customNotification";
+import NextNProgress from "nextjs-progressbar";
+import nProgress from "nprogress";
+
 const offset = 20;
 function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
   const [start, setStart] = useState(offset);
@@ -22,6 +25,7 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
   const addressRef = useRef(null);
 
   const loadMoreAsset = async () => {
+    nProgress.start();
     const assetResult = await fetch(
       `nfts?_start=${start}&_limit=${offset}&talent.walletAddress=${accountAddress}`
     );
@@ -43,8 +47,10 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
       setStart(start + offset);
     }
     setAssets((prev) => [...prev, ...assets]);
+    nProgress.done();
   };
   const loadMoreOnSale = async () => {
+    nProgress.start();
     const assetResult = await fetch(
       `nfts?_start=${onSaleStart}&_limit=${offset}&talent.walletAddress=${accountAddress}&onSale=${true}`
     );
@@ -65,13 +71,55 @@ function TalentPage({ collectedAsset, onSaleAsset, talent, accountAddress }) {
       setOnSaleStart(onSaleStart + offset);
     }
     setOnSales((prev) => [...prev, ...assets]);
+    nProgress.done();
   };
 
   const loadOnSale = async () => {
+    nProgress.start();
     setSelectedTab(0);
+
+    setOnSaleStart(offset);
+    const assetResult = await fetch(
+      `nfts?_start=${0}&_limit=${offset}&talent.walletAddress=${accountAddress}&onSale=${true}`
+    );
+    const assets = await assetResult.data;
+    if (assets.length == 0) {
+      setOnsaleSearchResult("No Results Found");
+      setDisplayOnSaleButton(false);
+    } else {
+      setOnsaleSearchResult("");
+      if (assets.length < offset) {
+        setDisplayOnSaleButton(false);
+      } else {
+        setDisplayOnSaleButton(true);
+      }
+    }
+
+    setOnSales(assets);
+    nProgress.done();
   };
   const loadCollected = async () => {
+    nProgress.start();
     setSelectedTab(1);
+    const assetResult = await fetch(
+      `nfts?_start=${0}&_limit=${offset}&talent.walletAddress=${accountAddress}`
+    );
+    const assets = await assetResult.data;
+    console.log("assets are in here", assets);
+    if (assets.length == 0) {
+      setCollectedSearchResult("No Results Found");
+      setDisplayCollectedButton(false);
+    } else {
+      setCollectedSearchResult("");
+      if (assets.length < offset) {
+        setDisplayCollectedButton(false);
+      } else {
+        setDisplayCollectedButton(true);
+      }
+    }
+
+    setAssets(assets);
+    nProgress.done();
   };
 
   const copyAddress = () => {

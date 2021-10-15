@@ -89,6 +89,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
     setNftImageFile(null);
     setUploadPrecentage(0);
     setDuplicateNameError("");
+    setSellOrderErrorMessage("");
     form.resetFields();
     hiddenFileInput.current.value = null;
   };
@@ -230,25 +231,30 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
     const sellSign = await signTransaction(ownerAddress, "Request to Sell", {
       name: formValues.name,
     });
+
     if (sellSign.success) {
-      const sell = await sellOrder(
-        tokenAddress,
-        tokenId,
-        ownerAddress,
-        contractAddress,
-        formValues,
-        isFixed
-      );
-      setDisplayUploadModal(true);
-      setDisplayModalButtons(true);
-      if (sell?.hash) {
-        handleUpdateAsset(tokenAddress, tokenId, true);
-        CustomNotification("success", "Sell Order", "Sell order is placed", "topLeft");
-        setDisplaySellOrderLabel(false);
-      } else {
-        setDisplaySellOrderLabel(true);
-        setSellOrderErrorMessage("Sell order is not saved !!!");
-        CustomNotification("warning", "Sell Order", "Sell order is not saved", "topLeft");
+      try {
+        const sell = await sellOrder(
+          tokenAddress,
+          tokenId,
+          ownerAddress,
+          contractAddress,
+          formValues,
+          isFixed
+        );
+        setDisplayUploadModal(true);
+        setDisplayModalButtons(true);
+        if (sell?.hash) {
+          handleUpdateAsset(tokenAddress, tokenId, true);
+          CustomNotification("success", "Sell Order", "Sell order is placed", "topLeft");
+          setDisplaySellOrderLabel(false);
+        } else {
+          setDisplaySellOrderLabel(true);
+          setSellOrderErrorMessage("Sell order is not saved !!!");
+          CustomNotification("warning", "Sell Order", "Sell order is not saved", "topLeft");
+        }
+      } catch (e) {
+        console.log(" Sell order is not saved ok", e);
       }
     } else {
       setDisplayUploadModal(true);
@@ -265,6 +271,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
     if (openseaAsset.data) {
       asset.asset = openseaAsset.data;
       asset.onSale = onSale;
+      asset.isInternal = true;
     }
     let updateResult = await updateAsset(asset.id, asset);
   };
@@ -623,7 +630,7 @@ const ERC721 = ({ serverCollections, categories, serverNfts }) => {
                     {selectedTab == 0
                       ? form.getFieldValue(["price", "amount"])
                       : form.getFieldValue(["price", "minAmount"])}
-                    ETH
+                    {` ETH`}
                   </div>
                   <div className="nft__item_action">
                     <a>{`Place a bid`}</a>

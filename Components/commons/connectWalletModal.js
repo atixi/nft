@@ -35,29 +35,26 @@ const ConnectWalletModal = ({ displayModal }) => {
   const [onboard, setOnboard] = useState(null);
   const onDesktopConnect = async () => {
     const { ethereum } = window;
-
     if (ethereum) {
       let web3 = new Web3(ethereum);
       const accounts = await web3.eth.getAccounts();
       if (accounts.length > 0) {
         presisMetamask(accounts);
       } else {
-        if (ethereum && ethereum.isMetaMask) {
-          ethereum
-            .request({ method: "eth_requestAccounts" })
-            .then(handleNewAccounts)
-            .catch((error) => {
-              if (error.code === 4001) {
-                CustomNotification("warning", "Metamask", "User must accept wallet connection ");
-              } else {
-                console.error(error);
-              }
-            });
-          ethereum.on("accountsChanged", handleNewAccounts);
+        try {
+          const accountPermission = await ethereum.request({ method: "eth_requestAccounts" });
+          if (accountPermission.length > 0) {
+            presisMetamask(accountPermission);
+          }
+        } catch (error) {
+          if (error.code === 4001) {
+            CustomNotification("warning", "Metamask", "You must accept wallet connection ");
+          } else {
+            console.error(error);
+          }
         }
       }
     } else {
-      await dispatch(setDisplayWalletModal(false));
       onMobileConnect();
     }
   };
@@ -68,7 +65,7 @@ const ConnectWalletModal = ({ displayModal }) => {
     await dispatch(setDisplayWalletModal(false));
     accounts = accounts.map((account) => web3.utils.toChecksumAddress(account));
 
-    await registerTalent(accounts[0]);
+    // await registerTalent(accounts[0]);
 
     await dispatchMetaToken(setMetaToken(accounts));
     web3.eth.getBalance(accounts[0], async (err, result) => {
@@ -78,7 +75,7 @@ const ConnectWalletModal = ({ displayModal }) => {
         await dipsatchMetaBalance(setMetaBalance(web3.utils.fromWei(result, "ether")));
       }
     });
-    if (router.pathname.toString().includes("nft")) {
+    if (router.pathname.toString().includes("nft") || router.pathname.toString().includes("nft")) {
       router.replace(router.asPath);
     }
   };
